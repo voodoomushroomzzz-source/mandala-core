@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-07T18:06:04Z",
+    "generated_at": "2026-10-12T12:16:23Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,9 +28,9 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.5.6",
+      "version": "v2.5.7",
       "created": "2026-09-23",
-      "updated": "2026-10-07",
+      "updated": "2026-10-12",
       "layer": 2,
       "type": "personal_subhub_index",
       "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Входная точка: контекст, инструкции, ссылки на модули. Данные разбиты: taskboard.json, team.json, knowledge_base.json.",
@@ -56,15 +56,15 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.5.9",
-        "tasks_count": 46,
+        "version": "v2.6.0",
+        "tasks_count": 49,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
         "description": "Картотека сотрудников. Графа vacation — история и планы отпусков.",
         "purpose": "Все 16 сотрудников: контакты, навыки, статусы.",
-        "version": "v1.5.1",
-        "total_employees": 18
+        "version": "v1.6.0",
+        "total_employees": 20
       },
       "knowledge_base.json": {
         "description": "База знаний: чек-листы, регламенты, техкарты, обучение, ЦУ.",
@@ -183,8 +183,8 @@
     },
     "health": {
       "status": "healthy",
-      "last_check": "2026-10-07",
-      "notes": "v2.5.6: синхронизация счётчиков с реальностью. taskboard=46 активных, team=18 сотрудников, archive=66. Графа vacation у всех сотрудников. K-123 (меню Центр) добавлена. K-077 done, K-106 cancelled. Дедлайны K-013/K-101/K-027 → 15.10."
+      "last_check": "2026-10-12",
+      "notes": "v2.5.7: +K-124 (провода Нижка), +K-125 (планёрка), +K-126 (график Нижки 8:00-20:00). +EMP-019 Валя, +EMP-020 Настя (SMM, management). total 20."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -247,9 +247,9 @@
         "notion_is_visual_mirror": true,
         "rule": "Mandala (taskboard.json, team.json, knowledge_base.json) — эталон. Notion — визуальное зеркало. Если расхождение — правим Notion по Mandala, не наоборот.",
         "id_conventions": {
-          "tasks": "K-001..K-123 с пропусками (K-017, K-047..K-056, K-061). Следующий свободный — K-124.",
+          "tasks": "K-001..K-126 с пропусками. Следующий свободный — K-127.",
           "milestones": "M-001, M-002 — крупные вехи (Возрождение Нижки, Возрождение Центра)",
-          "next_task_id": "K-124",
+          "next_task_id": "K-127",
           "next_milestone_id": "M-004"
         }
       },
@@ -482,9 +482,9 @@
     "current_status": {
       "phase": "phase_0",
       "progress": 45,
-      "date": "2026-10-07",
-      "last_action": "2026-10-07: Массовое закрытие (12 done + K-119 + K-113 cancelled). K-123 (меню Центр + QR). team v1.5.1 (EMP-006 working, EMP-018 Дима Рыжков added). index v2.5.6 — синхронизация счётчиков. Notion full_sync выполнен.",
-      "next_action": "Фокус: K-078 (финансы/бюджеты, 15.10), K-105 (перераспределение Крис, 31.10), K-123/K-111 (меню + QR, 15.10), K-110 (фильтр воды, 11.10), K-108 (планёрка обучения, 07.10). Отпуск Катрин 17.10–24.10. Сессионные подменщики: Матвей, Арина, Маша, Дима Рыжков.",
+      "date": "2026-10-12",
+      "last_action": "12.10: K-124/125/126 added. team v1.6.0 (Валя + Настя, management). smm_budget 30К. index v2.5.7.",
+      "next_action": "K-125 планёрка 15.10. K-126 новый график Нижки с 19.10. K-124 провода. K-078 финансы 15.10. K-105 перераспределение Крис 31.10. Отпуск Катрин 17.10-24.10.",
       "blockers": [],
       "notes": [
         "Фокус: команда, документация, чистота, бот.",
@@ -910,13 +910,13 @@
       "description": "Модули данных проекта Куртош. Основной вход — index.json (этот файл).",
       "taskboard": {
         "file": "taskboard.json",
-        "purpose": "Активные задачи (46) + вехи M-001..M-003.",
+        "purpose": "Активные задачи (49) + вехи M-001..M-003.",
         "when_to_use": "Когда нужно работать с задачами, вехами, статусами, дедлайнами.",
         "sync": "Notion Taskboard (via scripts/push_taskboard.py)"
       },
       "team": {
         "file": "team.json",
-        "purpose": "Картотека сотрудников (18). Графа vacation.",
+        "purpose": "Картотека сотрудников (20). Графа vacation. Управленческая команда + SMM.",
         "when_to_use": "Когда нужно посмотреть/обновить данные сотрудника: контакты, навыки, статус.",
         "sync": "Notion Team (будет создана)"
       },
@@ -1024,9 +1024,9 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.5.9",
+      "version": "v2.6.0",
       "created": "2026-09-14",
-      "updated": "2026-10-07",
+      "updated": "2026-10-12",
       "layer": 2,
       "type": "taskboard_module",
       "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -1039,7 +1039,7 @@
       "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
       "version": "v2.3.4",
       "created": "2026-09-14",
-      "updated": "2026-10-07",
+      "updated": "2026-10-12",
       "legend": {
         "priority": {
           "critical": "Горит. Сегодня-завтра.",
@@ -2271,29 +2271,103 @@
             "notion_page_id": null,
             "column": "Операционка — Центр"
           }
+        },
+        {
+          "id": "K-124",
+          "title": "Провода над печкой (Нижняя Дуброва): посмотреть проводку",
+          "description": "Проблема с проводами над печкой на Нижней Дуброве. Нужно посмотреть проводку — диагностика, оценка, при необходимости ремонт/замена.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-001"
+          ],
+          "created": "2026-10-12",
+          "updated": "2026-10-12",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-125",
+          "title": "Управленческая планёрка (вт/ср, 15:00)",
+          "description": "Провести управленческую планёрку.\n\nДень: вторник или среда. Время: 15:00.\nДедлайн: 15.10.2026.\n\nУчастники: Дима, Крис, Катрин, Валя, Витя.\n\nПОВЕСТКА:\n1. Отчёт по финансам и фондам — сентябрь: планы vs факты, тенденция, план на след. месяц. (@krisik2005)\n2. Отчёт по SMM за месяц — план vs факт, тенденция, план + акции. (@shtuchkiotvalki)\n3. Штатка, обучение, аттестации. (@krisik2005)\n4. Список активного функционала — кто что делает по проекту. Каждый свой список. (@katrinzzz_its_i, @krisik2005)\n\nСвязь: K-089 (отчёты), K-105 (перераспределение), K-078 (финансы).",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-15",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-089",
+            "K-105",
+            "K-078"
+          ],
+          "created": "2026-10-12",
+          "updated": "2026-10-12",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-126",
+          "title": "Новый график Нижки: 8:00–20:00 (старт 19.10)",
+          "description": "Переход на новый график работы на Нижней Дуброве.\n\nБыло: 8:30–20:30.\nСтанет: 8:00–20:00 (сдвиг на полчаса назад).\nСтарт: со следующего понедельника, 19.10.2026.\n\nЧто нужно сделать (в пятницу 16.10):\n1. Обновить внешнюю информацию (вывеска / часы работы)\n2. Анонс в соцсетях\n3. Анонс в чате «Нижняя Дуброва»\n4. Уведомить сотрудников",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-19",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-001"
+          ],
+          "created": "2026-10-12",
+          "updated": "2026-10-12",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
         }
       ],
       "counters": {
-        "total": 46,
+        "total": 49,
         "by_status": {
-          "todo": 43,
+          "todo": 46,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
-          "medium": 16,
-          "high": 28,
+          "medium": 17,
+          "high": 30,
           "critical": 2
         },
         "by_column": {
           "Стратегические": 7,
-          "Операционка — Общая": 9,
+          "Операционка — Общая": 10,
           "Операционка — Центр": 9,
-          "Операционка — Нижка": 18,
+          "Операционка — Нижка": 20,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 46
+          "phase_0": 49
         }
       },
       "notes": {
@@ -4018,9 +4092,9 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.5.1",
+      "version": "v1.6.0",
       "created": "2026-09-23",
-      "updated": "2026-10-07",
+      "updated": "2026-10-12",
       "layer": 2,
       "type": "team_module",
       "description": "Картотека сотрудников Куртош. 17 человек. Графа vacation — история и планы отпусков. Синхронизируется с Notion Team (в будущем).",
@@ -4030,15 +4104,16 @@
       "resonance": "100%"
     },
     "team_roster": {
-      "last_updated": "2026-10-07",
-      "total_employees": 18,
+      "last_updated": "2026-10-12",
+      "total_employees": 20,
       "by_status": {
         "core": 1,
         "working": 6,
         "left": 3,
         "runner": 2,
         "trainee": 2,
-        "substitute": 4
+        "substitute": 4,
+        "management": 2
       },
       "skill_ladder": {
         "order": [
@@ -4894,6 +4969,101 @@
             "schedule.availability"
           ],
           "updated": "2026-10-07"
+        },
+        {
+          "id": "EMP-019",
+          "name": "Валя",
+          "role": "Продюсер + маркетинг (SMM-куратор)",
+          "contacts": {
+            "phone": "+7 904 655 3112",
+            "telegram": "@shtuchkiotvalki"
+          },
+          "functions": [
+            "SMM",
+            "маркетинг",
+            "продюсирование"
+          ],
+          "schedule": {
+            "notes": "управленческая команда, SMM",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "n/a",
+            "pechka": "no",
+            "coffee": "no",
+            "kassa": "no",
+            "notes": "Не на точках. SMM + маркетинг."
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "10 000 руб/мес",
+            "bonuses": [],
+            "extra": null,
+            "notes": "Курирование SMM. Итого с Настей — 30 000 руб/мес."
+          },
+          "status": "management",
+          "risks": [],
+          "notes": "Кофаундер и владелец @luzerbar. Художник + маркетолог. SMM в @kurtosh. Курирует SMM. Функционал урезан.",
+          "vacation": {
+            "planned": [],
+            "history": []
+          },
+          "data_gaps": [
+            "nijka.attitude"
+          ],
+          "updated": "2026-10-12"
+        },
+        {
+          "id": "EMP-020",
+          "name": "Анастасия (Настя)",
+          "role": "SMM-контент",
+          "contacts": {
+            "phone": null,
+            "telegram": "@nzv_anastasia"
+          },
+          "functions": [
+            "SMM",
+            "контент-план",
+            "публикации"
+          ],
+          "schedule": {
+            "notes": "управленческая команда, SMM",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "n/a",
+            "pechka": "no",
+            "coffee": "no",
+            "kassa": "no",
+            "notes": "Не на точках. Контент + соцсети."
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "20 000 руб/мес",
+            "bonuses": [],
+            "extra": null,
+            "notes": "Контент-план + публикации. Итого с Валей — 30 000 руб/мес."
+          },
+          "status": "management",
+          "risks": [],
+          "notes": "SMM-контент: контент-план, публикации в соцсети.",
+          "vacation": {
+            "planned": [],
+            "history": []
+          },
+          "data_gaps": [
+            "contacts.phone",
+            "nijka.attitude"
+          ],
+          "updated": "2026-10-12"
         }
       ],
       "skills_summary": {
@@ -4955,7 +5125,14 @@
         "knowledge_base.json"
       ]
     },
-    "sync_rule": "Mandala (team.json) — эталон. Notion Team — визуальное зеркало (когда создадим базу)."
+    "sync_rule": "Mandala (team.json) — эталон. Notion Team — визуальное зеркало (когда создадим базу).",
+    "smm_budget": {
+      "total_monthly_rub": 30000,
+      "valya": 10000,
+      "nastya": 20000,
+      "note": "SMM-бюджет на месяц. Валя — курирование, Настя — контент.",
+      "last_updated": "2026-10-12"
+    }
   },
   "knowledge_base": {
     "identity": {
