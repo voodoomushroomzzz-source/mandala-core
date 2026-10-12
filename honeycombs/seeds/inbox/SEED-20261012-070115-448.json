@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261012-070115-448",
+  "title": "PanTact: Teaching Whole-Body Dexterity with a Wearable Contact Interface",
+  "url": "https://arxiv.org/abs/2610.12558",
+  "description": "arXiv:2610.12558v1 Announce Type: new \nAbstract: Humanoid robots have many degrees of freedom and contact surfaces, yet most loco-manipulation research restricts manipulation to the hands and avoids other body contacts with the environment. To extend manipulation beyond the hands, we present PanTact, a system that learns humanoid whole-body dexterity, the capability to manipulate with any suitable body surface, directly from robot-free human demonstrations. Our key idea is to use contact as mani",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-12T07:01:15.031466",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
