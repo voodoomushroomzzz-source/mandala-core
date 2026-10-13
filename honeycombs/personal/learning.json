@@ -1,18 +1,37 @@
 {
   "identity": {
     "name": "Learning & Certificates — Dima (Gardener)",
-    "version": "v1.3.0",
+    "version": "v1.4.0",
     "created": "2026-08-14",
-    "updated": "2026-10-05",
-    "description": "Обучение, сертификаты, английский. Симбиоз с career.json. v1.3.0: полная пересборка под критерий 'есть проверяемый сертификат'. Уровень 1: Elements of AI + Anthropic + Harvard CS50. Уровень 2 (future_paid): Google AI, GitHub, CCAF, Microsoft AI-901. Убраны: OpenAI (badge), Microsoft for Beginners (нет сертификата), CCA-F (недоступен)."
+    "updated": "2026-10-13",
+    "description": "Обучение, сертификаты, английский. Симбиоз с career.json. v1.4.0: добавлен Submarine Вайбкодинг (level 1), Deep Learning AI и IBM AI Engineering (level 3). Все курсы — только с проверяемыми сертификатами."
   },
   "symbiosis": {
     "partner_file": "honeycombs/personal/career.json",
     "principle": "Каждый сертификат и навык закрывает конкретный трек карьеры. Обратная связь: карьерный трек требует — обучение закрывает.",
     "tracks_mapping": {
-      "track_a_ai_ops": ["Elements of AI", "Anthropic Claude 101", "Anthropic Claude Code 101", "Anthropic Building with Claude API"],
-      "track_b_system_analyst": ["UML", "BPMN", "SQL", "Swagger", "Harvard CS50 AI"],
-      "track_c_global_ai": ["CCAF", "English C1", "Harvard CS50 AI", "Claude Certified Architect (future)"]
+      "track_a_ai_ops": [
+        "Elements of AI",
+        "Anthropic Claude 101",
+        "Anthropic Claude Code 101",
+        "Anthropic Building with Claude API",
+        "Submarine Вайбкодинг"
+      ],
+      "track_b_system_analyst": [
+        "UML",
+        "BPMN",
+        "SQL",
+        "Swagger",
+        "Harvard CS50 AI"
+      ],
+      "track_c_global_ai": [
+        "CCAF",
+        "English C1",
+        "Harvard CS50 AI",
+        "Claude Certified Architect (future)",
+        "Deep Learning AI",
+        "IBM AI Engineering"
+      ]
     },
     "key_principle": "Все курсы в плане дают проверяемый сертификат. Курсы без сертификата — удалены."
   },
@@ -79,6 +98,20 @@
         },
         {
           "order": 5,
+          "name": "Submarine Вайбкодинг",
+          "platform": "Submarine",
+          "url": "https://submarine.club/",
+          "duration": "~мастер-класс",
+          "start": "2026-11-03",
+          "deadline": "2026-11-10",
+          "status": "not_started",
+          "certificate": "Сертификат участника",
+          "verification": "Submarine certificate",
+          "why": "Прямое попадание в AI Ops. Практика vibe coding — Claude Code, Codex. Быстро, бесплатно.",
+          "in_resume": true
+        },
+        {
+          "order": 6,
           "name": "Harvard CS50 AI",
           "platform": "Harvard (edX / cs50.harvard.edu)",
           "url": "https://cs50.harvard.edu/ai/",
@@ -186,6 +219,32 @@
           "verification": "Google Cloud certified",
           "why": "Высшая планка. Для глобалки.",
           "in_resume": true
+        },
+        {
+          "order": 4,
+          "name": "Deep Learning AI (Andrew Ng)",
+          "platform": "Coursera",
+          "url": "https://www.deeplearning.ai/",
+          "cost": "Coursera subscription",
+          "duration": "5 курсов, ~2-3 месяца",
+          "certificate": "Deep Learning Specialization",
+          "verification": "Coursera verify",
+          "why": "ML, TensorFlow, нейросети. Для углубления в AI.",
+          "in_resume": true,
+          "note": "Требует Python + математика. Не для AI Ops — для Track C (глобалка) и ML-направления."
+        },
+        {
+          "order": 5,
+          "name": "IBM AI Engineering",
+          "platform": "Coursera",
+          "url": "https://www.coursera.org/professional-certificates/ai-engineer",
+          "cost": "~$200 (4 месяца x $49)",
+          "duration": "13 курсов, ~4 месяца по 10ч/неделю",
+          "certificate": "IBM AI Engineering Professional Certificate",
+          "verification": "Coursera verify",
+          "why": "ML, Deep Learning, LLM, RAG. Рекрутеры знают.",
+          "in_resume": true,
+          "note": "Дорого и долго. Только если выберешь глубокое AI-направление (не AI Ops)."
         }
       ]
     },
@@ -214,7 +273,7 @@
   "unified_certificate_track": {
     "description": "Единый трек сертификатов. Только курсы с проверяемыми сертификатами.",
     "last_updated": "2026-10-05",
-    "total": 12,
+    "total": 15,
     "certificates": [
       {
         "order": 1,
@@ -371,6 +430,45 @@
         "status": "not_started",
         "in_resume": true,
         "why": "Высшая планка. Для глобалки."
+      },
+      {
+        "order": 13,
+        "name": "Submarine Вайбкодинг",
+        "platform": "Submarine",
+        "level": "1 (free)",
+        "url": "https://submarine.club/",
+        "time_estimate": "Мастер-класс",
+        "deadline": "2026-11-10",
+        "priority": "high",
+        "status": "not_started",
+        "in_resume": true,
+        "why": "Практика vibe coding. Бесплатно."
+      },
+      {
+        "order": 14,
+        "name": "Deep Learning AI (Andrew Ng)",
+        "platform": "Coursera",
+        "level": "3 (pro)",
+        "url": "https://www.deeplearning.ai/",
+        "cost": "Coursera subscription",
+        "time_estimate": "5 курсов, ~2-3 месяца",
+        "priority": "medium",
+        "status": "not_started",
+        "in_resume": true,
+        "why": "ML, TensorFlow, нейросети."
+      },
+      {
+        "order": 15,
+        "name": "IBM AI Engineering",
+        "platform": "Coursera",
+        "level": "3 (pro)",
+        "url": "https://www.coursera.org/professional-certificates/ai-engineer",
+        "cost": "~$200",
+        "time_estimate": "13 курсов, ~4 месяца",
+        "priority": "medium",
+        "status": "not_started",
+        "in_resume": true,
+        "why": "ML, Deep Learning, LLM, RAG."
       }
     ]
   },
@@ -506,6 +604,15 @@
         "output": "CCAF Credential",
         "in_resume": true,
         "note": "После дохода."
+      },
+      {
+        "id": "LRN-015",
+        "name": "Submarine Вайбкодинг",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": "2026-11-10",
+        "output": "Сертификат участника",
+        "in_resume": true
       }
     ]
   },
