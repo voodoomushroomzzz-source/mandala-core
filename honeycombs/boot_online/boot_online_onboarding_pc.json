@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.182",
+    "version": "v1.7.183",
     "created": "2026-05-11",
     "updated": "2026-10-13",
     "layer": 1,
@@ -1185,12 +1185,12 @@
       "identity": {
         "module_id": "INSTR-MOBILE-WORKFLOW-001",
         "name": "Mobile Workflow — Working with Mandala from Android",
-        "version": "v1.13.0",
+        "version": "v1.14.0",
         "created": "2026-04-12",
-        "updated": "2026-09-25",
+        "updated": "2026-10-13",
         "layer": 2,
         "type": "workflow_guide",
-        "description": "Complete guide for External SR working from Android/Termux. v1.13.0: +LR-14 (pre-check пути скрипта перед вызовом). ",
+        "description": "Complete guide for External SR working from Android/Termux. v1.14.0: +LR-15 (JSON-файлы — всегда Python-патчер, не cat >) и +LR-16 (обязательные параметры json.dump: ensure_ascii=False, indent=2, newline='\\n'). Усилены patching_guide.criteria и prohibited. v1.13.0: +LR-14 (pre-check пути скрипта).",
         "status": "active",
         "priority": "high",
         "tags": [
@@ -1242,6 +1242,7 @@
           },
           "patcher_method_python": {
             "when": [
+              "Правка JSON-файла (любой размер, кроме <1 КБ) — LR-15",
               "Несколько файлов нужно изменить одновременно (навигация, роутинг)",
               "Файл большой (> 500 строк) — sr_conversation.py, handlers/tasks.py, handlers/system.py",
               "Нужно заменить только конкретный блок, оставив остальное нетронутым",
@@ -1271,6 +1272,7 @@
         ],
         "prohibited": {
           "never": [
+            "Не использовать cat > для JSON-файлов (кроме <1 КБ) — использовать Python-патчер (см. LR-15)",
             "Не использовать cat для больших файлов с многострочными строками — это вызывает SyntaxError",
             "Не смешивать cat и patcher_method в одном FULL DEPLOY блоке"
           ]
@@ -1499,8 +1501,8 @@
       },
       "health": {
         "status": "healthy",
-        "last_check": "2026-09-25",
-        "notes": "v1.12.0: добавлен раздел learned_rules_2026_09 (13 правил из сессий 23-24.09.2026). Обновлён troubleshooting (+4 пункта). patching_guide: идемпотентность. v1.13.0: +LR-14 (pre-check пути скрипта)."
+        "last_check": "2026-10-13",
+        "notes": "v1.14.0: LR-15 (JSON → Python-патчер, не cat >) и LR-16 (json.dump параметры). Усилены patching_guide.criteria.patcher_method_python.when и patching_guide.prohibited. Цель — единый стандарт правок JSON с телефона. v1.13.0: +LR-14 (pre-check пути скрипта)."
       },
       "large_files_handling": {
         "title": "Работа с большими файлами",
@@ -1692,6 +1694,40 @@
             "problem": "Вызов bash script.sh без проверки существования — при неверном пути падает вся хвостовая часть цепочки && (в т.ч. commit/push могут не пройти, если это последние шаги).",
             "solution": "Перед вызовом любого скрипта через bash/python — сначала ls -la с полным путём от корня репо. Затем — вызов того же полного пути. Правило выведено из сессии 25.09.2026: notion_runner.sh лежал в honeycombs/personal/kurtoch/scripts/, но был вызван как scripts/notion_runner.sh от корня → No such file or directory.",
             "example": "ls -la honeycombs/personal/kurtoch/scripts/notion_runner.sh && bash honeycombs/personal/kurtoch/scripts/notion_runner.sh full_sync 2>&1 | tee ~/notion_$(date +%Y%m%d_%H%M).log"
+          },
+          {
+            "id": "LR-15",
+            "title": "JSON-файлы на телефоне — ВСЕГДА Python-патчер (не cat >)",
+            "problem": "cat > с полной заменой JSON на телефоне — риск обрезки при копировании, ручная валидация, легко сломать структуру (одна запятая не там → файл битый).",
+            "solution": "Для любой правки JSON-файла в honeycombs/ — использовать Python-патчер. Паттерн: guard (os.path.exists или version check) → json.load → точечные правки → json.dump(ensure_ascii=False, indent=2, newline='\\n') → git add/commit/push.",
+            "why": [
+              "Guard — не перезапишет, если уже применено (идемпотентность)",
+              "json.load/json.dump гарантируют валидность JSON (нельзя сломать запятой)",
+              "Точечные правки — не трогает остальное содержимое",
+              "Малый размер блока — не обрезается при копировании с телефона",
+              "Auto-recount метрик через len() — не забыть обновить total_*",
+              "Auto-bump version — единообразие, видно что изменилось"
+            ],
+            "bad": "cat > honeycombs/personal/learning.json << 'EOF' { ...весь файл целиком... } EOF",
+            "good": "cat > patch_x.py << 'PYEOF'\\nimport json\\n# guard → load → edit → dump\\nPYEOF\\npython patch_x.py && rm patch_x.py && git add ...",
+            "exception": "Только для файлов <1 КБ и простых конфигов — допустим cat >.",
+            "example": "Патч learning.json v1.4.0 (13.10.2026): 11 точечных правок, 114 вставок/7 удалений, всё за один блок, всё валидно."
+          },
+          {
+            "id": "LR-16",
+            "title": "json.dump — обязательные параметры",
+            "problem": "По умолчанию json.dump пишет кириллицу как \\uXXXX (нечитаемо в git diff), меняет line endings, не ставит финальный \\n (diff-шум при каждом патче).",
+            "solution": "Всегда писать: json.dump(data, f, ensure_ascii=False, indent=2), затем f.write('\\n'). Открывать файл с newline='\\n'.",
+            "why": [
+              "ensure_ascii=False — кириллица читаема в git diff",
+              "indent=2 — стабильное форматирование, чистые diff",
+              "newline='\\n' — единые line endings (LF везде, включая Windows)",
+              "f.write('\\n') — финальный перевод строки, как у POSIX-файлов",
+              "Без этих параметров каждый патч даёт diff-шум и ломает стиль"
+            ],
+            "bad": "with open(path, 'w') as f: json.dump(data, f)",
+            "good": "with open(path, 'w', encoding='utf-8', newline='\\n') as f:\\n    json.dump(data, f, ensure_ascii=False, indent=2)\\n    f.write('\\n')",
+            "example": "См. add_soup_knowledge.py и patch_learning_1_4.py — оба используют этот паттерн."
           }
         ]
       }
@@ -2666,12 +2702,12 @@
       "identity": {
         "module_id": "PERSONAL-INDEX-001",
         "name": "Personal Hub — Карта и инструкция",
-        "version": "v2.4.0",
+        "version": "v2.5.0",
         "created": "2026-08-20",
-        "updated": "2026-10-04",
+        "updated": "2026-10-13",
         "layer": 2,
         "type": "personal_index",
-        "description": "Центральная карта для personal/. v2.4.0: career v1.2.0 + learning v1.2.0 — обновлены дедлайны (Track A 30.11, Track C Q4 2027, English B2 Nov), Track D реализован. v2.3.0: добавлен pilgrimage.json.",
+        "description": "Центральная карта для personal/. v2.5.0: learning v1.4.0 синхронизирован (15 сертификатов, Submarine, Deep Learning AI, IBM). v2.4.0: career v1.2.0 + learning v1.2.0. v2.3.0: pilgrimage.json.",
         "status": "active",
         "priority": "high",
         "tags": [
@@ -2706,12 +2742,12 @@
           "updated": "2026-10-04"
         },
         "learning.json": {
-          "description": "Обучение: сертификаты (unified_certificate_track, 9 шт), системный анализ (UML/BPMN/SQL/Swagger), английский (B2 с ноября 2026 → C1 до 30.09.2027), OpenAI/Anthropic Academy. 1 час в будни. Симбиоз с career.json.",
+          "description": "Обучение: сертификаты (15 шт, только проверяемые), системный анализ (UML/BPMN/SQL/Swagger), английский (B2 с ноября 2026 → C1 до 30.09.2027), OpenAI/Anthropic/Harvard/Submarine. 1 час в будни. Симбиоз с career.json. v1.4.0: +Submarine Вайбкодинг, +Deep Learning AI, +IBM AI Engineering.",
           "purpose": "Структурирование обучения под карьерные треки.",
           "when_to_use": "При планировании обучения. Читать ВМЕСТЕ с career.json.",
           "symbiosis_partner": "career.json",
-          "version": "v1.2.0",
-          "updated": "2026-10-04"
+          "version": "v1.4.0",
+          "updated": "2026-10-13"
         },
         "creative.json": {
           "description": "Творчество: поэзия, музыка, проза.",
@@ -2760,22 +2796,25 @@
           ],
           "tracks_mapping": {
             "track_a_ai_ops": [
-              "Google AI Essentials",
-              "GitHub Foundations",
-              "OpenAI Foundations"
+              "Elements of AI",
+              "Anthropic Claude 101",
+              "Anthropic Claude Code 101",
+              "Anthropic Building with Claude API",
+              "Submarine Вайбкодинг"
             ],
             "track_b_system_analyst": [
               "UML",
               "BPMN",
               "SQL",
               "Swagger",
-              "OpenAI Applied",
-              "Anthropic Academy"
+              "Harvard CS50 AI"
             ],
             "track_c_global_ai": [
-              "CCA-F",
+              "CCAF",
               "English C1",
-              "OpenAI Agents"
+              "Harvard CS50 AI",
+              "Deep Learning AI",
+              "IBM AI Engineering"
             ]
           },
           "key_deadlines": {
@@ -2783,7 +2822,10 @@
             "track_b_entry": "2027-03-31",
             "track_c_entry": "2027-10-01",
             "english_b2": "2027-03-31",
-            "english_c1": "2027-09-30"
+            "english_c1": "2027-09-30",
+            "elements_of_ai": "2026-11-15",
+            "anthropic_courses": "2026-11-02",
+            "submarine_vibecoding": "2026-11-10"
           },
           "rule": "Если career требует навык — он должен быть в learning. Если в learning появился курс — он должен усилить один из треков."
         }
@@ -2828,8 +2870,8 @@
       },
       "health": {
         "status": "healthy",
-        "last_check": "2026-10-04",
-        "notes": "v2.4.0: career v1.2.0 + learning v1.2.0 синхронизированы. Track D реализован (Куртошкофе). Track A deadline 30.11.2026, Track C Q4 2027. English B2 с ноября 2026. Learning 1ч/будни."
+        "last_check": "2026-10-13",
+        "notes": "v2.5.0: learning v1.4.0 синхронизирован — 15 сертификатов (только проверяемые), +Submarine, +Deep Learning AI, +IBM AI Engineering. Symbiosis.tracks_mapping обновлён."
       }
     }
   },
