@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.181",
+    "version": "v1.7.182",
     "created": "2026-05-11",
-    "updated": "2026-10-08",
+    "updated": "2026-10-13",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -3242,9 +3242,9 @@
       "identity": {
         "module_id": "KNOWLEDGE-INDEX-001",
         "name": "Knowledge Base — Curated Resources",
-        "version": "v1.2.1",
+        "version": "v1.2.2",
         "created": "2026-07-05",
-        "updated": "2026-07-24",
+        "updated": "2026-10-13",
         "layer": 1,
         "type": "knowledge_index",
         "status": "active",
@@ -3333,6 +3333,15 @@
           "source": "Интернет-исследования и психологические материалы, структурировано в Mandala",
           "date_added": "2026-09-10",
           "version": "v1.0.0"
+        },
+        {
+          "id": "soup_finetuning",
+          "name": "Soup — Fine-tuning LLM on Budget GPU",
+          "file": "soup_finetuning.json",
+          "description": "Открытый CLI-инструмент для тонкой настройки LLM. Layer streaming: обучение 8B модели на 4 GB VRAM. Автор — Alpamys Makazhan (Казахстан). Apache-2.0.",
+          "source": "Instagram (neironovvai) + verification",
+          "date_added": "2026-10-13",
+          "version": "v1.0.0"
         }
       ],
       "navigation": {
@@ -3344,8 +3353,8 @@
         ]
       },
       "metrics": {
-        "total_resources": 7,
-        "last_updated": "2026-09-10"
+        "total_resources": 8,
+        "last_updated": "2026-10-13"
       },
       "health": {
         "status": "healthy",
