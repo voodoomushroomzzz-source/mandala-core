@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-12T12:16:23Z",
+    "generated_at": "2026-10-13T12:10:22Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,9 +28,9 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.5.7",
+      "version": "v2.5.8",
       "created": "2026-09-23",
-      "updated": "2026-10-12",
+      "updated": "2026-10-13",
       "layer": 2,
       "type": "personal_subhub_index",
       "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Входная точка: контекст, инструкции, ссылки на модули. Данные разбиты: taskboard.json, team.json, knowledge_base.json.",
@@ -56,8 +56,8 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.6.0",
-        "tasks_count": 49,
+        "version": "v2.6.1",
+        "tasks_count": 51,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
@@ -183,8 +183,8 @@
     },
     "health": {
       "status": "healthy",
-      "last_check": "2026-10-12",
-      "notes": "v2.5.7: +K-124 (провода Нижка), +K-125 (планёрка), +K-126 (график Нижки 8:00-20:00). +EMP-019 Валя, +EMP-020 Настя (SMM, management). total 20."
+      "last_check": "2026-10-13",
+      "notes": "v2.5.8: +K-127 (флажки Центр), +K-128 (расписание Дарья), K-110 → 2 угольных фильтра (Центр+Нижка)."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -247,9 +247,9 @@
         "notion_is_visual_mirror": true,
         "rule": "Mandala (taskboard.json, team.json, knowledge_base.json) — эталон. Notion — визуальное зеркало. Если расхождение — правим Notion по Mandala, не наоборот.",
         "id_conventions": {
-          "tasks": "K-001..K-126 с пропусками. Следующий свободный — K-127.",
+          "tasks": "K-001..K-128 с пропусками. Следующий свободный — K-129.",
           "milestones": "M-001, M-002 — крупные вехи (Возрождение Нижки, Возрождение Центра)",
-          "next_task_id": "K-127",
+          "next_task_id": "K-129",
           "next_milestone_id": "M-004"
         }
       },
@@ -482,9 +482,9 @@
     "current_status": {
       "phase": "phase_0",
       "progress": 45,
-      "date": "2026-10-12",
-      "last_action": "12.10: K-124/125/126 added. team v1.6.0 (Валя + Настя, management). smm_budget 30К. index v2.5.7.",
-      "next_action": "K-125 планёрка 15.10. K-126 новый график Нижки с 19.10. K-124 провода. K-078 финансы 15.10. K-105 перераспределение Крис 31.10. Отпуск Катрин 17.10-24.10.",
+      "date": "2026-10-13",
+      "last_action": "13.10: K-127/128 added. K-110 expanded (2 filters, in_progress). taskboard v2.6.1 (51 active).",
+      "next_action": "K-125 планёрка 15.10. K-126 график Нижки 19.10. K-127 флажки 15.10. K-128 расписание Дарья 16.10. K-110 фильтры сегодня. K-078 финансы 15.10. K-105 Крис 31.10.",
       "blockers": [],
       "notes": [
         "Фокус: команда, документация, чистота, бот.",
@@ -910,7 +910,7 @@
       "description": "Модули данных проекта Куртош. Основной вход — index.json (этот файл).",
       "taskboard": {
         "file": "taskboard.json",
-        "purpose": "Активные задачи (49) + вехи M-001..M-003.",
+        "purpose": "Активные задачи (51) + вехи M-001..M-003.",
         "when_to_use": "Когда нужно работать с задачами, вехами, статусами, дедлайнами.",
         "sync": "Notion Taskboard (via scripts/push_taskboard.py)"
       },
@@ -1024,9 +1024,9 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.6.0",
+      "version": "v2.6.1",
       "created": "2026-09-14",
-      "updated": "2026-10-12",
+      "updated": "2026-10-13",
       "layer": 2,
       "type": "taskboard_module",
       "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -1039,7 +1039,7 @@
       "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
       "version": "v2.3.4",
       "created": "2026-09-14",
-      "updated": "2026-10-12",
+      "updated": "2026-10-13",
       "legend": {
         "priority": {
           "critical": "Горит. Сегодня-завтра.",
@@ -2177,26 +2177,27 @@
         },
         {
           "id": "K-110",
-          "title": "Заменить фильтр для воды на Нижке",
-          "description": "Заменить фильтр для воды на Нижке (Нижняя Дуброва).\n\nСистема: HIWATER RO 400 Lite.\n\nКартриджи:\n- Угольный (двойного действия) — 11 000 ₽, раз в 6-8 месяцев (или 30 тыс. литров)\n- Осмос (мембрана обратного осмоса) — 19 500 ₽, раз в 1-2 года\n\nСервис: Hiwater Рабочий — +7 (999) 545-27-71 (картриджи для фильтров воды)\n\nРеквизиты: ИП Штефанец В.В., ИНН 782513617177, г. Владимир, ул. Гагарина, 5, Куртош Кофе.",
+          "title": "Заменить фильтры воды: 2 угольных (Центр + Нижка)",
+          "description": "Заказать 2 угольных фильтра: один в Центр, один на Нижку.\n\nСистема: HIWATER RO 400 Lite.\n\nКартриджи:\n- Угольный (двойного действия) — 11 000 ₽, раз в 6-8 месяцев (или 30 тыс. литров)\n- Осмос (мембрана обратного осмоса) — 19 500 ₽, раз в 1-2 года\n\nСервис: Hiwater Рабочий — +7 (999) 545-27-71\nРеквизиты: ИП Штефанец В.В., ИНН 782513617177, г. Владимир, ул. Гагарина, 5, Куртош Кофе.",
           "priority": "high",
-          "status": "todo",
+          "status": "in_progress",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-10-11",
+          "deadline": "2026-10-13",
           "reminder": null,
           "depends_on": [],
           "related_to": [
-            "M-001"
+            "M-001",
+            "M-002"
           ],
           "created": "2026-10-02",
-          "updated": "2026-10-05",
+          "updated": "2026-10-13",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
             "notion_page_id": null,
-            "column": "Операционка — Нижка"
+            "column": "Операционка — Общая"
           }
         },
         {
@@ -2345,29 +2346,73 @@
             "notion_page_id": null,
             "column": "Операционка — Нижка"
           }
+        },
+        {
+          "id": "K-127",
+          "title": "Снять флажки на улице (Центр)",
+          "description": "Снять все флажки на улице в Центре.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-15",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-10-13",
+          "updated": "2026-10-13",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
+        },
+        {
+          "id": "K-128",
+          "title": "Правка расписания: убрать Дарью из пятницы + замена с 16:00 + попрощаться",
+          "description": "Правка расписания на пятницу.\n\n1. Убрать Дарью из пятницы.\n2. Вместо неё поставить кого-то с 16:00.\n3. Попрощаться с Дарьей, мягко.\n\nСвязь: EMP-017 (Дарья).",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-16",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-10-13",
+          "updated": "2026-10-13",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
         }
       ],
       "counters": {
-        "total": 49,
+        "total": 51,
         "by_status": {
-          "todo": 46,
-          "in_progress": 2,
+          "todo": 47,
+          "in_progress": 3,
           "planning": 1
         },
         "by_priority": {
-          "medium": 17,
-          "high": 30,
+          "medium": 18,
+          "high": 31,
           "critical": 2
         },
         "by_column": {
           "Стратегические": 7,
-          "Операционка — Общая": 10,
-          "Операционка — Центр": 9,
-          "Операционка — Нижка": 20,
+          "Операционка — Общая": 12,
+          "Операционка — Центр": 10,
+          "Операционка — Нижка": 19,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 49
+          "phase_0": 51
         }
       },
       "notes": {
