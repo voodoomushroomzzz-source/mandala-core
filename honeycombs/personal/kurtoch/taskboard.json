@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.1",
+    "version": "v2.6.2",
     "created": "2026-09-14",
     "updated": "2026-10-13",
     "layer": 2,
@@ -1132,10 +1132,10 @@
         "title": "Планёрка по материалам обучения (сбор кусков + полный план)",
         "description": "Планёрка по материалам обучения. Участники: Крис, Витя, Дима.\nЦель: собрать все куски обучающих материалов (у кого что лежит) + составить полный план обучения.\nРезультат — входные данные для K-106 (программы обучения) и K-105 (передача функции обучения от Крис к Катрин).",
         "priority": "high",
-        "status": "todo",
+        "status": "in_progress",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": "2026-10-07",
+        "deadline": "2026-10-31",
         "reminder": null,
         "depends_on": [],
         "related_to": [
@@ -1144,7 +1144,7 @@
           "K-076"
         ],
         "created": "2026-10-01",
-        "updated": "2026-10-05",
+        "updated": "2026-10-13",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -1373,8 +1373,8 @@
     "counters": {
       "total": 51,
       "by_status": {
-        "todo": 47,
-        "in_progress": 3,
+        "todo": 46,
+        "in_progress": 4,
         "planning": 1
       },
       "by_priority": {
