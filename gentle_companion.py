@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-09-26 10:15:41 ──
+# ── BUILT by build.py ── 2026-10-13 13:55:01 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -92,10 +92,10 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 50
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.24"
+BOT_VERSION = "7.39.25"
 # ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
-    "version": "7.39.24",
+    "version": "7.39.25",
     "date": "2026-09-19",
     "text": (
         "🌱 Мандала · Что нового\n"
@@ -165,6 +165,44 @@ dp.include_router(router)
 from aiogram import BaseMiddleware
 from typing import Callable, Dict, Any, Awaitable
 from aiogram.types import TelegramObject
+
+# -- Architect Gate (TASK-ARCHITECT-BOT-GATE-001) ------------------------------
+# Closed bot: only ARCHITECT_TELEGRAM_ID passes. Everyone else gets a stub
+# (at most once per hour per user) and NO handler is called. No whitelist.
+# Registered on dp.update as an OUTER middleware: it runs before filters,
+# FSM and all other middlewares, for every update type.
+GATE_STUB_TEXT = "\U0001f512 \u042d\u0442\u043e \u0437\u0430\u043a\u0440\u044b\u0442\u044b\u0439 \u0431\u043e\u0442 \u041c\u0430\u043d\u0434\u0430\u043b\u044b. \u0414\u043e\u0441\u0442\u0443\u043f \u0442\u043e\u043b\u044c\u043a\u043e \u0443 \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u043e\u0440\u0430."
+GATE_STUB_TTL = 3600
+_gate_stub_sent: dict = {}
+
+class ArchitectGateMiddleware(BaseMiddleware):
+    async def __call__(
+        self,
+        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
+        data: Dict[str, Any]
+    ) -> Any:
+        user = data.get("event_from_user")
+        if user is not None and str(user.id) == str(ARCHITECT_TELEGRAM_ID):
+            return await handler(event, data)
+        try:
+            import time as _time_gate
+            uid = str(user.id) if user is not None else "none"
+            logger.info(f"[Gate] blocked uid={uid}")
+            cq = getattr(event, "callback_query", None)
+            msg = getattr(event, "message", None)
+            if cq is not None:
+                await cq.answer(GATE_STUB_TEXT, show_alert=True)
+            elif msg is not None:
+                _now = _time_gate.time()
+                if _now - _gate_stub_sent.get(uid, 0) > GATE_STUB_TTL:
+                    _gate_stub_sent[uid] = _now
+                    await msg.answer(GATE_STUB_TEXT)
+        except Exception as _e_gate:
+            logger.warning(f"[Gate] stub failed: {_e_gate}")
+        return None
+
+dp.update.outer_middleware(ArchitectGateMiddleware())
 
 class AutoLoadMiddleware(BaseMiddleware):
     async def __call__(
