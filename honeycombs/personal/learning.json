@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Learning & Certificates — Dima (Gardener)",
-    "version": "v1.5.0",
+    "version": "v1.6.0",
     "created": "2026-08-14",
     "updated": "2026-10-13",
-    "description": "Обучение, сертификаты, английский. Симбиоз с career.json. v1.5.0: приоритеты пересобраны — Anthropic (Claude 101/Code 101/API) первыми, Submarine вторым, Elements of AI paused (слишком базовая). Harvard CS50 AI — долгий. Только проверяемые сертификаты."
+    "description": "Обучение, сертификаты, английский. Симбиоз с career.json. v1.6.0: английский реалистичный (B2 31.08.2027, C1 30.06.2029, темп 3-4ч/нед). Приоритеты — Anthropic → Submarine → Harvard."
   },
   "symbiosis": {
     "partner_file": "honeycombs/personal/career.json",
@@ -28,14 +28,13 @@
         "CCAF",
         "English C1",
         "Harvard CS50 AI",
-        "Claude Certified Architect (future)",
         "Deep Learning AI",
         "IBM AI Engineering"
       ]
     },
     "key_principle": "Все курсы в плане дают проверяемый сертификат. Курсы без сертификата — удалены."
   },
-  "strategy": "Стратегия: сначала БЫСТРЫЕ сертификаты (Anthropic-цикл — 3 курса за неделю, ~6 часов). Потом Submarine (vibe coding). Elements of AI — paused (слишком базовая для текущего уровня). Harvard CS50 AI — долгий, параллельно. Платные (Google, GitHub, CCAF, AI-901) — после дохода Track A.",
+  "strategy": "Стратегия: сначала БЫСТРЫЕ сертификаты (Anthropic-цикл). Потом Submarine. Elements paused. Harvard CS50 AI — долгий, параллельно. Английский — 3-4ч/нед, B2 до 31.08.2027, C1 до 30.06.2029. Платные — после дохода.",
   "courses": {
     "level_1_free_with_certificate": {
       "description": "✅ Бесплатные курсы с проверяемыми сертификатами. Начать сейчас.",
@@ -588,20 +587,20 @@
         "name": "English B2",
         "status": "not_started",
         "priority": "high",
-        "deadline": "2027-03-31",
+        "deadline": "2027-08-31",
         "output": "B2 certificate",
         "in_resume": true,
-        "note": "с ноября 2026"
+        "note": "3-4ч/нед, реалистичный темп"
       },
       {
         "id": "LRN-011",
         "name": "English C1",
         "status": "not_started",
         "priority": "high",
-        "deadline": "2027-09-30",
+        "deadline": "2029-06-30",
         "output": "C1 certificate",
         "in_resume": true,
-        "note": "после B2"
+        "note": "После B2, 3-4ч/нед"
       },
       {
         "id": "LRN-012",
