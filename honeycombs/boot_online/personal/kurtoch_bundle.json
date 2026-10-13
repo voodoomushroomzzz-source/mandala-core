@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-13T12:10:22Z",
+    "generated_at": "2026-10-13T13:30:33Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,7 +28,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.5.8",
+      "version": "v2.5.9",
       "created": "2026-09-23",
       "updated": "2026-10-13",
       "layer": 2,
@@ -56,14 +56,14 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.6.1",
+        "version": "v2.6.2",
         "tasks_count": 51,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
         "description": "Картотека сотрудников. Графа vacation — история и планы отпусков.",
         "purpose": "Все 16 сотрудников: контакты, навыки, статусы.",
-        "version": "v1.6.0",
+        "version": "v1.6.1",
         "total_employees": 20
       },
       "knowledge_base.json": {
@@ -184,7 +184,7 @@
     "health": {
       "status": "healthy",
       "last_check": "2026-10-13",
-      "notes": "v2.5.8: +K-127 (флажки Центр), +K-128 (расписание Дарья), K-110 → 2 угольных фильтра (Центр+Нижка)."
+      "notes": "v2.5.9: K-108 in_progress (31.10). EMP-020 Настя phone added."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -483,7 +483,7 @@
       "phase": "phase_0",
       "progress": 45,
       "date": "2026-10-13",
-      "last_action": "13.10: K-127/128 added. K-110 expanded (2 filters, in_progress). taskboard v2.6.1 (51 active).",
+      "last_action": "13.10 (2): K-108 in_progress (31.10). EMP-020 Настя phone.",
       "next_action": "K-125 планёрка 15.10. K-126 график Нижки 19.10. K-127 флажки 15.10. K-128 расписание Дарья 16.10. K-110 фильтры сегодня. K-078 финансы 15.10. K-105 Крис 31.10.",
       "blockers": [],
       "notes": [
@@ -1024,7 +1024,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.6.1",
+      "version": "v2.6.2",
       "created": "2026-09-14",
       "updated": "2026-10-13",
       "layer": 2,
@@ -2154,10 +2154,10 @@
           "title": "Планёрка по материалам обучения (сбор кусков + полный план)",
           "description": "Планёрка по материалам обучения. Участники: Крис, Витя, Дима.\nЦель: собрать все куски обучающих материалов (у кого что лежит) + составить полный план обучения.\nРезультат — входные данные для K-106 (программы обучения) и K-105 (передача функции обучения от Крис к Катрин).",
           "priority": "high",
-          "status": "todo",
+          "status": "in_progress",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-10-07",
+          "deadline": "2026-10-31",
           "reminder": null,
           "depends_on": [],
           "related_to": [
@@ -2166,7 +2166,7 @@
             "K-076"
           ],
           "created": "2026-10-01",
-          "updated": "2026-10-05",
+          "updated": "2026-10-13",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2395,8 +2395,8 @@
       "counters": {
         "total": 51,
         "by_status": {
-          "todo": 47,
-          "in_progress": 3,
+          "todo": 46,
+          "in_progress": 4,
           "planning": 1
         },
         "by_priority": {
@@ -4137,9 +4137,9 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.6.0",
+      "version": "v1.6.1",
       "created": "2026-09-23",
-      "updated": "2026-10-12",
+      "updated": "2026-10-13",
       "layer": 2,
       "type": "team_module",
       "description": "Картотека сотрудников Куртош. 17 человек. Графа vacation — история и планы отпусков. Синхронизируется с Notion Team (в будущем).",
@@ -4149,7 +4149,7 @@
       "resonance": "100%"
     },
     "team_roster": {
-      "last_updated": "2026-10-12",
+      "last_updated": "2026-10-13",
       "total_employees": 20,
       "by_status": {
         "core": 1,
@@ -5067,7 +5067,7 @@
           "name": "Анастасия (Настя)",
           "role": "SMM-контент",
           "contacts": {
-            "phone": null,
+            "phone": "89004771801",
             "telegram": "@nzv_anastasia"
           },
           "functions": [
@@ -5105,10 +5105,9 @@
             "history": []
           },
           "data_gaps": [
-            "contacts.phone",
             "nijka.attitude"
           ],
-          "updated": "2026-10-12"
+          "updated": "2026-10-13"
         }
       ],
       "skills_summary": {
