@@ -1,0 +1,139 @@
+{
+  "identity": {
+    "module_id": "KNOWLEDGE-SOUP-FINETUNING-001",
+    "name": "Soup — Fine-tuning LLM on Budget GPU",
+    "version": "v1.0.0",
+    "created": "2026-10-13",
+    "updated": "2026-10-13",
+    "layer": 3,
+    "type": "knowledge_index",
+    "description": "Soup CLI — open-source инструмент для файнтюнинга LLM на бюджетных GPU. Layer streaming: обучение 8B модели на 4 GB VRAM.",
+    "status": "active",
+    "priority": "medium",
+    "tags": [
+      "ai",
+      "llm",
+      "fine-tuning",
+      "lora",
+      "qlora",
+      "open-source",
+      "soup"
+    ]
+  },
+  "meta": {
+    "description": "Ресурс базы знаний Mandala: инструмент Soup для тонкой настройки языковых моделей.",
+    "source": "Instagram + verification (GitHub, PyPI, Hacker News, Product Hunt)",
+    "date_added": "2026-10-13",
+    "how_to_use": "Для справки. Может пригодиться, когда Mandala дорастёт до дообучения собственных SR-моделей."
+  },
+  "content": {
+    "what_it_is": "Soup (soup-cli) — открытый CLI-инструмент для post-training LLM. Полный цикл: advise, data doctor, train (SFT/DPO/ORPO/GRPO/PPO и др.), ship, diagnose, adapter arithmetic.",
+    "author": "Alpamys Makazhan (Казахстан)",
+    "license": "Apache-2.0",
+    "key_innovation": {
+      "name": "Layer Streaming",
+      "description": "Базовые (замороженные) слои модели не загружаются в VRAM целиком, а подаются на GPU по одному decoder-слою через double-buffered VRAM slots.",
+      "effect": "Пик VRAM = размер одного слоя + адаптер. Требования к памяти падают с 16 GB до ~3.3 GB.",
+      "tradeoff": "Каждый слой читается дважды (forward + backward recompute). Время обменивается на память."
+    },
+    "verified_facts": {
+      "github": "github.com/MakazhanAlpamys/Soup (~1.1k stars, 84k+ PyPI downloads)",
+      "pypi": "soup-cli",
+      "docker": "ghcr.io/makazhanalpamys/soup",
+      "zenodo": "Научная статья с протоколом корректности и измерениями",
+      "recognition": [
+        "Hacker News",
+        "Product Hunt",
+        "GIGAZINE",
+        "知乎"
+      ]
+    },
+    "benchmarks": {
+      "rtx_3050_4gb": {
+        "llama_3_1_8b_nf4_lora": {
+          "throughput": "119.6 tok/s",
+          "peak_vram": "3.32 GB"
+        },
+        "qwen2_5_3b_nf4": {
+          "throughput": "264.2 tok/s",
+          "peak_vram": "1.76 GB"
+        }
+      },
+      "correctness": "Forward побитово совпадает с resident NF4 reference, loss-кривые совпадают.",
+      "reproducibility": "Воспроизводится на H100 с сопоставимым throughput."
+    },
+    "honest_limitations": [
+      "Layer streaming — BETA, ограничен transformers/text/plain LoRA.",
+      "Медленнее resident training — структурно, из-за двойного чтения слоёв.",
+      "Публикует и проваленные эксперименты (benchmarks/README.md).",
+      "Silent correctness bugs — на 32B/72B NF4 forward bit-exact, но градиенты неверны на 62/64 слоях (aliasing, исправлено).",
+      "Windows/WDDM spilling — не OOM, а spill в host memory. Завершённый run ≠ модель влезла."
+    ],
+    "full_functionality": {
+      "decide": [
+        "soup advise (PROMPT_ENG/RAG/SFT/DPO)",
+        "soup data doctor (8 проверок chat-template)"
+      ],
+      "train": [
+        "SFT",
+        "DPO",
+        "ORPO",
+        "SimPO",
+        "KTO",
+        "GRPO",
+        "PPO",
+        "IPO",
+        "BCO",
+        "PRM",
+        "distillation",
+        "vision",
+        "audio"
+      ],
+      "ship": [
+        "soup ship — eval-гейт, exit 0/2, SHA-pinned"
+      ],
+      "operate": [
+        "soup diagnose",
+        "adapter arithmetic (diff/merge/bisect)"
+      ],
+      "secure": [
+        "HIPAA/SOC2/EU-AI-Act шаблоны",
+        "signed ML-BOMs"
+      ],
+      "integrations": [
+        "HuggingFace",
+        "Unsloth",
+        "DeepSpeed",
+        "vLLM",
+        "Ollama",
+        "ONNX",
+        "TensorRT",
+        "W&B",
+        "MLX"
+      ],
+      "migration": [
+        "soup migrate --from llamafactory|axolotl|unsloth"
+      ]
+    },
+    "relevance_to_mandala": {
+      "direct_fit": "Инструмент для training, не для memory. Дополняет Memory Architecture (Lemmalog, ACM, RENDER), не конкурирует.",
+      "use_case": "Когда Mandala дорастёт до дообучения специализированных SR-моделей (например, для философских диалогов).",
+      "current_limitation": "На Hetzner VPS нет GPU. Инструмент не применим прямо сейчас.",
+      "value": "Знание на будущее. Реальная, верифицированная, open-source технология."
+    },
+    "links": {
+      "github": "https://github.com/MakazhanAlpamys/Soup",
+      "pypi": "https://pypi.org/project/soup-cli/",
+      "instagram_source": "neironovvai, пост от 23 сентября"
+    },
+    "mandala_verdict": "8/10. Реальная разработка, верифицирована, open-source, релевантна. Добавлена в knowledge как справочный ресурс."
+  },
+  "navigation": {
+    "parent": "honeycombs/knowledge/index.json"
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-10-13",
+    "notes": "Создан на основе Instagram-поста neironovvai + верификация через GitHub/PyPI/HN/Product Hunt."
+  }
+}
