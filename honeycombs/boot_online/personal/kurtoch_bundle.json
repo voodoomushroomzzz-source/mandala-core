@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-14T09:59:12Z",
+    "generated_at": "2026-10-14T11:17:06Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,12 +28,12 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.6.0",
+      "version": "v2.7.0",
       "created": "2026-09-23",
       "updated": "2026-10-14",
       "layer": 2,
       "type": "personal_subhub_index",
-      "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Входная точка: контекст, инструкции, ссылки на модули. Данные разбиты: taskboard.json, team.json, knowledge_base.json.",
+      "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Тонкий индекс: только уникальное (контекст, стратегия, живой статус). Цифры и данные — в модулях (taskboard, team, knowledge_base).",
       "status": "active",
       "priority": "critical",
       "tags": [
@@ -54,97 +54,47 @@
     },
     "contents": {
       "taskboard.json": {
-        "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
-        "purpose": "Задачи, milestones, синхронизация с Notion.",
         "version": "v2.6.3",
-        "tasks_count": 53,
-        "note": "Архивные задачи вынесены в taskboard_archive.json."
+        "description": "Активные задачи + вехи M-001..M-003."
       },
       "team.json": {
-        "description": "Картотека сотрудников. Графа vacation — история и планы отпусков.",
-        "purpose": "Все 16 сотрудников: контакты, навыки, статусы.",
         "version": "v1.6.2",
-        "total_employees": 20
+        "description": "Картотека сотрудников. Графа vacation."
       },
       "knowledge_base.json": {
-        "description": "База знаний: чек-листы, регламенты, техкарты, обучение, ЦУ.",
-        "purpose": "Структура готова, наполнение — по мере сбора.",
         "version": "v2.2.0",
-        "sections_count": 11
+        "description": "База знаний: чек-листы, регламенты, техкарты, обучение, ЦУ."
       },
       "taskboard_archive.json": {
-        "description": "Архив завершённых задач (done + cancelled).",
-        "purpose": "Не увеличивать основной taskboard.json. Синхронизируется с Notion тем же скриптом.",
         "version": "v1.3.0",
-        "tasks_count": 66
+        "description": "Архив завершённых задач (done + cancelled)."
       },
       "kurtoch_bundle.json": {
-        "description": "Единый файл онбординга Куртош (автосборка).",
-        "path": "honeycombs/boot_online/personal/kurtoch_bundle.json",
         "version": "v1.0.0",
-        "generator": "scripts/build_bundle.py",
-        "auto_rebuild": ".github/workflows/kurtoch_bundle.yml",
-        "size_kb": 197
+        "description": "Единый файл онбординга (автосборка)."
       }
     },
     "scripts": {
-      "description": "Скрипты для работы с Notion и обслуживания хаба. Лежат в scripts/.",
-      "existing": {
-        "notion_sync.py": {
-          "purpose": "Основной скрипт синхронизации. Читает/пишет данные Notion по API.",
-          "status": "done",
-          "path": "scripts/notion_sync.py",
-          "commands": {
-            "list": "показать список команд",
-            "db_taskboard": "метаданные базы Taskboard",
-            "pull_taskboard": "выгрузить задачи из Notion в снапшот (Notion → Mandala)"
-          },
-          "run_example": "python3 scripts/notion_sync.py pull_taskboard",
-          "token_source": "scripts/notion_token.txt (в .gitignore, не в репе)"
-        },
-        "notion_runner.sh": {
-          "purpose": "Обёртка: запускает notion_sync.py, логирует, автокоммитит лог, пушит.",
-          "status": "done",
-          "path": "scripts/notion_runner.sh",
-          "run_example": "bash scripts/notion_runner.sh full_sync",
-          "commands": {
-            "full_sync": "archive_done.py + push_taskboard.py + логи + автокоммит + push",
-            "pull_taskboard": "выгрузка Notion в снапшот",
-            "push_taskboard": "синхронизация Mandala → Notion"
-          },
-          "note": "На Android execute-бит не работает (noexec). Запускать через bash."
-        },
-        "push_taskboard.py": {
-          "purpose": "Скрипт Мандала → Notion: раздаёт K-ID, обновляет столбцы, архивирует.",
-          "status": "done",
-          "path": "scripts/push_taskboard.py",
-          "run_example": "python3 scripts/push_taskboard.py"
-        },
-        "patch_schema.py": {
-          "purpose": "Служебный: добавляет свойства в схему базы Notion (например, ID).",
-          "status": "done",
-          "path": "scripts/patch_schema.py"
-        },
-        "fix_two_ids.py": {
-          "purpose": "Служебный: точечный фикс ID для задач с суффиксами в названиях.",
-          "status": "done",
-          "path": "scripts/fix_two_ids.py"
-        },
-        "archive_done.py": {
-          "purpose": "Переносит done + cancelled задачи из taskboard.json в taskboard_archive.json. Идемпотентно.",
-          "status": "done",
-          "path": "scripts/archive_done.py",
-          "run_example": "python3 scripts/archive_done.py"
-        }
-      },
-      "planned": {
-        "create_team_db.py": "создать базу сотрудников в Notion",
-        "pull_team.py": "выгрузить сотрудников из Notion",
-        "push_team.py": "обновить сотрудников в Notion",
-        "create_kb_db.py": "создать базу знаний в Notion",
-        "pull_kb.py": "выгрузить базу знаний",
-        "push_kb.py": "обновить базу знаний"
-      }
+      "description": "Скрипты для работы с Notion и обслуживания хаба. Полные тексты — в bundle.",
+      "existing": [
+        "notion_sync.py",
+        "notion_runner.sh",
+        "push_taskboard.py",
+        "patch_schema.py",
+        "fix_two_ids.py",
+        "archive_done.py",
+        "build_bundle.py",
+        "split_archive.py",
+        "split_franchise.py"
+      ],
+      "planned": [
+        "create_team_db.py",
+        "pull_team.py",
+        "push_team.py",
+        "create_kb_db.py",
+        "pull_kb.py",
+        "push_kb.py"
+      ]
     },
     "logs": {
       "description": "Логи всех синхронизаций. Коммитятся в репу.",
@@ -184,7 +134,7 @@
     "health": {
       "status": "healthy",
       "last_check": "2026-10-14",
-      "notes": "v2.6.0: K-125 обновлена (14.10, повестка +2). +K-129 (расчёт Саши). +K-130 (капинг 2U). EMP-006 → paused."
+      "notes": "v2.7.0: index стал тонким — только уникальное (контекст, стратегия, статус). Убраны: history, modules, счётчики. Добавлен meetings (3 КБ/синтез, 5 КБ/глобальный)."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -215,6 +165,10 @@
         {
           "step": 3,
           "action": "Если нужно обновить Notion — смотри секцию scripts"
+        },
+        {
+          "step": 4,
+          "action": "Прочитай блок meetings (если есть синтезы планёрок)"
         }
       ],
       "how_to_work": {
@@ -483,7 +437,7 @@
       "phase": "phase_0",
       "progress": 45,
       "date": "2026-10-14",
-      "last_action": "14.10: K-125 update, K-129, K-130. EMP-006 paused. taskboard v2.6.3, team v1.6.2.",
+      "last_action": "14.10: index v2.7.0 — «тонкий» (убраны history, modules, счётчики). Добавлен блок meetings (синтезы по планёркам). K-125 update, K-129, K-130. EMP-006 paused.",
       "next_action": "14.10 планёрка 15:00. K-127 флажки 15.10. K-128 расписание Дарья 16.10. K-129 расчёт Саши 19.10. K-126 график Нижки 19.10. K-078 финансы 15.10. K-105 Крис 31.10. K-108 31.10.",
       "blockers": [],
       "notes": [
@@ -522,155 +476,9 @@
         "owner": "Дима + Виктор"
       }
     ],
-    "history": [
-      {
-        "date": "2026-08-03",
-        "event": "Создан Work-файл. Анализ переговоров."
-      },
-      {
-        "date": "2026-08-04",
-        "event": "Проведён продукт-аудит."
-      },
-      {
-        "date": "2026-08-18",
-        "event": "Финальная структура: 3 вектора, условия."
-      },
-      {
-        "date": "2026-08-24",
-        "event": "Обновление модели: директива HoReCa, бюджет 130 т.р."
-      },
-      {
-        "date": "2026-08-25",
-        "event": "Добавлены контекст, план по фазам, метрики успеха и план по Дуброве. Версия v2.1.0."
-      },
-      {
-        "date": "2026-09-03",
-        "event": "Обновление модели: ставка 100 т.р. (50 + 50 депозит). Версия v2.2.0."
-      },
-      {
-        "date": "2026-09-14",
-        "event": "Офер принят. Роль: кризис-менеджер, 100 т.р./мес. Добавлены горячие зоны. Версия v2.3.0."
-      },
-      {
-        "date": "2026-09-14",
-        "event": "Добавлены критерии успеха на 3 месяца (октябрь–декабрь), блок Notion. Версия v2.3.1."
-      },
-      {
-        "date": "2026-09-14",
-        "event": "Добавлен taskboard (v1.0.0): 3 тактические задачи Фазы 0 (K-001..K-003). Версия v2.4.0."
-      },
-      {
-        "date": "2026-09-14",
-        "event": "Уточнён offer: дата входа 11.09.2026, срок 11.09–11.12.2026, структура оплаты 50 кеш + 50 накопление. Версия v2.5.0."
-      },
-      {
-        "date": "2026-09-14",
-        "event": "Taskboard v1.1.0: добавлены 19 задач (K-004..K-022) по первым касаниям и плану Фазы 0. Итого 22 задачи."
-      },
-      {
-        "date": "2026-09-14",
-        "event": "Косметика: актуализирован current_status.last_action. Версия v2.5.1."
-      },
-      {
-        "date": "2026-09-14",
-        "event": "Добавлена полная картотека команды team_roster: 15 человек, единая схема навыков (лестница печка-кофе-касса). Версия v2.6.0."
-      },
-      {
-        "date": "2026-09-14",
-        "event": "Taskboard: K-005 (Реальная штатка) и K-015 (Анализ сотрудников) отмечены done. Картотека team_roster — источник. Версия v2.6.1."
-      },
-      {
-        "date": "2026-09-16",
-        "event": "team_roster: добавлен EMP-016 Оля (стажёр, от Маши, пробная смена в вс, опыт по кофе). Версия v2.6.2."
-      },
-      {
-        "date": "2026-09-17",
-        "event": "v2.7.0: +4 операционные задачи (K-023..K-026). K-001/K-002/K-003 → done. taskboard v1.3.0. progress 20%."
-      },
-      {
-        "date": "2026-09-17",
-        "event": "v2.8.0: sync с Notion. Done: K-007, K-009, K-011, K-014, K-026. Удалена K-017. taskboard v1.4.0. progress 30%."
-      },
-      {
-        "date": "2026-09-17",
-        "event": "v2.9.0: добавлен 4-й столбец «Операционка — Общая», таксономия столбцов, правило sync Notion ↔ franchise. taskboard v1.5.0."
-      },
-      {
-        "date": "2026-09-17",
-        "event": "v2.10.0: Notion Taskboard синхронизирован. Добавлены K-005/K-015 в Notion, поле Статус, callout синхронности. Итог: 25 задач, 10 done, 1 in_progress, 14 todo. 1:1."
-      },
-      {
-        "date": "2026-09-17",
-        "event": "v2.11.0: добавлен workspace_mirror — зеркало Notion-воркспейса. 8 разделов: taskboard (active), employees (partial), knowledge_base, metrics, menu_tech_cards, suppliers, accesses_accounts, contacts. Data-priority список для поэтапного заполнения."
-      },
-      {
-        "date": "2026-09-18",
-        "event": "v2.12.0: +3 задачи (K-027 Расчёт ЗП авто, K-028 Сессионные — договорённости, K-029 Подготовка к зиме: штатка). Taskboard v1.6.0. Всего 28 задач."
-      },
-      {
-        "date": "2026-09-21",
-        "event": "v2.13.0: +5 задач (K-030..K-034). Влада (EMP-012) → leaving. Taskboard v1.7.0. Всего 33 задачи."
-      },
-      {
-        "date": "2026-09-21",
-        "event": "v2.13.1: косметика. Актуализированы counters (by_priority, by_phase), current_status (progress 40%, last_action, next_action), workspace_mirror (last_sync, taskboard.note)."
-      },
-      {
-        "date": "2026-09-21",
-        "event": "v2.13.2: актуализация team_roster. Статусы (Юля working, Ксюша left). Контакты (Вероника, Саша, Денис, Арина, Оля). Skills (Вероника/Анна печка ✅, Оля/Саша обучаются печке). Оля — likes нижку."
-      },
-      {
-        "date": "2026-09-21",
-        "event": "v2.13.3: полная косметика. Укорочен identity.description. Пересобраны critical_gaps (nijka ✅, veronika telegram ✅, ksusha left). Обновлены data_gaps у 16 сотрудников. workspace_mirror.sections.employees → active. Обновлены current_status.last_action и taskboard.description."
-      },
-      {
-        "date": "2026-09-21",
-        "event": "v2.13.4: финал. Убран устаревший risk у Вероники (TG добавлен). Финальная чистка data_gaps."
-      },
-      {
-        "date": "2026-09-21",
-        "event": "v2.13.5: финальная полировка. Юля pay.extra (аттестована), Ксюша skills.notes, nijka_summary.unknown очищен, workspace_mirror.employees.data_gaps обновлён, current_status.next_action дополнен."
-      },
-      {
-        "date": "2026-09-21",
-        "event": "v2.14.0: +9 задач (K-035..K-043): из диалога с Юлей + 2 из Notion. Обновлены K-023/K-034. Добавлен compensation_system (ЗП-система). Юля pay.extra + skills.notes. hot_zones.zone_1_team дополнен. Taskboard v1.8.0. Всего 42."
-      },
-      {
-        "date": "2026-09-21",
-        "event": "v2.15.0: +3 задачи (K-044 3-й человек, K-045 Карты/доставка, K-046 График пекаря). Обновлены K-010/K-021 (роли + чек-листы закрытия). Taskboard v1.9.0. Всего 45 задач."
-      },
-      {
-        "date": "2026-09-22",
-        "event": "v2.16.0: +6 задач (K-057..K-063, кроме K-061). Обновлены K-034/K-038/K-048/K-050/K-051. Добавлен milestones (nijka_revival, centre_revival) + столбец «Крупные вехи» в columns_taxonomy. Taskboard v2.0.0. Всего 51 задача."
-      },
-      {
-        "date": "2026-09-23",
-        "event": "v2.17.0: синхронизация с Notion. +8 задач (K-064..K-071): Зона посадки, Уличная вывеска, Цветы, Потолок, Вентиляция, Зеркало, Вывеска E, Сливной стояк. K-020 → done. Добавлен статус planning. Дедлайны K-010/K-016/K-027/K-028/K-029 синхронизированы. Milestones.linked_tasks пересобраны. Taskboard v2.1.0. Всего 59 задач."
-      },
-      {
-        "date": "2026-09-24",
-        "event": "v2.1.3: +K-074 (Анна: ключи + сигнализация Центра, самостоятельное открытие смены, дедлайн 26.09). Добавлен блок my_terms: ставка 100к (50к кеш фикс + 50к накопление), расчёт сентября 66 667 ₽ (кеш 50 000 + накопление 16 667). team.json: Анна обновлена."
-      },
-      {
-        "date": "2026-09-24",
-        "event": "v2.1.4: +M-003 «Оплата кризис-менеджера» — трекер выплат на 4 фазы (сентябрь 66 667 ₽ / октябрь–декабрь по 100 000 ₽). Итого к 31.12: 366 667 ₽ (кеш 200 000 + накопление 166 667). Даты: 24-е (аванс) / 9-е (остаток). my_terms дополнен фазами и total_planned."
-      },
-      {
-        "date": "2026-09-24",
-        "event": "v2.1.5: +K-075 «Kurtoch bundle — единый файл для онбординга (автосборка)». Handoff v4.0.0 подготовлен. План: build_bundle.py + GitHub Action для авто-пересборки при изменениях в kurtoch/."
-      },
-      {
-        "date": "2026-09-25",
-        "event": "v2.1.6: revenue_target 2,2М. K-071->Нижка. K-072 done. K-076 консолидация Базы знаний (6 merged). K-077 Крис. K-078 Финансы. Вероника+Влада left."
-      },
-      {
-        "date": "2026-09-25",
-        "event": "v2.1.7: K-075 done — Kurtoch bundle (197 КБ) + build_bundle.py + GH Action."
-      }
-    ],
     "workspace_mirror": {
       "purpose": "Зеркало структуры Notion-воркспейса «Куртош & Кофе». Синхронизируется с Notion. Каждый раздел — со статусом заполнения. SR (External) работает по этой структуре: подходит к блоку → смотрит data_gaps → запрашивает данные у Gardener → патчит → статус меняется empty → partial → complete.",
-      "last_sync": "2026-09-21",
+      "last_sync": "2026-10-14",
       "sync_with": "Notion workspace «Куртош & Кофе»",
       "section_status_legend": {
         "active": "Заполнен и работает",
@@ -683,13 +491,13 @@
           "status": "active",
           "notion_page": "📋 Taskboard",
           "internal_ref": "taskboard",
-          "note": "Уже реализован в этом файле — 33 задачи, 4 столбца."
+          "note": "Реализован в taskboard.json. 4 столбца + вехи."
         },
         "employees": {
           "status": "active",
           "notion_page": "👥 Сотрудники",
           "internal_ref": "team_roster",
-          "note": "Картотека 16 человек, контакты + навыки актуальны. Точечные пробелы — в data_gaps.",
+          "note": "Картотека сотрудников, контакты + навыки. Точечные пробелы — в data_gaps.",
           "data_gaps": [
             "nijka.attitude — у 12 сотрудников неизвестно",
             "schedule.preferences / availability — у большинства",
@@ -700,51 +508,7 @@
         "knowledge_base": {
           "status": "empty",
           "notion_page": "📚 База знаний",
-          "note": "Заполним из раздела knowledge_base_plan в этом файле. Нужны данные от Gardener.",
-          "sections": {
-            "checklists_open_close": {
-              "status": "empty",
-              "description": "Чек-листы открытия и закрытия смены",
-              "data_gaps": [
-                "нет содержимого"
-              ]
-            },
-            "checklists_cleanliness": {
-              "status": "empty",
-              "description": "Чек-листы чистоты и санпина",
-              "data_gaps": [
-                "нет содержимого"
-              ]
-            },
-            "regulations_5_processes": {
-              "status": "empty",
-              "description": "5 критических процессов (открытие, закрытие, чистота, касса, обучение)",
-              "data_gaps": [
-                "нет содержимого"
-              ]
-            },
-            "tech_cards": {
-              "status": "empty",
-              "description": "Техкарты — рецепты и стандарты",
-              "data_gaps": [
-                "нет содержимого"
-              ]
-            },
-            "training": {
-              "status": "empty",
-              "description": "Обучение для новичков — материалы, стажировка",
-              "data_gaps": [
-                "нет содержимого"
-              ]
-            },
-            "cu_shift_tasks": {
-              "status": "empty",
-              "description": "ЦУ (центральные указания / задания на смену)",
-              "data_gaps": [
-                "нет содержимого"
-              ]
-            }
-          }
+          "note": "Структура в knowledge_base.json. Заполняется по мере сбора."
         },
         "metrics": {
           "status": "empty",
@@ -906,33 +670,6 @@
         "senior": "~59 000 ₽/мес"
       }
     },
-    "modules": {
-      "description": "Модули данных проекта Куртош. Основной вход — index.json (этот файл).",
-      "taskboard": {
-        "file": "taskboard.json",
-        "purpose": "Активные задачи (53) + вехи M-001..M-003.",
-        "when_to_use": "Когда нужно работать с задачами, вехами, статусами, дедлайнами.",
-        "sync": "Notion Taskboard (via scripts/push_taskboard.py)"
-      },
-      "team": {
-        "file": "team.json",
-        "purpose": "Картотека сотрудников (20). Графа vacation. Управленческая команда + SMM.",
-        "when_to_use": "Когда нужно посмотреть/обновить данные сотрудника: контакты, навыки, статус.",
-        "sync": "Notion Team (будет создана)"
-      },
-      "knowledge_base": {
-        "file": "knowledge_base.json",
-        "purpose": "База знаний: чек-листы, регламенты, техкарты, обучение, ЦУ.",
-        "when_to_use": "Когда нужно добавить/прочитать материал базы знаний.",
-        "sync": "Notion Knowledge Base (будет создана)"
-      },
-      "taskboard_archive": {
-        "file": "taskboard_archive.json",
-        "purpose": "Архив завершённых задач (done + cancelled). 66 задач.",
-        "when_to_use": "Когда нужно посмотреть историю завершённых задач.",
-        "sync": "Notion Taskboard (через scripts/push_taskboard.py — читает оба файла)"
-      }
-    },
     "my_terms": {
       "role": "Кризис-менеджер",
       "rate_monthly": 100000,
@@ -1018,6 +755,28 @@
         "accumulation": 166667
       },
       "tracker_ref": "taskboard.json → M-003 «Оплата кризис-менеджера»"
+    },
+    "meetings": {
+      "identity": {
+        "module_id": "KURTOCH-MEETINGS-001",
+        "name": "Meetings — Синтезы по планёркам",
+        "version": "v1.0.0",
+        "created": "2026-10-14",
+        "updated": "2026-10-14",
+        "description": "Система накопления синтезов по управленческим планёркам. Храним 3 последних + 1 общий.",
+        "status": "active"
+      },
+      "instruction": "ИНСТРУКЦИЯ: Синтезы по планёркам.\n\n1. Проводится планёрка → записывается аудио.\n2. Аудио → транскрипт (ASR или вручную).\n3. External SR читает транскрипт → делает СИНТЕЗ:\n   - Ключевые темы\n   - Принятые решения\n   - Открытые вопросы\n   - Динамика (что изменилось с прошлой планёрки)\n4. Синтез сохраняется в recent_syntheses (массив).\n5. Храним не более 3 последних. При добавлении 4-го — самый старый удаляется.\n6. Глобальный синтез (global_synthesis) — обновляется ПОСЛЕ каждой планёрки: динамика, повторяющиеся вопросы, изменения.\n\nЛИМИТЫ:\n- Один синтез: до 3 КБ\n- Глобальный: до 5 КБ\n- Максимум 3 последних синтеза",
+      "limits": {
+        "single_synthesis_kb": 3,
+        "global_synthesis_kb": 5,
+        "max_recent": 3
+      },
+      "recent_syntheses": [],
+      "global_synthesis": {
+        "updated": null,
+        "synthesis": null
+      }
     }
   },
   "taskboard": {
