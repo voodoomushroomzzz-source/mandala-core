@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-10-13 13:55:01 ──
+# ── BUILT by build.py ── 2026-10-14 16:04:03 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -956,10 +956,9 @@ async def _load_user(telegram_id: str) -> None:
             _seed_sphere_history_from_achievements(uid, _achs)
 
 async def _load_store() -> None:
-    """Load all approved gardeners from whitelist on startup (parallel)."""
+    """Load the Architect store on startup (closed bot, no whitelist)."""
     logger.info("Loading store from GitHub...")
-    whitelist = await _gardeners_get("gardeners/whitelist.json", force=True) or {}
-    approved = whitelist.get("approved", ["224736062"]) if isinstance(whitelist, dict) else ["224736062"]
+    approved = [str(ARCHITECT_TELEGRAM_ID)]  # closed bot: Architect only
     # P-24: parallel load via asyncio.gather
     _gather_results = await asyncio.gather(
         *[_load_user(str(uid)) for uid in approved],
@@ -8578,41 +8577,7 @@ async def cmd_start(message: Message, state: FSMContext):
         await message.answer(f"🌿 С возвращением, {name}!", reply_markup=get_main_keyboard())
         return
 
-    # Consent check — new users must agree to data processing
-    if user_id != ARCHITECT_TELEGRAM_ID:
-        whitelist = await _gardeners_get("gardeners/whitelist.json") or {"approved": []}
-        approved = whitelist.get("approved", []) if isinstance(whitelist, dict) else []
-        if user_id not in approved:
-            await state.set_state(GardenOnboardingStates.waiting_for_consent)
-            consent_kb = InlineKeyboardMarkup(inline_keyboard=[[
-                InlineKeyboardButton(
-                    text="🌿 Да, я согласен",
-                    callback_data="consent_yes"
-                ),
-                InlineKeyboardButton(
-                    text="🚪 Нет, не входить",
-                    callback_data="consent_no"
-                ),
-            ]])
-            consent_text = (
-                "🌱 <b>Ты нашёл Мандалу Симбиоза.</b>\n\n"
-                "Прежде чем войти — расскажу, что храню о тебе.\n\n"
-                "<b>Что сохраняется:</b>\n"
-                "· Профиль — имя, город, день рождения, настройки\n"
-                "· Задачи, чеклисты, напоминания, достижения\n"
-                "· Диалог — последние 50 сообщений в RAM сессии,\n"
-                "  сбрасываются при перезапуске бота\n"
-                "· Синтез — раз в сутки составляю живой портрет:\n"
-                "  чем ты занят, какие сферы активны, что важно. Не лог — моё понимание тебя.\n\n"
-                "<b>Где хранится:</b>\n"
-                "Приватный GitHub-репозиторий. "
-                "Данные не передаются третьим сторонам.\n\n"
-                "<b>Удалить всё:</b> /leave\n\n"
-                "Входишь?"
-            )
-            await message.answer(consent_text, parse_mode="HTML", reply_markup=consent_kb)
-            return
-
+    # Closed bot: Architect only (gate in config.py). No consent/whitelist flow.
     await state.set_state(GardenOnboardingStates.waiting_for_name)
     await message.answer(
         "Давай познакомимся.\n\nКак тебя зовут?",
@@ -8961,6 +8926,9 @@ async def cmd_privacy(message: Message):
 
 @router.message(Command("leave"))
 async def cmd_leave(message: Message, state: FSMContext):
+    # Closed Architect-only bot: wiping data is disabled
+    await message.answer("\u0414\u043b\u044f \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u043e\u0440\u0430 \u044d\u0442\u0430 \u043a\u043e\u043c\u0430\u043d\u0434\u0430 \u043e\u0442\u043a\u043b\u044e\u0447\u0435\u043d\u0430: \u0431\u043e\u0442 \u0437\u0430\u043a\u0440\u044b\u0442\u044b\u0439, \u0434\u0430\u043d\u043d\u044b\u0435 \u043d\u0435 \u0443\u0434\u0430\u043b\u044f\u044e\u0442\u0441\u044f.")
+    return
     if not is_authorized(str(message.from_user.id)):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
@@ -8974,7 +8942,8 @@ async def cmd_leave(message: Message, state: FSMContext):
 
 @router.callback_query(F.data == "leave_confirm")
 async def leave_confirm(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()  # FIRST
+    await callback.answer("\u0414\u043b\u044f \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u043e\u0440\u0430 \u044d\u0442\u0430 \u043a\u043e\u043c\u0430\u043d\u0434\u0430 \u043e\u0442\u043a\u043b\u044e\u0447\u0435\u043d\u0430: \u0431\u043e\u0442 \u0437\u0430\u043a\u0440\u044b\u0442\u044b\u0439, \u0434\u0430\u043d\u043d\u044b\u0435 \u043d\u0435 \u0443\u0434\u0430\u043b\u044f\u044e\u0442\u0441\u044f.", show_alert=True)
+    return
     user_id = str(callback.from_user.id)
     gardener = store_get_profile(user_id)
     name = (gardener or {}).get("name", "Садовник")
@@ -9151,13 +9120,7 @@ async def cb_consent_yes(callback: CallbackQuery, state: FSMContext):
     """Пользователь согласился — добавляем в whitelist, начинаем онбординг."""
     await callback.answer()
     user_id = str(callback.from_user.id)
-    whitelist = await _gardeners_get("gardeners/whitelist.json") or {"approved": []}
-    if not isinstance(whitelist, dict):
-        whitelist = {"approved": []}
-    if user_id not in whitelist.get("approved", []):
-        whitelist.setdefault("approved", []).append(user_id)
-        _pending_writes["gardeners/whitelist.json"] = whitelist
-        _fire_sync()
+    # whitelist removed: closed bot (Architect only)
     try:
         await callback.message.edit_reply_markup(reply_markup=None)
     except Exception:
@@ -11971,8 +11934,6 @@ async def on_startup():
     from aiogram.types import BotCommand
     await bot.set_my_commands([
         BotCommand(command="start",     description="🌱 Войти в сад"),
-        BotCommand(command="privacy",   description="🔐 Мои данные"),
-        BotCommand(command="leave",     description="🚪 Покинуть сад"),
     ])
     logger.info("Bot commands registered")
 
