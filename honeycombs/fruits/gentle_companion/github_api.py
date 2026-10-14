@@ -452,10 +452,9 @@ async def _load_user(telegram_id: str) -> None:
             _seed_sphere_history_from_achievements(uid, _achs)
 
 async def _load_store() -> None:
-    """Load all approved gardeners from whitelist on startup (parallel)."""
+    """Load the Architect store on startup (closed bot, no whitelist)."""
     logger.info("Loading store from GitHub...")
-    whitelist = await _gardeners_get("gardeners/whitelist.json", force=True) or {}
-    approved = whitelist.get("approved", ["224736062"]) if isinstance(whitelist, dict) else ["224736062"]
+    approved = [str(ARCHITECT_TELEGRAM_ID)]  # closed bot: Architect only
     # P-24: parallel load via asyncio.gather
     _gather_results = await asyncio.gather(
         *[_load_user(str(uid)) for uid in approved],

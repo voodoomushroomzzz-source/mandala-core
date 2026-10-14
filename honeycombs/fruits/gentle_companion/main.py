@@ -35,8 +35,6 @@ async def on_startup():
     from aiogram.types import BotCommand
     await bot.set_my_commands([
         BotCommand(command="start",     description="🌱 Войти в сад"),
-        BotCommand(command="privacy",   description="🔐 Мои данные"),
-        BotCommand(command="leave",     description="🚪 Покинуть сад"),
     ])
     logger.info("Bot commands registered")
 
