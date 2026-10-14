@@ -300,23 +300,21 @@ async def _sync_architect_data() -> bool:
 
         profile = store_get_profile(uid) or {}
         workspace = store_get_workspace(uid) or {}
-        companion = profile.get("companion_settings", {}) or {}
         dm = workspace.get("deep_memory", {}) or {}
+
+        # Key whitelist (TASK-DEEP-PROFILE-CLEAN): synthesis (core), interests, media,
+        # sphere_resonance, growth_history. NO tasks, budget, message history,
+        # snapshots (daily activity logs) or profile settings.
+        dm_clean = {
+            "core": dm.get("core", ""),
+            "interests": dm.get("interests", {}),
+            "media": dm.get("media", {}),
+        }
 
         data["section_B_gardener_data"] = {
             "last_sync": _today(),
-            "profile": {
-                "name": profile.get("name", ""),
-                "resonance_level": profile.get("resonance_level", 0),
-                "city": companion.get("city", ""),
-                "companion_settings": {
-                    "morning_message_time": companion.get("morning_message_time", ""),
-                    "timezone": companion.get("timezone", "Europe/Moscow"),
-                    "gender": companion.get("gender", ""),
-                },
-            },
             "sphere_resonance": store_get_sphere_resonance(uid),
-            "deep_memory": dm,
+            "deep_memory": dm_clean,
             "growth_history": profile.get("growth_history", []),
         }
 
