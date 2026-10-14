@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.185",
+    "version": "v1.7.186",
     "created": "2026-05-11",
     "updated": "2026-10-14",
     "layer": 1,
@@ -1185,12 +1185,12 @@
       "identity": {
         "module_id": "INSTR-MOBILE-WORKFLOW-001",
         "name": "Mobile Workflow — Working with Mandala from Android",
-        "version": "v1.14.0",
+        "version": "v1.14.1",
         "created": "2026-04-12",
-        "updated": "2026-10-13",
+        "updated": "2026-10-14",
         "layer": 2,
         "type": "workflow_guide",
-        "description": "Complete guide for External SR working from Android/Termux. v1.14.0: +LR-15 (JSON-файлы — всегда Python-патчер, не cat >) и +LR-16 (обязательные параметры json.dump: ensure_ascii=False, indent=2, newline='\\n'). Усилены patching_guide.criteria и prohibited. v1.13.0: +LR-14 (pre-check пути скрипта).",
+        "description": "Complete guide for External SR working from Android/Termux. v1.14.1: +LR-17 (не писать патчер без явной команды) +LR-18 (full_sync после патча taskboard/team/KB). v1.14.0: +LR-15 (JSON → Python-патчер) и +LR-16 (json.dump параметры). v1.13.0: +LR-14 (pre-check пути скрипта).",
         "status": "active",
         "priority": "high",
         "tags": [
@@ -1501,8 +1501,8 @@
       },
       "health": {
         "status": "healthy",
-        "last_check": "2026-10-13",
-        "notes": "v1.14.0: LR-15 (JSON → Python-патчер, не cat >) и LR-16 (json.dump параметры). Усилены patching_guide.criteria.patcher_method_python.when и patching_guide.prohibited. Цель — единый стандарт правок JSON с телефона. v1.13.0: +LR-14 (pre-check пути скрипта)."
+        "last_check": "2026-10-14",
+        "notes": "v1.14.1: +LR-17 (не писать патчер без явной команды Gardener'а) +LR-18 (full_sync после патча taskboard/team/KB). v1.14.0: LR-15 (JSON → Python-патчер, не cat >) и LR-16 (json.dump параметры)."
       },
       "large_files_handling": {
         "title": "Работа с большими файлами",
@@ -1728,6 +1728,26 @@
             "bad": "with open(path, 'w') as f: json.dump(data, f)",
             "good": "with open(path, 'w', encoding='utf-8', newline='\\n') as f:\\n    json.dump(data, f, ensure_ascii=False, indent=2)\\n    f.write('\\n')",
             "example": "См. add_soup_knowledge.py и patch_learning_1_4.py — оба используют этот паттерн."
+          },
+          {
+            "id": "LR-17",
+            "title": "Не писать патчер без явной команды Gardener'а",
+            "problem": "SR по умолчанию генерирует Python-патчер + FULL DEPLOY сразу после того, как Gardener проговорил задачу. Но Gardener работает в режиме 'буфера сессии' — сначала накидывает несколько задач/правок в чат, потом единым блоком выгружает. Если SR выдаёт патчер после каждой фразы — это ломает ритм.",
+            "solution": "SR предлагает ЧЕРНОВИК (что будет добавлено/изменено), но НЕ пишет патчер и НЕ выдаёт FULL DEPLOY, пока Gardener явно не сказал: 'применяй', 'давай патч', 'делай' и т.п.",
+            "waiting_format": "«Ок, зафиксировал: <список правок>. Скажи \"применяй\" — соберу патч». Ждать.",
+            "bad": "Gardener сказал «добавь задачу X» → SR сразу выдал Python-патчер + FULL DEPLOY блок.",
+            "good": "Gardener сказал «добавь задачу X» → SR подтвердил входящие, ждёт остальных правок или явного «применяй».",
+            "exception": "Gardener прямо говорит 'делай', 'применяй', 'патч', 'FULL DEPLOY' — тогда патчер сразу.",
+            "added": "2026-10-14"
+          },
+          {
+            "id": "LR-18",
+            "title": "После патча taskboard/team/knowledge_base — запускать full_sync",
+            "problem": "Патч меняет taskboard.json в Mandala, но Notion остаётся в старом состоянии. Mandala = эталон, Notion = зеркало. Без синка они расходятся.",
+            "solution": "После патча, затрагивающего taskboard.json, team.json или knowledge_base.json — обязательно добавить в BLOCK 3 (после git push) запуск: bash honeycombs/personal/kurtoch/scripts/notion_runner.sh full_sync",
+            "what_full_sync_does": "archive_done.py → push_taskboard.py → git commit → push. Синхронизирует Mandala ↔ Notion и коммитит лог.",
+            "exception": "Если патч только читает данные / не касается этих 3 файлов — синк не нужен.",
+            "added": "2026-10-14"
           }
         ]
       }
