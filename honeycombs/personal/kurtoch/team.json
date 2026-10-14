@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "KURTOCH-TEAM-001",
     "name": "Kurtoch — Team Roster",
-    "version": "v1.6.2",
+    "version": "v1.7.0",
     "created": "2026-09-23",
     "updated": "2026-10-14",
     "layer": 2,
     "type": "team_module",
-    "description": "Картотека сотрудников Куртош. 17 человек. Графа vacation — история и планы отпусков. Синхронизируется с Notion Team (в будущем).",
+    "description": "Картотека сотрудников Куртош. 20 человек. Новая система ставок (200/250/300 ₽/ч, без бонусов).",
     "status": "active",
     "priority": "high",
     "parent": "index.json",
@@ -17,13 +17,11 @@
     "last_updated": "2026-10-14",
     "total_employees": 20,
     "by_status": {
-      "core": 1,
-      "working": 5,
-      "left": 3,
-      "paused": 1,
-      "runner": 2,
-      "trainee": 2,
-      "substitute": 4,
+      "core": 2,
+      "working": 6,
+      "left": 5,
+      "paused": 4,
+      "substitute": 1,
       "management": 2
     },
     "skill_ladder": {
@@ -39,7 +37,7 @@
       {
         "id": "EMP-001",
         "name": "Катрин",
-        "role": "Администратор",
+        "role": "Старший бариста + администратор",
         "contacts": {
           "phone": "8 930 749 41 91",
           "telegram": "@katrinzzz_its_i"
@@ -66,13 +64,9 @@
           "notes": null
         },
         "pay": {
-          "base": "200 руб/ч",
-          "bonuses": [
-            "+10к команда",
-            "+10к продажи/сервис (-300 руб/ч)"
-          ],
-          "extra": "сентябрь 24к оклад админки; октябрь 16к за инвент и закупки",
-          "notes": null
+          "base": "300 руб/ч",
+          "admin_surcharge": "16 000 руб/мес",
+          "notes": "Админка — отдельный оклад. Сумма уточняется."
         },
         "status": "core",
         "risks": [],
@@ -91,12 +85,13 @@
             }
           ],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-002",
         "name": "Никита",
-        "role": "Бариста",
+        "role": "Бариста (1 уровень)",
         "contacts": {
           "phone": "8 980 754 12 82",
           "telegram": "@Yoshi3313"
@@ -121,12 +116,7 @@
           "notes": "не любит нижку — скучно, нет потоков"
         },
         "pay": {
-          "base": "200 руб/ч",
-          "bonuses": [
-            "+5к за штатку",
-            "+5к за киай и от адм (-250 руб/ч)"
-          ],
-          "extra": null,
+          "base": "250 руб/ч",
           "notes": null
         },
         "status": "working",
@@ -138,12 +128,13 @@
         "vacation": {
           "planned": [],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-003",
         "name": "Александра",
-        "role": "Бариста",
+        "role": "Бариста (1 уровень)",
         "contacts": {
           "phone": "8 999 098 66 61",
           "telegram": "@spelayavischnyaa"
@@ -168,12 +159,7 @@
           "notes": "не любит нижку — скучно, нет потоков"
         },
         "pay": {
-          "base": "200 руб/ч",
-          "bonuses": [
-            "+5к за штатку",
-            "+5к за киай и от адм (-250 руб/ч)"
-          ],
-          "extra": null,
+          "base": "250 руб/ч",
           "notes": null
         },
         "status": "working",
@@ -188,7 +174,8 @@
         "vacation": {
           "planned": [],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-004",
@@ -218,10 +205,8 @@
           "notes": null
         },
         "pay": {
-          "base": "200 руб/ч",
-          "bonuses": [],
-          "extra": "пока стажёр",
-          "notes": null
+          "base": null,
+          "notes": "Уволена 25.09.2026. Рассчитана."
         },
         "status": "left",
         "risks": [],
@@ -234,12 +219,13 @@
         "vacation": {
           "planned": [],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-005",
         "name": "Анна",
-        "role": "Стажёр",
+        "role": "Бариста (1 уровень)",
         "contacts": {
           "phone": "8 910 676 12 56",
           "telegram": "@annnnn_nnnnna"
@@ -257,17 +243,15 @@
           "pechka": "yes",
           "coffee": "training",
           "kassa": "training",
-          "notes": "Печка — сама. Обучается кофе и кассе."
+          "notes": "Печка — сама. Нужна аттестация: кофе + касса."
         },
         "nijka": {
           "attitude": null,
           "notes": null
         },
         "pay": {
-          "base": "200 руб/ч",
-          "bonuses": [],
-          "extra": "пока стажёр",
-          "notes": null
+          "base": "250 руб/ч",
+          "notes": "Аттестация: нужна"
         },
         "status": "working",
         "risks": [],
@@ -279,12 +263,13 @@
         "vacation": {
           "planned": [],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-006",
         "name": "Саша",
-        "role": "Стажёр (лайт)",
+        "role": "Стажёр",
         "contacts": {
           "phone": "89961972167",
           "telegram": "@ilmintra_neek"
@@ -310,9 +295,7 @@
         },
         "pay": {
           "base": "200 руб/ч",
-          "bonuses": [],
-          "extra": "пока стажёр",
-          "notes": null
+          "notes": "Стажёр (лайт). Временно на паузе."
         },
         "status": "paused",
         "risks": [],
@@ -355,12 +338,10 @@
           "notes": null
         },
         "pay": {
-          "base": "200 руб/ч + 50 руб/ч надбавка",
-          "bonuses": [],
-          "extra": "повышенная ставка бегунка = 250 руб/ч",
-          "notes": null
+          "base": null,
+          "notes": "Ранер. Временно на паузе."
         },
-        "status": "runner",
+        "status": "paused",
         "risks": [],
         "notes": "Бегунок (ранер).",
         "data_gaps": [
@@ -369,7 +350,8 @@
         "vacation": {
           "planned": [],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-008",
@@ -400,12 +382,10 @@
           "notes": null
         },
         "pay": {
-          "base": "200 руб/ч + 50 руб/ч надбавка",
-          "bonuses": [],
-          "extra": "повышенная ставка бегунка = 250 руб/ч",
-          "notes": null
+          "base": null,
+          "notes": "Ранер. Временно на паузе."
         },
-        "status": "runner",
+        "status": "paused",
         "risks": [],
         "notes": null,
         "data_gaps": [
@@ -414,12 +394,13 @@
         "vacation": {
           "planned": [],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-009",
         "name": "Юля",
-        "role": "Бариста (возвращается)",
+        "role": "Бариста (1 уровень)",
         "contacts": {
           "phone": "8 910 181 27 43",
           "telegram": "@yurkinnna"
@@ -437,20 +418,15 @@
           "pechka": "yes",
           "coffee": "yes",
           "kassa": "yes",
-          "notes": "Универсал ✅. Аттестация запланирована на 25.09."
+          "notes": "Универсал. Аттестация не завершена."
         },
         "nijka": {
           "attitude": "likes",
           "notes": "предпочитает Нижку"
         },
         "pay": {
-          "base": "200 руб/ч",
-          "bonuses": [
-            "+5к за штатку",
-            "+5к за киай и от адм (-250 руб/ч)"
-          ],
-          "extra": "Все самостоятельные смены — полная ставка. Аттестация (формальность) с Кристиной — 25.09.",
-          "notes": null
+          "base": "250 руб/ч",
+          "notes": "Аттестация: не доаттестована до конца."
         },
         "status": "working",
         "risks": [],
@@ -458,7 +434,7 @@
         "data_gaps": [
           "schedule.availability"
         ],
-        "updated": "2026-10-04",
+        "updated": "2026-10-14",
         "vacation": {
           "planned": [],
           "history": []
@@ -467,7 +443,7 @@
       {
         "id": "EMP-010",
         "name": "Денис",
-        "role": "Стажёр (управляющий др. кофеен)",
+        "role": "Бариста (1 уровень)",
         "contacts": {
           "phone": "79045905029",
           "telegram": "@earcrvsher"
@@ -482,23 +458,21 @@
           "availability": null
         },
         "skills": {
-          "stage": "universal",
+          "stage": "pechka_done",
           "pechka": "yes",
-          "coffee": "yes",
-          "kassa": "yes",
-          "notes": null
+          "coffee": "training",
+          "kassa": "training",
+          "notes": "Печка — аттестован. Нужна аттестация: кофе + касса."
         },
         "nijka": {
           "attitude": null,
           "notes": null
         },
         "pay": {
-          "base": "200 руб/ч",
-          "bonuses": [],
-          "extra": "пока стажёр",
-          "notes": null
+          "base": "250 руб/ч",
+          "notes": "Аттестация: нужна по кофе и кассе."
         },
-        "status": "trainee",
+        "status": "working",
         "risks": [],
         "notes": "Работает на подмоге. Сам печка. До года.",
         "data_gaps": [
@@ -508,7 +482,8 @@
         "vacation": {
           "planned": [],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-011",
@@ -538,10 +513,8 @@
           "notes": null
         },
         "pay": {
-          "base": "200 руб/ч",
-          "bonuses": [],
-          "extra": "пока стажёр",
-          "notes": null
+          "base": null,
+          "notes": "Ушла до завершения обучения."
         },
         "status": "left",
         "risks": [],
@@ -550,7 +523,8 @@
         "vacation": {
           "planned": [],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-012",
@@ -580,10 +554,8 @@
           "notes": null
         },
         "pay": {
-          "base": "200 руб/ч",
-          "bonuses": [],
-          "extra": "пока стажёр",
-          "notes": null
+          "base": null,
+          "notes": "Рассчитана 09.09.2026."
         },
         "status": "left",
         "risks": [],
@@ -596,7 +568,8 @@
         "vacation": {
           "planned": [],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-013",
@@ -626,12 +599,10 @@
           "notes": null
         },
         "pay": {
-          "base": "200 руб/ч",
-          "bonuses": [],
-          "extra": "пока стажёр",
-          "notes": null
+          "base": null,
+          "notes": "Ушла."
         },
-        "status": "substitute",
+        "status": "left",
         "risks": [],
         "notes": null,
         "data_gaps": [
@@ -640,7 +611,8 @@
         "vacation": {
           "planned": [],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-014",
@@ -670,15 +642,10 @@
           "notes": null
         },
         "pay": {
-          "base": "200 руб/ч",
-          "bonuses": [
-            "+5к за штатку",
-            "+5к за киай и от адм (-250 руб/ч)"
-          ],
-          "extra": null,
-          "notes": null
+          "base": null,
+          "notes": "Ушёл."
         },
-        "status": "substitute",
+        "status": "left",
         "risks": [
           "только частичные смены"
         ],
@@ -689,12 +656,13 @@
         "vacation": {
           "planned": [],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-015",
         "name": "Маша",
-        "role": "Подменная + обучение стажёров",
+        "role": "Старший бариста",
         "contacts": {
           "phone": "8 999 730 63 51",
           "telegram": "@Mashundradvo"
@@ -721,15 +689,10 @@
           "notes": null
         },
         "pay": {
-          "base": "200 руб/ч",
-          "bonuses": [
-            "+10к команда",
-            "+10к продажи/сервис (-300 руб/ч)"
-          ],
-          "extra": null,
-          "notes": null
+          "base": "300 руб/ч",
+          "notes": "Старший бариста. Без админки."
         },
-        "status": "substitute",
+        "status": "core",
         "risks": [
           "договорённость только до 3-й недели сентября"
         ],
@@ -741,12 +704,13 @@
         "vacation": {
           "planned": [],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-016",
         "name": "Оля",
-        "role": "Стажёр (пробная смена)",
+        "role": "Бариста (1 уровень)",
         "contacts": {
           "phone": "+79209204402",
           "telegram": "@helgadubova"
@@ -764,17 +728,15 @@
           "pechka": "yes",
           "coffee": "training",
           "kassa": "yes",
-          "notes": "Печка OK, касса OK. Работает самостоятельно. Кофе — доработать."
+          "notes": "Печка OK, касса OK. Нужна аттестация: кофе."
         },
         "nijka": {
           "attitude": "likes",
           "notes": "Готова работать на нижке"
         },
         "pay": {
-          "base": "200 руб/ч (пока стажёр)",
-          "bonuses": [],
-          "extra": null,
-          "notes": null
+          "base": "250 руб/ч",
+          "notes": "Аттестация: нужна."
         },
         "status": "working",
         "risks": [
@@ -784,7 +746,7 @@
         "data_gaps": [
           "schedule.notes"
         ],
-        "updated": "2026-10-02",
+        "updated": "2026-10-14",
         "vacation": {
           "planned": [],
           "history": []
@@ -818,12 +780,10 @@
           "notes": null
         },
         "pay": {
-          "base": "200 руб/ч (пока стажёр)",
-          "bonuses": [],
-          "extra": null,
-          "notes": null
+          "base": "200 руб/ч",
+          "notes": "Стажёр. В паузе — нет необходимости."
         },
-        "status": "trainee",
+        "status": "paused",
         "risks": [],
         "notes": "Собеседование 28.09. Договорились на 2 обучающие смены на след. неделе. Обе точки.",
         "data_gaps": [
@@ -833,12 +793,13 @@
         "vacation": {
           "planned": [],
           "history": []
-        }
+        },
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-018",
         "name": "Дима Рыжков",
-        "role": "Ассоциированный (сессионный подменщик)",
+        "role": "Ассоциированный (бариста 1 уровня)",
         "contacts": {
           "phone": "+7 (977) 700-31-10",
           "telegram": "@lickthesun23"
@@ -863,9 +824,7 @@
           "notes": null
         },
         "pay": {
-          "base": "200 руб/ч + 50 руб/ч надбавка",
-          "bonuses": [],
-          "extra": "повышенная ставка = 250 руб/ч",
+          "base": "250 руб/ч",
           "notes": null
         },
         "status": "substitute",
@@ -879,7 +838,7 @@
           "nijka.attitude",
           "schedule.availability"
         ],
-        "updated": "2026-10-07"
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-019",
@@ -912,9 +871,7 @@
         },
         "pay": {
           "base": "10 000 руб/мес",
-          "bonuses": [],
-          "extra": null,
-          "notes": "Курирование SMM. Итого с Настей — 30 000 руб/мес."
+          "notes": "SMM-курирование. Оклад."
         },
         "status": "management",
         "risks": [],
@@ -926,7 +883,7 @@
         "data_gaps": [
           "nijka.attitude"
         ],
-        "updated": "2026-10-12"
+        "updated": "2026-10-14"
       },
       {
         "id": "EMP-020",
@@ -959,9 +916,7 @@
         },
         "pay": {
           "base": "20 000 руб/мес",
-          "bonuses": [],
-          "extra": null,
-          "notes": "Контент-план + публикации. Итого с Валей — 30 000 руб/мес."
+          "notes": "SMM-контент. Оклад."
         },
         "status": "management",
         "risks": [],
@@ -973,7 +928,7 @@
         "data_gaps": [
           "nijka.attitude"
         ],
-        "updated": "2026-10-13"
+        "updated": "2026-10-14"
       }
     ],
     "skills_summary": {
