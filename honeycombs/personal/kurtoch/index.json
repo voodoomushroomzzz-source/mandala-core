@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.5.9",
+    "version": "v2.6.0",
     "created": "2026-09-23",
-    "updated": "2026-10-13",
+    "updated": "2026-10-14",
     "layer": 2,
     "type": "personal_subhub_index",
     "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Входная точка: контекст, инструкции, ссылки на модули. Данные разбиты: taskboard.json, team.json, knowledge_base.json.",
@@ -30,14 +30,14 @@
     "taskboard.json": {
       "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
       "purpose": "Задачи, milestones, синхронизация с Notion.",
-      "version": "v2.6.2",
-      "tasks_count": 51,
+      "version": "v2.6.3",
+      "tasks_count": 53,
       "note": "Архивные задачи вынесены в taskboard_archive.json."
     },
     "team.json": {
       "description": "Картотека сотрудников. Графа vacation — история и планы отпусков.",
       "purpose": "Все 16 сотрудников: контакты, навыки, статусы.",
-      "version": "v1.6.1",
+      "version": "v1.6.2",
       "total_employees": 20
     },
     "knowledge_base.json": {
@@ -157,8 +157,8 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-10-13",
-    "notes": "v2.5.9: K-108 in_progress (31.10). EMP-020 Настя phone added."
+    "last_check": "2026-10-14",
+    "notes": "v2.6.0: K-125 обновлена (14.10, повестка +2). +K-129 (расчёт Саши). +K-130 (капинг 2U). EMP-006 → paused."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -221,9 +221,9 @@
       "notion_is_visual_mirror": true,
       "rule": "Mandala (taskboard.json, team.json, knowledge_base.json) — эталон. Notion — визуальное зеркало. Если расхождение — правим Notion по Mandala, не наоборот.",
       "id_conventions": {
-        "tasks": "K-001..K-128 с пропусками. Следующий свободный — K-129.",
+        "tasks": "K-001..K-130 с пропусками. Следующий свободный — K-131.",
         "milestones": "M-001, M-002 — крупные вехи (Возрождение Нижки, Возрождение Центра)",
-        "next_task_id": "K-129",
+        "next_task_id": "K-131",
         "next_milestone_id": "M-004"
       }
     },
@@ -456,9 +456,9 @@
   "current_status": {
     "phase": "phase_0",
     "progress": 45,
-    "date": "2026-10-13",
-    "last_action": "13.10 (2): K-108 in_progress (31.10). EMP-020 Настя phone.",
-    "next_action": "K-125 планёрка 15.10. K-126 график Нижки 19.10. K-127 флажки 15.10. K-128 расписание Дарья 16.10. K-110 фильтры сегодня. K-078 финансы 15.10. K-105 Крис 31.10.",
+    "date": "2026-10-14",
+    "last_action": "14.10: K-125 update, K-129, K-130. EMP-006 paused. taskboard v2.6.3, team v1.6.2.",
+    "next_action": "14.10 планёрка 15:00. K-127 флажки 15.10. K-128 расписание Дарья 16.10. K-129 расчёт Саши 19.10. K-126 график Нижки 19.10. K-078 финансы 15.10. K-105 Крис 31.10. K-108 31.10.",
     "blockers": [],
     "notes": [
       "Фокус: команда, документация, чистота, бот.",
@@ -884,7 +884,7 @@
     "description": "Модули данных проекта Куртош. Основной вход — index.json (этот файл).",
     "taskboard": {
       "file": "taskboard.json",
-      "purpose": "Активные задачи (51) + вехи M-001..M-003.",
+      "purpose": "Активные задачи (53) + вехи M-001..M-003.",
       "when_to_use": "Когда нужно работать с задачами, вехами, статусами, дедлайнами.",
       "sync": "Notion Taskboard (via scripts/push_taskboard.py)"
     },

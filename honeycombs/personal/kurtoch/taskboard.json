@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.2",
+    "version": "v2.6.3",
     "created": "2026-09-14",
-    "updated": "2026-10-13",
+    "updated": "2026-10-14",
     "layer": 2,
     "type": "taskboard_module",
     "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -17,7 +17,7 @@
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
     "version": "v2.3.4",
     "created": "2026-09-14",
-    "updated": "2026-10-13",
+    "updated": "2026-10-14",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -1278,12 +1278,12 @@
       {
         "id": "K-125",
         "title": "Управленческая планёрка (вт/ср, 15:00)",
-        "description": "Провести управленческую планёрку.\n\nДень: вторник или среда. Время: 15:00.\nДедлайн: 15.10.2026.\n\nУчастники: Дима, Крис, Катрин, Валя, Витя.\n\nПОВЕСТКА:\n1. Отчёт по финансам и фондам — сентябрь: планы vs факты, тенденция, план на след. месяц. (@krisik2005)\n2. Отчёт по SMM за месяц — план vs факт, тенденция, план + акции. (@shtuchkiotvalki)\n3. Штатка, обучение, аттестации. (@krisik2005)\n4. Список активного функционала — кто что делает по проекту. Каждый свой список. (@katrinzzz_its_i, @krisik2005)\n\nСвязь: K-089 (отчёты), K-105 (перераспределение), K-078 (финансы).",
+        "description": "Провести управленческую планёрку.\n\nДень: 14.10.2026 (сегодня). Время: 15:00.\n\nУчастники: Дима, Крис, Катрин, Валя, Витя.\n\nПОВЕСТКА:\n1. Отчёт по финансам и фондам — сентябрь: планы vs факты, тенденция, план на след. месяц. (@krisik2005)\n2. Отчёт по SMM за месяц — план vs факт, тенденция, план + акции. (@shtuchkiotvalki)\n3. Штатка, обучение, аттестации. (@katrinzzz_its_i)\n4. Список активного функционала — кто что делает по проекту. Каждый свой список. (@katrinzzz_its_i, @krisik2005)\n5. Обсудить уборщицу.\n6. Обсудить посудомоечную машину.\n\nСвязь: K-089, K-105, K-078.",
         "priority": "high",
-        "status": "todo",
+        "status": "in_progress",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": "2026-10-15",
+        "deadline": "2026-10-14",
         "reminder": null,
         "depends_on": [],
         "related_to": [
@@ -1292,7 +1292,7 @@
           "K-078"
         ],
         "created": "2026-10-12",
-        "updated": "2026-10-12",
+        "updated": "2026-10-14",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -1368,29 +1368,75 @@
           "notion_page_id": null,
           "column": "Операционка — Общая"
         }
+      },
+      {
+        "id": "K-129",
+        "title": "Рассчитать Сашу-стажёра (EMP-006)",
+        "description": "Выдать расчёт Саше-стажёру (EMP-006).\n\nПричина: недостаточный уровень мастерства / не подходит. Временно на паузе.\n\nСрок: до понедельника следующей недели (19.10.2026).",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-19",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "EMP-006"
+        ],
+        "created": "2026-10-14",
+        "updated": "2026-10-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
+      },
+      {
+        "id": "K-130",
+        "title": "Капинг в 2U (01.11)",
+        "description": "Кофейный капинг (дегустация) зерна от обжарщиков QQ Coffee в кофейне 2U.\n\n2U — кофейня наших друзей.\nЦель: капить зерно от QQ Coffee.\n\nСвязь: KB → coffee_suppliers (QQ — поставщик).",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-01",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-14",
+        "updated": "2026-10-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
       }
     ],
     "counters": {
-      "total": 51,
+      "total": 53,
       "by_status": {
-        "todo": 46,
-        "in_progress": 4,
+        "todo": 47,
+        "in_progress": 5,
         "planning": 1
       },
       "by_priority": {
-        "medium": 18,
+        "medium": 20,
         "high": 31,
         "critical": 2
       },
       "by_column": {
         "Стратегические": 7,
-        "Операционка — Общая": 12,
+        "Операционка — Общая": 14,
         "Операционка — Центр": 10,
         "Операционка — Нижка": 19,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 51
+        "phase_0": 53
       }
     },
     "notes": {
