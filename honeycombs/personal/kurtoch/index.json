@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.7.2",
+    "version": "v2.7.3",
     "created": "2026-09-23",
     "updated": "2026-10-14",
     "layer": 2,
@@ -28,7 +28,7 @@
   },
   "contents": {
     "taskboard.json": {
-      "version": "v2.6.5",
+      "version": "v2.6.6",
       "description": "Активные задачи + вехи M-001..M-003."
     },
     "team.json": {
@@ -108,7 +108,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-10-14",
-    "notes": "v2.7.2: +K-131, +K-132, K-108 update. KB dismissal_rules. meetings синтез планёрки 14.10."
+    "notes": "v2.7.3: K-129 дополнен (8000 ₽, инкассация)."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -411,7 +411,7 @@
     "phase": "phase_0",
     "progress": 45,
     "date": "2026-10-14",
-    "last_action": "14.10 (3): Планёрка 15:00. K-131 (условия Дима/Витя), K-132 (уборщица). K-108 обновлён. KB dismissal_rules. Синтез в meetings. taskboard v2.6.5.",
+    "last_action": "14.10 (4): K-129 обновлён. Подготовка к новой сессии.",
     "next_action": "15.10: тест сезонки. K-103 введение до 31.10. 17.10-24.10: отпуск Катрин. 19.10: расчёт Саши (K-129), новый график Нижки (K-126). 31.10: K-105 (Крис), K-131, K-132, K-103, K-108.",
     "blockers": [],
     "notes": [
