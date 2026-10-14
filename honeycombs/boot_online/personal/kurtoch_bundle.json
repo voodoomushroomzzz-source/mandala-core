@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-14T15:40:57Z",
+    "generated_at": "2026-10-14T16:23:17Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,7 +28,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.7.2",
+      "version": "v2.7.3",
       "created": "2026-09-23",
       "updated": "2026-10-14",
       "layer": 2,
@@ -54,7 +54,7 @@
     },
     "contents": {
       "taskboard.json": {
-        "version": "v2.6.5",
+        "version": "v2.6.6",
         "description": "Активные задачи + вехи M-001..M-003."
       },
       "team.json": {
@@ -134,7 +134,7 @@
     "health": {
       "status": "healthy",
       "last_check": "2026-10-14",
-      "notes": "v2.7.2: +K-131, +K-132, K-108 update. KB dismissal_rules. meetings синтез планёрки 14.10."
+      "notes": "v2.7.3: K-129 дополнен (8000 ₽, инкассация)."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -437,7 +437,7 @@
       "phase": "phase_0",
       "progress": 45,
       "date": "2026-10-14",
-      "last_action": "14.10 (3): Планёрка 15:00. K-131 (условия Дима/Витя), K-132 (уборщица). K-108 обновлён. KB dismissal_rules. Синтез в meetings. taskboard v2.6.5.",
+      "last_action": "14.10 (4): K-129 обновлён. Подготовка к новой сессии.",
       "next_action": "15.10: тест сезонки. K-103 введение до 31.10. 17.10-24.10: отпуск Катрин. 19.10: расчёт Саши (K-129), новый график Нижки (K-126). 31.10: K-105 (Крис), K-131, K-132, K-103, K-108.",
       "blockers": [],
       "notes": [
@@ -791,7 +791,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.6.5",
+      "version": "v2.6.6",
       "created": "2026-09-14",
       "updated": "2026-10-14",
       "layer": 2,
@@ -1993,7 +1993,7 @@
         {
           "id": "K-129",
           "title": "Рассчитать Сашу-стажёра (EMP-006)",
-          "description": "Выдать расчёт Саше-стажёру (EMP-006).\n\nПричина: недостаточный уровень мастерства / не подходит. Временно на паузе.\n\nСрок: до понедельника следующей недели (19.10.2026).",
+          "description": "Расчёт Саши-стажёра (EMP-006).\n\nСумма: ~8 000 ₽ (39 ч × 200 ₽/ч).\nСмен: 3. Аванс уже выдан (10.1 / 10.2 / 10.3).\nФинал: 8 000 ₽.\n\nСпособ: инкассация в кассе налом. Подписать (инкас фин. сш), сообщить об изъятии из кассы, внести в операционку.\n\nДедлайн: 19.10.2026 (понедельник).",
           "priority": "medium",
           "status": "todo",
           "horizon": "tactical",
