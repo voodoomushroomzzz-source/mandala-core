@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.186",
+    "version": "v1.7.187",
     "created": "2026-05-11",
-    "updated": "2026-10-14",
+    "updated": "2026-10-15",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -3055,9 +3055,9 @@
       "identity": {
         "module_id": "WORKS-MANIFEST-001",
         "name": "Works — Unified System of Work Items",
-        "version": "v1.0.13",
+        "version": "v1.0.14",
         "created": "2026-07-08",
-        "updated": "2026-09-02",
+        "updated": "2026-10-14",
         "layer": 1,
         "type": "work_manifest",
         "description": "Single source of truth for all work items. Updated with full deadlines and progress tracking.",
@@ -3104,21 +3104,21 @@
         ]
       },
       "manifest": {
-        "total_works": 24,
+        "total_works": 25,
         "by_status": {
           "active": 14,
           "in_progress": 2,
-          "planned": 5,
+          "planned": 6,
           "pending": 3,
           "done": 0
         },
         "by_horizon": {
-          "strategic": 10,
+          "strategic": 11,
           "tactical": 15
         },
         "by_priority": {
           "critical": 6,
-          "high": 14,
+          "high": 15,
           "medium": 5,
           "low": 2
         },
@@ -3146,7 +3146,8 @@
           "W-T-20260804-SR-REFLECTION__in_context_search",
           "W-T-20260807-MEMORY__mandala_memory_layer",
           "W-R-20260803-KURTOCH-FRANCHISE",
-          "W-T-20260902-MEMORY-ARCH__unified_memory_architecture"
+          "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+          "W-R-20261013-PUBLIC-MANDALA"
         ],
         "deadlines": {
           "W-R-RC-001__visibility_strategy": null,
@@ -3172,7 +3173,8 @@
           "W-T-20260803-RL-REASONING": "2026-10-31",
           "W-T-20260803-SR-EVALUATION": "2026-10-31",
           "W-T-20260807-MEMORY__mandala_memory_layer": "2026-10-15",
-          "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": "2026-10-15"
+          "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": "2026-10-15",
+          "W-R-20261013-PUBLIC-MANDALA": null
         },
         "progress": {
           "W-R-RC-001__visibility_strategy": 0,
@@ -3198,9 +3200,10 @@
           "W-T-20260803-RL-REASONING": 0,
           "W-T-20260803-SR-EVALUATION": 0,
           "W-T-20260807-MEMORY__mandala_memory_layer": 0,
-          "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": 0
+          "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": 0,
+          "W-R-20261013-PUBLIC-MANDALA": 0
         },
-        "progress_updated": "2026-09-02",
+        "progress_updated": "2026-10-14",
         "related_works": {
           "W-R-ECOMM-001": [
             "W-R-RM-014"
@@ -3254,7 +3257,7 @@
         "last_check": "2026-09-02",
         "notes": "Added W-T-20260902-MEMORY-ARCH__unified_memory_architecture"
       },
-      "updated": "2026-08-21",
+      "updated": "2026-10-14",
       "notes": {
         "personal_hub": "Личные векторы (карьера, обучение, YouTube, e-commerce, франшиза) перенесены в honeycombs/personal/."
       }
