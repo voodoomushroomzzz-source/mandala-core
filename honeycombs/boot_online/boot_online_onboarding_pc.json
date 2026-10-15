@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.187",
+    "version": "v1.7.188",
     "created": "2026-05-11",
     "updated": "2026-10-15",
     "layer": 1,
@@ -2874,9 +2874,9 @@
       "identity": {
         "module_id": "FRUITS-REGISTRY-001",
         "name": "Fruits — Product Registry",
-        "version": "v2.8.0",
+        "version": "v2.7.0",
         "created": "2026-04-17",
-        "updated": "2026-09-19",
+        "updated": "2026-10-15",
         "layer": 2,
         "type": "registry_index",
         "description": "Registry of Mandala products. Each fruit has a dedicated index with full details.",
@@ -2966,6 +2966,16 @@
           "path": null,
           "icon": "🌱",
           "note": "Not yet extracted. Future product."
+        },
+        {
+          "id": "fruit-mge-001",
+          "name": "MGE — Mandala Graph Explorer",
+          "short_description": "Инструмент визуализации и анализа графа Mandala. Два входа: HTML для Садовника, JSON для SR/ИИ.",
+          "status": "in_development",
+          "version": "v0.0.0",
+          "layer": "Tool (Layer 2)",
+          "path": "honeycombs/fruits/mge/index.json",
+          "icon": "🕸️"
         }
       ],
       "bot_chat_context": {
@@ -3017,9 +3027,9 @@
         }
       },
       "metrics": {
-        "total_fruits": 7,
+        "total_fruits": 8,
         "active": 3,
-        "in_development": 2,
+        "in_development": 3,
         "planning": 2
       },
       "navigation": {
@@ -3039,8 +3049,8 @@
       },
       "health": {
         "status": "healthy",
-        "last_check": "2026-07-28",
-        "notes": "Cleaned: removed deep architecture structures. Each fruit now points to its own index."
+        "last_check": "2026-10-15",
+        "notes": "Added MGE (fruit-mge-001)"
       }
     }
   },
@@ -3057,7 +3067,7 @@
         "name": "Works — Unified System of Work Items",
         "version": "v1.0.14",
         "created": "2026-07-08",
-        "updated": "2026-10-14",
+        "updated": "2026-10-15",
         "layer": 1,
         "type": "work_manifest",
         "description": "Single source of truth for all work items. Updated with full deadlines and progress tracking.",
@@ -3104,9 +3114,9 @@
         ]
       },
       "manifest": {
-        "total_works": 25,
+        "total_works": 26,
         "by_status": {
-          "active": 14,
+          "active": 15,
           "in_progress": 2,
           "planned": 6,
           "pending": 3,
@@ -3114,12 +3124,12 @@
         },
         "by_horizon": {
           "strategic": 11,
-          "tactical": 15
+          "tactical": 16
         },
         "by_priority": {
           "critical": 6,
           "high": 15,
-          "medium": 5,
+          "medium": 6,
           "low": 2
         },
         "works_list": [
@@ -3147,7 +3157,8 @@
           "W-T-20260807-MEMORY__mandala_memory_layer",
           "W-R-20260803-KURTOCH-FRANCHISE",
           "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-          "W-R-20261013-PUBLIC-MANDALA"
+          "W-R-20261013-PUBLIC-MANDALA",
+          "W-T-20261015-MGE"
         ],
         "deadlines": {
           "W-R-RC-001__visibility_strategy": null,
@@ -3174,7 +3185,8 @@
           "W-T-20260803-SR-EVALUATION": "2026-10-31",
           "W-T-20260807-MEMORY__mandala_memory_layer": "2026-10-15",
           "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": "2026-10-15",
-          "W-R-20261013-PUBLIC-MANDALA": null
+          "W-R-20261013-PUBLIC-MANDALA": null,
+          "W-T-20261015-MGE": "2026-11-15"
         },
         "progress": {
           "W-R-RC-001__visibility_strategy": 0,
@@ -3201,7 +3213,8 @@
           "W-T-20260803-SR-EVALUATION": 0,
           "W-T-20260807-MEMORY__mandala_memory_layer": 0,
           "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": 0,
-          "W-R-20261013-PUBLIC-MANDALA": 0
+          "W-R-20261013-PUBLIC-MANDALA": 0,
+          "W-T-20261015-MGE": 0
         },
         "progress_updated": "2026-10-14",
         "related_works": {
@@ -3242,6 +3255,11 @@
             "W-T-20260511-ENGCHAT__engineer_chat",
             "W-T-20260511-MANUS__manus_hands",
             "W-R-ROSE-001__rose_world_ethical_filter"
+          ],
+          "W-T-20261015-MGE": [
+            "W-T-20260511-ENGCHAT__engineer_chat",
+            "W-T-20260418-SYM__sym_growth_system",
+            "W-T-20260807-MEMORY__mandala_memory_layer"
           ]
         }
       },
@@ -3254,8 +3272,8 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-09-02",
-        "notes": "Added W-T-20260902-MEMORY-ARCH__unified_memory_architecture"
+        "last_check": "2026-10-15",
+        "notes": "Added W-T-20261015-MGE"
       },
       "updated": "2026-10-14",
       "notes": {
