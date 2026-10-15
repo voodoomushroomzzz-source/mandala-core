@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-10-15T07:10:41.587560",
+  "last_scan": "2026-10-15T13:45:18.167160",
   "honeycomb_hashes": {
     "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
     "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
@@ -27,7 +27,7 @@
     "honeycombs/knowledge": "b7596c45b9293c61321bcec4e7b631e9",
     "honeycombs/knowledge/ai_tools": "2d59ee1b165e13e64c29c1822c683b6a",
     "honeycombs/directives": "dbc3c48c5b13d37df132cf510c2a3e8e",
-    "honeycombs/works": "f8154eced7acea59ecfae9290bb2524c",
+    "honeycombs/works": "62df1baafe2efa33dc4b2dd7b10bcafe",
     "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76"
   },
   "statistics": {
@@ -36,8 +36,8 @@
     "invalid_v2": 6,
     "errors": 0,
     "warnings": 6,
-    "total_files": 1259,
-    "total_size_kb": 3917.91
+    "total_files": 1260,
+    "total_size_kb": 3920.24
   },
   "seeds_health": {
     "root_count": 21,
@@ -54,7 +54,7 @@
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-10-15T07:10:41.587570",
+    "last_check": "2026-10-15T13:45:18.167174",
     "errors_count": 18,
     "warnings_count": 9,
     "expired_tasks": 10,
