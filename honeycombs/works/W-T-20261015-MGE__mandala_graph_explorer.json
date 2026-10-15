@@ -1,0 +1,252 @@
+{
+  "identity": {
+    "work_id": "W-T-20261015-MGE",
+    "name": "MGE — Mandala Graph Explorer",
+    "status": "active",
+    "priority": "medium",
+    "horizon": "tactical",
+    "created": "2026-10-15",
+    "updated": "2026-10-15",
+    "deadline": "2026-11-15",
+    "progress": 0,
+    "effort_estimate": "10-15 часов",
+    "tags": [
+      "graph",
+      "visualization",
+      "tool",
+      "ai-access",
+      "knowledge",
+      "fruit"
+    ]
+  },
+  "meta": {
+    "description": "Инструмент для визуализации и анализа графа Mandala. Два входа: HTML для Садовника, JSON для SR/ИИ.",
+    "purpose": "Закрывает 6 болей: не видно структуры, сироты/острова, ручной поиск, рассинхрон core_map, нет инструмента для SR, нет истории эволюции.",
+    "how_to_use": "mge scan → mandala_graph.json + mandala_graph.html + mandala_graph.mmd",
+    "change_requires": "gardener_approval",
+    "guardian_lock": true
+  },
+  "goal": {
+    "mission": "Дать Садовнику и SR единый визуальный и программный доступ к структуре Mandala.",
+    "success_criteria": [
+      "SR может прочитать одну ссылку (raw JSON) и понять всю структуру Mandala.",
+      "Садовник видит интерактивный граф сот/работ/семян.",
+      "Автоматическое обнаружение сирот, островов, рассинхронов.",
+      "GitHub Actions обновляет граф при push."
+    ]
+  },
+  "architecture": {
+    "principle": "Core один, окружения разные. Stdlib работает везде, опциональные модули — только на ПК.",
+    "environments": {
+      "termux": {
+        "role": "Run mge scan, get static HTML + JSON, git push.",
+        "deps": "Только stdlib Python 3.12+",
+        "outputs": [
+          "mandala_graph.json",
+          "mandala_graph.html",
+          "mandala_graph.mmd"
+        ]
+      },
+      "vscode_pc": {
+        "role": "Development, tests, live server, CI/CD.",
+        "deps": "Опционально: networkx, pyvis, Flask, pytest",
+        "outputs": [
+          "live server http://localhost:8080",
+          "tests",
+          "GitHub Actions"
+        ]
+      }
+    },
+    "location": "honeycombs/registry/mge/",
+    "read_only": true,
+    "zero_network": true,
+    "no_telemetry": true
+  },
+  "structure": {
+    "module_layout": {
+      "mge/": {
+        "__init__.py": "package init",
+        "cli.py": "CLI entry point",
+        "core/": {
+          "scanner.py": "обход honeycombs/ (stdlib)",
+          "parser.py": "парсинг JSON (stdlib)",
+          "graph.py": "модель графа (stdlib, опц. networkx)",
+          "analyzer.py": "сироты, острова, рассинхрон (stdlib)"
+        },
+        "reporters/": {
+          "json_reporter.py": "JSON output (stdlib)",
+          "mermaid_reporter.py": "Mermaid output (stdlib)",
+          "html_reporter.py": "static HTML + vis.js (stdlib)",
+          "pyvis_reporter.py": "optional pyvis HTML (только ПК)"
+        },
+        "server/": {
+          "app.py": "optional Flask/FastAPI сервер (только ПК)"
+        },
+        "data/": {
+          "edge_rules.json": "правила связей между узлами"
+        }
+      },
+      "tests/": {
+        "test_parser.py": "pytest",
+        "test_graph.py": "pytest",
+        "test_analyzer.py": "pytest"
+      },
+      "output/": {
+        "mandala_graph.json": "граф для SR (push в GitHub)",
+        "mandala_graph.html": "интерактивный граф",
+        "mandala_graph.mmd": "Mermaid для README"
+      },
+      "README.md": "документация",
+      "pyproject.toml": "зависимости (optional)"
+    }
+  },
+  "node_types": {
+    "honeycomb": "папка в honeycombs/",
+    "work": "файл в honeycombs/works/",
+    "seed": "файл в honeycombs/seeds/",
+    "fruit": "продукт (например, MGE сам себя)",
+    "knowledge": "ресурс базы знаний",
+    "protocol": "протокол активации",
+    "sr": "External SR (DeepSeek, Claude)"
+  },
+  "edge_types": {
+    "references": "core_map.navigation.references",
+    "children": "core_map.navigation.children",
+    "depends_on": "structure.critical_dependencies",
+    "related_works": "works/index.json.related_works",
+    "parent_work": "work-файлы",
+    "seed_to_work": "seed → work (PROTO-011)",
+    "path_refs": "все 'path': 'honeycombs/...' в JSON",
+    "handoff": "core_map.handoff_files"
+  },
+  "phases": {
+    "phase_1_core_mvp": {
+      "name": "Core MVP — JSON-граф сот",
+      "status": "planned",
+      "duration": "2-3 часа",
+      "deliverables": [
+        "Python-пакет mge/",
+        "Парсер core_map/index.json",
+        "Модель графа (stdlib)",
+        "JSON reporter → mandala_graph.json",
+        "Mermaid reporter → mandala_graph.mmd"
+      ],
+      "environment": "VS Code (разработка) + Termux (проверка)",
+      "output": "mandala_graph.json — SR читает по ссылке и понимает структуру"
+    },
+    "phase_2_html": {
+      "name": "HTML-визуализация",
+      "status": "planned",
+      "duration": "1-2 часа",
+      "deliverables": [
+        "HTML reporter (stdlib + встроенный vis.js)",
+        "Self-contained HTML",
+        "Клик → детали узла, поиск, фильтры"
+      ],
+      "environment": "Termux + VS Code",
+      "output": "mandala_graph.html — Садовник видит интерактивный граф"
+    },
+    "phase_3_extension": {
+      "name": "Расширение: works + seeds + knowledge",
+      "status": "planned",
+      "duration": "2-3 часа",
+      "deliverables": [
+        "Works parser",
+        "Seeds parser",
+        "Knowledge parser",
+        "Fruits parser",
+        "Связи: related_works, depends_on, parent_work, seed_to_work"
+      ],
+      "environment": "VS Code",
+      "output": "Полный граф Mandala"
+    },
+    "phase_4_analysis": {
+      "name": "Анализ: сироты, острова, рассинхрон",
+      "status": "planned",
+      "duration": "1-2 часа",
+      "deliverables": [
+        "Orphans (0 входящих)",
+        "Islands (connected components)",
+        "Desyncs (файлы vs core_map)",
+        "CLI: mge check",
+        "Подсветка в HTML"
+      ],
+      "environment": "Termux + VS Code",
+      "output": "Автопроверка здоровья системы"
+    },
+    "phase_5_live_server": {
+      "name": "Live-сервер",
+      "status": "planned",
+      "duration": "2-3 часа",
+      "deliverables": [
+        "Flask/FastAPI сервер",
+        "Live reload при изменении файлов",
+        "Клик → открыть файл в VS Code",
+        "Endpoints: /graph, /node/{id}, /search"
+      ],
+      "environment": "Только VS Code (ПК)",
+      "output": "http://localhost:8080"
+    },
+    "phase_6_ci_integration": {
+      "name": "Git-интеграция",
+      "status": "planned",
+      "duration": "1-2 часа",
+      "deliverables": [
+        "Pre-commit hook: mge check",
+        "GitHub Actions: mge scan при push",
+        "Автообновление mandala_graph.json в репо"
+      ],
+      "environment": "VS Code + GitHub",
+      "output": "Граф всегда актуален в репо"
+    }
+  },
+  "dependencies": {
+    "stdlib": [
+      "json",
+      "os",
+      "pathlib",
+      "argparse",
+      "collections"
+    ],
+    "optional_pc": {
+      "networkx": "графовые алгоритмы (centrality, orphans, islands)",
+      "pyvis": "альтернатива static HTML",
+      "Flask": "live server",
+      "pytest": "тесты"
+    }
+  },
+  "relevance": {
+    "sr_access": "mandala_graph.json — одна ссылка для любого SR/агента",
+    "gardener_access": "mandala_graph.html — визуальный интерфейс",
+    "mandala_health": "mge check — автоматический чек",
+    "onboarding": "Mermaid в README — диаграмма для новых SR",
+    "history": "Снапшоты + diff (Фаза 6+)"
+  },
+  "related_works": [
+    "W-T-20260511-ENGCHAT__engineer_chat",
+    "W-T-20260418-SYM__sym_growth_system",
+    "W-T-20260807-MEMORY__mandala_memory_layer"
+  ],
+  "related_fruits": [
+    "fruit-scout-agent-001",
+    "fruit-gentle-companion-001"
+  ],
+  "risks": [
+    "JSON не парсится как Markdown-граф (решается кастомным парсером)",
+    "Большие графы (325+ узлов) — vis.js справляется, но нужен контроль",
+    "Дублирование данных (решается read-only)",
+    "Termux ограничения (решается stdlib-core)"
+  ],
+  "navigation": {
+    "parent": "honeycombs/works/index.json",
+    "related": [
+      "honeycombs/fruits/index.json",
+      "honeycombs/registry/index.json"
+    ]
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-10-15",
+    "notes": "Work создан. Фаза 1 (MVP) — следующая."
+  }
+}

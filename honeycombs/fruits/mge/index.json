@@ -1,0 +1,52 @@
+{
+  "identity": {
+    "module_id": "FRUIT-MGE-001",
+    "name": "MGE — Mandala Graph Explorer",
+    "version": "v0.0.0",
+    "created": "2026-10-15",
+    "updated": "2026-10-15",
+    "layer": 2,
+    "type": "module_manifest",
+    "description": "Инструмент визуализации и анализа графа Mandala. Два входа: HTML для Садовника, JSON для SR/ИИ.",
+    "status": "in_development",
+    "priority": "medium",
+    "resonance": "100%",
+    "tags": [
+      "graph",
+      "visualization",
+      "tool",
+      "ai-access",
+      "knowledge"
+    ]
+  },
+  "meta": {
+    "description": "MGE — Mandala Graph Explorer. Строит граф всех сот, работ, семян. Генерирует HTML (для Садовника) и JSON (для SR).",
+    "purpose": "Дать единый доступ к структуре Mandala — визуальный и программный.",
+    "how_to_use": "python mge.py scan → 3 output (JSON, HTML, Mermaid)",
+    "change_requires": "gardener_approval"
+  },
+  "value_proposition": {
+    "for_sr": "Одна raw-ссылка на mandala_graph.json — весь граф Mandala",
+    "for_gardener": "Интерактивный HTML — визуальный обзор",
+    "for_mandala": "Автоматический чек здоровья структуры (mge check)"
+  },
+  "architecture": {
+    "principle": "Core один, окружения разные",
+    "environments": {
+      "termux": "stdlib только — scan, static HTML, JSON",
+      "vscode_pc": "опционально networkx/pyvis/Flask/pytest"
+    },
+    "location": "honeycombs/registry/mge/",
+    "read_only": true
+  },
+  "work_ref": "W-T-20261015-MGE",
+  "navigation": {
+    "parent": "honeycombs/fruits/index.json",
+    "work": "honeycombs/works/W-T-20261015-MGE__mandala_graph_explorer.json"
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-10-15",
+    "notes": "Fruit зарегистрирован. Разработка начнётся в W-T-20261015-MGE."
+  }
+}

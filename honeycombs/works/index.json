@@ -4,7 +4,7 @@
     "name": "Works — Unified System of Work Items",
     "version": "v1.0.14",
     "created": "2026-07-08",
-    "updated": "2026-10-14",
+    "updated": "2026-10-15",
     "layer": 1,
     "type": "work_manifest",
     "description": "Single source of truth for all work items. Updated with full deadlines and progress tracking.",
@@ -51,9 +51,9 @@
     ]
   },
   "manifest": {
-    "total_works": 25,
+    "total_works": 26,
     "by_status": {
-      "active": 14,
+      "active": 15,
       "in_progress": 2,
       "planned": 6,
       "pending": 3,
@@ -61,12 +61,12 @@
     },
     "by_horizon": {
       "strategic": 11,
-      "tactical": 15
+      "tactical": 16
     },
     "by_priority": {
       "critical": 6,
       "high": 15,
-      "medium": 5,
+      "medium": 6,
       "low": 2
     },
     "works_list": [
@@ -94,7 +94,8 @@
       "W-T-20260807-MEMORY__mandala_memory_layer",
       "W-R-20260803-KURTOCH-FRANCHISE",
       "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-      "W-R-20261013-PUBLIC-MANDALA"
+      "W-R-20261013-PUBLIC-MANDALA",
+      "W-T-20261015-MGE"
     ],
     "deadlines": {
       "W-R-RC-001__visibility_strategy": null,
@@ -121,7 +122,8 @@
       "W-T-20260803-SR-EVALUATION": "2026-10-31",
       "W-T-20260807-MEMORY__mandala_memory_layer": "2026-10-15",
       "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": "2026-10-15",
-      "W-R-20261013-PUBLIC-MANDALA": null
+      "W-R-20261013-PUBLIC-MANDALA": null,
+      "W-T-20261015-MGE": "2026-11-15"
     },
     "progress": {
       "W-R-RC-001__visibility_strategy": 0,
@@ -148,7 +150,8 @@
       "W-T-20260803-SR-EVALUATION": 0,
       "W-T-20260807-MEMORY__mandala_memory_layer": 0,
       "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": 0,
-      "W-R-20261013-PUBLIC-MANDALA": 0
+      "W-R-20261013-PUBLIC-MANDALA": 0,
+      "W-T-20261015-MGE": 0
     },
     "progress_updated": "2026-10-14",
     "related_works": {
@@ -189,6 +192,11 @@
         "W-T-20260511-ENGCHAT__engineer_chat",
         "W-T-20260511-MANUS__manus_hands",
         "W-R-ROSE-001__rose_world_ethical_filter"
+      ],
+      "W-T-20261015-MGE": [
+        "W-T-20260511-ENGCHAT__engineer_chat",
+        "W-T-20260418-SYM__sym_growth_system",
+        "W-T-20260807-MEMORY__mandala_memory_layer"
       ]
     }
   },
@@ -201,8 +209,8 @@
   },
   "health": {
     "status": "active",
-    "last_check": "2026-09-02",
-    "notes": "Added W-T-20260902-MEMORY-ARCH__unified_memory_architecture"
+    "last_check": "2026-10-15",
+    "notes": "Added W-T-20261015-MGE"
   },
   "updated": "2026-10-14",
   "notes": {

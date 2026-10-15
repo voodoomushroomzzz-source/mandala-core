@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "FRUITS-REGISTRY-001",
     "name": "Fruits — Product Registry",
-    "version": "v2.8.0",
+    "version": "v2.7.0",
     "created": "2026-04-17",
-    "updated": "2026-09-19",
+    "updated": "2026-10-15",
     "layer": 2,
     "type": "registry_index",
     "description": "Registry of Mandala products. Each fruit has a dedicated index with full details.",
@@ -94,6 +94,16 @@
       "path": null,
       "icon": "🌱",
       "note": "Not yet extracted. Future product."
+    },
+    {
+      "id": "fruit-mge-001",
+      "name": "MGE — Mandala Graph Explorer",
+      "short_description": "Инструмент визуализации и анализа графа Mandala. Два входа: HTML для Садовника, JSON для SR/ИИ.",
+      "status": "in_development",
+      "version": "v0.0.0",
+      "layer": "Tool (Layer 2)",
+      "path": "honeycombs/fruits/mge/index.json",
+      "icon": "🕸️"
     }
   ],
   "bot_chat_context": {
@@ -145,9 +155,9 @@
     }
   },
   "metrics": {
-    "total_fruits": 7,
+    "total_fruits": 8,
     "active": 3,
-    "in_development": 2,
+    "in_development": 3,
     "planning": 2
   },
   "navigation": {
@@ -167,7 +177,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-07-28",
-    "notes": "Cleaned: removed deep architecture structures. Each fruit now points to its own index."
+    "last_check": "2026-10-15",
+    "notes": "Added MGE (fruit-mge-001)"
   }
 }
