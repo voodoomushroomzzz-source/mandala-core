@@ -57,7 +57,7 @@
         ]
       }
     },
-    "location": "honeycombs/registry/mge/",
+    "location": "honeycombs/fruits/mge/",
     "read_only": true,
     "zero_network": true,
     "no_telemetry": true
@@ -247,6 +247,6 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-10-15",
-    "notes": "Work создан. Фаза 1 (MVP) — следующая."
+    "notes": "Location: honeycombs/fruits/mge/. MGE is a product (fruit), not infrastructure."
   }
 }
