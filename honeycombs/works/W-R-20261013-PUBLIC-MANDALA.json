@@ -1,0 +1,52 @@
+{
+  "work_id": "W-R-20261013-PUBLIC-MANDALA",
+  "name": "Mandala Public Knowledge System — Notion-first, website-ready",
+  "status": "planned",
+  "priority": "high",
+  "horizon": "strategic",
+  "description": "Design and launch a public knowledge resource for Mandala. Use Notion as the first publishing surface while keeping the content model and identifiers ready for a future website. Separate core knowledge, curated knowledge, public content, presentation, internal material, and personal information. Unknown visibility defaults to non-public. Each content item has one editing source and a stable ID. Draft is the default; deletion is never automatic. Publishing pipeline: Source, Validate, Resolve IDs and Relations, Dry Run, Review, Apply, Verify, Report.",
+  "created": "2026-10-14",
+  "updated": "2026-10-14",
+  "tags": [
+    "mandala",
+    "knowledge-base",
+    "public-content",
+    "notion",
+    "website-ready",
+    "publishing-pipeline"
+  ],
+  "deliverables": [
+    "Define the information architecture and content layers.",
+    "Define stable IDs and a single editing source per content item.",
+    "Define public, internal, and personal visibility rules.",
+    "Create a Notion-first publishing structure.",
+    "Define a website-ready content and relation model.",
+    "Specify validation, dry-run, review, apply, and verification.",
+    "Document operational ownership and maintenance."
+  ],
+  "phases": [
+    "Inventory existing knowledge and content sources.",
+    "Define taxonomy, stable IDs, and source-of-truth rules.",
+    "Define visibility and publication safeguards.",
+    "Build the initial Notion structure.",
+    "Prepare website-compatible content schemas.",
+    "Test the publishing pipeline on a small sample.",
+    "Review, document, and prepare the public launch."
+  ],
+  "progress": 0,
+  "notes": {
+    "visibility_default": "non-public",
+    "draft_default": true,
+    "automatic_deletion": false,
+    "publishing_pipeline": [
+      "Source",
+      "Validate",
+      "Resolve IDs and Relations",
+      "Dry Run",
+      "Review",
+      "Apply",
+      "Verify",
+      "Report"
+    ]
+  }
+}
