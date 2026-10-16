@@ -79,7 +79,6 @@ const COLORS = {
 };
 
 function nodeShape(type) {
-  if (type === "work") return "box";
   if (type === "fruit") return "diamond";
   if (type === "knowledge") return "triangle";
   return "dot";
@@ -91,17 +90,36 @@ function nodeColor(n) {
   return { background: c.bg, border: c.border };
 }
 
+function formatLabel(id, type) {
+  // Shorten long labels for works/fruits
+  if (type === "work" || type === "fruit") {
+    if (id.length <= 20) return id;
+    // Try to use the last meaningful part after __
+    if (id.includes("__")) {
+      const parts = id.split("__");
+      const tail = parts[parts.length - 1];
+      if (tail.length <= 20) return tail;
+    }
+    return id.slice(0, 18) + "…";
+  }
+  return id;
+}
+
 function buildNodes() {
-  return GRAPH.nodes.map(n => ({
-    id: n.id,
-    label: n.id,
-    title: n.description || "",
-    color: nodeColor(n),
-    shape: nodeShape(n.type),
-    font: { color: "#c9d1d9", size: 13 },
-    borderWidth: n.type === "honeycomb_unregistered" ? 3 : 2,
-    borderWidthSelected: 4
-  }));
+  return GRAPH.nodes.map(n => {
+    const label = formatLabel(n.id, n.type);
+    const isWork = n.type === "work";
+    return {
+      id: n.id,
+      label: label,
+      title: n.id,
+      color: nodeColor(n),
+      shape: nodeShape(n.type),
+      font: { color: "#c9d1d9", size: isWork ? 10 : 13 },
+      borderWidth: n.type === "honeycomb_unregistered" ? 3 : 2,
+      borderWidthSelected: 4
+    };
+  });
 }
 
 function buildEdges() {
