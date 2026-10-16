@@ -1870,11 +1870,62 @@
           "column": "Операционка — Нижка"
         },
         "archived_at": "2026-10-16"
+      },
+      {
+        "id": "K-127",
+        "title": "Снять флажки на улице (Центр)",
+        "description": "Снять все флажки на улице в Центре.",
+        "priority": "medium",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-15",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-13",
+        "updated": "2026-10-16",
+        "completed": "2026-10-16",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        },
+        "archived_at": "2026-10-16"
+      },
+      {
+        "id": "K-137",
+        "title": "Снять Reels с СММ (Настя снимает)",
+        "description": "Снять Reels с СММ. Настя снимает Диму.\n\nТемы (4 пункта):\n1. Больше не ищем новых сотрудников\n2. Работаем над новой сезонкой\n3. Со следующей недели — график Нижки 8:00–20:00\n4. Часть команды поедет на Пироэкспо (26–29.10)\n\nСвязь: EMP-020 (Настя), K-103, K-126, K-133.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-16",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "EMP-020",
+          "K-103",
+          "K-126",
+          "K-133"
+        ],
+        "created": "2026-10-16",
+        "updated": "2026-10-16",
+        "completed": "2026-10-16",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-10-16"
       }
     ],
-    "total": 77,
+    "total": 79,
     "by_status": {
-      "done": 66,
+      "done": 68,
       "cancelled": 11
     }
   },
