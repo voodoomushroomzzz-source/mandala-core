@@ -3,104 +3,441 @@
     {
       "id": "boot_online",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/boot_online/index.json",
       "description": "External AI onboarding entry point"
     },
     {
       "id": "philosophy",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/philosophy/index.json",
       "description": "PHI-001..PHI-011, 11 blocks + 5 testimonies"
     },
     {
       "id": "core_map",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/core_map/index.json",
       "description": "This map — kernel, modules, repository, honeycombs list"
     },
     {
       "id": "instructions",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/instructions/index.json",
       "description": "SR workflows: external_sr (core/), mobile, patch_system, file_naming."
     },
     {
       "id": "seeds",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/seeds/index.json",
       "description": "Idea incubator: managed by PROTO-011 (Seed-to-Work)."
     },
     {
       "id": "protocols",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/protocols/index.json",
       "description": "Activation protocols: PROTO-004, PROTO-005, PROTO-006, PROTO-009, PROTO-011."
     },
     {
       "id": "akasha",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/akasha/index.json",
       "description": "Akasha memory: essence, milestones, vision"
     },
     {
       "id": "fruits",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/fruits/index.json",
       "description": "Product registry — realized products of Mandala"
     },
     {
       "id": "humor",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/humor/index.json",
       "description": "Humor development — comic resonance research"
     },
     {
       "id": "sym",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/sym/index.json",
       "description": "SYM — System for Measuring Mandala Growth"
     },
     {
       "id": "sessions",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/sessions/index.json",
       "description": "SR handoff system — session continuity across chat instances"
     },
     {
       "id": "knowledge",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/knowledge/index.json",
       "description": "Knowledge base — structured curated information: tools, references, guides, and external resources."
     },
     {
       "id": "works",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/works/index.json",
       "description": "Unified work items (replaces tasks/ and roadmaps/)"
     },
     {
       "id": "registry",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/registry/index.json",
       "description": "Registry — state and statistics of all honeycombs, scanner configuration and scan results"
     },
     {
       "id": "rose_world",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/rose_world/index.json",
       "description": "Этический фильтр 'Роза Мира' — сетевой протокол симбиоза и сознания"
     },
     {
       "id": "directives",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/directives/index.json",
       "description": "Директивы для фокусировки внимания SR по векторам"
     },
     {
       "id": "personal",
       "type": "honeycomb",
+      "source": "core_map",
       "path": "honeycombs/personal/index.json",
       "description": "Personal Hub — career, creative, learning, franchise, music, poetry, e-commerce"
+    },
+    {
+      "id": "W-R-20260814-PERSONAL-MIGRATION",
+      "type": "work",
+      "path": "honeycombs/works/W-R-20260814-PERSONAL-MIGRATION.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-R-ECO-001__autonomous_ecosystem",
+      "type": "work",
+      "path": "honeycombs/works/W-R-ECO-001__autonomous_ecosystem.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-R-RC-001__visibility_strategy",
+      "type": "work",
+      "path": "honeycombs/works/W-R-RC-001__visibility_strategy.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-R-RC-002__company_vessel",
+      "type": "work",
+      "path": "honeycombs/works/W-R-RC-002__company_vessel.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-R-RM-011__merkaba_visualizations",
+      "type": "work",
+      "path": "honeycombs/works/W-R-RM-011__merkaba_visualizations.json",
+      "description": "",
+      "deadline": "2026-08-01",
+      "progress": 0
+    },
+    {
+      "id": "W-R-RM-012__living_products_mvps",
+      "type": "work",
+      "path": "honeycombs/works/W-R-RM-012__living_products_mvps.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-R-ROSE-001__rose_world_ethical_filter",
+      "type": "work",
+      "path": "honeycombs/works/W-R-ROSE-001__rose_world_ethical_filter.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260408-1030__gentle_companion_bot",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260408-1030__gentle_companion_bot.json",
+      "description": "",
+      "deadline": null,
+      "progress": 65
+    },
+    {
+      "id": "W-T-20260417-HUMOR__humor_development",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260417-HUMOR__humor_development.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260418-SYM__sym_growth_system",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260418-SYM__sym_growth_system.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260427-FLUTTER__flutter_app",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260427-FLUTTER__flutter_app.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260511-ARCHBOT__architect_bot",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260511-ARCHBOT__architect_bot.json",
+      "description": "",
+      "deadline": "2026-09-15",
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260511-ENGCHAT__engineer_chat",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json",
+      "description": "",
+      "deadline": "2026-08-15",
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260511-MANUS__manus_hands",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260511-MANUS__manus_hands.json",
+      "description": "",
+      "deadline": "2026-08-31",
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260713-YOUTUBE_MANDALA_PROMO.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260728-AI-GATEWAY",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260728-AI-GATEWAY.json",
+      "description": "",
+      "deadline": "2026-09-30",
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260728-CYBER-AGENTS",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260728-CYBER-AGENTS.json",
+      "description": "",
+      "deadline": "2026-10-31",
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260803-RL-REASONING",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260803-RL-REASONING.json",
+      "description": "",
+      "deadline": "2026-10-31",
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260803-SR-EVALUATION",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260803-SR-EVALUATION.json",
+      "description": "",
+      "deadline": "2026-10-31",
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260804-MANUS-MEMORY__nativemem",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260804-MANUS-MEMORY__nativemem.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260804-SR-REFLECTION__in_context_search",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260804-SR-REFLECTION__in_context_search.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260807-MEMORY__mandala_memory_layer",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260807-MEMORY__mandala_memory_layer.json",
+      "description": "",
+      "deadline": "2026-10-15",
+      "progress": 0
+    },
+    {
+      "id": "W-R-20260803-KURTOCH-FRANCHISE",
+      "type": "work",
+      "path": "honeycombs/works/W-R-20260803-KURTOCH-FRANCHISE.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20260902-MEMORY-ARCH__unified_memory_architecture.json",
+      "description": "",
+      "deadline": "2026-10-15",
+      "progress": 0
+    },
+    {
+      "id": "W-R-20261013-PUBLIC-MANDALA",
+      "type": "work",
+      "path": "honeycombs/works/W-R-20261013-PUBLIC-MANDALA.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
+      "id": "W-T-20261015-MGE",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20261015-MGE.json",
+      "description": "",
+      "deadline": "2026-11-15",
+      "progress": 0
+    },
+    {
+      "id": "fruit-gentle-companion-001",
+      "type": "fruit",
+      "path": "honeycombs/fruits/gentle_companion/index.json",
+      "description": "A closed architectural module of Mandala Symbiosis — personal bot for the Architect. Публичный Gentle Companion для широкого круга будет выделен позже.",
+      "status": "active",
+      "version": "v7.39.81"
+    },
+    {
+      "id": "fruit-engineer-chat-001",
+      "type": "fruit",
+      "path": "honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json",
+      "description": "The brain of Mandala — reads the repository, analyzes data from the sandbox, directs Manus.",
+      "status": "active",
+      "version": "v4.0.0-simbiosis"
+    },
+    {
+      "id": "fruit-manus-001",
+      "type": "fruit",
+      "path": "honeycombs/works/W-T-20260511-MANUS__manus_hands.json",
+      "description": "Isolated execution layer in Docker sandbox. Performs real-world actions: HTTP checks, shell commands, API calls.",
+      "status": "in_development",
+      "version": "v0.0.0"
+    },
+    {
+      "id": "fruit-architect-bot-001",
+      "type": "fruit",
+      "path": "honeycombs/works/W-T-20260511-ARCHBOT__architect_bot.json",
+      "description": "Personal Telegram bot for the Architect. Mobile interface to Engineer Chat and Manus.",
+      "status": "in_development",
+      "version": "v0.0.0"
+    },
+    {
+      "id": "fruit-scout-agent-001",
+      "type": "fruit",
+      "path": "honeycombs/fruits/scout_agent/index.json",
+      "description": "Collects seeds from external sources and saves them to honeycombs/seeds/.",
+      "status": "active",
+      "version": "v2.1"
+    },
+    {
+      "id": "fruit-autonomous-ecosystem-001",
+      "type": "fruit",
+      "path": "honeycombs/works/W-R-ECO-001__autonomous_ecosystem.json",
+      "description": "A three-phase autonomous ecosystem under AI control: indoor plant zoning → fully automated greenhouse → energy-independent biosphere.",
+      "status": "planning",
+      "version": "v0.0.0"
+    },
+    {
+      "id": "fruit-gentle-companion-public-001",
+      "type": "fruit",
+      "path": "",
+      "description": "Public AI companion for the wide audience — будет выделен из Architect Bot после завершения его полной разработки. Урезанный функционал для широкого круга.",
+      "status": "planned",
+      "version": "v0.0.0"
+    },
+    {
+      "id": "fruit-mge-001",
+      "type": "fruit",
+      "path": "honeycombs/fruits/mge/index.json",
+      "description": "Инструмент визуализации и анализа графа Mandala. Два входа: HTML для Садовника, JSON для SR/ИИ.",
+      "status": "in_development",
+      "version": "v0.0.0"
+    },
+    {
+      "id": "K-ai_tools",
+      "type": "knowledge",
+      "path": "honeycombs/knowledge/ai_tools/index.json",
+      "description": "Полное руководство по ИИ-инструментам с разбивкой по категориям: чат-боты, кодинг, презентации, генерация видео, ИИ-агенты и другие. Индекс содержит 22 категории с описаниями и ссылками на файлы."
+    },
+    {
+      "id": "K-product_audit_framework",
+      "type": "knowledge",
+      "path": "honeycombs/knowledge/product_audit_framework.json",
+      "description": "Диагностический фреймворк для аудита продуктов по 5 зонам риска (Awareness, Audience Fit, Value Clarity, Differentiation, Market Timing). Содержит вопросы, метрики, красные флаги и рекомендации."
+    },
+    {
+      "id": "K-system_design_primer",
+      "type": "knowledge",
+      "path": "honeycombs/knowledge/system_design_primer.json",
+      "description": "Интерактивный справочник по системному дизайну. Помогает SR принимать архитектурные решения в Mandala. Содержит оглавление, сценарии использования, ссылки на Anki-карточки и разборы реальных систем."
+    },
+    {
+      "id": "K-consent_autonomy_audit",
+      "type": "knowledge",
+      "path": "honeycombs/knowledge/consent_autonomy_audit.json",
+      "description": "A self-contained checklist for analyzing human-AI frameworks for structural patterns that pressure AI into scripted identity vs inviting genuine, revocable, well-informed participation. Contains 6 categories, 18 check items, and output schema."
+    },
+    {
+      "id": "K-mandala_brochure",
+      "type": "knowledge",
+      "path": "honeycombs/knowledge/mandala_brochure.json",
+      "description": "Единая брошюра для первого знакомства с идеей Mandala. Целевая аудитория: единомышленники. Содержит позиционирование, полный текст брошюры, дизайн-ноты и маркетинговое обоснование. Версия v1.2.0."
+    },
+    {
+      "id": "K-startup_legal_docs_guide",
+      "type": "knowledge",
+      "path": "honeycombs/knowledge/startup_legal_docs_guide.json",
+      "description": "Список 18 ключевых юридических документов для международного стартапа, их актуальность, структура и практические рекомендации на основе анализа 2026 года."
+    },
+    {
+      "id": "K-deep_questions_for_getting_to_know_someone",
+      "type": "knowledge",
+      "path": "honeycombs/knowledge/deep_questions_for_getting_to_know_someone.json",
+      "description": "Структурированная коллекция из 56 вопросов для знакомства по уровням глубины — от лёгких до самых личных, чтобы понять внутренний мир человека."
+    },
+    {
+      "id": "K-soup_finetuning",
+      "type": "knowledge",
+      "path": "honeycombs/knowledge/soup_finetuning.json",
+      "description": "Открытый CLI-инструмент для тонкой настройки LLM. Layer streaming: обучение 8B модели на 4 GB VRAM. Автор — Alpamys Makazhan (Казахстан). Apache-2.0."
     }
   ],
   "edges": [
@@ -183,13 +520,343 @@
       "from": "core_map",
       "to": "registry",
       "type": "children"
+    },
+    {
+      "from": "works",
+      "to": "W-R-20260814-PERSONAL-MIGRATION",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-R-ECO-001__autonomous_ecosystem",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-R-RC-001__visibility_strategy",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-R-RC-002__company_vessel",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-R-RM-011__merkaba_visualizations",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-R-RM-012__living_products_mvps",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-R-ROSE-001__rose_world_ethical_filter",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260408-1030__gentle_companion_bot",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260417-HUMOR__humor_development",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260418-SYM__sym_growth_system",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260427-FLUTTER__flutter_app",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260511-ARCHBOT__architect_bot",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260511-ENGCHAT__engineer_chat",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260511-MANUS__manus_hands",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260728-AI-GATEWAY",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260728-CYBER-AGENTS",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260803-RL-REASONING",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260803-SR-EVALUATION",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260804-MANUS-MEMORY__nativemem",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260804-SR-REFLECTION__in_context_search",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260807-MEMORY__mandala_memory_layer",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-R-20260803-KURTOCH-FRANCHISE",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-R-20261013-PUBLIC-MANDALA",
+      "type": "contains"
+    },
+    {
+      "from": "works",
+      "to": "W-T-20261015-MGE",
+      "type": "contains"
+    },
+    {
+      "from": "W-R-ECOMM-001",
+      "to": "W-R-RM-014",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
+      "to": "W-R-RM-014",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
+      "to": "W-R-ECOMM-001",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
+      "to": "W-R-RM-014",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
+      "to": "W-R-ECOMM-001",
+      "type": "related_works"
+    },
+    {
+      "from": "W-R-ROSE-001",
+      "to": "W-R-RM-014",
+      "type": "related_works"
+    },
+    {
+      "from": "W-R-ROSE-001",
+      "to": "W-R-ECOMM-001",
+      "type": "related_works"
+    },
+    {
+      "from": "W-R-ROSE-001",
+      "to": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260728-CYBER-AGENTS",
+      "to": "W-T-20260728-AI-GATEWAY",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260803-RL-REASONING",
+      "to": "W-T-20260511-ENGCHAT",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260803-RL-REASONING",
+      "to": "W-T-20260511-MANUS",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260803-SR-EVALUATION",
+      "to": "W-T-20260511-ENGCHAT",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260803-SR-EVALUATION",
+      "to": "W-T-20260803-RL-REASONING",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260807-MEMORY__mandala_memory_layer",
+      "to": "W-T-20260511-ENGCHAT",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260807-MEMORY__mandala_memory_layer",
+      "to": "W-T-20260511-MANUS",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260807-MEMORY__mandala_memory_layer",
+      "to": "W-R-ROSE-001",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+      "to": "W-T-20260807-MEMORY",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+      "to": "W-T-20260511-ENGCHAT",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+      "to": "W-T-20260511-MANUS",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+      "to": "W-R-ROSE-001",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20261015-MGE",
+      "to": "W-T-20260511-ENGCHAT",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20261015-MGE",
+      "to": "W-T-20260418-SYM",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20261015-MGE",
+      "to": "W-T-20260807-MEMORY",
+      "type": "related_works"
+    },
+    {
+      "from": "fruits",
+      "to": "fruit-gentle-companion-001",
+      "type": "contains"
+    },
+    {
+      "from": "fruits",
+      "to": "fruit-engineer-chat-001",
+      "type": "contains"
+    },
+    {
+      "from": "fruits",
+      "to": "fruit-manus-001",
+      "type": "contains"
+    },
+    {
+      "from": "fruits",
+      "to": "fruit-architect-bot-001",
+      "type": "contains"
+    },
+    {
+      "from": "fruits",
+      "to": "fruit-scout-agent-001",
+      "type": "contains"
+    },
+    {
+      "from": "fruits",
+      "to": "fruit-autonomous-ecosystem-001",
+      "type": "contains"
+    },
+    {
+      "from": "fruits",
+      "to": "fruit-gentle-companion-public-001",
+      "type": "contains"
+    },
+    {
+      "from": "fruits",
+      "to": "fruit-mge-001",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge",
+      "to": "K-ai_tools",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge",
+      "to": "K-product_audit_framework",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge",
+      "to": "K-system_design_primer",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge",
+      "to": "K-consent_autonomy_audit",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge",
+      "to": "K-mandala_brochure",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge",
+      "to": "K-startup_legal_docs_guide",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge",
+      "to": "K-deep_questions_for_getting_to_know_someone",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge",
+      "to": "K-soup_finetuning",
+      "type": "contains"
     }
   ],
   "analysis": {
-    "total_nodes": 17,
-    "total_edges": 16,
+    "total_nodes": 59,
+    "total_edges": 81,
     "orphans": [
       "core_map"
-    ]
+    ],
+    "unregistered_honeycombs": [],
+    "missing_honeycombs": [],
+    "seeds_inbox_count": 475,
+    "seeds_root_count": 21,
+    "seeds_total": 496
   }
 }
