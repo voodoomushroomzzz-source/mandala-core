@@ -112,52 +112,52 @@
     {
       "from": "core_map",
       "to": "fruits",
-      "type": "references"
+      "type": "children"
     },
     {
       "from": "core_map",
       "to": "humor",
-      "type": "references"
+      "type": "children"
     },
     {
       "from": "core_map",
       "to": "knowledge",
-      "type": "references"
+      "type": "children"
     },
     {
       "from": "core_map",
       "to": "philosophy",
-      "type": "references"
+      "type": "children"
     },
     {
       "from": "core_map",
       "to": "sessions",
-      "type": "references"
+      "type": "children"
     },
     {
       "from": "core_map",
       "to": "sym",
-      "type": "references"
+      "type": "children"
     },
     {
       "from": "core_map",
       "to": "works",
-      "type": "references"
+      "type": "children"
     },
     {
       "from": "core_map",
       "to": "rose_world",
-      "type": "references"
+      "type": "children"
     },
     {
       "from": "core_map",
       "to": "directives",
-      "type": "references"
+      "type": "children"
     },
     {
       "from": "core_map",
       "to": "personal",
-      "type": "references"
+      "type": "children"
     },
     {
       "from": "core_map",
@@ -166,27 +166,7 @@
     },
     {
       "from": "core_map",
-      "to": "fruits",
-      "type": "children"
-    },
-    {
-      "from": "core_map",
-      "to": "humor",
-      "type": "children"
-    },
-    {
-      "from": "core_map",
       "to": "instructions",
-      "type": "children"
-    },
-    {
-      "from": "core_map",
-      "to": "knowledge",
-      "type": "children"
-    },
-    {
-      "from": "core_map",
-      "to": "philosophy",
       "type": "children"
     },
     {
@@ -201,43 +181,13 @@
     },
     {
       "from": "core_map",
-      "to": "sessions",
-      "type": "children"
-    },
-    {
-      "from": "core_map",
-      "to": "sym",
-      "type": "children"
-    },
-    {
-      "from": "core_map",
-      "to": "works",
-      "type": "children"
-    },
-    {
-      "from": "core_map",
       "to": "registry",
-      "type": "children"
-    },
-    {
-      "from": "core_map",
-      "to": "rose_world",
-      "type": "children"
-    },
-    {
-      "from": "core_map",
-      "to": "directives",
-      "type": "children"
-    },
-    {
-      "from": "core_map",
-      "to": "personal",
       "type": "children"
     }
   ],
   "analysis": {
     "total_nodes": 17,
-    "total_edges": 26,
+    "total_edges": 16,
     "orphans": [
       "core_map"
     ]

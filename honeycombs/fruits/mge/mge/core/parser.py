@@ -31,15 +31,34 @@ def parse_core_map(core_map_path=None) -> dict:
         root = find_repo_root()
         core_map_path = root / "honeycombs" / "core_map" / "index.json"
     data = read_json(core_map_path)
+
     nodes = []
-    edges = []
+    edges_raw = []
+
     for name, info in data.get("honeycombs", {}).items():
-        nodes.append({"id": name, "type": "honeycomb", "path": info.get("path", ""), "description": info.get("description", "")})
+        nodes.append({
+            "id": name,
+            "type": "honeycomb",
+            "path": info.get("path", ""),
+            "description": info.get("description", "")
+        })
+
     nav = data.get("navigation", {})
+
     for ref in nav.get("references", []):
         target = ref.replace("honeycombs/", "").replace("/index.json", "").split("/")[0]
-        edges.append({"from": "core_map", "to": target, "type": "references"})
+        edges_raw.append({"from": "core_map", "to": target, "type": "references"})
+
     for child in nav.get("children", []):
         target = child.replace("honeycombs/", "").replace("/index.json", "").split("/")[0]
-        edges.append({"from": "core_map", "to": target, "type": "children"})
+        edges_raw.append({"from": "core_map", "to": target, "type": "children"})
+
+    # Deduplicate edges by (from, to) - prefer "children" over "references"
+    seen = {}
+    for e in edges_raw:
+        key = (e["from"], e["to"])
+        if key not in seen or e["type"] == "children":
+            seen[key] = e
+    edges = list(seen.values())
+
     return {"nodes": nodes, "edges": edges}
