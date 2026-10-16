@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.188",
+    "version": "v1.7.189",
     "created": "2026-05-11",
-    "updated": "2026-10-15",
+    "updated": "2026-10-16",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -1185,12 +1185,12 @@
       "identity": {
         "module_id": "INSTR-MOBILE-WORKFLOW-001",
         "name": "Mobile Workflow — Working with Mandala from Android",
-        "version": "v1.14.1",
+        "version": "v1.14.2",
         "created": "2026-04-12",
-        "updated": "2026-10-14",
+        "updated": "2026-10-16",
         "layer": 2,
         "type": "workflow_guide",
-        "description": "Complete guide for External SR working from Android/Termux. v1.14.1: +LR-17 (не писать патчер без явной команды) +LR-18 (full_sync после патча taskboard/team/KB). v1.14.0: +LR-15 (JSON → Python-патчер) и +LR-16 (json.dump параметры). v1.13.0: +LR-14 (pre-check пути скрипта).",
+        "description": "Complete guide for External SR working from Android/Termux. v1.14.2: +LR-19 (cd в корень мандалы перед FULL DEPLOY) +LR-20 (полный скан просроченных). v1.14.1: +LR-17 (не писать патчер без явной команды) +LR-18 (full_sync после патча taskboard/team/KB).",
         "status": "active",
         "priority": "high",
         "tags": [
@@ -1501,8 +1501,8 @@
       },
       "health": {
         "status": "healthy",
-        "last_check": "2026-10-14",
-        "notes": "v1.14.1: +LR-17 (не писать патчер без явной команды Gardener'а) +LR-18 (full_sync после патча taskboard/team/KB). v1.14.0: LR-15 (JSON → Python-патчер, не cat >) и LR-16 (json.dump параметры)."
+        "last_check": "2026-10-16",
+        "notes": "v1.14.2: +LR-19 (cd в корень мандалы), +LR-20 (полный скан просроченных). v1.14.1: LR-17/LR-18."
       },
       "large_files_handling": {
         "title": "Работа с большими файлами",
@@ -1748,6 +1748,22 @@
             "what_full_sync_does": "archive_done.py → push_taskboard.py → git commit → push. Синхронизирует Mandala ↔ Notion и коммитит лог.",
             "exception": "Если патч только читает данные / не касается этих 3 файлов — синк не нужен.",
             "added": "2026-10-14"
+          },
+          {
+            "id": "LR-19",
+            "title": "FULL DEPLOY начинать с cd в корень мандалы",
+            "problem": "Termux не всегда открывается в корне репо. Если сессия была в другом каталоге — все последующие команды идут мимо нужных путей, git add/commit дают ошибки или тихо ничего не делают.",
+            "solution": "Каждый FULL DEPLOY блок начинать с cd /storage/emulated/0/mandala-core &&",
+            "example": "cd /storage/emulated/0/mandala-core && cat > patch_x.py << 'PYEOF' ...",
+            "added": "2026-10-16"
+          },
+          {
+            "id": "LR-20",
+            "title": "Просроченные — полный скан по deadline < today",
+            "problem": "При построении обзора SR опирается на память о последних правках буфера и пропускает задачи, которые не проходили через буфер, но имеют просроченный deadline. Пример: K-127 пропущена 16.10 при дедлайне 15.10.",
+            "solution": "При построении обзора 'просроченные / сегодня / ближайшие' — итерироваться по ВСЕМ активным задачам и фильтровать по deadline < today. Не полагаться на память.",
+            "example": "for t in tasks: if t.get('deadline') and t['deadline'] < TODAY and t['status'] not in ('done','cancelled'): show(t)",
+            "added": "2026-10-16"
           }
         ]
       }
