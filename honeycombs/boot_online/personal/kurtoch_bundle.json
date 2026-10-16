@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-16T19:04:16Z",
+    "generated_at": "2026-10-16T20:17:18Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,12 +28,12 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.7.3",
+      "version": "v2.8.0",
       "created": "2026-09-23",
-      "updated": "2026-10-14",
+      "updated": "2026-10-16",
       "layer": 2,
       "type": "personal_subhub_index",
-      "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Тонкий индекс: только уникальное (контекст, стратегия, живой статус). Цифры и данные — в модулях (taskboard, team, knowledge_base).",
+      "description": "Хаб проекта 'Куртош'. v2.8.0: +scheduling_guide (правила расписания), +schedule_recent (последние 2 недели расписания).",
       "status": "active",
       "priority": "critical",
       "tags": [
@@ -133,8 +133,8 @@
     },
     "health": {
       "status": "healthy",
-      "last_check": "2026-10-14",
-      "notes": "v2.7.3: K-129 дополнен (8000 ₽, инкассация)."
+      "last_check": "2026-10-16",
+      "notes": "v2.8.0: +scheduling_guide, +schedule_recent."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -785,6 +785,231 @@
         "updated": null,
         "synthesis": null
       }
+    },
+    "scheduling_guide": {
+      "identity": {
+        "module_id": "KURTOCH-SCHEDULING-GUIDE-001",
+        "name": "Scheduling Guide",
+        "version": "v1.0.0",
+        "created": "2026-10-16",
+        "updated": "2026-10-16",
+        "description": "Правила и логика составления расписания смен Куртош.",
+        "status": "active"
+      },
+      "instruction": "ИНСТРУКЦИЯ: При составлении расписания на неделю/две — SR читает этот блок, следует структуре, проверяет правила, формирует черновик. Gardener сверяет в Google Sheets, только потом — патч в Mandala.",
+      "structure": {
+        "centre": {
+          "mon_thu": {
+            "base": 2,
+            "notes": "Стандарт"
+          },
+          "fri": {
+            "base": 2,
+            "extra": "runner 16:00-close"
+          },
+          "sat": {
+            "base": 2,
+            "extra": "1 чел 11:00-19:00"
+          },
+          "sun": {
+            "base": 2,
+            "extra": "1 чел 11:00-19:00"
+          }
+        },
+        "nijka": {
+          "all_days": {
+            "base": 1
+          }
+        }
+      },
+      "rules": {
+        "1_max_consecutive_shifts": {
+          "rule": "Максимум 2 смены подряд",
+          "why": "3+ смен подряд → выгорание"
+        },
+        "2_respect_wishes": {
+          "rule": "Учитывать пожелания (выходные) каждого сотрудника из чата 'Расписание и Зарплаты'",
+          "why": "Баланс, доверие, удержание"
+        },
+        "3_target_shifts": {
+          "rule": "Ориентир — target из team.json (shifts_per_week.target), не max",
+          "why": "Целевое количество, не потолок"
+        },
+        "4_active_only": {
+          "rule": "Учитывать только активных: status = core | working | substitute | management",
+          "why": "paused и left — не в расписании"
+        },
+        "5_shift_notation": {
+          "rule": "Формат: full | 11-19 | 16-22 | вых | ОТП",
+          "why": "Единый язык в таблице"
+        },
+        "6_table_format": {
+          "rule": "Строки = сотрудники (контакт + имя + Ц/Н), столбцы = дни. Цвет: зелёный = Центр, розовый = Нижка",
+          "why": "Как в Google Sheets"
+        },
+        "7_nijka_pattern": {
+          "rule": "Юля + Анна — зеркальный 2/2 на Нижке. Одна 2 дня → вторая 2 дня. Нишка закрыта каждый день.",
+          "why": "Продолжать паттерн предыдущей недели"
+        },
+        "8_katrin": {
+          "rule": "Катрин: Пн — админка (не смена). Отпуск — Центр без core. Возврат — по необходимости, не обязательно сразу.",
+          "why": "Ключевой сотрудник, но не всегда нужна"
+        }
+      },
+      "deficit": {
+        "priority": [
+          "1. Дима Рыжков (substitute)",
+          "2. Дима (кризис-менеджер) — по возможности",
+          "3. 'нужен сессионник' — с пометкой в клетке"
+        ],
+        "note": "Применяется, когда не хватает людей на покрытие дня"
+      },
+      "workflow": {
+        "step_1": "SR строит черновик расписания",
+        "step_2": "Gardener сверяет в Google Sheets",
+        "step_3": "Патч в Mandala — только после сверки",
+        "step_4": "Перед началом — перепроверить день недели по календарю (16.10 = пт, 19.10 = пн)"
+      }
+    },
+    "schedule_recent": {
+      "identity": {
+        "module_id": "KURTOCH-SCHEDULE-RECENT-001",
+        "name": "Recent Schedule",
+        "version": "v1.0.0",
+        "created": "2026-10-16",
+        "updated": "2026-10-16",
+        "description": "Расписание последних 2 недель. Хранится для контекста и продолжения паттерна.",
+        "status": "active"
+      },
+      "rule": "Хранить 2 последних недели. При добавлении 3-й — самая старая удаляется.",
+      "weeks": [
+        {
+          "week_label": "10.4",
+          "period": "19.10 – 25.10",
+          "created": "2026-10-16",
+          "verified_by_gardener": false,
+          "rows": [
+            {
+              "name": "Катрин",
+              "point": "Ц",
+              "schedule": {
+                "пн": null,
+                "вт": null,
+                "ср": null,
+                "чт": null,
+                "пт": null,
+                "сб": null,
+                "вс": null
+              },
+              "note": "отпуск 17-24"
+            },
+            {
+              "name": "Маша",
+              "point": "Ц",
+              "schedule": {
+                "пн": "вых",
+                "вт": "вых",
+                "ср": "вых",
+                "чт": "full",
+                "пт": "full",
+                "сб": "вых",
+                "вс": "вых"
+              }
+            },
+            {
+              "name": "Оля",
+              "point": "Ц",
+              "schedule": {
+                "пн": "вых",
+                "вт": "full",
+                "ср": "full",
+                "чт": null,
+                "пт": "full",
+                "сб": "вых",
+                "вс": "full"
+              }
+            },
+            {
+              "name": "Александра",
+              "point": "Ц",
+              "schedule": {
+                "пн": "full",
+                "вт": null,
+                "ср": "full",
+                "чт": "full",
+                "пт": null,
+                "сб": "full",
+                "вс": null
+              }
+            },
+            {
+              "name": "Никита",
+              "point": "Ц",
+              "schedule": {
+                "пн": "full",
+                "вт": null,
+                "ср": null,
+                "чт": null,
+                "пт": null,
+                "сб": "full",
+                "вс": "11-19"
+              }
+            },
+            {
+              "name": "Денис",
+              "point": "Ц",
+              "schedule": {
+                "пн": null,
+                "вт": "full",
+                "ср": null,
+                "чт": null,
+                "пт": "с16",
+                "сб": null,
+                "вс": null
+              }
+            },
+            {
+              "name": "Дима Рыжков",
+              "point": "Ц",
+              "schedule": {
+                "пн": null,
+                "вт": null,
+                "ср": null,
+                "чт": null,
+                "пт": null,
+                "сб": "11-19",
+                "вс": null
+              }
+            },
+            {
+              "name": "Юля",
+              "point": "Н",
+              "schedule": {
+                "пн": null,
+                "вт": "full",
+                "ср": "full",
+                "чт": null,
+                "пт": null,
+                "сб": "full",
+                "вс": "full"
+              }
+            },
+            {
+              "name": "Анна",
+              "point": "Н",
+              "schedule": {
+                "пн": "full",
+                "вт": null,
+                "ср": null,
+                "чт": "full",
+                "пт": "full",
+                "сб": null,
+                "вс": null
+              }
+            }
+          ]
+        }
+      ]
     }
   },
   "taskboard": {
@@ -4180,7 +4405,7 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.8.0",
+      "version": "v1.8.1",
       "created": "2026-09-23",
       "updated": "2026-10-16",
       "layer": 2,
@@ -4294,7 +4519,8 @@
               "max": 7,
               "type": "flexible",
               "notes": "Учится. Скидывает пожелания каждую неделю."
-            }
+            },
+            "scheduling_note": "Учится. Предпочитает выхи. Не может по четвергам."
           },
           "skills": {
             "stage": "universal",
@@ -4344,7 +4570,8 @@
               "max": 3,
               "type": "fixed",
               "notes": "Не может закрываться. При 4 сменах — невыходы."
-            }
+            },
+            "scheduling_note": "Не может закрываться. При 4 сменах — невыходы."
           },
           "skills": {
             "stage": "universal",
@@ -4443,7 +4670,8 @@
               "type": "pattern",
               "pattern": "2/2",
               "notes": "Нижка. Паттерн 2/2 — уточнить по скрину."
-            }
+            },
+            "scheduling_note": "Нижка, паттерн 2/2 с Юлей (зеркально)."
           },
           "skills": {
             "stage": "pechka_done",
@@ -4626,7 +4854,8 @@
               "type": "pattern",
               "pattern": "2/2",
               "notes": "Нижка. Паттерн 2/2 — уточнить по скрину."
-            }
+            },
+            "scheduling_note": "Нижка, паттерн 2/2 с Анной (зеркально). Предпочитает Нижку."
           },
           "skills": {
             "stage": "universal",
@@ -4677,7 +4906,8 @@
               "max": 7,
               "type": "flexible",
               "notes": "Работает на другой работе. Скидывает пожелания каждую неделю."
-            }
+            },
+            "scheduling_note": "Работает на другой работе. Скидывает пожелания каждую неделю."
           },
           "skills": {
             "stage": "pechka_done",
@@ -4904,7 +5134,8 @@
               "max": 4,
               "type": "fixed",
               "notes": null
-            }
+            },
+            "scheduling_note": "Старший бариста. Target 3, max 4."
           },
           "skills": {
             "stage": "universal",
@@ -4957,7 +5188,8 @@
               "max": 4,
               "type": "fixed",
               "notes": null
-            }
+            },
+            "scheduling_note": "Target 4 смены."
           },
           "skills": {
             "stage": "coffee",
@@ -5053,7 +5285,8 @@
               "max": 7,
               "type": "on_call",
               "notes": "Ассоциированный, по вызову."
-            }
+            },
+            "scheduling_note": "Ассоциированный, по вызову. Универсал."
           },
           "skills": {
             "stage": "universal",
