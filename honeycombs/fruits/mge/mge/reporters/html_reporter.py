@@ -55,6 +55,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <span class="stat" id="stat">nodes: 0 / edges: 0 / seeds: 0</span>
   <span id="unreg-badge"></span>
   <span id="broken-badge"></span>
+  <span id="format-badge"></span>
   <span id="islands-badge"></span>
   <span id="reachable-badge"></span>
   <div id="filters">
@@ -63,6 +64,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     <label><input type="checkbox" id="f-fruit" checked> Fruits</label>
     <label><input type="checkbox" id="f-knowledge" checked> Knowledge</label>
     <label><input type="checkbox" id="f-unregistered" checked> Unregistered</label>
+    <label><input type="checkbox" id="f-missing" checked> Missing</label>
   </div>
   <input type="text" id="search" placeholder="Search node...">
 </div>
@@ -80,7 +82,8 @@ const COLORS = {
   honeycomb_unregistered: { bg: "#f85149", border: "#da3633" },
   work: { bg: "#3fb950", border: "#2ea043" },
   fruit: { bg: "#a371f7", border: "#8957e5" },
-  knowledge: { bg: "#d29922", border: "#bb8009" }
+  knowledge: { bg: "#d29922", border: "#bb8009" },
+  missing: { bg: "#f85149", border: "#da3633" }
 };
 
 function nodeShape(type) {
@@ -114,28 +117,31 @@ function buildNodes() {
   return GRAPH.nodes.map(n => {
     const label = formatLabel(n.id, n.type);
     const isWork = n.type === "work";
+    const isMissing = n.type === "missing" || n.type === "honeycomb_unregistered";
     return {
       id: n.id,
       label: label,
       title: n.id,
       color: nodeColor(n),
       shape: nodeShape(n.type),
-      font: { color: "#c9d1d9", size: isWork ? 10 : 13 },
-      borderWidth: n.type === "honeycomb_unregistered" ? 3 : 2,
-      borderWidthSelected: 4
+      font: { color: isMissing ? "#f85149" : "#c9d1d9", size: isWork ? 10 : 13 },
+      borderWidth: isMissing ? 3 : 2,
+      borderWidthSelected: 4,
+      borderDashes: n.type === "missing" ? [5, 5] : false
     };
   });
 }
 
 function buildEdges() {
   return GRAPH.edges.map(e => {
-    const isUnreg = e.type === "unregistered";
+    const isBroken = e.type === "unregistered" || e.type === "broken_link";
     return {
       from: e.from,
       to: e.to,
       arrows: "to",
-      color: { color: isUnreg ? "#f85149" : "#30363d", highlight: "#58a6ff" },
-      dashes: isUnreg,
+      color: { color: isBroken ? "#f85149" : "#30363d", highlight: "#58a6ff" },
+      dashes: isBroken ? [6, 6] : false,
+      width: isBroken ? 2 : 1.5,
       smooth: { type: "continuous" },
       title: e.type
     };
@@ -178,6 +184,11 @@ if (unreg.length > 0) {
 if (broken.length > 0) {
   document.getElementById("broken-badge").innerHTML =
     '<span class="badge warn">⚠ broken refs: ' + broken.length + '</span>';
+}
+const formatMismatches = a.id_format_mismatches || [];
+if (formatMismatches.length > 0) {
+  document.getElementById("format-badge").innerHTML =
+    '<span class="badge">format: ' + formatMismatches.length + '</span>';
 }
 if (islands.length > 0) {
   document.getElementById("islands-badge").innerHTML =
@@ -241,7 +252,7 @@ const TYPE_TO_ID = {
 
 function applyFilters() {
   const active = {};
-  ["honeycomb", "work", "fruit", "knowledge", "unregistered"].forEach(k => {
+  ["honeycomb", "work", "fruit", "knowledge", "unregistered", "missing"].forEach(k => {
     active[k] = document.getElementById("f-" + k).checked;
   });
 
@@ -253,6 +264,7 @@ function applyFilters() {
     if (active.fruit && n.type === "fruit") show = true;
     if (active.knowledge && n.type === "knowledge") show = true;
     if (active.unregistered && n.type === "honeycomb_unregistered") show = true;
+    if (active.missing && n.type === "missing") show = true;
     if (n.id === "core_map") show = active.honeycomb;
     if (show) visibleIds.add(n.id);
   });
