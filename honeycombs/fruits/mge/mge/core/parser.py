@@ -220,6 +220,60 @@ def count_seeds() -> dict:
     }
 
 
+def compute_degree(nodes: list, edges: list) -> dict:
+    """Compute in+out degree for each node."""
+    degree = {n["id"]: 0 for n in nodes}
+    for e in edges:
+        if e["from"] in degree:
+            degree[e["from"]] += 1
+        if e["to"] in degree:
+            degree[e["to"]] += 1
+    return degree
+
+
+def find_top_hubs(nodes: list, edges: list, top: int = 5) -> list:
+    """Return top N nodes by degree."""
+    degree = compute_degree(nodes, edges)
+    sorted_nodes = sorted(degree.items(), key=lambda x: -x[1])
+    return [{"id": k, "degree": v} for k, v in sorted_nodes[:top]]
+
+
+def find_broken_refs(nodes: list, edges: list) -> list:
+    """Find edges pointing to non-existent nodes."""
+    node_ids = {n["id"] for n in nodes}
+    broken = []
+    for e in edges:
+        if e["to"] not in node_ids:
+            broken.append({"from": e["from"], "to": e["to"], "type": e["type"]})
+    return broken
+
+
+def find_islands(nodes: list, edges: list, root: str = "core_map") -> list:
+    """Find nodes not reachable from root (BFS)."""
+    node_ids = {n["id"] for n in nodes}
+    if root not in node_ids:
+        return sorted(node_ids)
+
+    adj = {nid: set() for nid in node_ids}
+    for e in edges:
+        if e["from"] in adj and e["to"] in adj:
+            adj[e["from"]].add(e["to"])
+            adj[e["to"]].add(e["from"])
+
+    visited = set()
+    queue = [root]
+    while queue:
+        cur = queue.pop()
+        if cur in visited:
+            continue
+        visited.add(cur)
+        for nb in adj.get(cur, []):
+            if nb not in visited:
+                queue.append(nb)
+
+    return sorted(node_ids - visited)
+
+
 def parse_all() -> dict:
     """Parse everything and return combined graph."""
     unregistered_info = find_unregistered_honeycombs()
@@ -261,17 +315,33 @@ def parse_all() -> dict:
         incoming[e["to"]] = incoming.get(e["to"], 0) + 1
     orphans = [n["id"] for n in all_nodes if incoming.get(n["id"], 0) == 0]
 
+    by_type = {}
+    for n in all_nodes:
+        t = n.get("type", "unknown")
+        by_type[t] = by_type.get(t, 0) + 1
+
+    islands = find_islands(all_nodes, edges, root="core_map")
+    broken_refs = find_broken_refs(all_nodes, edges)
+    top_hubs = find_top_hubs(all_nodes, edges, top=5)
+    reachable_count = len(all_nodes) - len(islands)
+
     return {
         "nodes": all_nodes,
         "edges": edges,
         "analysis": {
             "total_nodes": len(all_nodes),
             "total_edges": len(edges),
+            "by_type": by_type,
             "orphans": orphans,
             "unregistered_honeycombs": unregistered_info["unregistered"],
             "missing_honeycombs": unregistered_info["missing"],
             "seeds_inbox_count": seeds_info["seeds_inbox_count"],
             "seeds_root_count": seeds_info["seeds_root_count"],
-            "seeds_total": seeds_info["seeds_total"]
+            "seeds_total": seeds_info["seeds_total"],
+            "islands": islands,
+            "broken_refs": broken_refs,
+            "reachable_from_core": reachable_count,
+            "unreachable": islands,
+            "top_hubs": top_hubs
         }
     }
