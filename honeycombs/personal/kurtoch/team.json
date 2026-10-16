@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TEAM-001",
     "name": "Kurtoch — Team Roster",
-    "version": "v1.8.0",
+    "version": "v1.8.1",
     "created": "2026-09-23",
     "updated": "2026-10-16",
     "layer": 2,
@@ -116,7 +116,8 @@
             "max": 7,
             "type": "flexible",
             "notes": "Учится. Скидывает пожелания каждую неделю."
-          }
+          },
+          "scheduling_note": "Учится. Предпочитает выхи. Не может по четвергам."
         },
         "skills": {
           "stage": "universal",
@@ -166,7 +167,8 @@
             "max": 3,
             "type": "fixed",
             "notes": "Не может закрываться. При 4 сменах — невыходы."
-          }
+          },
+          "scheduling_note": "Не может закрываться. При 4 сменах — невыходы."
         },
         "skills": {
           "stage": "universal",
@@ -265,7 +267,8 @@
             "type": "pattern",
             "pattern": "2/2",
             "notes": "Нижка. Паттерн 2/2 — уточнить по скрину."
-          }
+          },
+          "scheduling_note": "Нижка, паттерн 2/2 с Юлей (зеркально)."
         },
         "skills": {
           "stage": "pechka_done",
@@ -448,7 +451,8 @@
             "type": "pattern",
             "pattern": "2/2",
             "notes": "Нижка. Паттерн 2/2 — уточнить по скрину."
-          }
+          },
+          "scheduling_note": "Нижка, паттерн 2/2 с Анной (зеркально). Предпочитает Нижку."
         },
         "skills": {
           "stage": "universal",
@@ -499,7 +503,8 @@
             "max": 7,
             "type": "flexible",
             "notes": "Работает на другой работе. Скидывает пожелания каждую неделю."
-          }
+          },
+          "scheduling_note": "Работает на другой работе. Скидывает пожелания каждую неделю."
         },
         "skills": {
           "stage": "pechka_done",
@@ -726,7 +731,8 @@
             "max": 4,
             "type": "fixed",
             "notes": null
-          }
+          },
+          "scheduling_note": "Старший бариста. Target 3, max 4."
         },
         "skills": {
           "stage": "universal",
@@ -779,7 +785,8 @@
             "max": 4,
             "type": "fixed",
             "notes": null
-          }
+          },
+          "scheduling_note": "Target 4 смены."
         },
         "skills": {
           "stage": "coffee",
@@ -875,7 +882,8 @@
             "max": 7,
             "type": "on_call",
             "notes": "Ассоциированный, по вызову."
-          }
+          },
+          "scheduling_note": "Ассоциированный, по вызову. Универсал."
         },
         "skills": {
           "stage": "universal",
