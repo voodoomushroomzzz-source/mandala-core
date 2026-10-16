@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-16T13:05:53Z",
+    "generated_at": "2026-10-16T19:04:16Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -4180,19 +4180,19 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.7.0",
+      "version": "v1.8.0",
       "created": "2026-09-23",
-      "updated": "2026-10-14",
+      "updated": "2026-10-16",
       "layer": 2,
       "type": "team_module",
-      "description": "Картотека сотрудников Куртош. 20 человек. Новая система ставок (200/250/300 ₽/ч, без бонусов).",
+      "description": "Картотека сотрудников Куртош. 20 человек. v1.8.0: добавлено поле shifts_per_week (min/target/max/type) для активных сотрудников.",
       "status": "active",
       "priority": "high",
       "parent": "index.json",
       "resonance": "100%"
     },
     "team_roster": {
-      "last_updated": "2026-10-14",
+      "last_updated": "2026-10-16",
       "total_employees": 20,
       "by_status": {
         "core": 2,
@@ -4228,7 +4228,14 @@
           "schedule": {
             "notes": "пн — админка; может в любые дни; не более 3 смен подряд",
             "preferences": null,
-            "availability": null
+            "availability": null,
+            "shifts_per_week": {
+              "min": 3,
+              "target": 3,
+              "max": 5,
+              "type": "fixed",
+              "notes": "Без понедельника (админка). Не более 3 смен подряд."
+            }
           },
           "skills": {
             "stage": "universal",
@@ -4280,7 +4287,14 @@
           "schedule": {
             "notes": "целые смены; не может по четвергам; предпочитает выхи",
             "preferences": "выхи",
-            "availability": null
+            "availability": null,
+            "shifts_per_week": {
+              "min": 0,
+              "target": 0,
+              "max": 7,
+              "type": "flexible",
+              "notes": "Учится. Скидывает пожелания каждую неделю."
+            }
           },
           "skills": {
             "stage": "universal",
@@ -4323,7 +4337,14 @@
           "schedule": {
             "notes": "не может закрываться; не более 3 смен в неделю; при 4 сменах — невыходы и болезни",
             "preferences": null,
-            "availability": null
+            "availability": null,
+            "shifts_per_week": {
+              "min": 3,
+              "target": 3,
+              "max": 3,
+              "type": "fixed",
+              "notes": "Не может закрываться. При 4 сменах — невыходы."
+            }
           },
           "skills": {
             "stage": "universal",
@@ -4414,7 +4435,15 @@
           "schedule": {
             "notes": "2/2; может норм работать; может открывать смену",
             "preferences": null,
-            "availability": null
+            "availability": null,
+            "shifts_per_week": {
+              "min": 3,
+              "target": 3,
+              "max": 4,
+              "type": "pattern",
+              "pattern": "2/2",
+              "notes": "Нижка. Паттерн 2/2 — уточнить по скрину."
+            }
           },
           "skills": {
             "stage": "pechka_done",
@@ -4589,7 +4618,15 @@
           "schedule": {
             "notes": "2/2, стабильно до февраля",
             "preferences": "Нижка",
-            "availability": null
+            "availability": null,
+            "shifts_per_week": {
+              "min": 3,
+              "target": 3,
+              "max": 4,
+              "type": "pattern",
+              "pattern": "2/2",
+              "notes": "Нижка. Паттерн 2/2 — уточнить по скрину."
+            }
           },
           "skills": {
             "stage": "universal",
@@ -4633,7 +4670,14 @@
           "schedule": {
             "notes": null,
             "preferences": null,
-            "availability": null
+            "availability": null,
+            "shifts_per_week": {
+              "min": 0,
+              "target": 0,
+              "max": 7,
+              "type": "flexible",
+              "notes": "Работает на другой работе. Скидывает пожелания каждую неделю."
+            }
           },
           "skills": {
             "stage": "pechka_done",
@@ -4853,7 +4897,14 @@
           "schedule": {
             "notes": "работает целыми сменами до 3-й недели сентября включительно; дальше — по договорённости",
             "preferences": null,
-            "availability": null
+            "availability": null,
+            "shifts_per_week": {
+              "min": 3,
+              "target": 3,
+              "max": 4,
+              "type": "fixed",
+              "notes": null
+            }
           },
           "skills": {
             "stage": "universal",
@@ -4899,7 +4950,14 @@
           "schedule": {
             "notes": "пробная смена в воскресенье",
             "preferences": null,
-            "availability": null
+            "availability": null,
+            "shifts_per_week": {
+              "min": 4,
+              "target": 4,
+              "max": 4,
+              "type": "fixed",
+              "notes": null
+            }
           },
           "skills": {
             "stage": "coffee",
@@ -4988,7 +5046,14 @@
           "schedule": {
             "notes": "по вызову, ассоциированный. Точка: Центр.",
             "preferences": null,
-            "availability": null
+            "availability": null,
+            "shifts_per_week": {
+              "min": 0,
+              "target": 0,
+              "max": 7,
+              "type": "on_call",
+              "notes": "Ассоциированный, по вызову."
+            }
           },
           "skills": {
             "stage": "universal",
