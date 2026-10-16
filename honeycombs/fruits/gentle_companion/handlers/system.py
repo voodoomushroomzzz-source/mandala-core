@@ -330,7 +330,7 @@ async def run_proactive_scheduler() -> None:
             try:
                 from zoneinfo import ZoneInfo as _ZI
                 from datetime import datetime as _dt2
-                tz2 = ZoneInfo(g2.get("companion_settings", {}).get("timezone", "Europe/Moscow"))
+                tz2 = _ZI(g2.get("companion_settings", {}).get("timezone", "Europe/Moscow"))
                 now2 = _dt2.now(tz2)
                 today_bday = now2.strftime("%d.%m")
                 # Only at 10:00 in user's timezone
@@ -831,9 +831,6 @@ async def ask_question(message: Message, state: FSMContext):
     await message.answer(reply, reply_markup=get_main_keyboard())
 
 # ─── /achievements ────────────────────────────────────────────────────────────
-
-@router.message(Command("achievements"))
-
 
 @router.callback_query(F.data == "show_changelog")
 async def cb_show_changelog(callback: CallbackQuery):

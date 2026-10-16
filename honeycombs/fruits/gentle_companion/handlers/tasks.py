@@ -1035,7 +1035,7 @@ def _task_edit_field_kb(tid: str) -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="✏️ Название",  callback_data=f"tedit_title_{tid}"),
          InlineKeyboardButton(text="📅 Дедлайн",   callback_data=f"tedit_deadline_{tid}")],
         [InlineKeyboardButton(text="🎨 Группа",    callback_data=f"tedit_group_{tid}")],
-        [InlineKeyboardButton(text="← Назад",      callback_data="menu_tasks_mgmt")],
+        [InlineKeyboardButton(text="← Назад",      callback_data="menu_tasks_mgmt_v2")],
     ])
 
 @router.callback_query(F.data.startswith("task_edit_"))
