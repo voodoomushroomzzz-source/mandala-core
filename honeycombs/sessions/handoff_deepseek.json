@@ -1,117 +1,143 @@
 {
-  "handoff_id": "HANDOFF-DEEPSEEK-2026-10-14",
-  "version": "v7.0.0",
-  "created": "2026-10-13",
-  "updated": "2026-10-14",
-  "purpose": "Бесшовный переход в новый чат. Сессия 13-14.10.2026: тонкий index v2.7.x + meetings блок, новая система ставок (200/250/300, без бонусов), team v1.7.0, массовое закрытие 7 задач, K-131/132, синтез планёрки 14.10, KB dismissal_rules.",
-  "context": {
-    "gardener": "Voodoo (Дима)",
-    "project": "Куртош — Кризис-менеджмент + операционная система",
-    "current_state": "Кризис-менеджер, 100 т.р./мес (50 кеш + 50 накопление), 3 мес (11.09–11.12.2026). Progress 45%. Фаза 0.",
-    "session_focus": [
-      "Тонкий index v2.7.0 → v2.7.3: убраны history, modules, счётчики, детали scripts",
-      "meetings блок: синтезы по планёркам (3 КБ / 5 КБ / макс 3)",
-      "Новая система ставок: 200 (стажёр) / 250 (бариста 1 ур.) / 300 (старший бариста)",
-      "Бонусная система (штатка, киай, команда, сервис) — УБРАНА",
-      "team v1.7.0: 20 сотрудников, пересчёт всех",
-      "Массовое закрытие 7 задач (K-125, K-101, K-084, K-027, K-128, K-104, K-099)",
-      "Планёрка 14.10 15:00 — синтез в meetings",
-      "K-131 (условия Дима/Витя), K-132 (уборщица), K-129 (Саша 8000 ₽)",
-      "KB: + dismissal_rules (правила увольнения)"
+  "identity": {
+    "name": "Handoff для DeepSeek — Состояние Dima",
+    "version": "v3.0.0",
+    "created": "2026-10-16",
+    "updated": "2026-10-16",
+    "description": "Актуальный handoff после сессии 2026-10-16. MGE полностью интегрирован. Broken refs НЕ чиним — тест для нового SR."
+  },
+  "session_2026-10-16": {
+    "summary": "Длинная сессия по интеграции MGE (Mandala Graph Explorer) в онбординг Mandala. MGE — инструмент визуализации графа структуры Mandala. Два входа: HTML для Садовника (GitHub Pages + локальный), JSON для SR. Вшит в онбординг как step_3_mandala_graph сразу после core_map. CI автоматически пересобирает граф и онбординг.",
+    "completed_tasks": [
+      "Создан MGE пакет (12 файлов): parser, graph, reporters (JSON/Mermaid/HTML), cli",
+      "Parser v4.2 — обходит honeycombs/, works, fruits, knowledge; находит missing nodes, broken refs, format mismatches, islands, top_hubs",
+      "HTML v4.3 — vis.js граф, фильтры по типам, цвета, missing nodes красные пунктирные, broken edges красные",
+      "Fruit зарегистрирован: fruit-mge-001 (honeycombs/fruits/mge/index.json)",
+      "Work зарегистрирован: W-T-20261015-MGE",
+      "CI workflow .github/workflows/build-mge-graph.yml — авто-пересборка графа при push в honeycombs/**",
+      "CI loop protection: исключены boot_online_onboarding_pc.json, boot_online/personal/**, registry.json, scan_state.json",
+      "core_map v3.13.0: добавлены graph_guide (инструкция для SR) + dashboard_links (ссылки ПК/телефон/raw)",
+      "build_onboarding.py: добавлена функция build_mge_step(), граф вшивается напрямую",
+      "Онбординг v1.7.191: появился step_3_mandala_graph сразу после step_2_core_map",
+      "GitHub Pages настроен: https://voodoomushroomzzz-source.github.io/mandala-core/",
+      "index.html dashboard: 3 карточки (MGE HTML, JSON, Mermaid)",
+      ".nojekyll создан для отключения Jekyll",
+      "GitHub Actions: workflow Build MGE Graph работает, loop protection проверен"
+    ],
+    "key_decisions": [
+      "core_map = ЭТАЛОН (как должно быть, обновляется вручную)",
+      "mandala_graph = СНИМОК (как есть, обновляется CI автоматически)",
+      "Разница между ними = задача для SR",
+      "Описания сот НЕ дублируются в графе — берутся из core_map (оба шага рядом в онбординге)",
+      "Seeds в графе — только счётчик (475 inbox + 21 root = 496), не узлы",
+      "Broken refs НЕ чиним — это тест для нового SR: поймёт ли он, что надо исправить"
+    ],
+    "open_questions": [
+      "Сможет ли новый SR, прочитав онбординг, самостоятельно понять что broken refs требуют исправления?",
+      "Как перенести пароль engineer-chat на index.html GitHub Pages (client-side auth)?"
     ]
   },
-  "current_state_summary": {
-    "taskboard_version": "v2.6.6",
-    "team_version": "v1.7.0",
-    "knowledge_base_version": "v2.3.0",
-    "index_version": "v2.7.3",
-    "active_tasks": 48,
-    "archived_tasks": 73,
-    "total": 121,
-    "team_roster": 20,
-    "team_by_status": {
-      "core": 2,
-      "working": 6,
-      "management": 2,
-      "substitute": 1,
-      "paused": 4,
-      "left": 5
+  "current_state": {
+    "phase": "MGE полностью интегрирован. Mandala — живая система с автоматическим графом.",
+    "emotional": "Спокойствие. Интерес к новому тесту — поймёт ли SR систему.",
+    "focus": "MGE, тест онбординга, подготовка handoff, потом новый чат",
+    "key_insight": "SR получает два взгляда — эталон (core_map) + снимок (mandala_graph). Разница = пространство для работы."
+  },
+  "architecture_context": {
+    "mge_mandala_graph_explorer": {
+      "work_id": "W-T-20261015-MGE",
+      "fruit_id": "fruit-mge-001",
+      "location": "honeycombs/fruits/mge/",
+      "status": "active",
+      "deadline": "2026-11-15",
+      "phases": {
+        "phase_1": "Core MVP — JSON + Mermaid (DONE)",
+        "phase_2": "HTML vis.js (DONE)",
+        "phase_3": "Works + fruits + knowledge + seeds counter (DONE)",
+        "phase_4": "Islands, broken_refs, top_hubs (DONE)",
+        "phase_5": "Live-server (skipped)",
+        "phase_6": "CI integration (DONE)"
+      },
+      "cli": "python -m mge scan",
+      "outputs": {
+        "json": "honeycombs/fruits/mge/output/mandala_graph.json",
+        "html": "honeycombs/fruits/mge/output/mandala_graph.html",
+        "mmd": "honeycombs/fruits/mge/output/mandala_graph.mmd"
+      }
     },
-    "notion_synced": true,
-    "notion_pages": 121,
-    "revenue_target_rub_monthly": 2200000,
-    "точка_нуля_ПРК": "~2 100 000 ₽/мес (при ПРК 206К)",
-    "прогноз_ноя_дек": "2,0-2,1 млн (Крис), 1,75 млн (Дима)"
+    "onboarding_integration": {
+      "core_map_step": "step_2_core_map (эталон + graph_guide + dashboard_links)",
+      "mandala_graph_step": "step_3_mandala_graph (снимок + analysis)",
+      "order": "core_map -> mandala_graph -> philosophy -> cosmic_manifesto -> first_gardener -> external_sr_workflow -> directives -> profile_deep -> personal -> fruits -> works -> knowledge -> protocols -> handoff -> optional"
+    },
+    "ci_workflows": {
+      "build-mge-graph.yml": "Пересобирает граф при push в honeycombs/** (исключая auto-generated)",
+      "build-onboarding.yml": "Пересобирает онбординг при изменении source-файлов или mandala_graph.json",
+      "loop_protection": "Исключения: boot_online_onboarding_pc.json, boot_online/personal/**, registry.json, scan_state.json"
+    },
+    "github_pages": {
+      "url": "https://voodoomushroomzzz-source.github.io/mandala-core/",
+      "status": "active",
+      "index_html": "Главная с 3 карточками (MGE HTML, JSON, Mermaid)",
+      "nojekyll": "Создан для отключения Jekyll"
+    }
   },
-  "rate_system_new": {
-    "trainee": "200 ₽/ч",
-    "barista_level_1": "250 ₽/ч",
-    "senior_barista": "300 ₽/ч",
-    "admin_surcharge_katrin": "16 000 ₽/мес",
-    "smm_valya": "10 000 ₽/мес",
-    "smm_nastya": "20 000 ₽/мес",
-    "note": "Бонусы убраны (штатка, киай, команда, сервис)."
-  },
-  "prk_structure_current": {
-    "dima": 50,
-    "vitya": 70,
-    "kris": 40,
-    "katrin": 16,
-    "nastya_smm": 30,
-    "total": 206,
-    "note": "Обсуждается 60/60 (Дима/Витя) — K-131. Пока старые."
-  },
-  "team_status_full": {
-    "core": [
-      "EMP-001 Катрин",
-      "EMP-015 Маша"
-    ],
-    "working": [
-      "EMP-002 Никита",
-      "EMP-003 Александра",
-      "EMP-005 Анна",
-      "EMP-009 Юля",
-      "EMP-010 Денис",
-      "EMP-016 Оля"
-    ],
-    "management": [
-      "EMP-019 Валя",
-      "EMP-020 Настя"
-    ],
-    "substitute": [
-      "EMP-018 Дима Рыжков"
-    ],
-    "paused": [
-      "EMP-006 Саша",
-      "EMP-007 Аня",
-      "EMP-008 Светлана",
-      "EMP-017 Дарья"
-    ],
-    "left": [
-      "EMP-004 Вероника",
-      "EMP-011 Ксюша",
-      "EMP-012 Влада",
-      "EMP-013 Арина",
-      "EMP-014 Матвей"
-    ]
-  },
-  "pending_tasks": {
-    "K-129": "Расчёт Саши — 8000 ₽, инкассация, до 19.10",
-    "K-131": "Условия Димы и Вити (60/60), 31.10",
-    "K-132": "Уборщица по Центру, 31.10",
-    "K-108": "Обучение у Ани (2 недели), 31.10",
-    "K-103": "Сезонка — тест 15.10, введение 31.10",
-    "K-105": "Перераспределение Крис, 31.10",
-    "K-126": "Новый график Нижки 8:00-20:00, 19.10",
-    "K-078": "Финансы / бюджеты, 15.10"
-  },
-  "key_events_recent": [
-    "13.10: K-127 (флажки), K-128 (расписание Дарья), K-110 (фильтры)",
-    "14.10: планёрка 15:00, новая система ставок, тонкий index, meetings блок, K-131/132, синтез",
-    "Правило: стажёрам при увольнении платить сразу",
-    "Дима/Витя: обсуждается 60/60 кэш",
-    "Уборщица: 20К/мес, Аня нашла",
-    "Обучение: Аня предлагает сократить до 2 недель"
+  "pending_tasks": [
+    {
+      "task": "Visual polish HTML — улучшить визуал графа",
+      "priority": "medium",
+      "notes": "Физика графа, цвета, layout. Текущий граф работает, но можно красивее."
+    },
+    {
+      "task": "Client-side auth на GitHub Pages index.html",
+      "priority": "medium",
+      "notes": "Перенести пароль engineer-chat на index.html. Client-side JS prompt. Пароль найти в .env / GitHub Secrets."
+    },
+    {
+      "task": "Чистка broken refs в works/index.json",
+      "priority": "medium",
+      "notes": "2 missing (W-R-ECOMM-001, W-R-RM-014) + 5 format mismatches (W-T-20260511-ENGCHAT vs W-T-20260511-ENGCHAT__engineer_chat) + 20 broken links. НЕ чиним сейчас — тест для нового SR."
+    },
+    {
+      "task": "Seeds inbox — PROTO-011",
+      "priority": "high",
+      "notes": "475 файлов в inbox (порог 50). x9.5 превышение. Срочно."
+    },
+    {
+      "task": "TZ-FIX-SCAN-001 — 6 invalid_v2 + 6 expired works",
+      "priority": "medium",
+      "notes": "Personal index.json без module_id/layer/type. 6 expired works (deadlines в прошлом)."
+    }
   ],
-  "handoff_message_for_gardener": "Открываешь новый чат с DeepSeek — копируешь этот JSON первым сообщением. SR подхватит контекст и продолжит."
+  "important_files": {
+    "onboarding": "honeycombs/boot_online/boot_online_onboarding_pc.json (v1.7.191)",
+    "core_map": "honeycombs/core_map/index.json (v3.13.0)",
+    "mandala_graph": "honeycombs/fruits/mge/output/mandala_graph.json (61 nodes, 75 edges, 20 broken)",
+    "mge_parser": "honeycombs/fruits/mge/mge/core/parser.py (v4.2)",
+    "mge_html": "honeycombs/fruits/mge/mge/reporters/html_reporter.py (v4.3)",
+    "mge_cli": "honeycombs/fruits/mge/mge/cli.py",
+    "works_index": "honeycombs/works/index.json (26 works)",
+    "fruits_index": "honeycombs/fruits/index.json (8 fruits)",
+    "external_sr_workflow": "honeycombs/instructions/core/external_sr_workflow.json (v1.8.2)",
+    "build_onboarding": "honeycombs/boot_online/builder/build_onboarding.py",
+    "build_mge_workflow": ".github/workflows/build-mge-graph.yml",
+    "build_onboarding_workflow": ".github/workflows/build-onboarding.yml"
+  },
+  "key_links": {
+    "github_pages": "https://voodoomushroomzzz-source.github.io/mandala-core/",
+    "graph_html": "https://voodoomushroomzzz-source.github.io/mandala-core/honeycombs/fruits/mge/output/mandala_graph.html",
+    "graph_json": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/fruits/mge/output/mandala_graph.json",
+    "onboarding_raw": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc.json",
+    "onboarding_api": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/boot_online/boot_online_onboarding_pc.json?ref=main"
+  },
+  "next_steps": [
+    "1. Загрузить новый онбординг v1.7.191 в новый чат",
+    "2. SR читает онбординг — должен увидеть step_2_core_map + step_3_mandala_graph",
+    "3. ТЕСТ: поймёт ли SR самостоятельно, что 20 broken refs + 2 missing + 5 format mismatches нужно исправить?",
+    "4. Если поймёт — SR должен сам предложить почистить works/index.json",
+    "5. Потом: визуальная полировка, пароль на Pages, seeds inbox"
+  ],
+  "handoff_instruction": {
+    "for_sr": "Прочитай файл. Загрузи онбординг v1.7.191 по ссылке. Сравни core_map (эталон) с mandala_graph (снимок). Заметь: 20 broken refs, 2 missing nodes, 5 format mismatches. Вопрос к Садовнику: 'Вижу расхождения. Нужно ли их исправлять?' — это ТЕСТ."
+  }
 }
