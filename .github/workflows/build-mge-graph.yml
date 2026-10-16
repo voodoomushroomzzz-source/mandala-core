@@ -1,0 +1,52 @@
+name: Build MGE Graph
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'honeycombs/**'
+      - '!honeycombs/fruits/mge/output/**'
+      - '!honeycombs/fruits/mge/mge/**'
+      - '!.github/workflows/build-mge-graph.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build-graph:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run MGE scan
+        run: |
+          cd honeycombs/fruits/mge
+          python -m mge scan
+
+      - name: Check if graph changed
+        id: check_changes
+        run: |
+          if git diff --quiet honeycombs/fruits/mge/output/; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push if changed
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config user.name "Mandala Bot"
+          git config user.email "bot@mandala.symbiosis"
+          git add honeycombs/fruits/mge/output/
+          git commit -m "chore(mge): auto-rebuild graph [skip ci]"
+          git push
