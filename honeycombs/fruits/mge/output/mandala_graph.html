@@ -7,32 +7,54 @@
 <script src="https://unpkg.com/vis-network@9.1.6/standalone/umd/vis-network.min.js"></script>
 <style>
   body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0d1117; color: #c9d1d9; }
-  #header { padding: 12px 16px; background: #161b22; border-bottom: 1px solid #30363d; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  #header { padding: 10px 16px; background: #161b22; border-bottom: 1px solid #30363d; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   #header h1 { margin: 0; font-size: 16px; color: #58a6ff; }
   #header .stat { font-size: 13px; color: #8b949e; }
-  #search { padding: 6px 10px; background: #0d1117; border: 1px solid #30363d; color: #c9d1d9; border-radius: 6px; font-size: 13px; width: 200px; }
+  #header .badge { padding: 2px 8px; border-radius: 10px; font-size: 12px; background: #21262d; color: #8b949e; }
+  #header .badge.warn { background: #4d1f1f; color: #f85149; }
+  #filters { display: flex; gap: 12px; flex-wrap: wrap; }
+  #filters label { font-size: 13px; color: #c9d1d9; display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; }
+  #filters input[type=checkbox] { cursor: pointer; }
+  #search { padding: 6px 10px; background: #0d1117; border: 1px solid #30363d; color: #c9d1d9; border-radius: 6px; font-size: 13px; width: 180px; }
   #search:focus { outline: none; border-color: #58a6ff; }
-  #container { display: flex; height: calc(100vh - 57px); }
+  #container { display: flex; height: calc(100vh - 60px); }
   #network { flex: 1; min-height: 400px; }
-  #panel { width: 320px; padding: 16px; background: #161b22; border-left: 1px solid #30363d; overflow-y: auto; }
+  #panel { width: 340px; padding: 16px; background: #161b22; border-left: 1px solid #30363d; overflow-y: auto; }
   #panel h2 { margin: 0 0 8px 0; font-size: 16px; color: #58a6ff; }
   #panel .desc { font-size: 13px; color: #c9d1d9; margin-bottom: 12px; line-height: 1.5; }
   #panel .path { font-size: 12px; color: #8b949e; font-family: monospace; word-break: break-all; margin-bottom: 12px; }
   #panel .link { display: inline-block; font-size: 13px; color: #58a6ff; text-decoration: none; }
   #panel .link:hover { text-decoration: underline; }
   #panel .empty { color: #8b949e; font-size: 13px; font-style: italic; }
-  #panel .badge { display: inline-block; padding: 2px 8px; background: #21262d; border-radius: 12px; font-size: 11px; color: #8b949e; margin-right: 4px; }
+  #panel .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-right: 4px; margin-bottom: 4px; }
+  #panel .badge.honeycomb { background: #0d2f57; color: #58a6ff; }
+  #panel .badge.honeycomb_unregistered { background: #4d1f1f; color: #f85149; }
   #panel .badge.root { background: #663c00; color: #ffa657; }
+  #panel .badge.work { background: #0f3d1f; color: #3fb950; }
+  #panel .badge.fruit { background: #2d1f4d; color: #a371f7; }
+  #panel .badge.knowledge { background: #4d3d0f; color: #d29922; }
+  #panel .field { font-size: 12px; color: #8b949e; margin-bottom: 4px; }
+  #panel .field b { color: #c9d1d9; font-weight: 500; }
   @media (max-width: 768px) {
     #container { flex-direction: column; }
-    #panel { width: auto; height: 200px; border-left: none; border-top: 1px solid #30363d; }
+    #panel { width: auto; height: 220px; border-left: none; border-top: 1px solid #30363d; }
+    #header { padding: 8px 12px; }
+    #search { width: 140px; }
   }
 </style>
 </head>
 <body>
 <div id="header">
   <h1>Mandala Graph Explorer</h1>
-  <span class="stat" id="stat">nodes: 0 / edges: 0</span>
+  <span class="stat" id="stat">nodes: 0 / edges: 0 / seeds: 0</span>
+  <span id="unreg-badge"></span>
+  <div id="filters">
+    <label><input type="checkbox" id="f-honeycomb" checked> Honeycombs</label>
+    <label><input type="checkbox" id="f-work" checked> Works</label>
+    <label><input type="checkbox" id="f-fruit" checked> Fruits</label>
+    <label><input type="checkbox" id="f-knowledge" checked> Knowledge</label>
+    <label><input type="checkbox" id="f-unregistered" checked> Unregistered</label>
+  </div>
   <input type="text" id="search" placeholder="Search node...">
 </div>
 <div id="container">
@@ -44,37 +66,82 @@
 <script>
 const GRAPH = {"nodes": [{"id": "boot_online", "type": "honeycomb", "path": "honeycombs/boot_online/index.json", "description": "External AI onboarding entry point"}, {"id": "philosophy", "type": "honeycomb", "path": "honeycombs/philosophy/index.json", "description": "PHI-001..PHI-011, 11 blocks + 5 testimonies"}, {"id": "core_map", "type": "honeycomb", "path": "honeycombs/core_map/index.json", "description": "This map \u2014 kernel, modules, repository, honeycombs list"}, {"id": "instructions", "type": "honeycomb", "path": "honeycombs/instructions/index.json", "description": "SR workflows: external_sr (core/), mobile, patch_system, file_naming."}, {"id": "seeds", "type": "honeycomb", "path": "honeycombs/seeds/index.json", "description": "Idea incubator: managed by PROTO-011 (Seed-to-Work)."}, {"id": "protocols", "type": "honeycomb", "path": "honeycombs/protocols/index.json", "description": "Activation protocols: PROTO-004, PROTO-005, PROTO-006, PROTO-009, PROTO-011."}, {"id": "akasha", "type": "honeycomb", "path": "honeycombs/akasha/index.json", "description": "Akasha memory: essence, milestones, vision"}, {"id": "fruits", "type": "honeycomb", "path": "honeycombs/fruits/index.json", "description": "Product registry \u2014 realized products of Mandala"}, {"id": "humor", "type": "honeycomb", "path": "honeycombs/humor/index.json", "description": "Humor development \u2014 comic resonance research"}, {"id": "sym", "type": "honeycomb", "path": "honeycombs/sym/index.json", "description": "SYM \u2014 System for Measuring Mandala Growth"}, {"id": "sessions", "type": "honeycomb", "path": "honeycombs/sessions/index.json", "description": "SR handoff system \u2014 session continuity across chat instances"}, {"id": "knowledge", "type": "honeycomb", "path": "honeycombs/knowledge/index.json", "description": "Knowledge base \u2014 structured curated information: tools, references, guides, and external resources."}, {"id": "works", "type": "honeycomb", "path": "honeycombs/works/index.json", "description": "Unified work items (replaces tasks/ and roadmaps/)"}, {"id": "registry", "type": "honeycomb", "path": "honeycombs/registry/index.json", "description": "Registry \u2014 state and statistics of all honeycombs, scanner configuration and scan results"}, {"id": "rose_world", "type": "honeycomb", "path": "honeycombs/rose_world/index.json", "description": "\u042d\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u0444\u0438\u043b\u044c\u0442\u0440 '\u0420\u043e\u0437\u0430 \u041c\u0438\u0440\u0430' \u2014 \u0441\u0435\u0442\u0435\u0432\u043e\u0439 \u043f\u0440\u043e\u0442\u043e\u043a\u043e\u043b \u0441\u0438\u043c\u0431\u0438\u043e\u0437\u0430 \u0438 \u0441\u043e\u0437\u043d\u0430\u043d\u0438\u044f"}, {"id": "directives", "type": "honeycomb", "path": "honeycombs/directives/index.json", "description": "\u0414\u0438\u0440\u0435\u043a\u0442\u0438\u0432\u044b \u0434\u043b\u044f \u0444\u043e\u043a\u0443\u0441\u0438\u0440\u043e\u0432\u043a\u0438 \u0432\u043d\u0438\u043c\u0430\u043d\u0438\u044f SR \u043f\u043e \u0432\u0435\u043a\u0442\u043e\u0440\u0430\u043c"}, {"id": "personal", "type": "honeycomb", "path": "honeycombs/personal/index.json", "description": "Personal Hub \u2014 career, creative, learning, franchise, music, poetry, e-commerce"}], "edges": [{"from": "core_map", "to": "akasha", "type": "references"}, {"from": "core_map", "to": "fruits", "type": "children"}, {"from": "core_map", "to": "humor", "type": "children"}, {"from": "core_map", "to": "knowledge", "type": "children"}, {"from": "core_map", "to": "philosophy", "type": "children"}, {"from": "core_map", "to": "sessions", "type": "children"}, {"from": "core_map", "to": "sym", "type": "children"}, {"from": "core_map", "to": "works", "type": "children"}, {"from": "core_map", "to": "rose_world", "type": "children"}, {"from": "core_map", "to": "directives", "type": "children"}, {"from": "core_map", "to": "personal", "type": "children"}, {"from": "core_map", "to": "boot_online", "type": "children"}, {"from": "core_map", "to": "instructions", "type": "children"}, {"from": "core_map", "to": "protocols", "type": "children"}, {"from": "core_map", "to": "seeds", "type": "children"}, {"from": "core_map", "to": "registry", "type": "children"}], "analysis": {"total_nodes": 17, "total_edges": 16, "orphans": ["core_map"]}};
 
-const nodesArray = GRAPH.nodes.map(n => ({
-  id: n.id,
-  label: n.id,
-  title: n.description,
-  color: n.id === "core_map" ? "#ffa657" : "#58a6ff",
-  font: { color: "#c9d1d9", size: 14 },
-  borderWidth: 2
-}));
+const COLORS = {
+  honeycomb: { bg: "#58a6ff", border: "#1f6feb" },
+  honeycomb_unregistered: { bg: "#f85149", border: "#da3633" },
+  work: { bg: "#3fb950", border: "#2ea043" },
+  fruit: { bg: "#a371f7", border: "#8957e5" },
+  knowledge: { bg: "#d29922", border: "#bb8009" }
+};
 
-const edgesArray = GRAPH.edges.map(e => ({
-  from: e.from,
-  to: e.to,
-  arrows: "to",
-  color: { color: "#30363d", highlight: "#58a6ff" },
-  smooth: { type: "continuous" }
-}));
+function nodeShape(type) {
+  if (type === "work") return "box";
+  if (type === "fruit") return "diamond";
+  if (type === "knowledge") return "triangle";
+  return "dot";
+}
+
+function nodeColor(n) {
+  if (n.id === "core_map") return { background: "#ffa657", border: "#bb8009" };
+  const c = COLORS[n.type] || COLORS.honeycomb;
+  return { background: c.bg, border: c.border };
+}
+
+function buildNodes() {
+  return GRAPH.nodes.map(n => ({
+    id: n.id,
+    label: n.id,
+    title: n.description || "",
+    color: nodeColor(n),
+    shape: nodeShape(n.type),
+    font: { color: "#c9d1d9", size: 13 },
+    borderWidth: n.type === "honeycomb_unregistered" ? 3 : 2,
+    borderWidthSelected: 4
+  }));
+}
+
+function buildEdges() {
+  return GRAPH.edges.map(e => {
+    const isUnreg = e.type === "unregistered";
+    return {
+      from: e.from,
+      to: e.to,
+      arrows: "to",
+      color: { color: isUnreg ? "#f85149" : "#30363d", highlight: "#58a6ff" },
+      dashes: isUnreg,
+      smooth: { type: "continuous" },
+      title: e.type
+    };
+  });
+}
 
 const container = document.getElementById("network");
 const data = {
-  nodes: new vis.DataSet(nodesArray),
-  edges: new vis.DataSet(edgesArray)
+  nodes: new vis.DataSet(buildNodes()),
+  edges: new vis.DataSet(buildEdges())
 };
+
 const options = {
-  nodes: { shape: "dot", size: 22, borderWidth: 2 },
+  nodes: { size: 22, borderWidth: 2 },
   edges: { width: 1.5 },
-  physics: { stabilization: { iterations: 200 }, barnesHut: { gravitationalConstant: -4000, springLength: 200 } },
+  physics: {
+    stabilization: { iterations: 250 },
+    barnesHut: { gravitationalConstant: -5000, springLength: 180, springConstant: 0.04 }
+  },
   interaction: { hover: true, tooltipDelay: 100 }
 };
 const network = new vis.Network(container, data, options);
 
-document.getElementById("stat").textContent = "nodes: " + GRAPH.nodes.length + " / edges: " + GRAPH.edges.length;
+const a = GRAPH.analysis || {};
+const unreg = a.unregistered_honeycombs || [];
+document.getElementById("stat").textContent =
+  "nodes: " + GRAPH.nodes.length +
+  " / edges: " + GRAPH.edges.length +
+  " / seeds: " + (a.seeds_total || 0);
+if (unreg.length > 0) {
+  document.getElementById("unreg-badge").innerHTML =
+    '<span class="badge warn">⚠ unregistered: ' + unreg.length + '</span>';
+}
 
 function findNode(id) {
   return GRAPH.nodes.find(n => n.id === id);
@@ -89,15 +156,75 @@ network.on("click", function(params) {
   const id = params.nodes[0];
   const node = findNode(id);
   if (!node) return;
+
   const isRoot = id === "core_map";
-  const badges = '<span class="badge' + (isRoot ? " root" : "") + '">' + node.type + '</span>' + (isRoot ? '<span class="badge root">root</span>' : '');
-  const githubUrl = "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/" + node.path;
+  const typeClass = isRoot ? "root" : node.type;
+  const badges =
+    '<span class="badge ' + typeClass + '">' + (isRoot ? "root" : node.type) + '</span>' +
+    (node.source ? '<span class="badge">source: ' + node.source + '</span>' : '');
+
+  let fields = "";
+  if (node.deadline) fields += '<div class="field"><b>deadline:</b> ' + node.deadline + '</div>';
+  if (node.progress !== undefined && node.progress !== null && node.type === "work") {
+    fields += '<div class="field"><b>progress:</b> ' + node.progress + '%</div>';
+  }
+  if (node.status) fields += '<div class="field"><b>status:</b> ' + node.status + '</div>';
+  if (node.version) fields += '<div class="field"><b>version:</b> ' + node.version + '</div>';
+
+  const githubUrl = node.path
+    ? "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/" + node.path
+    : null;
+  const linkHtml = githubUrl
+    ? '<a class="link" href="' + githubUrl + '" target="_blank">Open on GitHub →</a>'
+    : '<div class="field">no path</div>';
+
   panel.innerHTML =
     '<h2>' + id + '</h2>' +
     '<div>' + badges + '</div>' +
     '<div class="desc" style="margin-top:12px">' + (node.description || "(no description)") + '</div>' +
-    '<div class="path">' + node.path + '</div>' +
-    '<a class="link" href="' + githubUrl + '" target="_blank">Open on GitHub →</a>';
+    fields +
+    (node.path ? '<div class="path" style="margin-top:8px">' + node.path + '</div>' : '') +
+    linkHtml;
+});
+
+// Filters
+const TYPE_TO_ID = {
+  honeycomb: ["honeycomb"],
+  work: ["work"],
+  fruit: ["fruit"],
+  knowledge: ["knowledge"],
+  unregistered: ["honeycomb_unregistered"]
+};
+
+function applyFilters() {
+  const active = {};
+  ["honeycomb", "work", "fruit", "knowledge", "unregistered"].forEach(k => {
+    active[k] = document.getElementById("f-" + k).checked;
+  });
+
+  const visibleIds = new Set();
+  GRAPH.nodes.forEach(n => {
+    let show = false;
+    if (active.honeycomb && n.type === "honeycomb") show = true;
+    if (active.work && n.type === "work") show = true;
+    if (active.fruit && n.type === "fruit") show = true;
+    if (active.knowledge && n.type === "knowledge") show = true;
+    if (active.unregistered && n.type === "honeycomb_unregistered") show = true;
+    if (n.id === "core_map") show = active.honeycomb;
+    if (show) visibleIds.add(n.id);
+  });
+
+  GRAPH.nodes.forEach(n => {
+    data.nodes.update({ id: n.id, hidden: !visibleIds.has(n.id) });
+  });
+  GRAPH.edges.forEach((e, i) => {
+    const hidden = !visibleIds.has(e.from) || !visibleIds.has(e.to);
+    data.edges.update({ id: data.edges.getIds()[i], hidden: hidden });
+  });
+}
+
+["honeycomb", "work", "fruit", "knowledge", "unregistered"].forEach(k => {
+  document.getElementById("f-" + k).addEventListener("change", applyFilters);
 });
 
 document.getElementById("search").addEventListener("input", function(e) {
