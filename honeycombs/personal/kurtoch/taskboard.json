@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.9",
+    "version": "v2.6.10",
     "created": "2026-09-14",
-    "updated": "2026-10-15",
+    "updated": "2026-10-16",
     "layer": 2,
     "type": "taskboard_module",
     "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -17,7 +17,7 @@
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
     "version": "v2.3.4",
     "created": "2026-09-14",
-    "updated": "2026-10-15",
+    "updated": "2026-10-16",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -93,7 +93,7 @@
         "status": "todo",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": "2026-10-12",
+        "deadline": "2026-10-19",
         "reminder": null,
         "depends_on": [],
         "related_to": [
@@ -103,7 +103,7 @@
           "K-110"
         ],
         "created": "2026-09-14",
-        "updated": "2026-10-05",
+        "updated": "2026-10-16",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -118,7 +118,7 @@
         "title": "Подготовка к зиме: штатка",
         "description": "Рассчитать штатку на зиму. Ноя-фев — низкий сезон, −20% выручки. Прошлой зимой: 1.5 человека в Центре + конвейером отпуска по 2 недели. В этот раз все новенькие — договориться об отпусках зимой на собеседовании. Если ставить 2 — возможен перегруз по финансам. Найти баланс. См. KB → economics.seasonality, staffing_management.",
         "priority": "high",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-10-10",
@@ -126,8 +126,8 @@
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-18",
-        "updated": "2026-09-28",
-        "completed": null,
+        "updated": "2026-10-16",
+        "completed": "2026-10-16",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -143,12 +143,12 @@
         "status": "todo",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": "2026-10-12",
+        "deadline": "2026-11-04",
         "reminder": null,
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-21",
-        "updated": "2026-10-05",
+        "updated": "2026-10-16",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -741,14 +741,14 @@
         "status": "todo",
         "horizon": "strategic",
         "phase": "phase_0",
-        "deadline": "2026-10-15",
+        "deadline": "2026-10-22",
         "reminder": null,
         "depends_on": [],
         "related_to": [
           "K-077"
         ],
         "created": "2026-09-25",
-        "updated": "2026-09-30",
+        "updated": "2026-10-16",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -911,7 +911,7 @@
         "title": "Отфотографировать цветы на Нишке",
         "description": "Отфотографировать все цветы на Нишке. Точка: Нижка (Нижняя Дуброва). См. K-066.",
         "priority": "medium",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-10-07",
@@ -922,8 +922,8 @@
           "M-001"
         ],
         "created": "2026-09-29",
-        "updated": "2026-10-05",
-        "completed": null,
+        "updated": "2026-10-16",
+        "completed": "2026-10-16",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -1012,7 +1012,7 @@
         "title": "Планёрка по материалам обучения (сбор кусков + полный план)",
         "description": "Планёрка по материалам обучения. Участники: Крис, Витя, Дима, Катрин.\n\nЦель: собрать все куски обучающих материалов + составить полный план обучения.\n\nС планёрки 14.10: у Ани есть фишка — сократить обучение с месяца до 2 недель. Катрин хочет встретиться с Аней, обсудить, потом идти с предложением.\n\nСвязь: K-105 (перераспределение), K-076 (база знаний).",
         "priority": "high",
-        "status": "in_progress",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-10-31",
@@ -1024,8 +1024,8 @@
           "K-076"
         ],
         "created": "2026-10-01",
-        "updated": "2026-10-14",
-        "completed": null,
+        "updated": "2026-10-16",
+        "completed": "2026-10-16",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -1041,7 +1041,7 @@
         "status": "in_progress",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": "2026-10-13",
+        "deadline": "2026-10-19",
         "reminder": null,
         "depends_on": [],
         "related_to": [
@@ -1049,7 +1049,7 @@
           "M-002"
         ],
         "created": "2026-10-02",
-        "updated": "2026-10-13",
+        "updated": "2026-10-16",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -1066,14 +1066,14 @@
         "status": "todo",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": "2026-10-15",
+        "deadline": "2026-10-21",
         "reminder": null,
         "depends_on": [],
         "related_to": [
           "M-001"
         ],
         "created": "2026-10-02",
-        "updated": "2026-10-07",
+        "updated": "2026-10-16",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -1114,7 +1114,7 @@
         "status": "todo",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": "2026-10-15",
+        "deadline": "2026-10-21",
         "reminder": null,
         "depends_on": [],
         "related_to": [
@@ -1122,7 +1122,7 @@
           "M-002"
         ],
         "created": "2026-10-07",
-        "updated": "2026-10-07",
+        "updated": "2026-10-16",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -1318,7 +1318,7 @@
         "title": "Протечка льдогенератора (Нижка)",
         "description": "Протечка льдогенератора на Нижке.\n\nДиагностировать источник утечки, устранить.\nПроверить: уплотнители, трубки, соединения, поддон/слив.\n\nСвязь: M-001 (Возрождение Нижки).",
         "priority": "high",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-10-16",
@@ -1328,8 +1328,8 @@
           "M-001"
         ],
         "created": "2026-10-15",
-        "updated": "2026-10-15",
-        "completed": null,
+        "updated": "2026-10-16",
+        "completed": "2026-10-16",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -1387,29 +1387,57 @@
           "notion_page_id": null,
           "column": "Операционка — Общая"
         }
+      },
+      {
+        "id": "K-137",
+        "title": "Снять Reels с СММ (Настя снимает)",
+        "description": "Снять Reels с СММ. Настя снимает Диму.\n\nТемы (4 пункта):\n1. Больше не ищем новых сотрудников\n2. Работаем над новой сезонкой\n3. Со следующей недели — график Нижки 8:00–20:00\n4. Часть команды поедет на Пироэкспо (26–29.10)\n\nСвязь: EMP-020 (Настя), K-103, K-126, K-133.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-16",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "EMP-020",
+          "K-103",
+          "K-126",
+          "K-133"
+        ],
+        "created": "2026-10-16",
+        "updated": "2026-10-16",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
       }
     ],
     "counters": {
-      "total": 52,
+      "total": 53,
       "by_status": {
-        "todo": 47,
-        "in_progress": 4,
+        "todo": 45,
+        "done": 4,
+        "in_progress": 3,
         "planning": 1
       },
       "by_priority": {
         "medium": 22,
-        "high": 28,
+        "high": 29,
         "critical": 2
       },
       "by_column": {
         "Стратегические": 9,
-        "Операционка — Общая": 10,
+        "Операционка — Общая": 11,
         "Операционка — Центр": 10,
         "Операционка — Нижка": 20,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 52
+        "phase_0": 53
       }
     },
     "notes": {
