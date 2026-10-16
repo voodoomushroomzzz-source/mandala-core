@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261016-070117-474",
+  "title": "Persistent Profile-Guided Reset-Free Recovery Improves Final Gait Selection after Irreversible Leg Damage",
+  "url": "https://arxiv.org/abs/2610.20838",
+  "description": "arXiv:2610.20838v1 Announce Type: new \nAbstract: Damage-recovery algorithms often rank gaits from short trials, yet a gait that performs well briefly may not remain effective during continued execution. In reset-free recovery, each trial also changes the physical state inherited by the next. We introduce persistent profile-guided reset-free recovery (PGRR), which predicts multiple outcomes over repeated gait execution and uses conservative uncertainty-aware estimates to guide short online probes",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-16T07:01:17.087326",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
