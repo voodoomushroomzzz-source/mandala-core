@@ -248,6 +248,61 @@ def find_broken_refs(nodes: list, edges: list) -> list:
     return broken
 
 
+def normalize_work_id(wid: str) -> str:
+    """Strip __suffix from work IDs for comparison.
+    W-T-20260511-ENGCHAT__engineer_chat -> W-T-20260511-ENGCHAT
+    """
+    if not isinstance(wid, str):
+        return wid
+    return wid.split("__")[0] if "__" in wid else wid
+
+
+def find_missing_nodes(nodes: list, edges: list) -> dict:
+    """Find edges pointing to non-existent nodes.
+    Uses normalized IDs: __suffix is stripped for comparison.
+    Returns: phantom nodes for truly missing, format_mismatches separately.
+    """
+    node_ids_normalized = {normalize_work_id(n["id"]) for n in nodes}
+    original_ids = {n["id"] for n in nodes}
+
+    missing_targets = {}
+    format_mismatches = set()
+    broken_edges = []
+
+    for e in edges:
+        target = e["to"]
+        if target in original_ids:
+            continue
+        target_norm = normalize_work_id(target)
+        if target_norm in node_ids_normalized:
+            format_mismatches.add(target)
+            continue
+        missing_targets[target] = missing_targets.get(target, 0) + 1
+        broken_edges.append({
+            "from": e["from"],
+            "to": target,
+            "type": "broken_link",
+            "original_type": e["type"]
+        })
+
+    phantom_nodes = []
+    for mid, count in missing_targets.items():
+        phantom_nodes.append({
+            "id": mid,
+            "type": "missing",
+            "path": "",
+            "description": "Referenced by " + str(count) + " node(s) but does not exist",
+            "referenced_count": count
+        })
+
+    return {
+        "nodes": phantom_nodes,
+        "edges": broken_edges,
+        "missing_ids": sorted(missing_targets.keys()),
+        "format_mismatches": sorted(format_mismatches)
+    }
+
+
 def find_islands(nodes: list, edges: list, root: str = "core_map") -> list:
     """Find nodes not reachable from root (BFS)."""
     node_ids = {n["id"] for n in nodes}
@@ -323,7 +378,25 @@ def parse_all() -> dict:
     islands = find_islands(all_nodes, edges, root="core_map")
     broken_refs = find_broken_refs(all_nodes, edges)
     top_hubs = find_top_hubs(all_nodes, edges, top=5)
+
+    missing_info = find_missing_nodes(all_nodes, edges)
+    for phantom in missing_info["nodes"]:
+        if phantom["id"] not in seen_nodes:
+            all_nodes.append(phantom)
+            seen_nodes.add(phantom["id"])
+    for broken_edge in missing_info["edges"]:
+        edges.append(broken_edge)
+
+    # Remove broken refs from normal edges (they pointed to missing nodes)
+    node_ids_final = {n["id"] for n in all_nodes}
+    edges = [e for e in edges if e["to"] in node_ids_final]
+
     reachable_count = len(all_nodes) - len(islands)
+
+    by_type = {}
+    for n in all_nodes:
+        t = n.get("type", "unknown")
+        by_type[t] = by_type.get(t, 0) + 1
 
     return {
         "nodes": all_nodes,
@@ -340,6 +413,8 @@ def parse_all() -> dict:
             "seeds_total": seeds_info["seeds_total"],
             "islands": islands,
             "broken_refs": broken_refs,
+            "missing_node_ids": missing_info["missing_ids"],
+            "id_format_mismatches": missing_info["format_mismatches"],
             "reachable_from_core": reachable_count,
             "unreachable": islands,
             "top_hubs": top_hubs
