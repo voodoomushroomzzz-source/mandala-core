@@ -46,7 +46,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-10-15",
-    "notes": "Fruit зарегистрирован. Разработка начнётся в W-T-20261015-MGE."
+    "last_check": "2026-10-16",
+    "notes": "CI test: trigger workflow rebuild"
   }
 }
