@@ -4,6 +4,7 @@ from mge.core.parser import parse_core_map
 from mge.core.graph import Graph
 from mge.reporters.json_reporter import write_json
 from mge.reporters.mermaid_reporter import write_mermaid
+from mge.reporters.html_reporter import write_html
 
 
 def cmd_scan():
@@ -17,11 +18,13 @@ def cmd_scan():
     graph_dict = g.to_dict()
     json_path = write_json(graph_dict)
     mmd_path = write_mermaid(graph_dict)
+    html_path = write_html(graph_dict)
     print(f"OK nodes: {graph_dict['analysis']['total_nodes']}")
     print(f"OK edges: {graph_dict['analysis']['total_edges']}")
     print(f"OK orphans: {graph_dict['analysis']['orphans']}")
     print(f"OK JSON: {json_path}")
     print(f"OK Mermaid: {mmd_path}")
+    print(f"OK HTML: {html_path}")
 
 
 def main():
