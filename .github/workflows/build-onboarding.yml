@@ -20,6 +20,8 @@ on:
       - 'honeycombs/personal/profile_deep.json'
       - 'honeycombs/rose_world/index.json'
       - 'honeycombs/directives/index.json'
+      - 'honeycombs/fruits/mge/output/mandala_graph.json'
+      - '!honeycombs/boot_online/boot_online_onboarding_pc.json'
 
 jobs:
   build:

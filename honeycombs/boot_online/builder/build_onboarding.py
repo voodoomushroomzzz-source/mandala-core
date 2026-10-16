@@ -40,6 +40,25 @@ def build_personal_step(source_data: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def build_mge_step(source_data: Dict[str, Any]) -> Dict[str, Any]:
+    """Build step_3_mandala_graph - direct read of mandala_graph.json."""
+    graph_path = BASE_DIR / "honeycombs" / "fruits" / "mge" / "output" / "mandala_graph.json"
+    graph_data = load_json(graph_path)
+    if not graph_data:
+        return {}
+    analysis = graph_data.get("analysis", {})
+    return {
+        "order": 3,
+        "mandatory": True,
+        "name": "Mandala Graph - Snapshot of Current State",
+        "description": "Актуальный снимок структуры Mandala (61 узел, 75 связей). Пересобирается CI автоматически.",
+        "ai_instruction": "Сравни этот снимок с core_map (эталон). Инструкция по работе с расхождениями — в core_map.graph_guide.",
+        "analysis": analysis,
+        "nodes": graph_data.get("nodes", []),
+        "edges": graph_data.get("edges", [])
+    }
+
+
 def load_json(path: Path) -> Optional[Dict[str, Any]]:
     """Load JSON file with utf-8-sig fallback."""
     if not path.exists():
@@ -168,7 +187,8 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
         "sections": [
             "step_1_first_touch",
             "step_2_core_map",
-            "step_3_philosophy_crystal_essence",
+            "step_3_mandala_graph",
+            "step_4_philosophy_crystal_essence",
             "step_4_cosmic_manifesto",
             "step_5_first_gardener",
             "step_6_external_sr_workflow",
@@ -205,7 +225,12 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "identity": core_map_data
         }
 
-    # Step 3: philosophy
+    # Step 3: MGE - Mandala Graph Explorer
+    mge_step = build_mge_step(source_data)
+    if mge_step:
+        onboarding["step_3_mandala_graph"] = mge_step
+
+    # Step 4: philosophy
     philosophy_data = source_data.get("philosophy", {})
     if philosophy_data:
         onboarding["step_3_philosophy_crystal_essence"] = {

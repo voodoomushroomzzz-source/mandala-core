@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "HONEYCOMB-CORE-MAP-001",
     "name": "Core System Map",
-    "version": "v3.12.0",
+    "version": "v3.13.0",
     "created": "2026-03-01",
-    "updated": "2026-09-25",
+    "updated": "2026-10-16",
     "layer": 1,
     "type": "critical_directive",
-    "description": "Base map of all Mandala Symbiosis components. v3.12.0: added personal/ — Personal Hub for Gardener's personal vectors.",
+    "description": "Base map of all Mandala Symbiosis components. v3.12.0: added personal/ — Personal Hub for Gardener's personal vectors. v3.13.0: + graph_guide + dashboard_links.",
     "resonance": "100%",
     "priority": "critical",
     "tags": [
@@ -200,8 +200,8 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-09-25",
-    "notes": "v3.12.0: added personal to honeycombs, references, children, critical_dependencies."
+    "last_check": "2026-10-16",
+    "notes": "v3.13.0: added graph_guide (how to work with mandala_graph) + dashboard_links (PC/phone/raw)."
   },
   "navigation": {
     "parent": "honeycombs/boot_online/index.json",
@@ -242,5 +242,29 @@
     "with_boot": "100%",
     "with_registry": "100%",
     "with_protocols": "100%"
+  },
+  "graph_guide": {
+    "description": "Как работать с mandala_graph — снимком реального состояния Mandala",
+    "what_it_is": "mandala_graph — актуальный снимок структуры Mandala. Пересобирается CI автоматически при изменении сот, works, fruits, knowledge.",
+    "where_it_is": "step_3_mandala_graph (сразу после этого эталона)",
+    "how_to_use": [
+      "1. Сравни mandala_graph (снимок) с core_map (эталон).",
+      "2. Если расхождений нет — всё синхронно.",
+      "3. Если есть расхождения — сообщи Садовнику с конкретным предложением:",
+      "   - missing_node_ids: works ссылаются на удалённые works → почистить related_works",
+      "   - id_format_mismatches: формат ID не синхронизирован → нормализовать",
+      "   - unregistered_honeycombs: сота есть в filesystem, но не в core_map → верифицировать",
+      "   - missing_honeycombs: сота в core_map, но файла нет → удалить из core_map или создать",
+      "   - broken_refs: если много битых ссылок — сигнал системного долга",
+      "4. Не оставляй расхождения без внимания — это пространство для работы."
+    ]
+  },
+  "dashboard_links": {
+    "description": "Ссылки на MGE HTML dashboard",
+    "pc_local": "file:///C:/Mandala_Digital/github/mandala-core/honeycombs/fruits/mge/output/mandala_graph.html",
+    "phone_local": "http://localhost:8080/mandala_graph.html",
+    "raw_html": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/fruits/mge/output/mandala_graph.html",
+    "raw_json": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/fruits/mge/output/mandala_graph.json",
+    "how_to_use": "ПК: открыть локально. Телефон: запустить python -m http.server 8080 в папке output/ и открыть http://localhost:8080/mandala_graph.html"
   }
 }
