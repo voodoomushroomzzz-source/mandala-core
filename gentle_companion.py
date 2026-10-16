@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-10-15 15:06:29 ──
+# ── BUILT by build.py ── 2026-10-16 13:29:47 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -4876,7 +4876,7 @@ def _task_edit_field_kb(tid: str) -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="✏️ Название",  callback_data=f"tedit_title_{tid}"),
          InlineKeyboardButton(text="📅 Дедлайн",   callback_data=f"tedit_deadline_{tid}")],
         [InlineKeyboardButton(text="🎨 Группа",    callback_data=f"tedit_group_{tid}")],
-        [InlineKeyboardButton(text="← Назад",      callback_data="menu_tasks_mgmt")],
+        [InlineKeyboardButton(text="← Назад",      callback_data="menu_tasks_mgmt_v2")],
     ])
 
 @router.callback_query(F.data.startswith("task_edit_"))
@@ -8353,7 +8353,7 @@ async def run_proactive_scheduler() -> None:
             try:
                 from zoneinfo import ZoneInfo as _ZI
                 from datetime import datetime as _dt2
-                tz2 = ZoneInfo(g2.get("companion_settings", {}).get("timezone", "Europe/Moscow"))
+                tz2 = _ZI(g2.get("companion_settings", {}).get("timezone", "Europe/Moscow"))
                 now2 = _dt2.now(tz2)
                 today_bday = now2.strftime("%d.%m")
                 # Only at 10:00 in user's timezone
@@ -8854,9 +8854,6 @@ async def ask_question(message: Message, state: FSMContext):
     await message.answer(reply, reply_markup=get_main_keyboard())
 
 # ─── /achievements ────────────────────────────────────────────────────────────
-
-@router.message(Command("achievements"))
-
 
 @router.callback_query(F.data == "show_changelog")
 async def cb_show_changelog(callback: CallbackQuery):
