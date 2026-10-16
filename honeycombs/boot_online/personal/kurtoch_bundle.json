@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-16T10:27:42Z",
+    "generated_at": "2026-10-16T13:05:53Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -791,7 +791,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.6.10",
+      "version": "v2.6.11",
       "created": "2026-09-14",
       "updated": "2026-10-16",
       "layer": 2,
@@ -1896,28 +1896,6 @@
           }
         },
         {
-          "id": "K-127",
-          "title": "Снять флажки на улице (Центр)",
-          "description": "Снять все флажки на улице в Центре.",
-          "priority": "medium",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-10-15",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [],
-          "created": "2026-10-13",
-          "updated": "2026-10-13",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Центр"
-          }
-        },
-        {
           "id": "K-129",
           "title": "Рассчитать Сашу-стажёра (EMP-006)",
           "description": "Расчёт Саши-стажёра (EMP-006).\n\nСумма: ~8 000 ₽ (39 ч × 200 ₽/ч).\nСмен: 3. Аванс уже выдан (10.1 / 10.2 / 10.3).\nФинал: 8 000 ₽.\n\nСпособ: инкассация в кассе налом. Подписать (инкас фин. сш), сообщить об изъятии из кассы, внести в операционку.\n\nДедлайн: 19.10.2026 (понедельник).",
@@ -2081,21 +2059,19 @@
           }
         },
         {
-          "id": "K-137",
-          "title": "Снять Reels с СММ (Настя снимает)",
-          "description": "Снять Reels с СММ. Настя снимает Диму.\n\nТемы (4 пункта):\n1. Больше не ищем новых сотрудников\n2. Работаем над новой сезонкой\n3. Со следующей недели — график Нижки 8:00–20:00\n4. Часть команды поедет на Пироэкспо (26–29.10)\n\nСвязь: EMP-020 (Настя), K-103, K-126, K-133.",
-          "priority": "high",
+          "id": "K-138",
+          "title": "Привезти блогера Настю на обзор кофейни (кофе)",
+          "description": "Привезти блогера Настю (кофе-обзорщица) на обзор нашей кофейни.\n\nПланирование отдачи:\n- Согласовать дату и точку (Центр / Нижка)\n- Подготовить позиции для съёмки (сезонка, фирменные напитки)\n- Согласовать формат обзора\n- После обзора — репост/шеры в наш SMM\n\nСвязь: EMP-020 (Настя SMM), K-103 (Сезонка).",
+          "priority": "medium",
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-10-16",
+          "deadline": "2026-11-15",
           "reminder": null,
           "depends_on": [],
           "related_to": [
             "EMP-020",
-            "K-103",
-            "K-126",
-            "K-133"
+            "K-103"
           ],
           "created": "2026-10-16",
           "updated": "2026-10-16",
@@ -2105,6 +2081,30 @@
             "bot_task_id": null,
             "notion_page_id": null,
             "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-139",
+          "title": "Слабый поток воды из питьевого фильтра: диагностика + замена (Центр)",
+          "description": "Слабый поток воды из-под питьевого фильтра. Центр.\n\nГипотеза: проблема либо в фильтре, либо в баке обратного осмоса.\n\nПлан:\n1. Заменить фильтр\n2. Если не помогло — заменить бак обратного осмоса\n3. Проверить поток после каждой замены\n\nСистема: HIWATER RO 400 Lite (см. KB / K-110).\nСервис: Hiwater Рабочий +7 (999) 545-27-71.\n\nСвязь: K-110.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-23",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-110"
+          ],
+          "created": "2026-10-16",
+          "updated": "2026-10-16",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
           }
         }
       ],
@@ -4112,11 +4112,62 @@
             "column": "Операционка — Нижка"
           },
           "archived_at": "2026-10-16"
+        },
+        {
+          "id": "K-127",
+          "title": "Снять флажки на улице (Центр)",
+          "description": "Снять все флажки на улице в Центре.",
+          "priority": "medium",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-15",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-10-13",
+          "updated": "2026-10-16",
+          "completed": "2026-10-16",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          },
+          "archived_at": "2026-10-16"
+        },
+        {
+          "id": "K-137",
+          "title": "Снять Reels с СММ (Настя снимает)",
+          "description": "Снять Reels с СММ. Настя снимает Диму.\n\nТемы (4 пункта):\n1. Больше не ищем новых сотрудников\n2. Работаем над новой сезонкой\n3. Со следующей недели — график Нижки 8:00–20:00\n4. Часть команды поедет на Пироэкспо (26–29.10)\n\nСвязь: EMP-020 (Настя), K-103, K-126, K-133.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-16",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "EMP-020",
+            "K-103",
+            "K-126",
+            "K-133"
+          ],
+          "created": "2026-10-16",
+          "updated": "2026-10-16",
+          "completed": "2026-10-16",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "archived_at": "2026-10-16"
         }
       ],
-      "total": 77,
+      "total": 79,
       "by_status": {
-        "done": 66,
+        "done": 68,
         "cancelled": 11
       }
     },
