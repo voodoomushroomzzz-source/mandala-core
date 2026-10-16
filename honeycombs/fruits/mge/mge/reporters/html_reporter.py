@@ -17,6 +17,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   #header .stat { font-size: 13px; color: #8b949e; }
   #header .badge { padding: 2px 8px; border-radius: 10px; font-size: 12px; background: #21262d; color: #8b949e; }
   #header .badge.warn { background: #4d1f1f; color: #f85149; }
+  #header .badge.ok { background: #0f3d1f; color: #3fb950; }
   #filters { display: flex; gap: 12px; flex-wrap: wrap; }
   #filters label { font-size: 13px; color: #c9d1d9; display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; }
   #filters input[type=checkbox] { cursor: pointer; }
@@ -53,6 +54,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <h1>Mandala Graph Explorer</h1>
   <span class="stat" id="stat">nodes: 0 / edges: 0 / seeds: 0</span>
   <span id="unreg-badge"></span>
+  <span id="broken-badge"></span>
+  <span id="islands-badge"></span>
+  <span id="reachable-badge"></span>
   <div id="filters">
     <label><input type="checkbox" id="f-honeycomb" checked> Honeycombs</label>
     <label><input type="checkbox" id="f-work" checked> Works</label>
@@ -139,14 +143,30 @@ const network = new vis.Network(container, data, options);
 
 const a = GRAPH.analysis || {};
 const unreg = a.unregistered_honeycombs || [];
+const broken = a.broken_refs || [];
+const islands = a.islands || [];
+const reachable = a.reachable_from_core || 0;
+const total = a.total_nodes || 0;
+
 document.getElementById("stat").textContent =
   "nodes: " + GRAPH.nodes.length +
   " / edges: " + GRAPH.edges.length +
   " / seeds: " + (a.seeds_total || 0);
+
 if (unreg.length > 0) {
   document.getElementById("unreg-badge").innerHTML =
     '<span class="badge warn">⚠ unregistered: ' + unreg.length + '</span>';
 }
+if (broken.length > 0) {
+  document.getElementById("broken-badge").innerHTML =
+    '<span class="badge warn">⚠ broken refs: ' + broken.length + '</span>';
+}
+if (islands.length > 0) {
+  document.getElementById("islands-badge").innerHTML =
+    '<span class="badge warn">⚠ islands: ' + islands.length + '</span>';
+}
+document.getElementById("reachable-badge").innerHTML =
+  '<span class="badge">reachable: ' + reachable + '/' + total + '</span>';
 
 function findNode(id) {
   return GRAPH.nodes.find(n => n.id === id);

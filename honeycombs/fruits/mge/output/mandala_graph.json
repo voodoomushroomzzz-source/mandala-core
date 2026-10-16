@@ -850,6 +850,12 @@
   "analysis": {
     "total_nodes": 59,
     "total_edges": 81,
+    "by_type": {
+      "honeycomb": 17,
+      "work": 26,
+      "fruit": 8,
+      "knowledge": 8
+    },
     "orphans": [
       "core_map"
     ],
@@ -857,6 +863,133 @@
     "missing_honeycombs": [],
     "seeds_inbox_count": 475,
     "seeds_root_count": 21,
-    "seeds_total": 496
+    "seeds_total": 496,
+    "islands": [],
+    "broken_refs": [
+      {
+        "from": "W-R-ECOMM-001",
+        "to": "W-R-RM-014",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
+        "to": "W-R-RM-014",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
+        "to": "W-R-ECOMM-001",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
+        "to": "W-R-RM-014",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
+        "to": "W-R-ECOMM-001",
+        "type": "related_works"
+      },
+      {
+        "from": "W-R-ROSE-001",
+        "to": "W-R-RM-014",
+        "type": "related_works"
+      },
+      {
+        "from": "W-R-ROSE-001",
+        "to": "W-R-ECOMM-001",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260803-RL-REASONING",
+        "to": "W-T-20260511-ENGCHAT",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260803-RL-REASONING",
+        "to": "W-T-20260511-MANUS",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260803-SR-EVALUATION",
+        "to": "W-T-20260511-ENGCHAT",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260807-MEMORY__mandala_memory_layer",
+        "to": "W-T-20260511-ENGCHAT",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260807-MEMORY__mandala_memory_layer",
+        "to": "W-T-20260511-MANUS",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260807-MEMORY__mandala_memory_layer",
+        "to": "W-R-ROSE-001",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+        "to": "W-T-20260807-MEMORY",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+        "to": "W-T-20260511-ENGCHAT",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+        "to": "W-T-20260511-MANUS",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+        "to": "W-R-ROSE-001",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20261015-MGE",
+        "to": "W-T-20260511-ENGCHAT",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20261015-MGE",
+        "to": "W-T-20260418-SYM",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20261015-MGE",
+        "to": "W-T-20260807-MEMORY",
+        "type": "related_works"
+      }
+    ],
+    "reachable_from_core": 59,
+    "unreachable": [],
+    "top_hubs": [
+      {
+        "id": "works",
+        "degree": 27
+      },
+      {
+        "id": "core_map",
+        "degree": 16
+      },
+      {
+        "id": "fruits",
+        "degree": 9
+      },
+      {
+        "id": "knowledge",
+        "degree": 9
+      },
+      {
+        "id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+        "degree": 5
+      }
+    ]
   }
 }
