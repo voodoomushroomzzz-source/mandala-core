@@ -1,0 +1,1 @@
+﻿"""MGE - Mandala Graph Explorer."""

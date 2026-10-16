@@ -1,0 +1,15 @@
+﻿[project]
+name = "mge"
+version = "0.1.0"
+description = "Mandala Graph Explorer"
+requires-python = ">=3.12"
+
+[project.scripts]
+mge = "mge.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["mge", "mge.core", "mge.reporters"]
