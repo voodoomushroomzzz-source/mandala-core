@@ -1,5 +1,6 @@
 """Parser: read Mandala structure, extract nodes and edges."""
 import json
+import os
 from pathlib import Path
 
 
@@ -26,6 +27,20 @@ def read_json(path) -> dict:
         return {"_error": str(e)}
 
 
+def scan_filesystem_honeycombs(root: Path = None) -> list:
+    """Scan honeycombs/ folder for all dirs with index.json. Returns list of names."""
+    if root is None:
+        root = find_repo_root()
+    hc_dir = root / "honeycombs"
+    if not hc_dir.exists():
+        return []
+    result = []
+    for entry in sorted(hc_dir.iterdir()):
+        if entry.is_dir() and (entry / "index.json").exists():
+            result.append(entry.name)
+    return result
+
+
 def parse_core_map(core_map_path=None) -> dict:
     """Parse core_map: honeycombs + navigation edges."""
     if core_map_path is None:
@@ -40,6 +55,7 @@ def parse_core_map(core_map_path=None) -> dict:
         nodes.append({
             "id": name,
             "type": "honeycomb",
+            "source": "core_map",
             "path": info.get("path", ""),
             "description": info.get("description", "")
         })
@@ -60,6 +76,41 @@ def parse_core_map(core_map_path=None) -> dict:
     edges = list(seen.values())
 
     return {"nodes": nodes, "edges": edges}
+
+
+def find_unregistered_honeycombs() -> dict:
+    """Compare filesystem honeycombs vs core_map. Returns unregistered + missing."""
+    root = find_repo_root()
+    fs_honeycombs = set(scan_filesystem_honeycombs(root))
+
+    core_map_data = read_json(root / "honeycombs" / "core_map" / "index.json")
+    registered = set(core_map_data.get("honeycombs", {}).keys())
+
+    unregistered = sorted(fs_honeycombs - registered)
+    missing = sorted(registered - fs_honeycombs)
+
+    unregistered_nodes = []
+    unregistered_edges = []
+    for name in unregistered:
+        unregistered_nodes.append({
+            "id": name,
+            "type": "honeycomb_unregistered",
+            "source": "filesystem",
+            "path": "honeycombs/" + name + "/index.json",
+            "description": "NOT REGISTERED in core_map"
+        })
+        unregistered_edges.append({
+            "from": "core_map",
+            "to": name,
+            "type": "unregistered"
+        })
+
+    return {
+        "unregistered": unregistered,
+        "missing": missing,
+        "nodes": unregistered_nodes,
+        "edges": unregistered_edges
+    }
 
 
 def parse_works(works_path=None) -> dict:
@@ -146,19 +197,34 @@ def parse_knowledge(knowledge_path=None) -> dict:
     return {"nodes": nodes, "edges": edges}
 
 
-def parse_seeds_count(seeds_path=None) -> dict:
-    """Count seeds for analysis (not as graph nodes)."""
-    if seeds_path is None:
-        root = find_repo_root()
-        seeds_path = root / "honeycombs" / "seeds" / "index.json"
-    data = read_json(seeds_path)
-    meta = data.get("meta", {})
-    total = meta.get("total_seeds", 0)
-    return {"seeds_total": total}
+def count_seeds() -> dict:
+    """Count seeds in inbox and root folders (real filesystem count)."""
+    root = find_repo_root()
+    seeds_dir = root / "honeycombs" / "seeds"
+    inbox_dir = seeds_dir / "inbox"
+
+    inbox_count = 0
+    if inbox_dir.exists():
+        inbox_count = sum(1 for f in inbox_dir.iterdir()
+                         if f.is_file() and f.name.endswith(".json") and f.name != "index.json")
+
+    root_count = 0
+    if seeds_dir.exists():
+        root_count = sum(1 for f in seeds_dir.iterdir()
+                        if f.is_file() and f.name.endswith(".json") and f.name != "index.json")
+
+    return {
+        "seeds_inbox_count": inbox_count,
+        "seeds_root_count": root_count,
+        "seeds_total": inbox_count + root_count
+    }
 
 
 def parse_all() -> dict:
     """Parse everything and return combined graph."""
+    unregistered_info = find_unregistered_honeycombs()
+    seeds_info = count_seeds()
+
     parts = [
         parse_core_map(),
         parse_works(),
@@ -177,6 +243,12 @@ def parse_all() -> dict:
                 seen_nodes.add(n["id"])
         all_edges.extend(p.get("edges", []))
 
+    for n in unregistered_info["nodes"]:
+        if n["id"] not in seen_nodes:
+            all_nodes.append(n)
+            seen_nodes.add(n["id"])
+    all_edges.extend(unregistered_info["edges"])
+
     seen_edges = {}
     for e in all_edges:
         key = (e["from"], e["to"], e["type"])
@@ -184,10 +256,22 @@ def parse_all() -> dict:
             seen_edges[key] = e
     edges = list(seen_edges.values())
 
-    seeds_info = parse_seeds_count()
+    incoming = {}
+    for e in edges:
+        incoming[e["to"]] = incoming.get(e["to"], 0) + 1
+    orphans = [n["id"] for n in all_nodes if incoming.get(n["id"], 0) == 0]
 
     return {
         "nodes": all_nodes,
         "edges": edges,
-        "seeds_total": seeds_info.get("seeds_total", 0)
+        "analysis": {
+            "total_nodes": len(all_nodes),
+            "total_edges": len(edges),
+            "orphans": orphans,
+            "unregistered_honeycombs": unregistered_info["unregistered"],
+            "missing_honeycombs": unregistered_info["missing"],
+            "seeds_inbox_count": seeds_info["seeds_inbox_count"],
+            "seeds_root_count": seeds_info["seeds_root_count"],
+            "seeds_total": seeds_info["seeds_total"]
+        }
     }
