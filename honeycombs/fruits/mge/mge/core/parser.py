@@ -1,8 +1,24 @@
 """Parser: read JSON files, extract nodes and edges."""
 import json
+from pathlib import Path
 
 
-def read_json(path: str) -> dict:
+def find_repo_root(start: Path = None) -> Path:
+    """Walk up from start until we find honeycombs/core_map/index.json."""
+    if start is None:
+        start = Path.cwd()
+    current = start.resolve()
+    for _ in range(10):
+        candidate = current / "honeycombs" / "core_map" / "index.json"
+        if candidate.exists():
+            return current
+        if current.parent == current:
+            break
+        current = current.parent
+    raise FileNotFoundError("honeycombs/core_map/index.json not found in any parent directory")
+
+
+def read_json(path) -> dict:
     try:
         with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
@@ -10,7 +26,10 @@ def read_json(path: str) -> dict:
         return {"_error": str(e)}
 
 
-def parse_core_map(core_map_path: str = "honeycombs/core_map/index.json") -> dict:
+def parse_core_map(core_map_path=None) -> dict:
+    if core_map_path is None:
+        root = find_repo_root()
+        core_map_path = root / "honeycombs" / "core_map" / "index.json"
     data = read_json(core_map_path)
     nodes = []
     edges = []

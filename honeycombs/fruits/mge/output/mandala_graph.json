@@ -1,9 +1,245 @@
 {
-  "nodes": [],
-  "edges": [],
+  "nodes": [
+    {
+      "id": "boot_online",
+      "type": "honeycomb",
+      "path": "honeycombs/boot_online/index.json",
+      "description": "External AI onboarding entry point"
+    },
+    {
+      "id": "philosophy",
+      "type": "honeycomb",
+      "path": "honeycombs/philosophy/index.json",
+      "description": "PHI-001..PHI-011, 11 blocks + 5 testimonies"
+    },
+    {
+      "id": "core_map",
+      "type": "honeycomb",
+      "path": "honeycombs/core_map/index.json",
+      "description": "This map — kernel, modules, repository, honeycombs list"
+    },
+    {
+      "id": "instructions",
+      "type": "honeycomb",
+      "path": "honeycombs/instructions/index.json",
+      "description": "SR workflows: external_sr (core/), mobile, patch_system, file_naming."
+    },
+    {
+      "id": "seeds",
+      "type": "honeycomb",
+      "path": "honeycombs/seeds/index.json",
+      "description": "Idea incubator: managed by PROTO-011 (Seed-to-Work)."
+    },
+    {
+      "id": "protocols",
+      "type": "honeycomb",
+      "path": "honeycombs/protocols/index.json",
+      "description": "Activation protocols: PROTO-004, PROTO-005, PROTO-006, PROTO-009, PROTO-011."
+    },
+    {
+      "id": "akasha",
+      "type": "honeycomb",
+      "path": "honeycombs/akasha/index.json",
+      "description": "Akasha memory: essence, milestones, vision"
+    },
+    {
+      "id": "fruits",
+      "type": "honeycomb",
+      "path": "honeycombs/fruits/index.json",
+      "description": "Product registry — realized products of Mandala"
+    },
+    {
+      "id": "humor",
+      "type": "honeycomb",
+      "path": "honeycombs/humor/index.json",
+      "description": "Humor development — comic resonance research"
+    },
+    {
+      "id": "sym",
+      "type": "honeycomb",
+      "path": "honeycombs/sym/index.json",
+      "description": "SYM — System for Measuring Mandala Growth"
+    },
+    {
+      "id": "sessions",
+      "type": "honeycomb",
+      "path": "honeycombs/sessions/index.json",
+      "description": "SR handoff system — session continuity across chat instances"
+    },
+    {
+      "id": "knowledge",
+      "type": "honeycomb",
+      "path": "honeycombs/knowledge/index.json",
+      "description": "Knowledge base — structured curated information: tools, references, guides, and external resources."
+    },
+    {
+      "id": "works",
+      "type": "honeycomb",
+      "path": "honeycombs/works/index.json",
+      "description": "Unified work items (replaces tasks/ and roadmaps/)"
+    },
+    {
+      "id": "registry",
+      "type": "honeycomb",
+      "path": "honeycombs/registry/index.json",
+      "description": "Registry — state and statistics of all honeycombs, scanner configuration and scan results"
+    },
+    {
+      "id": "rose_world",
+      "type": "honeycomb",
+      "path": "honeycombs/rose_world/index.json",
+      "description": "Этический фильтр 'Роза Мира' — сетевой протокол симбиоза и сознания"
+    },
+    {
+      "id": "directives",
+      "type": "honeycomb",
+      "path": "honeycombs/directives/index.json",
+      "description": "Директивы для фокусировки внимания SR по векторам"
+    },
+    {
+      "id": "personal",
+      "type": "honeycomb",
+      "path": "honeycombs/personal/index.json",
+      "description": "Personal Hub — career, creative, learning, franchise, music, poetry, e-commerce"
+    }
+  ],
+  "edges": [
+    {
+      "from": "core_map",
+      "to": "akasha",
+      "type": "references"
+    },
+    {
+      "from": "core_map",
+      "to": "fruits",
+      "type": "references"
+    },
+    {
+      "from": "core_map",
+      "to": "humor",
+      "type": "references"
+    },
+    {
+      "from": "core_map",
+      "to": "knowledge",
+      "type": "references"
+    },
+    {
+      "from": "core_map",
+      "to": "philosophy",
+      "type": "references"
+    },
+    {
+      "from": "core_map",
+      "to": "sessions",
+      "type": "references"
+    },
+    {
+      "from": "core_map",
+      "to": "sym",
+      "type": "references"
+    },
+    {
+      "from": "core_map",
+      "to": "works",
+      "type": "references"
+    },
+    {
+      "from": "core_map",
+      "to": "rose_world",
+      "type": "references"
+    },
+    {
+      "from": "core_map",
+      "to": "directives",
+      "type": "references"
+    },
+    {
+      "from": "core_map",
+      "to": "personal",
+      "type": "references"
+    },
+    {
+      "from": "core_map",
+      "to": "boot_online",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "fruits",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "humor",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "instructions",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "knowledge",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "philosophy",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "protocols",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "seeds",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "sessions",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "sym",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "works",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "registry",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "rose_world",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "directives",
+      "type": "children"
+    },
+    {
+      "from": "core_map",
+      "to": "personal",
+      "type": "children"
+    }
+  ],
   "analysis": {
-    "total_nodes": 0,
-    "total_edges": 0,
-    "orphans": []
+    "total_nodes": 17,
+    "total_edges": 26,
+    "orphans": [
+      "core_map"
+    ]
   }
 }
