@@ -40,7 +40,7 @@
       "module_location": "Bot modules live in honeycombs/fruits/gentle_companion/ — config.py, store.py, github_api.py, helpers.py, ui.py, sr_prompts.py, sr_search.py, sr_context.py, sr_memory.py, handlers/tasks.py, handlers/features.py, handlers/system.py, sr_conversation.py, main.py. Read honeycombs/fruits/gentle_companion/index.json for full architecture map.",
       "session_context": "Read honeycombs/sessions/handoff_claude.json and/or handoff_deepseek.json for previous session context before starting any work.",
       "announce_last_updated": "ALWAYS announce the file's last_updated date in your FIRST response. Format: 'Read {filename} — last updated: YYYY-MM-DD'. Gardener must see data freshness immediately.",
-      "sync_onboarding_and_source": "CRITICAL: When updating any source honeycomb that is embedded in boot_online_onboarding_pc.json (philosophy/index.json, core_map/index.json, boot_online/index.json, instructions/core/external_sr_workflow.json, phi_010, phi_011, fruits/index.json, tasks/index.json) — ALWAYS update BOTH the source file AND the onboarding file. They are co-dependent. Updating one without the other breaks sync.",
+      "sync_onboarding_and_source": "CRITICAL: When updating any source honeycomb that is embedded in boot_online_onboarding_pc.json (philosophy/index.json, core_map/index.json, boot_online/index.json, instructions/core/external_sr_workflow.json, phi_010, phi_011, fruits/index.json, tasks/index.json) — the onboarding file is REBUILT AUTOMATICALLY by GitHub Actions (build-onboarding.yml) on every push to main. DO NOT edit boot_online_onboarding_pc.json manually. Just update the source file and push — CI will rebuild and commit the onboarding file. If after 5 minutes onboarding still shows old version, check Actions logs. Manual edits to onboarding file will be OVERWRITTEN by CI.",
       "copyable_links_mandate": {
         "rule": "CRITICAL. ALWAYS provide ALL links in a code block with language 'text' (```text ... ```). This is MANDATORY for all links — API, raw, GitHub, any URL. Reason: Gardener works from mobile (Termux) and needs the 'Copy' button in the interface. Without this, copying links is error-prone and breaks workflow.",
         "format": "```text\nhttps://...\n```",
@@ -52,7 +52,8 @@
         "format": "```text\nhttps://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/{path}\n```",
         "why": "GitHub web interface (blob) displays content from the current HEAD commit. No CDN, no cache, no delay. Instant and accurate.",
         "fallback": "If direct link is unavailable, use API (api.github.com) as fallback to verify SHA and version."
-      }
+      },
+      "python_package_cli_rule": "For any Python package with CLI (invoked as 'python -m pkg ...'), ALWAYS create pkg/__main__.py with: from pkg.cli import main; if __name__ == '__main__': main(). Without __main__.py, 'python -m pkg' fails with 'No module named pkg.__main__'. This is a standard Python requirement, not optional."
     },
     "powershell_examples": {
       "description": "Concrete, copy-paste ready examples for common tasks.",
@@ -464,11 +465,11 @@
     ]
   },
   "identity": {
-    "updated": "2026-07-14",
+    "updated": "2026-10-16",
     "layer": 2,
     "type": "workflow_guide",
-    "version": "v1.8.0",
-    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + dual GitHub repo routing (mandala-core + mandala-gardeners). v1.6.3: + pre-check raw, post-check API, report last_updated rules. + module patching rule, session context, announce last_updated. + sync onboarding ↔ source rule.",
+    "version": "v1.8.2",
+    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + dual GitHub repo routing (mandala-core + mandala-gardeners). v1.6.3: + pre-check raw, post-check API, report last_updated rules. + module patching rule, session context, announce last_updated. + sync onboarding ↔ source rule. v1.8.2: + python_package_cli_rule (__main__.py mandatory for CLI packages). + sync_onboarding_and_source clarified: onboarding is auto-rebuilt by CI, do NOT edit manually.",
     "created": "2026-04-09",
     "name": "External SR Workflow",
     "module_id": "INSTR-EXT-SR-WORKFLOW-001",
