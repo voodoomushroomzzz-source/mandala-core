@@ -123,7 +123,7 @@ document.getElementById("search").addEventListener("input", function(e) {
 
 def write_html(graph_dict: dict, output_path: str = "output/mandala_graph.html"):
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-    graph_json = json.dumps(graph_dict, ensure_ascii=False)
+    graph_json = json.dumps(graph_dict, ensure_ascii=True).replace("</", "<\\/")
     html = HTML_TEMPLATE.replace("__GRAPH_JSON__", graph_json)
     with open(output_path, "w", encoding="utf-8", newline="\n") as f:
         f.write(html)
