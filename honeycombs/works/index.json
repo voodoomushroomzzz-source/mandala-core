@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "WORKS-MANIFEST-001",
     "name": "Works — Unified System of Work Items",
-    "version": "v1.0.14",
+    "version": "v1.0.15",
     "created": "2026-07-08",
-    "updated": "2026-10-15",
+    "updated": "2026-10-17",
     "layer": 1,
     "type": "work_manifest",
     "description": "Single source of truth for all work items. Updated with full deadlines and progress tracking.",
@@ -51,22 +51,22 @@
     ]
   },
   "manifest": {
-    "total_works": 26,
+    "total_works": 27,
     "by_status": {
       "active": 15,
       "in_progress": 2,
-      "planned": 6,
+      "planned": 7,
       "pending": 3,
       "done": 0
     },
     "by_horizon": {
       "strategic": 11,
-      "tactical": 16
+      "tactical": 17
     },
     "by_priority": {
       "critical": 6,
       "high": 15,
-      "medium": 6,
+      "medium": 7,
       "low": 2
     },
     "works_list": [
@@ -95,7 +95,8 @@
       "W-R-20260803-KURTOCH-FRANCHISE",
       "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
       "W-R-20261013-PUBLIC-MANDALA",
-      "W-T-20261015-MGE"
+      "W-T-20261015-MGE",
+      "W-T-20261017-MGE-BUNDLE"
     ],
     "deadlines": {
       "W-R-RC-001__visibility_strategy": null,
@@ -123,7 +124,8 @@
       "W-T-20260807-MEMORY__mandala_memory_layer": "2026-10-15",
       "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": "2026-10-15",
       "W-R-20261013-PUBLIC-MANDALA": null,
-      "W-T-20261015-MGE": "2026-11-15"
+      "W-T-20261015-MGE": "2026-11-15",
+      "W-T-20261017-MGE-BUNDLE": "2026-11-15"
     },
     "progress": {
       "W-R-RC-001__visibility_strategy": 0,
@@ -151,7 +153,8 @@
       "W-T-20260807-MEMORY__mandala_memory_layer": 0,
       "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": 0,
       "W-R-20261013-PUBLIC-MANDALA": 0,
-      "W-T-20261015-MGE": 0
+      "W-T-20261015-MGE": 0,
+      "W-T-20261017-MGE-BUNDLE": 0
     },
     "progress_updated": "2026-10-14",
     "related_works": {
@@ -197,6 +200,9 @@
         "W-T-20260511-ENGCHAT__engineer_chat",
         "W-T-20260418-SYM__sym_growth_system",
         "W-T-20260807-MEMORY__mandala_memory_layer"
+      ],
+      "W-T-20261017-MGE-BUNDLE": [
+        "W-T-20261015-MGE__mandala_graph_explorer"
       ]
     }
   },
@@ -209,8 +215,8 @@
   },
   "health": {
     "status": "active",
-    "last_check": "2026-10-15",
-    "notes": "Added W-T-20261015-MGE"
+    "last_check": "2026-10-17",
+    "notes": "Added W-T-20261017-MGE-BUNDLE"
   },
   "updated": "2026-10-14",
   "notes": {

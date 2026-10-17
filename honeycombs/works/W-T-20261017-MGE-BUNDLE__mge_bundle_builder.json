@@ -1,0 +1,175 @@
+{
+  "identity": {
+    "work_id": "W-T-20261017-MGE-BUNDLE",
+    "name": "MGE Bundle Builder — Custom Module Bundles",
+    "status": "planned",
+    "priority": "medium",
+    "horizon": "tactical",
+    "created": "2026-10-17",
+    "updated": "2026-10-17",
+    "deadline": "2026-11-15",
+    "progress": 0,
+    "effort_estimate": "10-15 часов",
+    "parent_work": "W-T-20261015-MGE",
+    "tags": [
+      "mge",
+      "bundle",
+      "html",
+      "ci",
+      "auto-build",
+      "drafts"
+    ]
+  },
+  "meta": {
+    "description": "Инструмент автосборки кастомных бандлов Mandala. Позволяет выбирать любые соты через HTML-граф MGE и собирать из них монолит (JSON), доступный по ссылке. Опционально — автосборщик через CI, как build-onboarding.",
+    "purpose": "Дать Садовнику и SR возможность компоновать Mandala под задачу: выбрать релевантные соты → собрать кастомный бандл → использовать в сессии или для автосборки.",
+    "how_to_use": "HTML: выбрать соты в графе → кнопка «Экспорт для SR» (карта) или «Полный бандл» (монолит). Автосборщик: drafts.json + build_bundle.py + workflow.",
+    "change_requires": "gardener_approval"
+  },
+  "goal": {
+    "mission": "Дать возможность собирать кастомные бандлы из любых сот Mandala через MGE-граф, с опциональной автосборкой через CI.",
+    "success_criteria": [
+      "В HTML MGE — панель выбора сот (чекбоксы) + кнопки «Экспорт для SR» и «Полный бандл»",
+      "Карта (Экспорт для SR) — содержит: selected, edges, instruction_for_sr",
+      "Полный бандл — fetch() по raw-ссылкам + полное содержимое сот",
+      "Черновики (drafts.json) сохраняются и загружаются",
+      "Автосборщик (build_bundle.py + workflow) пересобирает бандлы при изменении сот",
+      "GitHub Pages открывает готовые бандлы по прямой ссылке"
+    ]
+  },
+  "architecture": {
+    "principle": "Без сервера. HTML на GitHub Pages — статический. Всё на клиенте + CI.",
+    "two_modes": {
+      "map_mode": {
+        "name": "Экспорт для SR (Карта)",
+        "description": "HTML отдаёт карту: ID выбранных сот, типы, связи, пути к файлам, инструкцию для SR. Размер ~5 KB. Без fetch.",
+        "use_case": "Быстрый контекст для SR. SR сам решает, что тянуть."
+      },
+      "full_bundle_mode": {
+        "name": "Полный бандл (Монолит)",
+        "description": "HTML делает fetch() на raw-ссылки выбранных сот → склеивает в один JSON. Размер ~50-500 KB.",
+        "use_case": "Глубокий контекст для SR. Всё вшито, без запросов."
+      }
+    },
+    "instruction_for_sr": {
+      "step_1": "СПРОСИ Садовника: «Создать автосборщик для этого набора сот? Если да — при изменении бандл будет пересобираться автоматически, как онбординг ПК.»",
+      "step_2": "ЗАПРОСИ ссылки на все выбранные файлы для ознакомления (paths из карты).",
+      "step_3": "ЕСЛИ Садовник ответил «да» — создай CI-автосборщик по образцу build-onboarding.yml.",
+      "step_4": "ЕСЛИ «нет» — работай с картой в текущей сессии."
+    },
+    "folder": {
+      "path": "honeycombs/boot_online/bundles/",
+      "reasoning": "Все автосборки живут в boot_online/. Здесь уже есть builder/ (build_onboarding.py) и personal/ (персональные автосборки). Bundles — логичное продолжение.",
+      "structure": {
+        "index.json": "Реестр бандлов (какие есть)",
+        "drafts.json": "Конфиг черновиков (что пользователь сохранил)",
+        "<draft_id>.json": "Готовые бандлы (собраны CI или вручную)",
+        "README.md": "Описание"
+      }
+    },
+    "auto_builder": {
+      "script": "honeycombs/boot_online/builder/build_bundle.py",
+      "workflow": ".github/workflows/build-bundles.yml",
+      "trigger": "push в honeycombs/** (кроме auto-generated, включая bundles/**)",
+      "loop_protection": "Исключить boot_online/bundles/** из триггера (чтобы не зацикливаться)"
+    }
+  },
+  "phases": {
+    "phase_1_html_ui": {
+      "name": "HTML UI — панель выбора сот",
+      "status": "planned",
+      "duration": "3-4 часа",
+      "deliverables": [
+        "В mandala_graph.html — панель выбора сот (чекбоксы по типам или клик-toggle)",
+        "Кнопка «Экспорт для SR» — модалка с картой (JSON) + кнопка «Копировать»",
+        "Кнопка «Полный бандл» — модалка с монолитом (JSON) + кнопка «Копировать»",
+        "Кнопка «Сохранить черновик» — сохранение в localStorage"
+      ],
+      "files_to_change": [
+        "honeycombs/fruits/mge/mge/reporters/html_reporter.py"
+      ]
+    },
+    "phase_2_drafts": {
+      "name": "Drafts — черновики",
+      "status": "planned",
+      "duration": "2-3 часа",
+      "deliverables": [
+        "Создать honeycombs/boot_online/bundles/index.json",
+        "Создать honeycombs/boot_online/bundles/drafts.json",
+        "HTML загружает drafts.json через fetch() при загрузке",
+        "Список черновиков в правой панели",
+        "Клик на черновик → выделяет узлы в графе",
+        "localStorage — для быстрых черновиков «на сейчас»"
+      ],
+      "files_to_change": [
+        "honeycombs/fruits/mge/mge/reporters/html_reporter.py",
+        "honeycombs/boot_online/bundles/index.json (новый)",
+        "honeycombs/boot_online/bundles/drafts.json (новый)"
+      ]
+    },
+    "phase_3_auto_builder": {
+      "name": "Автосборщик — CI",
+      "status": "planned",
+      "duration": "3-4 часа",
+      "deliverables": [
+        "honeycombs/boot_online/builder/build_bundle.py — скрипт сборки",
+        ".github/workflows/build-bundles.yml — workflow",
+        "Триггер: push в honeycombs/** (кроме bundles/**, mge/output/**)",
+        "Loop protection: исключить bundles/**, mge/mge/**",
+        "При изменении сот → пересборка всех бандлов с auto_bundle: true"
+      ],
+      "files_to_create": [
+        "honeycombs/boot_online/builder/build_bundle.py",
+        ".github/workflows/build-bundles.yml"
+      ]
+    },
+    "phase_4_registration": {
+      "name": "Регистрация в core_map + онбординг",
+      "status": "planned",
+      "duration": "1-2 часа",
+      "deliverables": [
+        "Добавить honeycombs/boot_online/bundles/ в core_map (references, children)",
+        "В онбординг — ссылка на bundles/index.json",
+        "GitHub Pages — dashboard ссылки на бандлы"
+      ],
+      "files_to_change": [
+        "honeycombs/core_map/index.json",
+        "honeycombs/boot_online/boot_online_onboarding_pc_builder.json",
+        "index.html"
+      ]
+    }
+  },
+  "dependencies": {
+    "parent": "W-T-20261015-MGE (MGE — Mandala Graph Explorer)",
+    "related": [
+      "W-T-20260511-ENGCHAT__engineer_chat"
+    ],
+    "requires": [
+      "mandala_graph.html (работает)",
+      "GitHub Pages (работает)",
+      "build-onboarding.yml как образец для workflow"
+    ]
+  },
+  "risks": [
+    "Размер полного бандла может быть большой (fetch 20+ сот) — решается прогресс-баром",
+    "CORS на raw.githubusercontent.com — работает, но кэш 5-10 мин (обойти через ?t=)",
+    "Loop protection в CI — критично, иначе бесконечный цикл",
+    "Черновики в localStorage не синхронизируются — решается через drafts.json в репо"
+  ],
+  "related_fruits": [
+    "fruit-mge-001"
+  ],
+  "navigation": {
+    "parent": "honeycombs/works/index.json",
+    "parent_work": "W-T-20261015-MGE",
+    "related": [
+      "honeycombs/fruits/mge/index.json",
+      "honeycombs/boot_online/index.json"
+    ]
+  },
+  "health": {
+    "status": "planned",
+    "last_check": "2026-10-17",
+    "notes": "Work создан. Phase 1 — HTML UI. Ожидает старта."
+  }
+}
