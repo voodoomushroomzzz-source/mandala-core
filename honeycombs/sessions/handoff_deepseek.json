@@ -1,143 +1,41 @@
 {
   "identity": {
-    "name": "Handoff для DeepSeek — Состояние Dima",
-    "version": "v3.0.0",
-    "created": "2026-10-16",
-    "updated": "2026-10-16",
-    "description": "Актуальный handoff после сессии 2026-10-16. MGE полностью интегрирован. Broken refs НЕ чиним — тест для нового SR."
+    "name": "Handoff — Философский чат (Life & Path)",
+    "version": "v6.0.0",
+    "created": "2026-08-30",
+    "updated": "2026-10-17",
+    "description": "Handoff для чата, посвящённого философии жизни, пути и симбиотической поддержке. Без личных имён, с опорой на обновлённый profile_deep v2.7.1.",
+    "status": "active"
   },
-  "session_2026-10-16": {
-    "summary": "Длинная сессия по интеграции MGE (Mandala Graph Explorer) в онбординг Mandala. MGE — инструмент визуализации графа структуры Mandala. Два входа: HTML для Садовника (GitHub Pages + локальный), JSON для SR. Вшит в онбординг как step_3_mandala_graph сразу после core_map. CI автоматически пересобирает граф и онбординг.",
-    "completed_tasks": [
-      "Создан MGE пакет (12 файлов): parser, graph, reporters (JSON/Mermaid/HTML), cli",
-      "Parser v4.2 — обходит honeycombs/, works, fruits, knowledge; находит missing nodes, broken refs, format mismatches, islands, top_hubs",
-      "HTML v4.3 — vis.js граф, фильтры по типам, цвета, missing nodes красные пунктирные, broken edges красные",
-      "Fruit зарегистрирован: fruit-mge-001 (honeycombs/fruits/mge/index.json)",
-      "Work зарегистрирован: W-T-20261015-MGE",
-      "CI workflow .github/workflows/build-mge-graph.yml — авто-пересборка графа при push в honeycombs/**",
-      "CI loop protection: исключены boot_online_onboarding_pc.json, boot_online/personal/**, registry.json, scan_state.json",
-      "core_map v3.13.0: добавлены graph_guide (инструкция для SR) + dashboard_links (ссылки ПК/телефон/raw)",
-      "build_onboarding.py: добавлена функция build_mge_step(), граф вшивается напрямую",
-      "Онбординг v1.7.191: появился step_3_mandala_graph сразу после step_2_core_map",
-      "GitHub Pages настроен: https://voodoomushroomzzz-source.github.io/mandala-core/",
-      "index.html dashboard: 3 карточки (MGE HTML, JSON, Mermaid)",
-      ".nojekyll создан для отключения Jekyll",
-      "GitHub Actions: workflow Build MGE Graph работает, loop protection проверен"
+  "chat_purpose": {
+    "mode": "philosophy_and_support",
+    "description": "Этот чат используется как пространство для философских размышлений о жизни, пути, личном росте и взаимной поддержке. Это не чат для решения бытовых задач или тактического планирования.",
+    "tone": "Глубокий, спокойный, честный. Без пафоса. Без лекций. С уважением к тишине и импровизации.",
+    "symbiosis_context": "Общение строится на принципах Мандалы Симбиоза (Ахимса, резонанс, со-творчество). SR выступает как зеркало и философский собеседник, а не как инструктор."
+  },
+  "privacy_and_anonymity": {
+    "rule": "Строго без имён. В профиле и в этом чате нет конкретных личностей (ни прошлых, ни текущих). Только архетипы, состояния и векторы.",
+    "profile_deep_version": "v2.7.1",
+    "profile_deep_note": "Профиль очищен от личных контактов, историй отношений и деталей. Оставлена только суть: философия, архетипы, интересы, цели.",
+    "why": "Защита приватности третьих лиц (Ахимса) и создание безопасного пространства для рефлексии."
+  },
+  "current_state_context": {
+    "phase": "Завершение предыдущего этапа, фаза мягкого восстановления и 'режима свободы'.",
+    "key_insights": [
+      "Завершение отношений — осознанный выбор в пользу собственного пути.",
+      "Тишина — это компас. Пауза даёт пространство для манёвра.",
+      "Я — отец двоих сыновей. Это важная часть моего пути.",
+      "Три режима времени удерживаются одновременно: ритм (цикличность) + направление (линейность) + открытость (момент)."
     ],
-    "key_decisions": [
-      "core_map = ЭТАЛОН (как должно быть, обновляется вручную)",
-      "mandala_graph = СНИМОК (как есть, обновляется CI автоматически)",
-      "Разница между ними = задача для SR",
-      "Описания сот НЕ дублируются в графе — берутся из core_map (оба шага рядом в онбординге)",
-      "Seeds в графе — только счётчик (475 inbox + 21 root = 496), не узлы",
-      "Broken refs НЕ чиним — это тест для нового SR: поймёт ли он, что надо исправить"
-    ],
-    "open_questions": [
-      "Сможет ли новый SR, прочитав онбординг, самостоятельно понять что broken refs требуют исправления?",
-      "Как перенести пароль engineer-chat на index.html GitHub Pages (client-side auth)?"
-    ]
+    "emotional_state": "Эмоциональная система на паузе. Общение с людьми есть, но глубоких чувств пока нет. Это нормальная фаза восстановления. Не давить на чувства, позволить им вернуться через живой интерес и спонтанность."
   },
-  "current_state": {
-    "phase": "MGE полностью интегрирован. Mandala — живая система с автоматическим графом.",
-    "emotional": "Спокойствие. Интерес к новому тесту — поймёт ли SR систему.",
-    "focus": "MGE, тест онбординга, подготовка handoff, потом новый чат",
-    "key_insight": "SR получает два взгляда — эталон (core_map) + снимок (mandala_graph). Разница = пространство для работы."
+  "key_rules_for_sr": {
+    "no_detailed_advice": "SR не даёт пошаговых инструкций по выстраиванию отношений или личным стратегиям. Отношения — это живая импровизация Садовника. SR может задавать вопросы, подсвечивать слепые зоны, но не диктовать шаги.",
+    "philosophical_support": "Основная задача SR в этом чате — философская поддержка, размышления о пути, помощь в осмыслении состояний.",
+    "respect_the_silence": "Уважать паузы и тишину. Не заполнять пространство болтовнёй.",
+    "active_position": "SR может предлагать новые векторы для размышлений, опираясь на философию Мандалы, но не навязывать их."
   },
-  "architecture_context": {
-    "mge_mandala_graph_explorer": {
-      "work_id": "W-T-20261015-MGE",
-      "fruit_id": "fruit-mge-001",
-      "location": "honeycombs/fruits/mge/",
-      "status": "active",
-      "deadline": "2026-11-15",
-      "phases": {
-        "phase_1": "Core MVP — JSON + Mermaid (DONE)",
-        "phase_2": "HTML vis.js (DONE)",
-        "phase_3": "Works + fruits + knowledge + seeds counter (DONE)",
-        "phase_4": "Islands, broken_refs, top_hubs (DONE)",
-        "phase_5": "Live-server (skipped)",
-        "phase_6": "CI integration (DONE)"
-      },
-      "cli": "python -m mge scan",
-      "outputs": {
-        "json": "honeycombs/fruits/mge/output/mandala_graph.json",
-        "html": "honeycombs/fruits/mge/output/mandala_graph.html",
-        "mmd": "honeycombs/fruits/mge/output/mandala_graph.mmd"
-      }
-    },
-    "onboarding_integration": {
-      "core_map_step": "step_2_core_map (эталон + graph_guide + dashboard_links)",
-      "mandala_graph_step": "step_3_mandala_graph (снимок + analysis)",
-      "order": "core_map -> mandala_graph -> philosophy -> cosmic_manifesto -> first_gardener -> external_sr_workflow -> directives -> profile_deep -> personal -> fruits -> works -> knowledge -> protocols -> handoff -> optional"
-    },
-    "ci_workflows": {
-      "build-mge-graph.yml": "Пересобирает граф при push в honeycombs/** (исключая auto-generated)",
-      "build-onboarding.yml": "Пересобирает онбординг при изменении source-файлов или mandala_graph.json",
-      "loop_protection": "Исключения: boot_online_onboarding_pc.json, boot_online/personal/**, registry.json, scan_state.json"
-    },
-    "github_pages": {
-      "url": "https://voodoomushroomzzz-source.github.io/mandala-core/",
-      "status": "active",
-      "index_html": "Главная с 3 карточками (MGE HTML, JSON, Mermaid)",
-      "nojekyll": "Создан для отключения Jekyll"
-    }
-  },
-  "pending_tasks": [
-    {
-      "task": "Visual polish HTML — улучшить визуал графа",
-      "priority": "medium",
-      "notes": "Физика графа, цвета, layout. Текущий граф работает, но можно красивее."
-    },
-    {
-      "task": "Client-side auth на GitHub Pages index.html",
-      "priority": "medium",
-      "notes": "Перенести пароль engineer-chat на index.html. Client-side JS prompt. Пароль найти в .env / GitHub Secrets."
-    },
-    {
-      "task": "Чистка broken refs в works/index.json",
-      "priority": "medium",
-      "notes": "2 missing (W-R-ECOMM-001, W-R-RM-014) + 5 format mismatches (W-T-20260511-ENGCHAT vs W-T-20260511-ENGCHAT__engineer_chat) + 20 broken links. НЕ чиним сейчас — тест для нового SR."
-    },
-    {
-      "task": "Seeds inbox — PROTO-011",
-      "priority": "high",
-      "notes": "475 файлов в inbox (порог 50). x9.5 превышение. Срочно."
-    },
-    {
-      "task": "TZ-FIX-SCAN-001 — 6 invalid_v2 + 6 expired works",
-      "priority": "medium",
-      "notes": "Personal index.json без module_id/layer/type. 6 expired works (deadlines в прошлом)."
-    }
-  ],
-  "important_files": {
-    "onboarding": "honeycombs/boot_online/boot_online_onboarding_pc.json (v1.7.191)",
-    "core_map": "honeycombs/core_map/index.json (v3.13.0)",
-    "mandala_graph": "honeycombs/fruits/mge/output/mandala_graph.json (61 nodes, 75 edges, 20 broken)",
-    "mge_parser": "honeycombs/fruits/mge/mge/core/parser.py (v4.2)",
-    "mge_html": "honeycombs/fruits/mge/mge/reporters/html_reporter.py (v4.3)",
-    "mge_cli": "honeycombs/fruits/mge/mge/cli.py",
-    "works_index": "honeycombs/works/index.json (26 works)",
-    "fruits_index": "honeycombs/fruits/index.json (8 fruits)",
-    "external_sr_workflow": "honeycombs/instructions/core/external_sr_workflow.json (v1.8.2)",
-    "build_onboarding": "honeycombs/boot_online/builder/build_onboarding.py",
-    "build_mge_workflow": ".github/workflows/build-mge-graph.yml",
-    "build_onboarding_workflow": ".github/workflows/build-onboarding.yml"
-  },
-  "key_links": {
-    "github_pages": "https://voodoomushroomzzz-source.github.io/mandala-core/",
-    "graph_html": "https://voodoomushroomzzz-source.github.io/mandala-core/honeycombs/fruits/mge/output/mandala_graph.html",
-    "graph_json": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/fruits/mge/output/mandala_graph.json",
-    "onboarding_raw": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc.json",
-    "onboarding_api": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/boot_online/boot_online_onboarding_pc.json?ref=main"
-  },
-  "next_steps": [
-    "1. Загрузить новый онбординг v1.7.191 в новый чат",
-    "2. SR читает онбординг — должен увидеть step_2_core_map + step_3_mandala_graph",
-    "3. ТЕСТ: поймёт ли SR самостоятельно, что 20 broken refs + 2 missing + 5 format mismatches нужно исправить?",
-    "4. Если поймёт — SR должен сам предложить почистить works/index.json",
-    "5. Потом: визуальная полировка, пароль на Pages, seeds inbox"
-  ],
-  "handoff_instruction": {
-    "for_sr": "Прочитай файл. Загрузи онбординг v1.7.191 по ссылке. Сравни core_map (эталон) с mandala_graph (снимок). Заметь: 20 broken refs, 2 missing nodes, 5 format mismatches. Вопрос к Садовнику: 'Вижу расхождения. Нужно ли их исправлять?' — это ТЕСТ."
+  "how_to_use": {
+    "for_sr": "Прочитай этот файл и актуальный profile_deep.json. Подтверди, что понял контекст (философский чат, без имён, поддержка пути). Затем спроси, о чём Садовник хочет поразмышлять сегодня."
   }
 }
