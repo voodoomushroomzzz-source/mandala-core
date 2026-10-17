@@ -328,6 +328,14 @@
       "progress": 0
     },
     {
+      "id": "W-T-20261017-MGE-BUNDLE",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20261017-MGE-BUNDLE.json",
+      "description": "",
+      "deadline": "2026-11-15",
+      "progress": 0
+    },
+    {
       "id": "fruit-gentle-companion-001",
       "type": "fruit",
       "path": "honeycombs/fruits/gentle_companion/index.json",
@@ -666,6 +674,11 @@
       "type": "contains"
     },
     {
+      "from": "works",
+      "to": "W-T-20261017-MGE-BUNDLE",
+      "type": "contains"
+    },
+    {
       "from": "W-R-ECOMM-001",
       "to": "W-R-RM-014",
       "type": "related_works"
@@ -713,6 +726,11 @@
     {
       "from": "W-T-20260803-SR-EVALUATION",
       "to": "W-T-20260803-RL-REASONING",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20261017-MGE-BUNDLE",
+      "to": "W-T-20261015-MGE",
       "type": "related_works"
     },
     {
@@ -832,11 +850,11 @@
     }
   ],
   "analysis": {
-    "total_nodes": 61,
-    "total_edges": 75,
+    "total_nodes": 62,
+    "total_edges": 77,
     "by_type": {
       "honeycomb": 17,
-      "work": 26,
+      "work": 27,
       "fruit": 8,
       "knowledge": 8,
       "missing": 2
@@ -963,12 +981,12 @@
       "W-T-20260511-MANUS",
       "W-T-20260807-MEMORY"
     ],
-    "reachable_from_core": 61,
+    "reachable_from_core": 62,
     "unreachable": [],
     "top_hubs": [
       {
         "id": "works",
-        "degree": 27
+        "degree": 28
       },
       {
         "id": "core_map",
