@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-10-16",
+    "updated": "2026-10-17",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 29,
-    "total_size_kb": 3988.23,
+    "total_size_kb": 4148.05,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,8 +44,8 @@
   },
   "registry": {
     "total_files": 29,
-    "total_size_kb": 3988.23,
-    "last_updated": "2026-10-16",
+    "total_size_kb": 4148.05,
+    "last_updated": "2026-10-17",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
   },
@@ -63,7 +63,13 @@
           "W-T-20261015-MGE__mandala_graph_explorer.json: missing required field 'status'",
           "W-T-20261015-MGE__mandala_graph_explorer.json: missing required field 'priority'",
           "W-T-20261015-MGE__mandala_graph_explorer.json: missing required field 'horizon'",
-          "W-T-20261015-MGE__mandala_graph_explorer.json: missing work_id"
+          "W-T-20261015-MGE__mandala_graph_explorer.json: missing work_id",
+          "W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json: missing required field 'work_id'",
+          "W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json: missing required field 'name'",
+          "W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json: missing required field 'status'",
+          "W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json: missing required field 'priority'",
+          "W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json: missing required field 'horizon'",
+          "W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json: missing work_id"
         ],
         "warnings": [],
         "expired_tasks": [
@@ -71,65 +77,65 @@
             "work_id": "W-T-20260511-MANUS",
             "name": "Manus — Hands of Mandala (исполнительный слой v1)",
             "deadline": "2026-08-31",
-            "days_overdue": 46
+            "days_overdue": 47
           },
           {
             "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
             "name": "Unified Memory Architecture — Lemmalog + ACM + RENDER",
             "deadline": "2026-10-15",
-            "days_overdue": 1
+            "days_overdue": 2
           },
           {
             "work_id": "W-T-20260511-ENGCHAT",
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "deadline": "2026-08-15",
-            "days_overdue": 62
+            "days_overdue": 63
           },
           {
             "work_id": "W-R-RM-012",
             "name": "First Living Products — Mandala MVPs",
             "deadline": "2026-09-01",
-            "days_overdue": 45
+            "days_overdue": 46
           },
           {
             "work_id": "W-T-20260807-MEMORY__mandala_memory_layer",
             "name": "Mandala Memory Layer — Долговременная семантическая память для SR",
             "deadline": "2026-10-15",
-            "days_overdue": 1
+            "days_overdue": 2
           },
           {
             "work_id": "W-T-20260728-AI-GATEWAY",
             "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
             "deadline": "2026-09-30",
-            "days_overdue": 16
+            "days_overdue": 17
           },
           {
             "work_id": "W-T-20260511-ARCHBOT",
             "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
             "deadline": "2026-09-15",
-            "days_overdue": 31
+            "days_overdue": 32
           },
           {
             "work_id": "W-R-20260814-PERSONAL-MIGRATION",
             "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
             "deadline": "2026-08-31",
-            "days_overdue": 46
+            "days_overdue": 47
           },
           {
             "work_id": "W-T-20260408-1030",
             "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
             "deadline": "2026-08-31",
-            "days_overdue": 46
+            "days_overdue": 47
           },
           {
             "work_id": "W-T-20260418-SYM",
             "name": "SYM Implementation — System for Measuring Mandala Growth",
             "deadline": "2026-10-01",
-            "days_overdue": 15
+            "days_overdue": 16
           }
         ],
         "upcoming_deadlines": [],
-        "errors_count": 6,
+        "errors_count": 12,
         "warnings_count": 0,
         "expired_count": 10,
         "upcoming_count": 0
@@ -156,6 +162,7 @@
           "poetry: missing identity.type"
         ],
         "warnings": [
+          "output: missing index.json",
           "personal: missing index.json",
           "music: missing meta section",
           "x_deaddy_x: missing meta section",
@@ -168,7 +175,7 @@
         ],
         "noise_files": [],
         "errors_count": 18,
-        "warnings_count": 9,
+        "warnings_count": 10,
         "noise_count": 0
       },
       "deadline_sentinel": {
@@ -178,70 +185,70 @@
             "name": "Manus — Hands of Mandala (исполнительный слой v1)",
             "type": "works",
             "deadline": "2026-08-31",
-            "days_overdue": 46
+            "days_overdue": 47
           },
           {
             "id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
             "name": "Unified Memory Architecture — Lemmalog + ACM + RENDER",
             "type": "works",
             "deadline": "2026-10-15",
-            "days_overdue": 1
+            "days_overdue": 2
           },
           {
             "id": "W-T-20260511-ENGCHAT",
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "type": "works",
             "deadline": "2026-08-15",
-            "days_overdue": 62
+            "days_overdue": 63
           },
           {
             "id": "W-R-RM-012",
             "name": "First Living Products — Mandala MVPs",
             "type": "works",
             "deadline": "2026-09-01",
-            "days_overdue": 45
+            "days_overdue": 46
           },
           {
             "id": "W-T-20260807-MEMORY__mandala_memory_layer",
             "name": "Mandala Memory Layer — Долговременная семантическая память для SR",
             "type": "works",
             "deadline": "2026-10-15",
-            "days_overdue": 1
+            "days_overdue": 2
           },
           {
             "id": "W-T-20260728-AI-GATEWAY",
             "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
             "type": "works",
             "deadline": "2026-09-30",
-            "days_overdue": 16
+            "days_overdue": 17
           },
           {
             "id": "W-T-20260511-ARCHBOT",
             "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
             "type": "works",
             "deadline": "2026-09-15",
-            "days_overdue": 31
+            "days_overdue": 32
           },
           {
             "id": "W-R-20260814-PERSONAL-MIGRATION",
             "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
             "type": "works",
             "deadline": "2026-08-31",
-            "days_overdue": 46
+            "days_overdue": 47
           },
           {
             "id": "W-T-20260408-1030",
             "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
             "type": "works",
             "deadline": "2026-08-31",
-            "days_overdue": 46
+            "days_overdue": 47
           },
           {
             "id": "W-T-20260418-SYM",
             "name": "SYM Implementation — System for Measuring Mandala Growth",
             "type": "works",
             "deadline": "2026-10-01",
-            "days_overdue": 15
+            "days_overdue": 16
           }
         ],
         "upcoming": [],
@@ -261,13 +268,13 @@
         "root_count": 21,
         "root_threshold": 10,
         "root_status": "warning",
-        "inbox_count": 474,
-        "inbox_total_files": 475,
+        "inbox_count": 480,
+        "inbox_total_files": 481,
         "inbox_threshold": 50,
         "inbox_status": "warning",
         "warnings": [
           "Корень seeds/: 21 файлов (порог 10)",
-          "Inbox: 474 новых файлов (порог 50)"
+          "Inbox: 480 новых файлов (порог 50)"
         ],
         "status": "warning"
       }
@@ -276,13 +283,13 @@
       "root_count": 21,
       "root_threshold": 10,
       "root_status": "warning",
-      "inbox_count": 474,
-      "inbox_total_files": 475,
+      "inbox_count": 480,
+      "inbox_total_files": 481,
       "inbox_threshold": 50,
       "inbox_status": "warning",
       "warnings": [
         "Корень seeds/: 21 файлов (порог 10)",
-        "Inbox: 474 новых файлов (порог 50)"
+        "Inbox: 480 новых файлов (порог 50)"
       ],
       "status": "warning"
     }
