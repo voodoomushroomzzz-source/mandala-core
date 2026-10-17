@@ -1,9 +1,9 @@
 {
   "identity": {
     "name": "Instagram — позиционирование и контент",
-    "version": "v1.11.0",
+    "version": "v1.13.0",
     "created": "2026-08-20",
-    "updated": "2026-10-04",
+    "updated": "2026-10-17",
     "description": "Стратегия и контент-план для Instagram. Работа циклами: Stories → сбор → Reels."
   },
   "profile": {
@@ -191,9 +191,9 @@
       {
         "id": "CYCLE-002",
         "theme": "Движение",
-        "status": "in_progress",
+        "status": "completed",
         "start_date": "2026-09-11",
-        "end_date": null,
+        "end_date": "2026-10-17",
         "stories": [
           {
             "date": "2026-09-16",
@@ -235,14 +235,24 @@
           {
             "topic": "Внешнее движение: тело, спорт, дисциплина, достижения",
             "text": null,
-            "status": "planned",
-            "order": 3
+            "status": "published",
+            "order": 3,
+            "key_insights": [
+              "Внешнее движение — это внешние проявления. Достижения, коммуникации, цели, творческие проявления.",
+              "Опасность перекоса. Когда концентрируемся на материи и внешнем — теряем духовность и внутреннее.",
+              "Потребность в балансе. Многогранные организмы должны развиваться гармонично.",
+              "Дзен и ленивый подход. Нужно ловить баланс во всём, делать это в своём ритме, без насилия."
+            ]
           },
           {
             "topic": "Отношения",
             "text": null,
-            "status": "planned",
-            "order": 4
+            "status": "published",
+            "order": 4,
+            "key_insights": [
+              "Отношения — это отдельный вектор движения, который влияет на общую гармонию.",
+              "Важно осознанно подходить к тому, как отношения вписываются в жизнь."
+            ]
           }
         ],
         "reel_made": false
@@ -279,6 +289,18 @@
           "Наушники как способ создать внутреннюю тишину.",
           "Владимир как место силы и тишины.",
           "Тишина между людьми — показатель глубины и прочности связи."
+        ],
+        "reel_made": false
+      },
+      {
+        "cycle_id": "CYCLE-002",
+        "theme": "Движение",
+        "stories_count": 4,
+        "key_insights": [
+          "Движение — основа жизни: внешнее и внутреннее.",
+          "Взгляд внутрь себя — фундаментальное движение, требующее честности и воли.",
+          "Внешнее движение (достижения, творчество) без внутреннего создаёт перекос.",
+          "Важно искать баланс (дзен) и проживать отношения как отдельный осознанный вектор."
         ],
         "reel_made": false
       }
@@ -347,7 +369,7 @@
     ],
     "purpose": "Сбор чистой статистики для понимания, какие темы заходят, а какие нет."
   },
-  "last_updated": "2026-10-04",
+  "last_updated": "2026-10-17",
   "reels_formats": {
     "description": "Три формата Reels. Каждый — минимум 1 раз в месяц. Дистанция между любыми Reels — минимум 7 дней.",
     "rule": "MIN 7 DAYS BETWEEN ANY REELS. MIN 7 DAYS BETWEEN POST AND REELS.",
@@ -405,7 +427,29 @@
       "tracks": [
         "Московские прятки — Те Дни Прошли, Их Не Вернуть",
         "Eto Leon — Чувства"
-      ]
+      ],
+      "strategy": {
+        "format": "Один припев — одно состояние",
+        "description": "Короткий Reel (15-25 сек) под один припев, где через эмоцию/ситуацию передается состояние. Легко снимать, не требует монтажа.",
+        "structure": [
+          "0-2 сек: Хук. Сразу действие/эмоция + текст на экране.",
+          "2-20 сек: Припев. Исполнение (кривляние/пение).",
+          "20-25 сек: Финал. Резкая смена эмоции или обрыв."
+        ],
+        "example_ideas": [
+          "Припев, когда никто не видит (дома, полное расслабление)",
+          "Когда услышал любимый припев в наушниках (внутри пожар, снаружи тихо)",
+          "Пытаюсь петь серьезно, но не получается (срыв в смех)"
+        ],
+        "rules": [
+          "1 Trial Reel в неделю (стабильность важнее частоты).",
+          "Текст на экране в первые 2 секунды (хук + ключевые слова).",
+          "Хештеги: #исполняю #настроение #музыка.",
+          "Не удалять неудачные Reels (оставлять как данные).",
+          "Ждать 48 часов для оценки результатов."
+        ],
+        "note": "Предыдущие тестовые Reels удалены (были низкие показатели). Начинаем с чистого листа."
+      }
     }
   },
   "audience_tracker": {
@@ -426,49 +470,48 @@
     "instagram": {
       "handle": "@xdeaddyx",
       "current": {
-        "followers": 244,
-        "followers_gain_30d": 8,
+        "followers": 250,
+        "followers_gain_30d": 6,
         "stories_views_avg": 50,
         "stories_views_avg_previous": 30,
-        "measured_date": "2026-10-04"
+        "measured_date": "2026-10-17"
       },
       "history": [
         {
-          "date": "2026-10-04",
+          "date": "2026-10-17",
           "period": "last_30_days",
-          "followers": 244,
-          "followers_gain_30d": 8,
-          "total_views_30d": 5691,
-          "stories_views_30d": 4500,
-          "posts_views_30d": 1100,
-          "reels_views_30d": 69,
-          "viewers_total": 925,
-          "followers_share_pct": 61.4,
-          "non_followers_share_pct": 38.6,
-          "interactions_stories": 285,
-          "interactions_posts": 28,
+          "followers": 250,
+          "followers_gain_30d": 6,
+          "total_views_30d": 5811,
+          "stories_views_30d": 4400,
+          "posts_views_30d": 956,
+          "reels_views_30d": 365,
+          "reels_type": "Trial Reels only (no public Reels published yet)",
+          "viewers_total": 612,
+          "interactions_stories": 339,
+          "interactions_posts": 24,
           "interactions_reels": 1,
-          "profile_visits": 145,
+          "profile_visits": 146,
           "bio_link_clicks": 3,
           "top_content": [
             {
-              "views": 646,
-              "type": "post"
+              "views": 273,
+              "type": "post_coffee"
             },
             {
               "views": 273,
-              "type": "post"
+              "type": "post_son"
             },
             {
-              "views": 273,
-              "type": "post"
+              "views": 267,
+              "type": "post_embankment"
             },
             {
-              "views": 214,
-              "type": "post"
+              "views": 194,
+              "type": "post_latte"
             }
           ],
-          "notes": "Stories доминируют (79% охвата). Reels практически не используются. Reach 3.8x от базы."
+          "notes": "ВСЕ 365 просмотров Reels — это Trial Reels (на холодную аудиторию). Публичных Reels не было. Это отличный результат для теста."
         }
       ]
     },
@@ -477,15 +520,16 @@
         "followers": 0,
         "measured_date": "2026-10-04",
         "videos_published": 1,
-        "notes": "ISP-001 опубликован 04.10. Ритм: ~1 видео в неделю."
+        "notes": "Аккаунт заморожен. 0 просмотров из-за отсутствия активности и прогрева."
       },
-      "history": []
+      "history": [],
+      "status": "frozen"
     },
     "growth_metrics": {
       "stories_views_trend": "up",
       "followers_trend": "up",
-      "reach_ratio": 3.8,
-      "stories_dominance_pct": 79,
+      "reach_ratio": 2.5,
+      "stories_dominance_pct": 75,
       "last_significant_change": "2026-10-04",
       "notes": "Stories — главный канал (79% охвата). Reels не используются. Reach 3.8x от базы. Конверсия в подписку 0.14% (можно усилить).",
       "historical_context": {
@@ -500,7 +544,8 @@
         },
         "growth_factor": "5.7x",
         "notes": "Рост охвата в 5.7x за 1.5–2 месяца. Системная работа с циклами Stories + рубрикой Исполняю дала результат."
-      }
+      },
+      "reels_growth": "5x (Trial Reels only)"
     }
   },
   "ispolnyayu_tracker": {
@@ -525,7 +570,8 @@
             "views": null,
             "likes": null,
             "comments": null,
-            "note": "Опубликован. Первые данные через 24-48ч."
+            "note": "Заморожено вместе с аккаунтом.",
+            "status": "frozen"
           }
         }
       }
@@ -549,7 +595,8 @@
           "views": null,
           "likes": null,
           "comments": null,
-          "note": "Планируется в конце недели, чтобы сохранить равномерный ритм активности"
+          "note": "Отменено из-за заморозки аккаунта TikTok.",
+          "status": "cancelled"
         }
       }
     },
