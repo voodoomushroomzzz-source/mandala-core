@@ -2024,11 +2024,40 @@
           "column": "Операционка — Общая"
         },
         "archived_at": "2026-10-19"
+      },
+      {
+        "id": "K-019",
+        "title": "Аудит и структурирование закупок: 3 типа + Google Forms + списания",
+        "description": "✅ ЗАВЕРШЕНО (19.10.2026). Система автоматизации закупок v10.1.0 внедрена.\n\nЧто сделано:\n1. Google Forms + Google Sheets (Нижка + Центр).\n2. Архивация с заменой блоков по неделям.\n3. Защита от дублей: повторная отправка за день заменяет старую.\n4. Умный merge журнала.\n5. Разделение меню (Управление / Технические).",
+        "priority": "critical",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-31",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-084",
+          "K-100",
+          "K-101",
+          "K-110"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-10-19",
+        "completed": "2026-10-19",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "column": "Операционка — Общая",
+        "archived_at": "2026-10-19"
       }
     ],
-    "total": 83,
+    "total": 84,
     "by_status": {
-      "done": 72,
+      "done": 73,
       "cancelled": 11
     }
   },
