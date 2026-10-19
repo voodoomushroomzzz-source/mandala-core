@@ -49,7 +49,10 @@
     },
     "procurement_automation.json": {
       "version": "v10.0.0",
-      "description": "Система автоматизации закупок: ТЗ и эталонный код v10."
+      "description": "Система автоматизации закупок (v10). ТЗ и эталонный код Google Apps Script.",
+      "when_to_use": "Если задача касается закупок, инвентаризации, Google Forms или Sheets для Куртоша.",
+      "how_to_load": "Запросить через API/RAW по пути: honeycombs/personal/kurtoch/procurement_automation.json",
+      "not_in_bundle": "Файл исключен из bundle из-за размера. Подгружается только по необходимости."
     }
   },
   "scripts": {

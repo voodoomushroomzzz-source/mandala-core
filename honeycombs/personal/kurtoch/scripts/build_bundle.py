@@ -20,7 +20,6 @@ MODULES = {
     "taskboard_archive": "taskboard_archive.json",
     "team": "team.json",
     "knowledge_base": "knowledge_base.json",
-    "procurement_automation": "procurement_automation.json",
 }
 
 EXCLUDE_SCRIPTS = {"notion_token.txt", "__pycache__"}
