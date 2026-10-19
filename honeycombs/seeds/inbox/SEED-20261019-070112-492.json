@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261019-070112-492",
+  "title": "RTISSLAM-3D: Full 6-DoF SLAM With an In-Air 3D Imaging Sonar",
+  "url": "https://arxiv.org/abs/2610.22552",
+  "description": "arXiv:2610.22552v1 Announce Type: new \nAbstract: Echolocating bats navigate dense forests using sonar alone, and in-air 3D imaging sonars now capture the entire frontal hemisphere with every pulse. Sonar SLAM, however, has so far been planar: current systems estimate a 2D trajectory and discard the elevation information in the sonar images, an assumption that does not hold on rough and sloped terrain such as a forest floor. In this paper, we introduce RTISSLAM-3D, a novel 6-DoF SLAM system for a",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-19T07:01:12.051894",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

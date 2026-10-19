@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261019-070109-485",
+  "title": "From Events to Reasoning: Hierarchical Rule Composition over Explicit States",
+  "url": "https://arxiv.org/abs/2610.22403",
+  "description": "arXiv:2610.22403v1 Announce Type: new \nAbstract: What a reasoning system emits is a conclusion; what it owes is a justification. Producing one requires every operation to be admissible on the facts actually available, the dependencies of intermediate results to survive to the end of the path, and the path to be revised when a premise changes. We present the Event Reasoning System (ERS), in which the reasoning state is an explicit event graph. Semantic features nominate candidate objects and rule",
+  "source": "arXiv AI",
+  "collected_at": "2026-10-19T07:01:09.648560",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

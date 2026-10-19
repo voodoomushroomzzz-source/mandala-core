@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261019-070111-490",
+  "title": "Has GPT-6-Astra Achieved Embodied Intelligence?",
+  "url": "https://arxiv.org/abs/2610.22471",
+  "description": "arXiv:2610.22471v1 Announce Type: new \nAbstract: GPT-6-Astra demonstrates a level of competence in robotic manipulation and navigation that challenges the conventional paradigm of building specialized models for individual tasks and embodiments. In this report, we ask not only how capable GPT-6-Astra is, but what its capabilities imply for the field. First, we probe the limits of standalone GPT-6-Astra. We conduct a large-scale evaluation across 12 representative benchmarks spanning tabletop man",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-19T07:01:11.444647",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

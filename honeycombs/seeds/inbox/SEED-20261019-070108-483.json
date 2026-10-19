@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261019-070108-483",
+  "title": "Structured Authority Injection: Persistent Human Control for LLM Agents via Typed MCP Overrides",
+  "url": "https://arxiv.org/abs/2610.22373",
+  "description": "arXiv:2610.22373v1 Announce Type: new \nAbstract: LLM-based agents are increasingly used as autonomous orchestrators in distributed and multi-agent systems, yet a control gap remains: no protocol-level mechanism allows human operators to inject binding directives that persist across planning cycles. Free-text overrides suffer from ambiguous interpretation due to lack of schema validation and from authority erosion as operator instructions lose influence within accumulating context. We propose Str",
+  "source": "arXiv AI",
+  "collected_at": "2026-10-19T07:01:08.989088",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
