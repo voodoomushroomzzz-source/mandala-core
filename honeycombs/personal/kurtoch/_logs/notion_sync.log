@@ -1316,3 +1316,32 @@ Notion: 131 страниц
   Создано новых: 0
 
 [3/3] git commit + push
+
+================================================================
+[2026-10-19 21:21:55] runner: full_sync
+================================================================
+[1/3] archive_done.py
+Нет задач для архивации.
+
+[2/3] push_taskboard.py
+  + архив: 85 задач
+Mandala: 131 задач
+Notion: 131 страниц
+
+  ! network error (URLError), retry in 1s...
+  ! network error (URLError), retry in 1s...
+  ! network error (URLError), retry in 1s...
+  ! network error (URLError), retry in 2s...
+  ! network error (URLError), retry in 4s...
+  [K-024 | Описание обновлено] Лампочки Центр
+
+=== Итог ===
+  Обновлено Статус: 0
+  Обновлено ID: 0
+  Обновлено Столбец: 0
+  Обновлено Дедлайн: 0
+  Обновлено Название (префикс): 0
+  Обновлено Описание: 1
+  Создано новых: 0
+
+[3/3] git commit + push
