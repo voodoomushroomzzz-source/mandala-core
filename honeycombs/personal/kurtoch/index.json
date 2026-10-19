@@ -46,6 +46,10 @@
     "kurtoch_bundle.json": {
       "version": "v1.0.0",
       "description": "Единый файл онбординга (автосборка)."
+    },
+    "procurement_automation.json": {
+      "version": "v10.0.0",
+      "description": "Система автоматизации закупок: ТЗ и эталонный код v10."
     }
   },
   "scripts": {
@@ -102,7 +106,8 @@
       "knowledge_base.json",
       "scripts/",
       "_logs/",
-      "_snapshots/"
+      "_snapshots/",
+      "procurement_automation.json"
     ]
   },
   "health": {
