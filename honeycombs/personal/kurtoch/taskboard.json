@@ -71,12 +71,12 @@
         "status": "todo",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": "2026-10-15",
+        "deadline": "2026-11-01",
         "reminder": null,
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-14",
-        "updated": "2026-10-07",
+        "updated": "2026-10-19",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -836,7 +836,7 @@
         "title": "Ежемесячные отчёты (финансы / SMM / персонал)",
         "description": "Ежемесячные отчёты по трём направлениям. Дедлайн — до 4-го числа следующего месяца.\n\n1) Финансы — от Крис (удалёнка). Бюджеты, фонды, оплата труда, закупки.\n2) SMM — отбивка по контент-плану: что планировалось, что сделано, что изменилось.\n3) Персонал — от шеф-бариста. По сотрудникам: уровень, обучение, кто чему учится.",
         "priority": "high",
-        "status": "todo",
+        "status": "done",
         "horizon": "strategic",
         "phase": "phase_0",
         "deadline": "2026-10-12",
@@ -847,8 +847,8 @@
         ],
         "reminder": null,
         "created": "2026-09-28",
-        "updated": "2026-10-05",
-        "completed": null,
+        "updated": "2026-10-19",
+        "completed": "2026-10-19",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -1034,7 +1034,7 @@
         "title": "Рассчитать Сашу-стажёра (EMP-006)",
         "description": "Расчёт Саши-стажёра (EMP-006).\n\nСумма: ~8 000 ₽ (39 ч × 200 ₽/ч).\nСмен: 3. Аванс уже выдан (10.1 / 10.2 / 10.3).\nФинал: 8 000 ₽.\n\nСпособ: инкассация в кассе налом. Подписать (инкас фин. сш), сообщить об изъятии из кассы, внести в операционку.\n\nДедлайн: 19.10.2026 (понедельник).",
         "priority": "medium",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-10-19",
@@ -1044,8 +1044,8 @@
           "EMP-006"
         ],
         "created": "2026-10-14",
-        "updated": "2026-10-14",
-        "completed": null,
+        "updated": "2026-10-19",
+        "completed": "2026-10-19",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -1149,7 +1149,7 @@
         "status": "todo",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": "2026-10-19",
+        "deadline": "2026-10-21",
         "reminder": null,
         "depends_on": [],
         "related_to": [
@@ -1158,7 +1158,7 @@
           "EMP-016"
         ],
         "created": "2026-10-15",
-        "updated": "2026-10-15",
+        "updated": "2026-10-19",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -1268,9 +1268,10 @@
     "counters": {
       "total": 47,
       "by_status": {
-        "todo": 44,
+        "todo": 42,
         "in_progress": 2,
-        "planning": 1
+        "planning": 1,
+        "done": 2
       },
       "by_priority": {
         "medium": 23,
