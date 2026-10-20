@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-20T15:11:44Z",
+    "generated_at": "2026-10-20T15:39:18Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -4746,7 +4746,7 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.9.0",
+      "version": "v1.8.3",
       "created": "2026-09-23",
       "updated": "2026-10-20",
       "layer": 2,
@@ -4758,13 +4758,13 @@
       "resonance": "100%"
     },
     "team_roster": {
-      "last_updated": "2026-10-16",
+      "last_updated": "2026-10-20",
       "total_employees": 20,
       "by_status": {
         "core": 2,
         "working": 6,
         "left": 5,
-        "paused": 4,
+        "stopped": 4,
         "substitute": 1,
         "management": 2
       },
@@ -5073,13 +5073,13 @@
             "base": "200 руб/ч",
             "notes": "Стажёр (лайт). Временно на паузе."
           },
-          "status": "paused",
+          "status": "stopped",
           "risks": [],
           "notes": "Временно на паузе. Недостаточный уровень мастерства / не подходит.",
           "data_gaps": [
             "nijka.attitude"
           ],
-          "updated": "2026-10-14",
+          "updated": "2026-10-20",
           "vacation": {
             "planned": [],
             "history": []
@@ -5117,7 +5117,7 @@
             "base": null,
             "notes": "Ранер. Временно на паузе."
           },
-          "status": "left",
+          "status": "stopped",
           "risks": [],
           "notes": "Бегунок (ранер). | Не работает с 2026-10-20 (раннер).",
           "data_gaps": [
@@ -5127,7 +5127,7 @@
             "planned": [],
             "history": []
           },
-          "updated": "2026-10-14"
+          "updated": "2026-10-20"
         },
         {
           "id": "EMP-008",
@@ -5161,7 +5161,7 @@
             "base": null,
             "notes": "Ранер. Временно на паузе."
           },
-          "status": "left",
+          "status": "stopped",
           "risks": [],
           "notes": " | Не работает с 2026-10-20 (раннер).",
           "data_gaps": [
@@ -5171,7 +5171,7 @@
             "planned": [],
             "history": []
           },
-          "updated": "2026-10-14"
+          "updated": "2026-10-20"
         },
         {
           "id": "EMP-009",
@@ -5592,7 +5592,7 @@
             "base": "200 руб/ч",
             "notes": "Стажёр. В паузе — нет необходимости."
           },
-          "status": "paused",
+          "status": "stopped",
           "risks": [],
           "notes": "Собеседование 28.09. Договорились на 2 обучающие смены на след. неделе. Обе точки.",
           "data_gaps": [
@@ -5603,7 +5603,7 @@
             "planned": [],
             "history": []
           },
-          "updated": "2026-10-14"
+          "updated": "2026-10-20"
         },
         {
           "id": "EMP-018",
