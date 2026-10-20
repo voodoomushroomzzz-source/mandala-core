@@ -9,7 +9,7 @@
   "total": {
     "poems": 44,
     "prose": 11,
-    "works": 54
+    "works": 55
   },
   "readiness_gate": {
     "principle": "Минимальный порог готовности сборника к редакции и изданию. Возможно больше по ходу.",
@@ -798,5 +798,5 @@
     "purpose": "Один файл для загрузки в любой External SR",
     "source": "Автосборка из honeycombs/personal/poetry/"
   },
-  "last_updated": "2026-09-25"
+  "last_updated": "2026-10-20"
 }
