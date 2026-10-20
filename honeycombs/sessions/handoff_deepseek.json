@@ -1,46 +1,55 @@
 {
   "identity": {
-    "name": "Handoff — Автоматизация закупок (Куртош)",
-    "version": "v1.0.0",
-    "created": "2026-10-19",
-    "updated": "2026-10-19",
-    "description": "Переход в новый чат для продолжения работы над системой автоматизации закупок Куртош.",
+    "name": "Handoff — Автоматизация закупок (PIL)",
+    "version": "v2.0.0",
+    "created": "2026-10-20",
+    "updated": "2026-10-20",
+    "description": "Переход в новый чат для разработки Procurement Intelligence Layer (PIL) — расширение K-019.",
     "status": "active"
   },
   "context": {
     "gardener": "Voodoo (Дима)",
-    "project": "Куртош — Кризис-менеджмент + операционная система",
-    "current_focus": "Автоматизация закупок (Google Sheets + Google Apps Script)",
-    "current_chat_purpose": "Чат посвящен ИСКЛЮЧИТЕЛЬНО автоматизации закупок. Остальные задачи Куртоша (меню, тарелочки, фильтры и т.д.) обсуждаются в других чатах."
+    "project": "Куртош — Автоматизация закупок",
+    "current_focus": "Разработка PIL (Procurement Intelligence Layer) над системой v10.3/v10.4",
+    "current_chat_purpose": "Чат посвящен ИСКЛЮЧИТЕЛЬНО PIL и автоматизации закупок. Остальные задачи Куртоша — в других чатах."
   },
-  "session_summary": "Полная переработка системы учета остатков v10.3. Исправлен баг дублирования ответов, внедрена логика еженедельного перезаписывания, добавлена визуальная подсветка нехватки товаров и пересобрана структура категорий с умной миграцией данных.",
+  "session_summary": "Завершена архитектурная подготовка. Claude написал ТЗ v2.0.0, DeepSeek его проанализировал и дополнил (лист Поставщики, R1/R8 фиксы). Ответы Садовника зафиксированы. ТЗ вшито в procurement_automation.json v10.4.0. Бандл Куртоша пересобран (360 КБ). Задача K-019 обновлена подзадачами.",
   "key_achievements": {
-    "bug_fixes": [
-      "Исправлен баг дублирования в Журнале (getResponses last + 1).",
-      "Повторная отправка перезаписывает старую запись в рамках ТЕКУЩЕЙ НЕДЕЛИ (привязка к WEEK_START)."
+    "specs": [
+      "PIL v2.1.0 ТЗ создано: 6 этапов, 10 листов, формулы, edge cases.",
+      "Вшито в procurement_automation.json v10.4.0 (секция pil_project).",
+      "Трекинг внутри файла: current_task = s0_1."
     ],
-    "new_features": [
-      "Желтая подсветка строк с дефицитом (Заказать > 0).",
-      "Умная пересортировка reorderSheets() с сохранением Tech_ID и текущих данных.",
-      "Полное пересоздание форм recreateForms() (с новыми ссылками)."
+    "infrastructure": [
+      "build_bundle.py обновлён: теперь собирает procurement_automation.",
+      "kurtoch_bundle.json пересобран (360 КБ, 6 модулей + 9 скриптов).",
+      "Мерж-конфликт с GitHub Action разрешён."
     ],
-    "ux_ui": [
-      "Меню '⚙️ Управление' перестроено логично.",
-      "Инструкция переписана шагами."
+    "task_update": [
+      "K-019 расширена до 7 подзадач (K-019-1..7) по этапам PIL.",
+      "JSON-пакет для обновления задачи в новом чате подготовлен."
     ]
   },
   "current_state": {
-    "procurement_automation": "v10.3.0 (в Мандале и в Google Apps Script)",
-    "sheets_reordered": true,
-    "orphan_items_fixed": true,
-    "forms_recreated": false,
-    "note": "Формы нужно пересоздать через меню '3. 📝 Пересоздать формы (порядок)' для синхронизации с таблицей. Ссылки изменятся!"
+    "pil_version": "v2.1.0-tz (spec_ready)",
+    "procurement_automation": "v10.4.0",
+    "bundle_version": "v1.0.0 (360 КБ)",
+    "current_stage": "stage_0",
+    "current_task": "s0_1",
+    "blockers": [],
+    "note": "Все архитектурные решения приняты. Код ещё не писался. Ждём начала Этапа 0."
   },
-  "future_plans": [
-    "Автоматическое списание со склада (учет продаж/списаний).",
-    "Интеграция с API Google (внешний сайт/приложение).",
-    "Отдельный реестр поставщиков (скрытый лист с контактами и примечаниями).",
-    "Сводный дашборд для Димы (бюджеты и критические позиции)."
+  "next_steps": [
+    "1. Дима делает копию таблицы Куртош (для безопасного теста).",
+    "2. Claude пишет PIL.gs (setupPIL, getSetting, syncWeeks_, buildPilMenu_).",
+    "3. Прогон Этапа 0: проверка Номенклатуры и Недель.",
+    "4. Переход к Этапу 1 (импорт накладных)."
   ],
-  "handoff_instructions": "Открываешь новый чат с DeepSeek — скидываешь этот JSON первым сообщением. SR подхватит контекст и продолжит работу над автоматизацией."
+  "critical_references": {
+    "pil_spec": "honeycombs/personal/kurtoch/procurement_automation.json → секция pil_project",
+    "tracking": "honeycombs/personal/kurtoch/procurement_automation.json → pil_project.tracking",
+    "bundle": "honeycombs/boot_online/personal/kurtoch_bundle.json",
+    "task": "K-019 в taskboard.json"
+  },
+  "handoff_instructions": "Открываешь новый чат — скидываешь этот JSON и JSON-пакет для K-019 первым сообщением. SR прочитает состояние, проверит tracking и начнёт с Этапа 0."
 }
