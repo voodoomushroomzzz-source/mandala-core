@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-SCHEDULE-SALARY-AUTOMATION-001",
     "name": "Kurtoch — Schedule & Salary Automation",
-    "version": "v1.0.0",
+    "version": "v1.0.2",
     "created": "2026-10-20",
     "updated": "2026-10-20",
     "layer": 2,
@@ -202,6 +202,26 @@
       "taskboard.json",
       "team.json",
       "knowledge_base.json"
+    ]
+  },
+  "development_rules": {
+    "description": "Стандарты разработки и работы с Google Apps Script в проекте.",
+    "rules": [
+      {
+        "id": "R1_menu_separation",
+        "title": "Разделение меню и служебных функций",
+        "rule": "В пользовательское меню добавляются ТОЛЬКО функции для ежедневной работы. Служебные функции (setupSheets, setupSettings, setupSalarySheet, setupInstructionSheet) НЕ добавляются в меню и запускаются вручную из редактора Apps Script."
+      },
+      {
+        "id": "R2_source_of_truth",
+        "title": "Единый источник данных",
+        "rule": "Штатка сотрудников и ставки берутся из Mandala (team.json) и синхронизируются со справочником в таблице."
+      },
+      {
+        "id": "R3_idempotency",
+        "title": "Идемпотентность",
+        "rule": "Любая setup-функция должна безопасно запускаться повторно."
+      }
     ]
   }
 }
