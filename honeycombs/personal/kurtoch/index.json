@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.8.0",
+    "version": "v2.9.0",
     "created": "2026-09-23",
     "updated": "2026-10-20",
     "layer": 2,
@@ -48,11 +48,10 @@
       "description": "Единый файл онбординга (автосборка)."
     },
     "procurement_automation.json": {
-      "version": "v10.0.0",
-      "description": "Система автоматизации закупок (v10). ТЗ и эталонный код Google Apps Script.",
-      "when_to_use": "Если задача касается закупок, инвентаризации, Google Forms или Sheets для Куртоша.",
-      "how_to_load": "Запросить через API/RAW по пути: honeycombs/personal/kurtoch/procurement_automation.json",
-      "not_in_bundle": "Файл исключен из bundle из-за размера. Подгружается только по необходимости."
+      "version": "v10.4.0",
+      "description": "Закупки Куртош: ТЗ v10.3 + блок pil_project (PIL v2.1.0) — полное ТЗ, план, трекинг.",
+      "when_to_use": "Любая задача по закупкам, расходу, рекомендациям, накладным, ценам.",
+      "status": "active_with_pil_spec"
     }
   },
   "scripts": {
