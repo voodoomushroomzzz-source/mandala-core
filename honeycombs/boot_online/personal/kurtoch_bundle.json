@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-20T13:23:52Z",
+    "generated_at": "2026-10-20T14:29:54Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -798,9 +798,9 @@
       "identity": {
         "module_id": "KURTOCH-SCHEDULING-GUIDE-001",
         "name": "Scheduling Guide",
-        "version": "v1.0.0",
+        "version": "v1.1.0",
         "created": "2026-10-16",
-        "updated": "2026-10-16",
+        "updated": "2026-10-20",
         "description": "Правила и логика составления расписания смен Куртош.",
         "status": "active"
       },
@@ -828,6 +828,12 @@
           "all_days": {
             "base": 1
           }
+        },
+        "shift_times": {
+          "centre_full": "08:45 - 21:45",
+          "centre_dop": "16:00 - 21:45",
+          "nijka_full": "07:45 - 20:45",
+          "note": "Смены 11-19 и 11-17 упразднены. Используем только full, с 16, адм и ОТП."
         }
       },
       "rules": {
@@ -877,6 +883,17 @@
         "step_2": "Gardener сверяет в Google Sheets",
         "step_3": "Патч в Mandala — только после сверки",
         "step_4": "Перед началом — перепроверить день недели по календарю (16.10 = пт, 19.10 = пн)"
+      },
+      "design_rules": {
+        "history_order": "Новые недели сверху, старые снизу.",
+        "empty_cells": "Выходные не пишем (оставляем пустыми).",
+        "shift_formats": "full | с 16 | адм | ОТП",
+        "colors": {
+          "center": "#c6e0b4 (зеленый)",
+          "nijka": "#ffe699 (желтый)",
+          "vacation": "#c9daf8 (светло-синий)"
+        },
+        "instructions": "Красим ТОЛЬКО ячейки со сменами. Названия 'ЦЕНТР' и 'НИЖКА' выделяем соответствующими цветами строки. Если сотрудник в отпуске — пишем 'ОТП' на все дни отпуска и красим в светло-синий."
       }
     },
     "schedule_recent": {
