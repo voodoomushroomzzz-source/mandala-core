@@ -21,6 +21,8 @@ MODULES = {
     "team": "team.json",
     "knowledge_base": "knowledge_base.json",
     "procurement_automation": "procurement_automation.json",
+    "schedule_salary_automation": "schedule_salary_automation.json",
+
 }
 
 EXCLUDE_SCRIPTS = {"notion_token.txt", "__pycache__"}
