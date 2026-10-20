@@ -1,0 +1,207 @@
+{
+  "identity": {
+    "module_id": "KURTOCH-SCHEDULE-SALARY-AUTOMATION-001",
+    "name": "Kurtoch — Schedule & Salary Automation",
+    "version": "v1.0.0",
+    "created": "2026-10-20",
+    "updated": "2026-10-20",
+    "layer": 2,
+    "type": "automation_project",
+    "description": "Проект объединения графика смен и расчёта ЗП в единый Google Sheets с автоматизацией.",
+    "status": "active",
+    "priority": "critical",
+    "parent": "index.json",
+    "resonance": "100%"
+  },
+  "meta": {
+    "purpose": "Единый файл проекта: описание, архитектура, инструкции, план реализации и трекинг.",
+    "how_to_use": "Читать перед работой над автоматизацией. Обновлять tracking при прогрессе.",
+    "change_requires": "gardener_approval"
+  },
+  "project_description": {
+    "goal": "Объединить визуальный график смен и расчёт зарплаты в один Google Sheets файл с автоматическим пересчётом.",
+    "problems_solved": [
+      "Две отдельные таблицы (график и ЗП) синхронизируются вручную.",
+      "Сложная система премий и авансов, легко ошибиться.",
+      "Нет единого архива месяцев."
+    ],
+    "key_features": [
+      "Автоматический расчёт часов из графика.",
+      "Гибкая ставка (200/250/300 и корректировки).",
+      "Разделение выплат: аванс 24-го (1–15) и финал 9-го (16–31).",
+      "Ручной ввод больничных/отпускных.",
+      "Архивация закрытых месяцев одной кнопкой."
+    ]
+  },
+  "architecture": {
+    "google_sheets_file": "Kurtoch — График и ЗП (NEW)",
+    "sheets": {
+      "📅 График": "Визуальная сетка смен по неделям.",
+      "💰 ЗП (Актуальный)": "Расчётный лист: сотрудник, ставка, часы 1–15, аванс, часы 16–31, ЗП 9-го, больничные/отпускные, итог.",
+      "⚙️ Настройки": "Справочник сотрудников, ставки по умолчанию, словарь смен.",
+      "📦 Архив": "Копии закрытых месяцев (график + ЗП)."
+    }
+  },
+  "shift_dictionary": {
+    "description": "Правила преобразования текстовых обозначений в часы.",
+    "centre": {
+      "full": {
+        "label": "08:45–21:45",
+        "hours": 13
+      },
+      "с 16": {
+        "label": "16:00–21:45",
+        "hours": 5.75
+      },
+      "до 15": {
+        "label": "08:45–15:00",
+        "hours": 6.25
+      },
+      "11-19": {
+        "hours": 8
+      },
+      "адм": {
+        "hours": 0,
+        "note": "Административный день, не оплачивается по часам."
+      },
+      "ГУ": {
+        "hours": 13,
+        "note": "Для основных сотрудников — как full."
+      }
+    },
+    "nijka": {
+      "full": {
+        "label": "07:45–20:45",
+        "hours": 13
+      },
+      "с 16": {
+        "label": "16:00–20:45",
+        "hours": 4.75
+      },
+      "до 15": {
+        "label": "07:45–15:00",
+        "hours": 7.25
+      }
+    },
+    "special": {
+      "ОТП": {
+        "hours": 0,
+        "type": "отпуск"
+      },
+      "ВЫХ": {
+        "hours": 0,
+        "type": "выходной"
+      },
+      "ГУ стажёр": {
+        "hours": 0,
+        "fixed_payment": 2500,
+        "note": "Фиксированная выплата для стажёров."
+      }
+    }
+  },
+  "salary_logic": {
+    "levels": {
+      "trainee": {
+        "name": "Стажёр",
+        "default_rate": 200
+      },
+      "barista": {
+        "name": "Бариста",
+        "default_rate": 250
+      },
+      "senior": {
+        "name": "Старший бариста",
+        "default_rate": 300
+      }
+    },
+    "flexible_rate": "Ставка может быть изменена вручную (например, 245, 230).",
+    "payment_split": {
+      "advance": {
+        "date": 24,
+        "period": "1–15",
+        "formula": "hours_1_15 × rate"
+      },
+      "final": {
+        "date": 9,
+        "period": "16–31",
+        "formula": "hours_16_31 × rate + sick_leave"
+      }
+    },
+    "fixed_surcharges": {
+      "katrin_admin": 16000,
+      "note": "Фиксированная надбавка за администрирование."
+    }
+  },
+  "google_apps_script_plan": {
+    "functions": [
+      "generateSchedule(data) — заполняет лист «График» из JSON.",
+      "calculateSalary() — читает график, считает часы и заполняет «ЗП».",
+      "archiveMonth() — копирует текущие листы в «Архив» и очищает для нового месяца."
+    ],
+    "status": "not_started"
+  },
+  "implementation_plan": {
+    "stages": [
+      {
+        "stage": 1,
+        "name": "Создание файла Google Sheets",
+        "tasks": [
+          "Создать пустой файл, настроить доступ.",
+          "Создать листы: График, ЗП, Настройки, Архив.",
+          "Заполнить «Настройки» сотрудниками и словарём смен."
+        ],
+        "status": "not_started"
+      },
+      {
+        "stage": 2,
+        "name": "Написание Apps Script",
+        "tasks": [
+          "Написать generateSchedule().",
+          "Написать calculateSalary().",
+          "Написать archiveMonth().",
+          "Добавить меню в таблицу."
+        ],
+        "status": "not_started"
+      },
+      {
+        "stage": 3,
+        "name": "Тестирование",
+        "tasks": [
+          "Заполнить тестовый график.",
+          "Проверить расчёт ЗП против ручного.",
+          "Проверить архивацию."
+        ],
+        "status": "not_started"
+      },
+      {
+        "stage": 4,
+        "name": "Интеграция с Mandala",
+        "tasks": [
+          "Обновить scheduling_guide.",
+          "Обновить team.json (ставки).",
+          "Отметить прогресс в taskboard."
+        ],
+        "status": "not_started"
+      }
+    ]
+  },
+  "tracking": {
+    "current_stage": 1,
+    "progress_pct": 0,
+    "last_updated": "2026-10-20",
+    "notes": "Проект инициирован. Ожидается создание Google Sheets файла."
+  },
+  "instructions": {
+    "how_to_fill_schedule": "Использовать обозначения из shift_dictionary. Скрипт автоматически преобразует в часы.",
+    "how_to_calculate_salary": "Запустить calculateSalary() из меню. Проверить колонки «Часы 1–15» и «Часы 16–31».",
+    "how_to_archive": "Нажать «Архивировать месяц» в меню. Убедиться, что данные скопированы в «Архив»."
+  },
+  "navigation": {
+    "parent": "honeycombs/personal/kurtoch/index.json",
+    "siblings": [
+      "taskboard.json",
+      "team.json",
+      "knowledge_base.json"
+    ]
+  }
+}

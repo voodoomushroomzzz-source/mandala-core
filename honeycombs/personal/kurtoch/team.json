@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "KURTOCH-TEAM-001",
     "name": "Kurtoch — Team Roster",
-    "version": "v1.8.2",
+    "version": "v1.9.0",
     "created": "2026-09-23",
-    "updated": "2026-10-16",
+    "updated": "2026-10-20",
     "layer": 2,
     "type": "team_module",
-    "description": "Картотека сотрудников Куртош. 20 человек. v1.8.0: добавлено поле shifts_per_week (min/target/max/type) для активных сотрудников.",
+    "description": "Картотека сотрудников Куртош. 20 человек. v1.9.0: добавлена модель оплаты (3 уровня + гибкая ставка), раннеры переведены в left, синхронизировано с schedule_salary_automation.",
     "status": "active",
     "priority": "high",
     "parent": "index.json",
@@ -373,9 +373,9 @@
           "base": null,
           "notes": "Ранер. Временно на паузе."
         },
-        "status": "paused",
+        "status": "left",
         "risks": [],
-        "notes": "Бегунок (ранер).",
+        "notes": "Бегунок (ранер). | Не работает с 2026-10-20 (раннер).",
         "data_gaps": [
           "nijka.attitude"
         ],
@@ -417,9 +417,9 @@
           "base": null,
           "notes": "Ранер. Временно на паузе."
         },
-        "status": "paused",
+        "status": "left",
         "risks": [],
-        "notes": null,
+        "notes": " | Не работает с 2026-10-20 (раннер).",
         "data_gaps": [
           "nijka.attitude"
         ],
@@ -1070,5 +1070,29 @@
     "nastya": 20000,
     "note": "SMM-бюджет на месяц. Валя — курирование, Настя — контент.",
     "last_updated": "2026-10-12"
+  },
+  "compensation_model": {
+    "levels": {
+      "trainee": {
+        "name": "Стажёр",
+        "default_rate": 200
+      },
+      "barista": {
+        "name": "Бариста",
+        "default_rate": 250
+      },
+      "senior": {
+        "name": "Старший бариста",
+        "default_rate": 300
+      }
+    },
+    "flexible_rate": "Ставка может быть изменена вручную (245, 230 и т.д.).",
+    "payment_split": {
+      "advance_24": "1–15 число текущего месяца",
+      "final_9": "16–конец предыдущего месяца"
+    },
+    "fixed_surcharges": {
+      "katrin_admin": 16000
+    }
   }
 }
