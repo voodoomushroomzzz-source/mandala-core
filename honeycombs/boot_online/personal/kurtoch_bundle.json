@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-20T14:29:54Z",
+    "generated_at": "2026-10-20T15:02:23Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -29,12 +29,12 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.9.0",
+      "version": "v2.10.0",
       "created": "2026-09-23",
       "updated": "2026-10-20",
       "layer": 2,
       "type": "personal_subhub_index",
-      "description": "Хаб проекта 'Куртош'. v2.8.0: +scheduling_guide (правила расписания), +schedule_recent (последние 2 недели расписания).",
+      "description": "Хаб проекта 'Куртош'. v2.10.0: + schedule_salary_automation — проект автоматизации графика смен и расчёта ЗП в едином Google Sheets.",
       "status": "active",
       "priority": "critical",
       "tags": [
@@ -79,6 +79,11 @@
         "description": "Закупки Куртош: ТЗ v10.3 + блок pil_project (PIL v2.1.0) — полное ТЗ, план, трекинг.",
         "when_to_use": "Любая задача по закупкам, расходу, рекомендациям, накладным, ценам.",
         "status": "active_with_pil_spec"
+      },
+      "schedule_salary_automation.json": {
+        "version": "v1.0.0",
+        "description": "Проект автоматизации графика смен и расчёта ЗП в едином Google Sheets.",
+        "when_to_use": "Любая задача по автоматизации расписания, расчёту зарплаты, архивации месяцев."
       }
     },
     "scripts": {
@@ -136,7 +141,8 @@
         "scripts/",
         "_logs/",
         "_snapshots/",
-        "procurement_automation.json"
+        "procurement_automation.json",
+        "schedule_salary_automation.json"
       ]
     },
     "health": {
@@ -455,7 +461,8 @@
         "OPEN: накопление 50к — уточнить механику (депозит/оборот).",
         "OPEN: ЗП-система — описать в единый документ (в compensation_system).",
         "OPEN: Переходный период управления — стабилизация процессов.",
-        "Notion — вариант для базы знаний."
+        "Notion — вариант для базы знаний.",
+        "Проект автоматизации графика и ЗП инициирован (schedule_salary_automation.json)."
       ]
     },
     "risks": [
@@ -4738,12 +4745,12 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.8.2",
+      "version": "v1.9.0",
       "created": "2026-09-23",
-      "updated": "2026-10-16",
+      "updated": "2026-10-20",
       "layer": 2,
       "type": "team_module",
-      "description": "Картотека сотрудников Куртош. 20 человек. v1.8.0: добавлено поле shifts_per_week (min/target/max/type) для активных сотрудников.",
+      "description": "Картотека сотрудников Куртош. 20 человек. v1.9.0: добавлена модель оплаты (3 уровня + гибкая ставка), раннеры переведены в left, синхронизировано с schedule_salary_automation.",
       "status": "active",
       "priority": "high",
       "parent": "index.json",
@@ -5109,9 +5116,9 @@
             "base": null,
             "notes": "Ранер. Временно на паузе."
           },
-          "status": "paused",
+          "status": "left",
           "risks": [],
-          "notes": "Бегунок (ранер).",
+          "notes": "Бегунок (ранер). | Не работает с 2026-10-20 (раннер).",
           "data_gaps": [
             "nijka.attitude"
           ],
@@ -5153,9 +5160,9 @@
             "base": null,
             "notes": "Ранер. Временно на паузе."
           },
-          "status": "paused",
+          "status": "left",
           "risks": [],
-          "notes": null,
+          "notes": " | Не работает с 2026-10-20 (раннер).",
           "data_gaps": [
             "nijka.attitude"
           ],
@@ -5806,6 +5813,30 @@
       "nastya": 20000,
       "note": "SMM-бюджет на месяц. Валя — курирование, Настя — контент.",
       "last_updated": "2026-10-12"
+    },
+    "compensation_model": {
+      "levels": {
+        "trainee": {
+          "name": "Стажёр",
+          "default_rate": 200
+        },
+        "barista": {
+          "name": "Бариста",
+          "default_rate": 250
+        },
+        "senior": {
+          "name": "Старший бариста",
+          "default_rate": 300
+        }
+      },
+      "flexible_rate": "Ставка может быть изменена вручную (245, 230 и т.д.).",
+      "payment_split": {
+        "advance_24": "1–15 число текущего месяца",
+        "final_9": "16–конец предыдущего месяца"
+      },
+      "fixed_surcharges": {
+        "katrin_admin": 16000
+      }
     }
   },
   "knowledge_base": {
