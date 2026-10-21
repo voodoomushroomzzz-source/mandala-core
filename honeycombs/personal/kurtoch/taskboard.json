@@ -15,7 +15,7 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.6.21",
+    "version": "v2.6.23",
     "created": "2026-09-14",
     "updated": "2026-10-21",
     "legend": {
@@ -61,7 +61,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Стратегические"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-013",
@@ -83,7 +84,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-031",
@@ -105,7 +107,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Центр"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-036",
@@ -127,7 +130,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-043",
@@ -149,7 +153,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-045",
@@ -171,7 +176,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-046",
@@ -193,7 +199,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-058",
@@ -215,7 +222,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-059",
@@ -237,7 +245,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-060",
@@ -259,7 +268,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-063",
@@ -281,7 +291,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-064",
@@ -305,7 +316,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-065",
@@ -327,7 +339,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-066",
@@ -349,7 +362,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-067",
@@ -371,7 +385,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-068",
@@ -393,7 +408,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-069",
@@ -415,7 +431,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-070",
@@ -437,7 +454,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-071",
@@ -459,7 +477,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "M-001",
@@ -533,7 +552,8 @@
             "K-069",
             "K-070"
           ]
-        }
+        },
+        "focus": false
       },
       {
         "id": "M-002",
@@ -563,7 +583,8 @@
           "linked_tasks_full": [
             "K-048"
           ]
-        }
+        },
+        "focus": false
       },
       {
         "id": "M-003",
@@ -647,7 +668,8 @@
             "last_updated": "2026-09-24"
           },
           "linked_tasks": []
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-076",
@@ -681,7 +703,8 @@
             "K-039",
             "K-041"
           ]
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-078",
@@ -705,7 +728,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Стратегические"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-080",
@@ -727,7 +751,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Центр"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-079",
@@ -749,7 +774,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Центр"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-081",
@@ -777,7 +803,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Центр"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-082",
@@ -805,7 +832,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Центр"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-085",
@@ -829,7 +857,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-103",
@@ -853,7 +882,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Стратегические"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-105",
@@ -881,7 +911,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Стратегические"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-107",
@@ -905,7 +936,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Центр"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-111",
@@ -929,7 +961,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-122",
@@ -953,7 +986,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Центр"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-123",
@@ -978,7 +1012,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Центр"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-124",
@@ -1002,7 +1037,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Нижка"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-130",
@@ -1024,12 +1060,13 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-131",
         "title": "Обсудить условия Димы и Вити (кэш 50/70 → 60/60)",
-        "description": "Обсудить новые условия кэш-части ПРК Димы и Вити.\n\nКонтекст (планёрка 14.10):\n- Обсуждали 60/60 (вместо текущих 50/70)\n- Дима: 50 кэш (обсуждается 60)\n- Витя: 70 кэш (обсуждается 60)\n- Накопление Димы — отдельно (не кэшем)\n- Решение: пока что на старых условиях, обсудить отдельно\n\nЦель: договориться о новых условиях кэш-части, зафиксировать.",
+        "description": "Обсудить новые условия кэш-части ПРК Димы и Вити.\n\nИТОГ 21.10.2026:\n- В октябре Диме выплачивается 70К.\n- Дальше двигаемся 50/50 по кэшевой части.\n- Если не хватает до полной суммы — снижаем пропорционально друг другу.\n\nЦель: зафиксировать новые условия.",
         "priority": "high",
         "status": "todo",
         "horizon": "strategic",
@@ -1039,14 +1076,15 @@
         "depends_on": [],
         "related_to": [],
         "created": "2026-10-14",
-        "updated": "2026-10-14",
+        "updated": "2026-10-21",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Стратегические"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-132",
@@ -1068,12 +1106,13 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Центр"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-133",
         "title": "Пироэкспо — поездка в Москву (26–29.10)",
-        "description": "Поездка на выставку «Пироэкспо» в Москву.\n\nМероприятие: 26–29.10.2026.\nПланируемая дата выезда: 27.10.2026 (уточнить).\n\nПодзадачи:\n1. Решить вопрос компенсации билетов (проезд).\n2. Согласовать состав участников поездки.\n3. Забронировать билеты / проживание.\n4. Согласовать с командой подмены на точках.\n\nСвязь: команда, операционка обеих точек.",
+        "description": "Поездка на выставку «Пироэкспо» в Москву.\n\nМероприятие: 26–29.10.2026.\nДата выезда: 27.10.2026.\n\nСостав: Витя, Катрин, Маша, Дима.\nОплата поездки для этих 4 сотрудников.\n\nПодзадачи:\n1. Решить вопрос компенсации билетов (проезд).\n2. Забронировать билеты / проживание.\n3. Согласовать с командой подмены на точках.\n\nСвязь: команда, операционка обеих точек.",
         "priority": "medium",
         "status": "todo",
         "horizon": "tactical",
@@ -1083,14 +1122,15 @@
         "depends_on": [],
         "related_to": [],
         "created": "2026-10-14",
-        "updated": "2026-10-14",
+        "updated": "2026-10-21",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-135",
@@ -1116,7 +1156,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Стратегические"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-138",
@@ -1141,7 +1182,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-139",
@@ -1165,12 +1207,13 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Центр"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-141",
         "title": "Управленческая планёрка (боты, передача финансов)",
-        "description": "Провести управленческую планёрку (стандартный формат).\n\nВ повестке:\n1. Боты — обсудить, каких поубирать, что оставить.\n2. Передача больших финансов — обсудить передачу/распределение.\n3. Распределение бюджета Крис на ноябрь (для Катрин и Димы).\n4. Поездка на Пироэкспо — обсудить (связь K-133).\n5. Переделать ИП Куртош на Гагарина.\n6. Расчёт авансов из ИП, ставки и соотношение выплат Димы и Вити — обсудить.\n\nСписок вопросов будет пополняться.",
+        "description": "Провести управленческую планёрку (стандартный формат).\n\nИТОГИ ПЛАНЁРКИ (21.10.2026):\n1. Боты: Оставляем 1 (транскрипция голосовых). 'Чак Норрис' убираем.\n2. Финансы: Дима запрашивает инструкцию у Крис. Передача в ноябре (постепенно).\n3. Бюджет на ноябрь: Дима скинет распределение позже (K-150).\n4. Пироэкспо: Едем 27.10 (K-133). Оплата: Витя, Катрин, Маша, Дима.\n5. ИП на Гагарина: Активируем, сделать до декабря (K-151).\n6. Авансы и выплаты: Авансы по ставкам (уровням). Дима/Витя — в октябре Диме 70К, далее 50/50 по кэшу, пропорциональное снижение при нехватке (K-131).\n\nСписок вопросов будет пополняться.",
         "priority": "medium",
         "status": "todo",
         "horizon": "tactical",
@@ -1189,7 +1232,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-142",
@@ -1213,7 +1257,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Центр"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-019",
@@ -1283,7 +1328,8 @@
             }
           ]
         },
-        "column": "Операционка — Общая"
+        "column": "Операционка — Общая",
+        "focus": false
       },
       {
         "id": "K-144",
@@ -1308,7 +1354,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-145",
@@ -1333,7 +1380,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-146",
@@ -1358,7 +1406,8 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
-        }
+        },
+        "focus": false
       },
       {
         "id": "K-147",
@@ -1383,30 +1432,146 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Стратегические"
-        }
+        },
+        "focus": false
+      },
+      {
+        "id": "K-148",
+        "title": "Ежедневный фотоотчёт зон по закрытию (горящее)",
+        "description": "Ежедневный фотоотчёт по закрытию зон. Сотрудники скидывают фото в рабочую группу (или бот) после закрытия. Цель — контроль чистоты и санпина, чтобы ничего не горело.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-31",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-21",
+        "updated": "2026-10-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
+      },
+      {
+        "id": "K-149",
+        "title": "Запросить у Крис инструкцию по ведению финансов/закупок",
+        "description": "Запросить у Крис (управляющая) инструкцию (гайд): как ведётся учёт больших финансов и больших закупок, как это всё работает между формами (Google Sheets / Forms / Notion).\n\nСвязь: K-105, K-019.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-31",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-21",
+        "updated": "2026-10-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
+      },
+      {
+        "id": "K-150",
+        "title": "Скинуть распределение нового бюджета на ноябрь",
+        "description": "Дима скидывает распределение бюджета на ноябрь (для Катрин и Димы). Связь: K-141 (итоги планёрки).",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-31",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-21",
+        "updated": "2026-10-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
+      },
+      {
+        "id": "K-151",
+        "title": "Переделать ИП Куртош на Гагарина (активация)",
+        "description": "Переделать ИП Куртош на Гагарина. Активируем, стараемся максимально сделать до декабря.\n\nСвязь: K-099 (арендодатель), M-002.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-12-01",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-21",
+        "updated": "2026-10-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "focus": false
+      },
+      {
+        "id": "K-152",
+        "title": "Создать View '🔥 Фокус' в Notion и поле focus в taskboard",
+        "description": "Добавить в Notion отдельное представление '🔥 Фокус' (фильтр по чекбоксу focus=true). В taskboard.json добавить поле 'focus': false для всех задач. Обновить push_taskboard.py для передачи галочки в Notion.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-22",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-21",
+        "updated": "2026-10-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "focus": false
       }
     ],
     "counters": {
-      "total": 50,
+      "total": 55,
       "by_status": {
-        "todo": 45,
+        "todo": 50,
         "in_progress": 4,
         "planning": 1
       },
       "by_priority": {
         "medium": 23,
-        "high": 23,
+        "high": 28,
         "critical": 4
       },
       "by_column": {
-        "Стратегические": 9,
-        "Операционка — Общая": 10,
+        "Стратегические": 11,
+        "Операционка — Общая": 13,
         "Операционка — Центр": 11,
         "Операционка — Нижка": 17,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 49,
+        "phase_0": 54,
         "phase_1": 1
       }
     },

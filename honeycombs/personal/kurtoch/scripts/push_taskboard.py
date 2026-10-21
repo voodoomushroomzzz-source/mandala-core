@@ -213,6 +213,7 @@ for t in tasks:
                 "Срочность": {"select": {"name": PRIORITY_TO_URGENCY.get(t.get("priority", "medium"), PRIORITY_TO_URGENCY["medium"])}},
                 "Ответственный": {"select": {"name": t.get("metadata", {}).get("assignee") or DEFAULT_ASSIGNEE}},
                 "Закрыта": {"checkbox": t["status"] in ("done", "cancelled")},
+                "Фокус": {"checkbox": t.get("focus", False)},
             }
         }
         ms_blocks = build_milestone_blocks(t) if t.get("metadata", {}).get("subtype") == "payment_tracker" else None
@@ -257,6 +258,10 @@ for t in tasks:
     if t.get("deadline") and cur_dl != t["deadline"]:
         props["Дедлайн"] = {"date": {"start": t["deadline"]}}
         updated_date += 1
+
+    cur_focus = prop_text(p, "Фокус")
+    if cur_focus != t.get("focus", False):
+        props["Фокус"] = {"checkbox": t.get("focus", False)}
 
     cur_urg = prop_text(p, "Срочность")
     need_urg = PRIORITY_TO_URGENCY.get(t.get("priority", "medium"), PRIORITY_TO_URGENCY["medium"])
