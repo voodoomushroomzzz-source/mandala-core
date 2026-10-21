@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-21T13:00:22Z",
+    "generated_at": "2026-10-21T13:11:35Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -7219,7 +7219,7 @@
     "identity": {
       "module_id": "KURTOCH-SCHEDULE-SALARY-AUTOMATION-001",
       "name": "Kurtoch — Schedule & Salary Automation",
-      "version": "v2.1.0",
+      "version": "v2.2.0",
       "created": "2026-10-20",
       "updated": "2026-10-21",
       "layer": 2,
@@ -7406,10 +7406,10 @@
       ]
     },
     "tracking": {
-      "current_stage": "completed",
+      "current_stage": "v1.1_in_progress",
       "progress_pct": 100,
       "last_updated": "2026-10-20",
-      "notes": "Текущая версия v1.0 завершена. Зафиксирован план доработок v1.1-v1.2."
+      "notes": "Начата разработка v1.1. Добавлено правило разработки R4 (без монолитов)."
     },
     "instructions": {
       "for_gardener": "Для добавления новой недели просто попроси ИИ сгенерировать JSON. Затем нажми в таблице '⚙️ Куртош' -> '📥 Загрузить неделю' и вставь код.",
@@ -7440,6 +7440,11 @@
           "id": "R3_idempotency",
           "title": "Идемпотентность",
           "rule": "Любая setup-функция должна безопасно запускаться повторно."
+        },
+        {
+          "id": "R4_no_monolith",
+          "title": "Никаких монолитов. Только точечная замена блоков.",
+          "rule": "При обновлении кода Google Apps Script запрещено переписывать весь файл Код.gs целиком. Вместо этого External SR выдает только конкретную функцию (или блок кода), которую Садовник заменяет через поиск в редакторе. Это предотвращает потерю других важных функций."
         }
       ]
     },
@@ -7467,7 +7472,7 @@
     },
     "future_roadmap": {
       "version": "v1.1-v1.2",
-      "status": "planned",
+      "status": "in_progress",
       "description": "План доработок системы автоматизации Графика и ЗП.",
       "items": [
         {
