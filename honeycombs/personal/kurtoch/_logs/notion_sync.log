@@ -1560,3 +1560,45 @@ Notion: 135 страниц
   Создано новых: 0
 
 [3/3] git commit + push
+
+================================================================
+[2026-10-21 20:33:33] runner: full_sync
+================================================================
+[1/3] archive_done.py
+Нет задач для архивации.
+
+[2/3] push_taskboard.py
+  + архив: 85 задач
+Mandala: 140 задач
+Notion: 135 страниц
+
+  ! network error (HTTPError), retry in 1s...
+  ! network error (HTTPError), retry in 2s...
+  ! network error (HTTPError), retry in 4s...
+Traceback (most recent call last):
+  File "/storage/emulated/0/mandala-core/honeycombs/personal/kurtoch/scripts/push_taskboard.py", line 276, in <module>
+    api(f"pages/{p['id']}", "PATCH", {"properties": props})
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/storage/emulated/0/mandala-core/honeycombs/personal/kurtoch/scripts/push_taskboard.py", line 70, in api
+    raise last_err
+  File "/storage/emulated/0/mandala-core/honeycombs/personal/kurtoch/scripts/push_taskboard.py", line 63, in api
+    with urllib.request.urlopen(req, timeout=30) as r:
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/urllib/request.py", line 189, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/urllib/request.py", line 495, in open
+    response = meth(req, response)
+  File "/data/data/com.termux/files/usr/lib/python3.13/urllib/request.py", line 604, in http_response
+    response = self.parent.error(
+        'http', request, response, code, msg, hdrs)
+  File "/data/data/com.termux/files/usr/lib/python3.13/urllib/request.py", line 533, in error
+    return self._call_chain(*args)
+           ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.13/urllib/request.py", line 466, in _call_chain
+    result = func(*args)
+  File "/data/data/com.termux/files/usr/lib/python3.13/urllib/request.py", line 613, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 400: Bad Request
+
+[3/3] git commit + push
