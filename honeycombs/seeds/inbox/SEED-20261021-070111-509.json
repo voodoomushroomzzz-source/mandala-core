@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261021-070111-509",
+  "title": "ACE-Brain-0.6: Scaling Spatial Grounding for Physical Foundation Models",
+  "url": "https://arxiv.org/abs/2610.27040",
+  "description": "arXiv:2610.27040v1 Announce Type: new \nAbstract: General-purpose multimodal models, including GPT-6 Astra and Claude Opus 5.5, demonstrate broad capabilities in embodied manipulation. Our analysis indicates that this generality is accompanied by strong spatial perception, as Astra can determine where to interact with task-relevant entities amid visual distractors. Because spatial perception connects high-level reasoning to the physical scene, we investigate scaling visual grounding to strengthen",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-21T07:01:11.142324",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
