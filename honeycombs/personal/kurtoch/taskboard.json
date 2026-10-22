@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.21",
+    "version": "v2.6.22",
     "created": "2026-09-14",
     "updated": "2026-10-22",
     "layer": 2,
@@ -1376,23 +1376,46 @@
           "column": "Операционка — Центр"
         },
         "focus": true
+      },
+      {
+        "id": "K-156",
+        "title": "Пересмотреть ТТК по какао (спешил какао)",
+        "description": "Гости жалуются, что спешил какао стал хуже.\n\nЧто сделать:\n1. Катрин выходит из отпуска.\n2. Собраться составом: Катрин, Маша, Дима.\n3. Вместе попробовать приготовить какао.\n4. Пересмотреть ТТК по какао (актуализировать рецепт/пропорции).\n\nСвязь: меню, качество продукта.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-26",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-22",
+        "updated": "2026-10-22",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": true
       }
     ],
     "counters": {
-      "total": 48,
+      "total": 49,
       "by_status": {
-        "todo": 43,
+        "todo": 44,
         "in_progress": 4,
         "planning": 1
       },
       "by_priority": {
-        "high": 25,
+        "high": 26,
         "medium": 19,
         "critical": 3,
         "low": 1
       },
       "by_column": {
-        "Операционка — Общая": 12,
+        "Операционка — Общая": 13,
         "Операционка — Центр": 9,
         "Операционка — Нижка": 17,
         "Крупные вехи": 3,
@@ -1400,7 +1423,8 @@
       },
       "by_phase": {
         "phase_0": 48
-      }
+      },
+      "in_focus": 11
     },
     "notes": {
       "priority_mode": "manual"
