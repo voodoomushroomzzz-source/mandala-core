@@ -2305,11 +2305,35 @@
         },
         "focus": false,
         "archived_at": "2026-10-22"
+      },
+      {
+        "id": "K-153",
+        "title": "Составить список дней рождения",
+        "description": "Собрать и систематизировать список дней рождения сотрудников команды. Основная команда собрана, данные внесены в team.json. По Крис — по факту (она на удаленке, не факт, что остается).",
+        "priority": "medium",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-22",
+        "updated": "2026-10-22",
+        "completed": "2026-10-22",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": true,
+        "archived_at": "2026-10-22"
       }
     ],
-    "total": 94,
+    "total": 95,
     "by_status": {
-      "done": 80,
+      "done": 81,
       "cancelled": 14
     }
   },
