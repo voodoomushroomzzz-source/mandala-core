@@ -1,55 +1,50 @@
 {
   "identity": {
-    "name": "Handoff — Автоматизация закупок (PIL)",
-    "version": "v2.0.0",
-    "created": "2026-10-20",
-    "updated": "2026-10-20",
-    "description": "Переход в новый чат для разработки Procurement Intelligence Layer (PIL) — расширение K-019.",
-    "status": "active"
+    "module_id": "HANDOFF-DEEPSEEK",
+    "version": "v1.9.0",
+    "updated": "2026-10-22",
+    "type": "session_handoff",
+    "audience": "DeepSeek SR"
   },
-  "context": {
-    "gardener": "Voodoo (Дима)",
-    "project": "Куртош — Автоматизация закупок",
-    "current_focus": "Разработка PIL (Procurement Intelligence Layer) над системой v10.3/v10.4",
-    "current_chat_purpose": "Чат посвящен ИСКЛЮЧИТЕЛЬНО PIL и автоматизации закупок. Остальные задачи Куртоша — в других чатах."
+  "session_summary": {
+    "date": "2026-10-22",
+    "focus": "Оптимизация работы с задачами Куртош, создание View '🔥 Фокус' в Notion, актуализация закупок.",
+    "status": "completed"
   },
-  "session_summary": "Завершена архитектурная подготовка. Claude написал ТЗ v2.0.0, DeepSeek его проанализировал и дополнил (лист Поставщики, R1/R8 фиксы). Ответы Садовника зафиксированы. ТЗ вшито в procurement_automation.json v10.4.0. Бандл Куртоша пересобран (360 КБ). Задача K-019 обновлена подзадачами.",
-  "key_achievements": {
-    "specs": [
-      "PIL v2.1.0 ТЗ создано: 6 этапов, 10 листов, формулы, edge cases.",
-      "Вшито в procurement_automation.json v10.4.0 (секция pil_project).",
-      "Трекинг внутри файла: current_task = s0_1."
-    ],
-    "infrastructure": [
-      "build_bundle.py обновлён: теперь собирает procurement_automation.",
-      "kurtoch_bundle.json пересобран (360 КБ, 6 модулей + 9 скриптов).",
-      "Мерж-конфликт с GitHub Action разрешён."
-    ],
-    "task_update": [
-      "K-019 расширена до 7 подзадач (K-019-1..7) по этапам PIL.",
-      "JSON-пакет для обновления задачи в новом чате подготовлен."
-    ]
-  },
+  "what_was_done": [
+    "Обновлены итоги планёрки 21.10 (K-141): боты, финансы, бюджет, Пироэкспо, ИП, авансы.",
+    "Созданы новые задачи: K-148 (фотоотчёт), K-149 (инструкция Крис), K-150 (бюджет), K-151 (ИП), K-152 (View Фокус).",
+    "K-105, K-132, K-149 отменены. K-004, K-131, K-139, K-152 закрыты. Текст K-149 перенесён в K-078.",
+    "Создано View '🔥 Фокус' в Notion (тип Board, фильтр по checkbox 'Фокус', группировка по статусу, сортировка по дедлайну).",
+    "В taskboard.json добавлено поле 'focus' (bool) для всех задач. Обновлён push_taskboard.py для синхронизации чекбокса.",
+    "Расставлены фокусы на 9 задач: K-019, K-078, K-103, K-133, K-146, K-147, K-148, K-150, K-153.",
+    "Добавлены K-153 (Дни рождения, в фокусе) и K-154 (Актуализация закупок, дедлайн 26.10, в фокусе).",
+    "Добавлена инструкция по работе с View в index.json (workflow_for_new_sr.notion_views).",
+    "В K-103 (Сезонка) добавлено: Маша делает ТТК, себестоимость, описание — за отдельный бонус."
+  ],
   "current_state": {
-    "pil_version": "v2.1.0-tz (spec_ready)",
-    "procurement_automation": "v10.4.0",
-    "bundle_version": "v1.0.0 (360 КБ)",
-    "current_stage": "stage_0",
-    "current_task": "s0_1",
-    "blockers": [],
-    "note": "Все архитектурные решения приняты. Код ещё не писался. Ждём начала Этапа 0."
+    "taskboard_version": "v2.6.26",
+    "active_tasks": 49,
+    "in_focus": 10,
+    "notion_views": {
+      "focus_view_id": "40130c88dcb581e28495000c22451d4c",
+      "type": "board",
+      "group_by": "status",
+      "sort": "deadline_asc"
+    },
+    "notion_sync": "synced (142 tasks in Mandala, 141 pages in Notion — last page created)"
   },
   "next_steps": [
-    "1. Дима делает копию таблицы Куртош (для безопасного теста).",
-    "2. Claude пишет PIL.gs (setupPIL, getSetting, syncWeeks_, buildPilMenu_).",
-    "3. Прогон Этапа 0: проверка Номенклатуры и Недель.",
-    "4. Переход к Этапу 1 (импорт накладных)."
+    "В новом чате — работать по задачам из фокуса (K-019, K-078, K-103, K-133, K-146, K-147, K-148, K-150, K-153, K-154).",
+    "Проверить актуализацию закупочных таблиц (K-154) — найти туалетную бумагу для Центра.",
+    "При запросе 'поставь в фокус' — патчить JSON, ставить focus=true, синхронизировать.",
+    "Помнить: View '🔥 Фокус' в Notion — Board, открывается по клику."
   ],
-  "critical_references": {
-    "pil_spec": "honeycombs/personal/kurtoch/procurement_automation.json → секция pil_project",
-    "tracking": "honeycombs/personal/kurtoch/procurement_automation.json → pil_project.tracking",
-    "bundle": "honeycombs/boot_online/personal/kurtoch_bundle.json",
-    "task": "K-019 в taskboard.json"
-  },
-  "handoff_instructions": "Открываешь новый чат — скидываешь этот JSON и JSON-пакет для K-019 первым сообщением. SR прочитает состояние, проверит tracking и начнёт с Этапа 0."
+  "instructions_for_new_sr": {
+    "mandala_is_source_of_truth": true,
+    "notion_is_visual_mirror": true,
+    "focus_field": "В taskboard.json есть ключ 'focus' (bool). true = задача в фокусе.",
+    "sync_command": "bash honeycombs/personal/kurtoch/scripts/notion_runner.sh full_sync",
+    "view_management": "Для обновления View использовать PATCH /v1/views/{id} с Notion-Version 2026-03-11."
+  }
 }
