@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-22T14:00:02Z",
+    "generated_at": "2026-10-22T19:32:53Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -1260,7 +1260,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.6.20",
+      "version": "v2.6.21",
       "created": "2026-09-14",
       "updated": "2026-10-22",
       "layer": 2,
@@ -2590,9 +2590,9 @@
         {
           "id": "K-153",
           "title": "Составить список дней рождения",
-          "description": "Собрать и систематизировать список дней рождения сотрудников команды. Внести данные в картотеку (team.json) или базу знаний (knowledge_base.json).",
+          "description": "Собрать и систематизировать список дней рождения сотрудников команды. Основная команда собрана, данные внесены в team.json. По Крис — по факту (она на удаленке, не факт, что остается).",
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "horizon": "tactical",
           "phase": "phase_0",
           "deadline": null,
@@ -2601,7 +2601,7 @@
           "related_to": [],
           "created": "2026-10-22",
           "updated": "2026-10-22",
-          "completed": null,
+          "completed": "2026-10-22",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2662,9 +2662,10 @@
       "counters": {
         "total": 49,
         "by_status": {
-          "todo": 44,
+          "todo": 43,
           "in_progress": 4,
-          "planning": 1
+          "planning": 1,
+          "done": 1
         },
         "by_priority": {
           "high": 25,
@@ -5117,7 +5118,7 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.8.4",
+      "version": "v1.9.0",
       "created": "2026-09-23",
       "updated": "2026-10-22",
       "layer": 2,
@@ -5130,14 +5131,14 @@
     },
     "team_roster": {
       "last_updated": "2026-10-20",
-      "total_employees": 20,
+      "total_employees": 22,
       "by_status": {
         "core": 2,
         "working": 6,
         "left": 5,
         "stopped": 4,
         "substitute": 1,
-        "management": 2
+        "management": 4
       },
       "skill_ladder": {
         "order": [
@@ -5453,11 +5454,12 @@
           "data_gaps": [
             "nijka.attitude"
           ],
-          "updated": "2026-10-20",
+          "updated": "2026-10-22",
           "vacation": {
             "planned": [],
             "history": []
-          }
+          },
+          "birthday": "2007-11-16"
         },
         {
           "id": "EMP-007",
@@ -5651,7 +5653,8 @@
             "planned": [],
             "history": []
           },
-          "updated": "2026-10-14"
+          "updated": "2026-10-22",
+          "birthday": "1999-04-20"
         },
         {
           "id": "EMP-011",
@@ -6077,7 +6080,8 @@
           "data_gaps": [
             "nijka.attitude"
           ],
-          "updated": "2026-10-14"
+          "updated": "2026-10-22",
+          "birthday": "1986-07-16"
         },
         {
           "id": "EMP-020",
@@ -6122,7 +6126,26 @@
           "data_gaps": [
             "nijka.attitude"
           ],
-          "updated": "2026-10-14"
+          "updated": "2026-10-22",
+          "birthday": "2002-05-14"
+        },
+        {
+          "id": "EMP-021",
+          "name": "Витя",
+          "role": "Управляющий (переходный период) / Владелец",
+          "contacts": {},
+          "status": "management",
+          "birthday": "1987-02-05",
+          "updated": "2026-10-22"
+        },
+        {
+          "id": "EMP-022",
+          "name": "Дмитрий (Дима)",
+          "role": "Кризис-менеджер / Архитектор",
+          "contacts": {},
+          "status": "management",
+          "birthday": "1989-10-26",
+          "updated": "2026-10-22"
         }
       ],
       "skills_summary": {
