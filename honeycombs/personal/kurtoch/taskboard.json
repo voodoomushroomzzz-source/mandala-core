@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.17",
+    "version": "v2.6.18",
     "created": "2026-09-14",
     "updated": "2026-10-22",
     "layer": 2,
@@ -1401,30 +1401,55 @@
           "column": "Операционка — Общая"
         },
         "focus": true
+      },
+      {
+        "id": "K-155",
+        "title": "Согласовать возможность покупки посудомоечной машины (Центр)",
+        "description": "Согласовать возможность покупки посудомоечной машины в Центр.",
+        "priority": "low",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-22",
+        "updated": "2026-10-22",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        },
+        "focus": true
       }
     ],
     "counters": {
-      "total": 49,
+      "total": 50,
       "by_status": {
-        "todo": 44,
+        "todo": 45,
         "in_progress": 4,
         "planning": 1
       },
       "by_priority": {
         "high": 25,
         "medium": 21,
-        "critical": 3
+        "critical": 3,
+        "low": 1
       },
       "by_column": {
         "Операционка — Общая": 14,
-        "Операционка — Центр": 8,
+        "Операционка — Центр": 9,
         "Операционка — Нижка": 17,
         "Крупные вехи": 3,
         "Стратегические": 7
       },
       "by_phase": {
         "phase_0": 49
-      }
+      },
+      "in_focus": 11
     },
     "notes": {
       "priority_mode": "manual"
