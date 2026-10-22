@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-22T19:32:53Z",
+    "generated_at": "2026-10-22T19:35:32Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -2588,29 +2588,6 @@
           "focus": false
         },
         {
-          "id": "K-153",
-          "title": "Составить список дней рождения",
-          "description": "Собрать и систематизировать список дней рождения сотрудников команды. Основная команда собрана, данные внесены в team.json. По Крис — по факту (она на удаленке, не факт, что остается).",
-          "priority": "medium",
-          "status": "done",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": null,
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [],
-          "created": "2026-10-22",
-          "updated": "2026-10-22",
-          "completed": "2026-10-22",
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Общая"
-          },
-          "focus": true
-        },
-        {
           "id": "K-154",
           "title": "Актуализировать закупочные таблицы (Центр + Нижка)",
           "description": "Актуализировать ассортимент в закупочных таблицах по Центру и Нижке.\n\n1. Пройтись по всему ассортименту, понять реальные остатки.\n2. Понять, что заказывается, а что уже лишнее.\n3. Найти точное наименование и поставщика для туалетной бумаги (круглая, Центр) — сейчас её нет в таблице, нужно понять, где она заказывается.\n\nСвязь: K-019 (Автоматизация закупок).",
@@ -2660,30 +2637,28 @@
         }
       ],
       "counters": {
-        "total": 49,
+        "total": 48,
         "by_status": {
           "todo": 43,
           "in_progress": 4,
-          "planning": 1,
-          "done": 1
+          "planning": 1
         },
         "by_priority": {
           "high": 25,
-          "medium": 20,
+          "medium": 19,
           "critical": 3,
           "low": 1
         },
         "by_column": {
-          "Операционка — Общая": 13,
+          "Операционка — Общая": 12,
           "Операционка — Центр": 9,
           "Операционка — Нижка": 17,
           "Крупные вехи": 3,
           "Стратегические": 7
         },
         "by_phase": {
-          "phase_0": 49
-        },
-        "in_focus": 11
+          "phase_0": 48
+        }
       },
       "notes": {
         "priority_mode": "manual"
@@ -5101,11 +5076,35 @@
           },
           "focus": false,
           "archived_at": "2026-10-22"
+        },
+        {
+          "id": "K-153",
+          "title": "Составить список дней рождения",
+          "description": "Собрать и систематизировать список дней рождения сотрудников команды. Основная команда собрана, данные внесены в team.json. По Крис — по факту (она на удаленке, не факт, что остается).",
+          "priority": "medium",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-10-22",
+          "updated": "2026-10-22",
+          "completed": "2026-10-22",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "focus": true,
+          "archived_at": "2026-10-22"
         }
       ],
-      "total": 94,
+      "total": 95,
       "by_status": {
-        "done": 80,
+        "done": 81,
         "cancelled": 14
       }
     },
