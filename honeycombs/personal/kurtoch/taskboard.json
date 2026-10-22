@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.20",
+    "version": "v2.6.21",
     "created": "2026-09-14",
     "updated": "2026-10-22",
     "layer": 2,
@@ -1332,9 +1332,9 @@
       {
         "id": "K-153",
         "title": "Составить список дней рождения",
-        "description": "Собрать и систематизировать список дней рождения сотрудников команды. Внести данные в картотеку (team.json) или базу знаний (knowledge_base.json).",
+        "description": "Собрать и систематизировать список дней рождения сотрудников команды. Основная команда собрана, данные внесены в team.json. По Крис — по факту (она на удаленке, не факт, что остается).",
         "priority": "medium",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": null,
@@ -1343,7 +1343,7 @@
         "related_to": [],
         "created": "2026-10-22",
         "updated": "2026-10-22",
-        "completed": null,
+        "completed": "2026-10-22",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -1404,9 +1404,10 @@
     "counters": {
       "total": 49,
       "by_status": {
-        "todo": 44,
+        "todo": 43,
         "in_progress": 4,
-        "planning": 1
+        "planning": 1,
+        "done": 1
       },
       "by_priority": {
         "high": 25,
