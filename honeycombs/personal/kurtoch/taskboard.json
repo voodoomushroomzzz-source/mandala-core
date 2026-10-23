@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.24",
+    "version": "v2.6.25",
     "created": "2026-09-14",
     "updated": "2026-10-23",
     "layer": 2,
@@ -1424,24 +1424,93 @@
           "column": "Операционка — Нижка"
         },
         "focus": false
+      },
+      {
+        "id": "K-158",
+        "title": "Подобрать автономный облегчённый пылесос (Центр)",
+        "description": "На зиму много слякоти. Нужно подобрать автономный облегчённый пылесос для Центра. Рассмотреть моющий вариант или с функцией влажной уборки. Задача — облегчить уборку слякоти.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-15",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-23",
+        "updated": "2026-10-23",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        },
+        "focus": false
+      },
+      {
+        "id": "K-159",
+        "title": "Закупить резиновые коврики (Центр и Нижка)",
+        "description": "На зимний сезон (слякоть). Подобрать и закупить резиновые (влагостойкие) коврики для входных зон и залов в Центре и Нижке.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-15",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-23",
+        "updated": "2026-10-23",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
+      },
+      {
+        "id": "K-160",
+        "title": "Закупка дежурных и запасных фартуков (Центр и Нижка)",
+        "description": "Закупить фартуки для точек.\n\nПотребность:\n- Дежурные (для стажёров и сессионных, которые приходят на смену).\n- Запасные (на время стирки основных).\n\nКоличество (исходить из реальной потребности и бюджета):\n- Центр: 2 дежурных (если двое сотрудников на смене) + запас.\n- Нижка: 1 дежурный + запас.\n\nБюджет ограничен, искать варианты по адекватной цене.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-10",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-23",
+        "updated": "2026-10-23",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
       }
     ],
     "counters": {
-      "total": 50,
+      "total": 53,
       "by_status": {
-        "todo": 45,
+        "todo": 48,
         "in_progress": 4,
         "planning": 1
       },
       "by_priority": {
         "high": 26,
-        "medium": 20,
+        "medium": 23,
         "critical": 3,
         "low": 1
       },
       "by_column": {
-        "Операционка — Общая": 13,
-        "Операционка — Центр": 9,
+        "Операционка — Общая": 15,
+        "Операционка — Центр": 10,
         "Операционка — Нижка": 18,
         "Крупные вехи": 3,
         "Стратегические": 7
