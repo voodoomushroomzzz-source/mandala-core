@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261023-070110-526",
+  "title": "Integrated Longitudinal and Lateral Control for High-Speed Platooning of Articulated Vehicles",
+  "url": "https://arxiv.org/abs/2610.30437",
+  "description": "arXiv:2610.30437v1 Announce Type: new \nAbstract: This paper presents an integrated control framework for high-speed platooning of articulated vehicles, combining advanced longitudinal and lateral control strategies to address the challenges of safe and efficient autonomous driving. A novel proof of string stability for the proposed longitudinal control algorithm, based on a PID framework, ensures robust inter-vehicle distance regulation even under dynamic operating conditions. Additionally, an a",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-23T07:01:10.773033",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
