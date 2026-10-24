@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.26",
+    "version": "v2.6.27",
     "created": "2026-09-14",
     "updated": "2026-10-24",
     "layer": 2,
@@ -1546,23 +1546,46 @@
         },
         "focus": true,
         "archived_at": "2026-10-21"
+      },
+      {
+        "id": "K-161",
+        "title": "Тест смен 11:00–19:00 (выходные пт, сб, вс)",
+        "description": "Попробовать новый формат смен на выходные дни.\n\nПараметры:\n- Время: с 11:00 до 19:00.\n- Дни: пятница, суббота, воскресенье.\n\nЦель: протестировать эффективность такого графика (возможно, для снижения нагрузки или оптимизации в выходные).",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-24",
+        "updated": "2026-10-24",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
       }
     ],
     "counters": {
-      "total": 55,
+      "total": 56,
       "by_status": {
-        "todo": 50,
+        "todo": 51,
         "in_progress": 4,
         "planning": 1
       },
       "by_priority": {
         "high": 28,
-        "medium": 23,
+        "medium": 24,
         "critical": 3,
         "low": 1
       },
       "by_column": {
-        "Операционка — Общая": 16,
+        "Операционка — Общая": 17,
         "Операционка — Центр": 11,
         "Операционка — Нижка": 18,
         "Крупные вехи": 3,
