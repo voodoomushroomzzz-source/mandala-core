@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-10-24T07:10:43.437054",
+  "last_scan": "2026-10-24T12:58:19.365826",
   "honeycomb_hashes": {
     "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
     "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
@@ -55,7 +55,7 @@
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-10-24T07:10:43.437068",
+    "last_check": "2026-10-24T12:58:19.365838",
     "errors_count": 30,
     "warnings_count": 10,
     "expired_tasks": 10,
