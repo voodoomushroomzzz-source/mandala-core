@@ -4,7 +4,7 @@
     "name": "Kurtoch — Procurement Automation",
     "version": "v10.4.0",
     "created": "2026-10-19",
-    "updated": "2026-10-20",
+    "updated": "2026-10-26",
     "layer": 2,
     "type": "automation_system",
     "description": "v10.4.0: добавлен блок pil_project — полное ТЗ, план и трекинг Procurement Intelligence Layer (PIL). Базовая система v10.3 не менялась.",
@@ -789,13 +789,15 @@
     "tracking": {
       "current_stage": "stage_0",
       "current_task": "s0_1",
-      "overall_progress_pct": 0,
+      "overall_progress_pct": 15,
       "stages": {
         "stage_0": {
-          "status": "not_started",
-          "started_at": null,
+          "status": "in_progress",
+          "started_at": "2026-10-26",
           "completed_at": null,
-          "blockers": []
+          "blockers": [
+            "копия отложена (гибрид): работаем в боевой, копия перед s0_5"
+          ]
         },
         "stage_1": {
           "status": "not_started",
@@ -836,11 +838,30 @@
         "skipped": "Пропущено"
       },
       "handoff_notes": {
-        "last_session_date": null,
-        "what_done": null,
-        "what_next": "Начать с s0_1 — Дима делает копию таблицы. После — s0_2: создать PIL.gs",
-        "questions_for_gardener": []
-      }
+        "last_session_date": "2026-10-26",
+        "what_done": "1) PIL_archive.gs: archiveSmart v2.0.0 + archiveSmartDryRun. dry-run на боевой: AUTO-ADVANCE на 26.10 готов. 2) PIL_setup: grantAllPermissions, setupTriggers, forceAuth. 3) Меню объединено в ⚙️ Куртош. 4) На Маке: 5 OK / 3 FAIL (Drive, Forms — не выданы). 5) Архивация 26.10 НЕ выполнена — ждём Центр.",
+        "what_next": "1) Заполнить Центр -> Архивировать умно. 2) Выдать Drive+Forms на Маке (forceAuth / Manifest). 3) s0_2..s0_4: PIL.gs каркас (setupPIL, getSetting, syncWeeks_, buildPilMenu_). 4) s0_5 — перед запуском сделать копию таблицы.",
+        "questions_for_gardener": [
+          "Q4: lead_time QQ/West4/Чайная — 5 или 7 дней?",
+          "Q5: приход без накладной — как фиксировать?"
+        ]
+      },
+      "extra_work_done": [
+        {
+          "id": "EX-01",
+          "name": "archiveSmart v2.0.0",
+          "reason": "Забыли newWeek 20.10 — защита от перезаписи недели",
+          "status": "done (dry-run OK)",
+          "date": "2026-10-26"
+        },
+        {
+          "id": "EX-02",
+          "name": "grantAllPermissions + setupTriggers + forceAuth",
+          "reason": "Онбординг новых аккаунтов на общем файле",
+          "status": "done, ждёт Drive+Forms на Маке",
+          "date": "2026-10-26"
+        }
+      ]
     },
     "edge_cases": {
       "first_weeks_no_history": "До накопления — «нет истории», рекомендация = норма − остаток.",

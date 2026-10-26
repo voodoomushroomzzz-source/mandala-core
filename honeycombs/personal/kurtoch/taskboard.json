@@ -1088,7 +1088,7 @@
       {
         "id": "K-019",
         "title": "Автоматизация закупок (v10.4 + PIL)",
-        "description": "Расширение системы учёта остатков v10.3 до Procurement Intelligence Layer (PIL). Включает: загрузку накладных (JSON), учёт приходов, историю цен, точные наименования, статистику расхода и авторекомендацию закупки.\n\nВся подробная спецификация, формулы и правила лежат в файле `honeycombs/personal/kurtoch/procurement_automation.json` (секция `pil_project`).\nТекущий статус разработки и трекинг: `procurement_automation.json` → `pil_project.tracking`.",
+        "description": "Расширение системы учёта остатков v10.3 до Procurement Intelligence Layer (PIL).\n\nПРОГРЕСС (26.10):\n- PIL_archive.gs v2.0.0: archiveSmart + archiveSmartDryRun (AUTO-ADVANCE при пропуске newWeek).\n- PIL_setup: grantAllPermissions + setupTriggers + forceAuth.\n- Меню объединено в ⚙️ Куртош.\n- Архивация 26.10 — ждёт инвентаризации Центра.\n- Права Drive+Forms на Маке — не выданы (forceAuth/Manifest).\n\nВся спецификация: `honeycombs/personal/kurtoch/procurement_automation.json` (секция `pil_project`).\nTracking: `procurement_automation.json` -> `pil_project.tracking`.",
         "priority": "critical",
         "status": "in_progress",
         "horizon": "strategic",
@@ -1101,7 +1101,7 @@
           "K-076"
         ],
         "created": "2026-09-14",
-        "updated": "2026-10-21",
+        "updated": "2026-10-26",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -1112,8 +1112,8 @@
             {
               "id": "K-019-1",
               "name": "Этап 0: Фундамент",
-              "status": "not_started",
-              "desc": "Копия таблицы, создание PIL.gs, листы Номенклатура, Поставщики, Настройки."
+              "status": "in_progress",
+              "desc": "Боевая подготовлена. Копия отложена (гибрид: перед s0_5). archiveSmart v2.0.0 написан + dry-run OK. Ждём архивации 26.10."
             },
             {
               "id": "K-019-2",

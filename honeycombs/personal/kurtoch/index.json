@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.14.3",
+    "version": "v2.12.0",
     "created": "2026-09-23",
-    "updated": "2026-10-24",
+    "updated": "2026-10-26",
     "layer": 2,
     "type": "personal_subhub_index",
-    "description": "Хаб проекта 'Куртош'. v2.11.0: + json_import_format в scheduling_guide.",
+    "description": "Хаб проекта 'Куртош'. v2.12.0: +procurement_pil_progress (archiveSmart v2.0.0, PIL_setup, прогресс stage_0).",
     "status": "active",
     "priority": "critical",
     "tags": [
@@ -51,7 +51,15 @@
       "version": "v10.4.0",
       "description": "Закупки Куртош: ТЗ v10.3 + блок pil_project (PIL v2.1.0) — полное ТЗ, план, трекинг.",
       "when_to_use": "Любая задача по закупкам, расходу, рекомендациям, накладным, ценам.",
-      "status": "active_with_pil_spec"
+      "status": "active_with_pil_spec",
+      "pil_progress": {
+        "version": "v2.1.0-tz",
+        "stage": "stage_0",
+        "progress_pct": 15,
+        "last_action": "archiveSmart v2.0.0 + dry-run OK; grantAllPermissions + setupTriggers",
+        "next_action": "Заполнить инвентаризацию Центра -> Архивировать умно -> блок 26.10",
+        "updated": "2026-10-26"
+      }
     },
     "schedule_salary_automation.json": {
       "version": "v1.0.0",
@@ -120,8 +128,8 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-10-16",
-    "notes": "v2.8.0: +scheduling_guide, +schedule_recent."
+    "last_check": "2026-10-26",
+    "notes": "v2.12.0: PIL progress + archiveSmart + права/триггеры."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -446,9 +454,9 @@
   "current_status": {
     "phase": "phase_0",
     "progress": 45,
-    "date": "2026-10-14",
-    "last_action": "14.10 (4): K-129 обновлён. Подготовка к новой сессии.",
-    "next_action": "15.10: тест сезонки. K-103 введение до 31.10. 17.10-24.10: отпуск Катрин. 19.10: расчёт Саши (K-129), новый график Нижки (K-126). 31.10: K-105 (Крис), K-131, K-132, K-103, K-108.",
+    "date": "2026-10-26",
+    "last_action": "26.10: PIL_archive.gs (archiveSmart v2.0.0) + PIL_setup (grantAllPermissions, setupTriggers, forceAuth). dry-run OK.",
+    "next_action": "Заполнить Центр -> Архивировать умно -> создать блок 26.10 в архиве.",
     "blockers": [],
     "notes": [
       "Фокус: команда, документация, чистота, бот.",
@@ -458,7 +466,11 @@
       "OPEN: ЗП-система — описать в единый документ (в compensation_system).",
       "OPEN: Переходный период управления — стабилизация процессов.",
       "Notion — вариант для базы знаний.",
-      "Проект автоматизации графика и ЗП инициирован (schedule_salary_automation.json)."
+      "Проект автоматизации графика и ЗП инициирован (schedule_salary_automation.json).",
+      "PIL: работаем в боевой, копия перед s0_5 (гибрид).",
+      "archiveSmart v2.0.0: AUTO-ADVANCE при пропуске newWeek (порог 5 дн).",
+      "Права на Маке: Drive+Forms требуют явного разрешения (forceAuth / Manifest).",
+      "Архивация 26.10 ещё не выполнена — ждём инвентаризации Центра."
     ]
   },
   "risks": [
