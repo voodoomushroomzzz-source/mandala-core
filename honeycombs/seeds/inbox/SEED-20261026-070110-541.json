@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261026-070110-541",
+  "title": "KiRoSe: Using Kinematic Data for Efficient Segmentation of Robot Demonstrations",
+  "url": "https://arxiv.org/abs/2610.31801",
+  "description": "arXiv:2610.31801v1 Announce Type: new \nAbstract: Segmenting robot demonstration data into disjoint temporal and semantic subsegments is valuable for learning, cleaning, retrieval, and analysis. Segmentation is often performed manually in a tedious and error prone process. Multimodal Large Language Models (MLLMs) have the potential for automating this process, but directly ingesting raw multi camera video streams into MLLMs can be costly and can quickly exhaust context windows. In this paper, we ",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-26T07:01:10.509099",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

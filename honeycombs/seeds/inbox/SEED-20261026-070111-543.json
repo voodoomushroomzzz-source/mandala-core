@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261026-070111-543",
+  "title": "SEVI: Safe Evidential Real-World Reinforcement Learning",
+  "url": "https://arxiv.org/abs/2610.31829",
+  "description": "arXiv:2610.31829v1 Announce Type: new \nAbstract: Real-world reinforcement learning has enabled contact-rich manipulation tasks to be trained directly on physical robots, but unsafe interactions during online learning remain a key barrier to practical deployment. We propose Safe Evidential Real-World Reinforcement Learning (SEVI), a framework for reliability-aware safety intervention during real-world policy learning. SEVI introduces an Evidential Safety Critic that estimates both future constrai",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-26T07:01:11.227871",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261026-070110-540",
+  "title": "FLORA: An Open Model Suite for Scaling Robotics Data Engines",
+  "url": "https://arxiv.org/abs/2610.31779",
+  "description": "arXiv:2610.31779v1 Announce Type: new \nAbstract: The life-cycle of robotics foundation models crucially depends on data labels. Outcome reward labels are needed for monitoring real-world deployments. Process reward labels are needed during RL post-training. Timestamped captions are needed for filtering and balancing pretraining data. We present Flora, an industrial-quality data engine used for training GR00T models, that simultaneously covers these capabilities. Flora achieves SOTA scores on the",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-26T07:01:10.141182",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
