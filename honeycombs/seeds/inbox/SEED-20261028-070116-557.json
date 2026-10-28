@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261028-070116-557",
+  "title": "Program-Level Adversarial Co-Adaptive Self-Play for Robotic Security",
+  "url": "https://arxiv.org/abs/2610.36143",
+  "description": "arXiv:2610.36143v1 Announce Type: new \nAbstract: Coding agents can adapt robotic software by revising executable programs, but successful responses to an evolving opponent may not remain effective. We present a framework for program-level adversarial co-adaptive self-play in which coding agents generate attacks and defenses from tested opponent code and mission feedback, without model fine-tuning. Environment-specific interfaces support external programs for autonomous driving and SDK-level defe",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-28T07:01:16.043253",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
