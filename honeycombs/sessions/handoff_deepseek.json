@@ -1,50 +1,61 @@
 {
   "identity": {
-    "module_id": "HANDOFF-DEEPSEEK",
-    "version": "v1.9.0",
-    "updated": "2026-10-22",
-    "type": "session_handoff",
-    "audience": "DeepSeek SR"
+    "name": "Handoff — Куртош: Автоматизация закупок (PIL)",
+    "version": "v3.0.0",
+    "created": "2026-10-28",
+    "updated": "2026-10-28",
+    "description": "Переход в новый чат. Статус: архивация (AUTO-ADVANCE) внедрена, формы открыты для текста. Следующий шаг — ядро PIL (Этап 0).",
+    "status": "active"
   },
-  "session_summary": {
-    "date": "2026-10-22",
-    "focus": "Оптимизация работы с задачами Куртош, создание View '🔥 Фокус' в Notion, актуализация закупок.",
-    "status": "completed"
+  "context": {
+    "project": "Куртош — Автоматизация закупок (PIL v2.1.0-tz)",
+    "current_focus": "Переход от v10.3 к PIL. Завершены внеплановые фиксы.",
+    "environment": "Google Apps Script (Code.gs + PIL.gs), мобильный (Termux) + ПК."
   },
-  "what_was_done": [
-    "Обновлены итоги планёрки 21.10 (K-141): боты, финансы, бюджет, Пироэкспо, ИП, авансы.",
-    "Созданы новые задачи: K-148 (фотоотчёт), K-149 (инструкция Крис), K-150 (бюджет), K-151 (ИП), K-152 (View Фокус).",
-    "K-105, K-132, K-149 отменены. K-004, K-131, K-139, K-152 закрыты. Текст K-149 перенесён в K-078.",
-    "Создано View '🔥 Фокус' в Notion (тип Board, фильтр по checkbox 'Фокус', группировка по статусу, сортировка по дедлайну).",
-    "В taskboard.json добавлено поле 'focus' (bool) для всех задач. Обновлён push_taskboard.py для синхронизации чекбокса.",
-    "Расставлены фокусы на 9 задач: K-019, K-078, K-103, K-133, K-146, K-147, K-148, K-150, K-153.",
-    "Добавлены K-153 (Дни рождения, в фокусе) и K-154 (Актуализация закупок, дедлайн 26.10, в фокусе).",
-    "Добавлена инструкция по работе с View в index.json (workflow_for_new_sr.notion_views).",
-    "В K-103 (Сезонка) добавлено: Маша делает ТТК, себестоимость, описание — за отдельный бонус."
-  ],
-  "current_state": {
-    "taskboard_version": "v2.6.26",
-    "active_tasks": 49,
-    "in_focus": 10,
-    "notion_views": {
-      "focus_view_id": "40130c88dcb581e28495000c22451d4c",
-      "type": "board",
-      "group_by": "status",
-      "sort": "deadline_asc"
+  "session_summary": "Внедрена защита от потери данных при забытом 'Начать новую неделю' (archiveSmart v2.0.0). Добавлены функции выдачи разрешений для новых аккаунтов. Формы переведены в режим приема текста ('не считали'). Архив за 26.10 успешно создан, цвета исправлены.",
+  "key_achievements": {
+    "archive_protection": {
+      "function": "archiveSmart v2.0.0",
+      "file": "PIL.gs",
+      "logic": "Если блок текущей недели уже есть в архиве, и прошло >= 5 дней с архивации — WEEK_START сдвигается на дату новых записей в Журнале, создается новый блок сверху. Старый блок не перезаписывается.",
+      "status": "Внедрено, протестировано, работает."
     },
-    "notion_sync": "synced (142 tasks in Mandala, 141 pages in Notion — last page created)"
+    "permissions_and_triggers": {
+      "functions": ["grantAllPermissions", "setupTriggers", "forceAuth"],
+      "file": "PIL.gs",
+      "purpose": "Онбординг новых сотрудников (выдача прав Drive, Forms, Sheets) и пересоздание триггеров syncResponses.",
+      "status": "Внедрено. На Маке 5 OK / 3 FAIL (Drive/Forms не выданы — решается через forceAuth или Manifest)."
+    },
+    "forms_text_support": {
+      "file": "Code.gs",
+      "changes": "Удалена валидация requireTextMatchesPattern из addRowToForm. Теперь сотрудники могут писать текст (например, 'не считали').",
+      "status": "Внедрено, применено через updateForms(). Ссылки не менялись."
+    },
+    "menu_ui": "Меню объединено в один пункт '⚙️ Куртош' для компактности."
+  },
+  "current_state": {
+    "pil_spec_version": "v2.1.0-tz",
+    "procurement_version": "v10.4.0",
+    "current_stage": "stage_0",
+    "current_task": "s0_1 (базовая подготовка)",
+    "blockers": [],
+    "notes": [
+      "Копия таблицы не делалась (работаем в боевой). Копию создадим перед s0_5.",
+      "В Архиве Нижка и Архив Центр теперь есть блок '26.10.2026'.",
+      "Инвентаризация Центра и Нижки за 26.10 загружена и заархивирована."
+    ]
   },
   "next_steps": [
-    "В новом чате — работать по задачам из фокуса (K-019, K-078, K-103, K-133, K-146, K-147, K-148, K-150, K-153, K-154).",
-    "Проверить актуализацию закупочных таблиц (K-154) — найти туалетную бумагу для Центра.",
-    "При запросе 'поставь в фокус' — патчить JSON, ставить focus=true, синхронизировать.",
-    "Помнить: View '🔥 Фокус' в Notion — Board, открывается по клику."
+    "1. Выдать права Drive и Forms на Маке (запустить forceAuth и пройти авторизацию).",
+    "2. s0_2 - s0_4: Написать каркас PIL.gs (функции setupPIL, getSetting, syncWeeks_, buildPilMenu_).",
+    "3. Создать листы: Номенклатура, Поставщики, Настройки.",
+    "4. s0_5: Перед заполнением Номенклатуры сделать копию таблицы (точка отката).",
+    "5. Двигаться к Этапу 1 (Импорт накладных -> JSON)."
   ],
-  "instructions_for_new_sr": {
-    "mandala_is_source_of_truth": true,
-    "notion_is_visual_mirror": true,
-    "focus_field": "В taskboard.json есть ключ 'focus' (bool). true = задача в фокусе.",
-    "sync_command": "bash honeycombs/personal/kurtoch/scripts/notion_runner.sh full_sync",
-    "view_management": "Для обновления View использовать PATCH /v1/views/{id} с Notion-Version 2026-03-11."
-  }
+  "critical_references": {
+    "pil_spec": "honeycombs/personal/kurtoch/procurement_automation.json -> pil_project",
+    "tracking": "procurement_automation.json -> pil_project.tracking",
+    "code_files": ["Code.gs (v10.3 + правки)", "PIL.gs (archiveSmart + setup)"]
+  },
+  "handoff_instructions": "Открываешь новый чат, скидываешь этот Handoff и JSON из сообщения ниже. SR прочитает состояние, подтвердит, что архивация и формы готовы, и начнет s0_2."
 }
