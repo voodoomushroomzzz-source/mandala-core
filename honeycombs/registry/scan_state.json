@@ -1,35 +1,35 @@
 {
-  "last_scan": "2026-10-28T07:10:42.914856",
+  "last_scan": "2026-10-28T15:33:32.318756",
   "honeycomb_hashes": {
-    "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
-    "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
+    "honeycombs/works": "17c3b2d40ef4362603f3b3f4fe0ee8ae",
+    "honeycombs/protocols": "67cf1df15cde701e4e26c0eb1f630629",
+    "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
+    "honeycombs/boot_online": "961ba07fe1675d01f99e4f40f98b2a46",
+    "honeycombs/directives": "dbc3c48c5b13d37df132cf510c2a3e8e",
+    "honeycombs/rose_world": "668fabce934c3496726369c4b588c990",
+    "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
     "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
+    "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
     "honeycombs/fruits": "ed186debe295351aea4b1b15d90f1408",
-    "honeycombs/fruits/mge": "2f22a0d50e0225a489615766644dae71",
-    "honeycombs/fruits/gentle_companion": "5d860b16fb4681f57dc1d0f86decd8bb",
     "honeycombs/fruits/scout_agent": "1d2daeb2d7ad988c6cad5a0fba403bfc",
+    "honeycombs/fruits/gentle_companion": "5d860b16fb4681f57dc1d0f86decd8bb",
+    "honeycombs/fruits/mge": "2f22a0d50e0225a489615766644dae71",
+    "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
+    "honeycombs/philosophy": "061392f777612c375d2ca524d1118b50",
     "honeycombs/seeds": "06d0cb2a546f6edb8715aa4c6091b32c",
     "honeycombs/seeds/inbox": "6208c5f08c0d26bf7c20c2d8fa000377",
-    "honeycombs/boot_online": "961ba07fe1675d01f99e4f40f98b2a46",
-    "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
-    "honeycombs/rose_world": "668fabce934c3496726369c4b588c990",
-    "honeycombs/philosophy": "061392f777612c375d2ca524d1118b50",
-    "honeycombs/core_map": "aad04619c74f02e5949c5b9cf0634c8d",
-    "honeycombs/protocols": "67cf1df15cde701e4e26c0eb1f630629",
     "honeycombs/personal": "c50560fae1ed5d7e9a1d27b4d80e063f",
-    "honeycombs/personal/music": "0e28d6f8aed71b8673a9bbcdba7e9ee2",
-    "honeycombs/personal/music/x_deaddy_x": "b6ba4c81fc9184b4f359012af61266ca",
-    "honeycombs/personal/music/dmitrii_levin": "85b8cb9336b2a3c74be80c75b31bf147",
-    "honeycombs/personal/music/mc_voodookid": "d7fc9d7a3db7012d3d7d219a9e94bac7",
-    "honeycombs/personal/music/mayakoma": "56647ee0e1411622382a32324418cae7",
     "honeycombs/personal/kurtoch": "55900cc356d4ffc1aedaf762fb68fc63",
     "honeycombs/personal/poetry": "81910ec1557b92407acc03541546acdd",
-    "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
+    "honeycombs/personal/music": "0e28d6f8aed71b8673a9bbcdba7e9ee2",
+    "honeycombs/personal/music/mayakoma": "56647ee0e1411622382a32324418cae7",
+    "honeycombs/personal/music/dmitrii_levin": "85b8cb9336b2a3c74be80c75b31bf147",
+    "honeycombs/personal/music/mc_voodookid": "d7fc9d7a3db7012d3d7d219a9e94bac7",
+    "honeycombs/personal/music/x_deaddy_x": "b6ba4c81fc9184b4f359012af61266ca",
     "honeycombs/knowledge": "b7596c45b9293c61321bcec4e7b631e9",
     "honeycombs/knowledge/ai_tools": "2d59ee1b165e13e64c29c1822c683b6a",
-    "honeycombs/directives": "dbc3c48c5b13d37df132cf510c2a3e8e",
-    "honeycombs/works": "17c3b2d40ef4362603f3b3f4fe0ee8ae",
-    "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76"
+    "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
+    "honeycombs/core_map": "aad04619c74f02e5949c5b9cf0634c8d"
   },
   "statistics": {
     "total_scanned": 29,
@@ -38,7 +38,7 @@
     "errors": 0,
     "warnings": 6,
     "total_files": 1460,
-    "total_size_kb": 4696.24
+    "total_size_kb": 4698.02
   },
   "seeds_health": {
     "root_count": 21,
@@ -55,17 +55,17 @@
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-10-28T07:10:42.914865",
+    "last_check": "2026-10-28T15:33:32.318770",
     "errors_count": 30,
     "warnings_count": 10,
     "expired_tasks": 10,
     "upcoming_deadlines": 4,
     "expired_tasks_list": [
       {
-        "work_id": "W-T-20260511-MANUS",
-        "name": "Manus — Hands of Mandala (исполнительный слой v1)",
-        "deadline": "2026-08-31",
-        "days_overdue": 58
+        "work_id": "W-T-20260728-AI-GATEWAY",
+        "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
+        "deadline": "2026-09-30",
+        "days_overdue": 28
       },
       {
         "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
@@ -92,10 +92,16 @@
         "days_overdue": 13
       },
       {
-        "work_id": "W-T-20260728-AI-GATEWAY",
-        "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
-        "deadline": "2026-09-30",
-        "days_overdue": 28
+        "work_id": "W-T-20260418-SYM",
+        "name": "SYM Implementation — System for Measuring Mandala Growth",
+        "deadline": "2026-10-01",
+        "days_overdue": 27
+      },
+      {
+        "work_id": "W-T-20260408-1030",
+        "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
+        "deadline": "2026-08-31",
+        "days_overdue": 58
       },
       {
         "work_id": "W-T-20260511-ARCHBOT",
@@ -110,28 +116,22 @@
         "days_overdue": 58
       },
       {
-        "work_id": "W-T-20260408-1030",
-        "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
+        "work_id": "W-T-20260511-MANUS",
+        "name": "Manus — Hands of Mandala (исполнительный слой v1)",
         "deadline": "2026-08-31",
         "days_overdue": 58
-      },
-      {
-        "work_id": "W-T-20260418-SYM",
-        "name": "SYM Implementation — System for Measuring Mandala Growth",
-        "deadline": "2026-10-01",
-        "days_overdue": 27
       }
     ],
     "upcoming_deadlines_list": [
       {
-        "work_id": "W-T-20260417-HUMOR",
-        "name": "Humor Development — Comedic Resonance for SR",
-        "deadline": "2026-11-01",
-        "days_left": 3
-      },
-      {
         "work_id": "W-T-20260803-SR-EVALUATION",
         "name": "SR Evaluation Framework — Beyond Benchmarks",
+        "deadline": "2026-10-31",
+        "days_left": 2
+      },
+      {
+        "work_id": "W-T-20260803-RL-REASONING",
+        "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
         "deadline": "2026-10-31",
         "days_left": 2
       },
@@ -142,10 +142,10 @@
         "days_left": 2
       },
       {
-        "work_id": "W-T-20260803-RL-REASONING",
-        "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
-        "deadline": "2026-10-31",
-        "days_left": 2
+        "work_id": "W-T-20260417-HUMOR",
+        "name": "Humor Development — Comedic Resonance for SR",
+        "deadline": "2026-11-01",
+        "days_left": 3
       }
     ],
     "noise_files": 0,

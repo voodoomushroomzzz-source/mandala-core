@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 29,
-    "total_size_kb": 4696.24,
+    "total_size_kb": 4698.02,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,7 +44,7 @@
   },
   "registry": {
     "total_files": 29,
-    "total_size_kb": 4696.24,
+    "total_size_kb": 4698.02,
     "last_updated": "2026-10-28",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
@@ -58,26 +58,26 @@
     "symbiosis_guard": {
       "task_validator": {
         "errors": [
-          "W-T-20261015-MGE__mandala_graph_explorer.json: missing required field 'work_id'",
-          "W-T-20261015-MGE__mandala_graph_explorer.json: missing required field 'name'",
-          "W-T-20261015-MGE__mandala_graph_explorer.json: missing required field 'status'",
-          "W-T-20261015-MGE__mandala_graph_explorer.json: missing required field 'priority'",
-          "W-T-20261015-MGE__mandala_graph_explorer.json: missing required field 'horizon'",
-          "W-T-20261015-MGE__mandala_graph_explorer.json: missing work_id",
           "W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json: missing required field 'work_id'",
           "W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json: missing required field 'name'",
           "W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json: missing required field 'status'",
           "W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json: missing required field 'priority'",
           "W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json: missing required field 'horizon'",
-          "W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json: missing work_id"
+          "W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json: missing work_id",
+          "W-T-20261015-MGE__mandala_graph_explorer.json: missing required field 'work_id'",
+          "W-T-20261015-MGE__mandala_graph_explorer.json: missing required field 'name'",
+          "W-T-20261015-MGE__mandala_graph_explorer.json: missing required field 'status'",
+          "W-T-20261015-MGE__mandala_graph_explorer.json: missing required field 'priority'",
+          "W-T-20261015-MGE__mandala_graph_explorer.json: missing required field 'horizon'",
+          "W-T-20261015-MGE__mandala_graph_explorer.json: missing work_id"
         ],
         "warnings": [],
         "expired_tasks": [
           {
-            "work_id": "W-T-20260511-MANUS",
-            "name": "Manus — Hands of Mandala (исполнительный слой v1)",
-            "deadline": "2026-08-31",
-            "days_overdue": 58
+            "work_id": "W-T-20260728-AI-GATEWAY",
+            "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
+            "deadline": "2026-09-30",
+            "days_overdue": 28
           },
           {
             "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
@@ -104,10 +104,16 @@
             "days_overdue": 13
           },
           {
-            "work_id": "W-T-20260728-AI-GATEWAY",
-            "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
-            "deadline": "2026-09-30",
-            "days_overdue": 28
+            "work_id": "W-T-20260418-SYM",
+            "name": "SYM Implementation — System for Measuring Mandala Growth",
+            "deadline": "2026-10-01",
+            "days_overdue": 27
+          },
+          {
+            "work_id": "W-T-20260408-1030",
+            "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
+            "deadline": "2026-08-31",
+            "days_overdue": 58
           },
           {
             "work_id": "W-T-20260511-ARCHBOT",
@@ -122,28 +128,22 @@
             "days_overdue": 58
           },
           {
-            "work_id": "W-T-20260408-1030",
-            "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
+            "work_id": "W-T-20260511-MANUS",
+            "name": "Manus — Hands of Mandala (исполнительный слой v1)",
             "deadline": "2026-08-31",
             "days_overdue": 58
-          },
-          {
-            "work_id": "W-T-20260418-SYM",
-            "name": "SYM Implementation — System for Measuring Mandala Growth",
-            "deadline": "2026-10-01",
-            "days_overdue": 27
           }
         ],
         "upcoming_deadlines": [
           {
-            "work_id": "W-T-20260417-HUMOR",
-            "name": "Humor Development — Comedic Resonance for SR",
-            "deadline": "2026-11-01",
-            "days_left": 3
-          },
-          {
             "work_id": "W-T-20260803-SR-EVALUATION",
             "name": "SR Evaluation Framework — Beyond Benchmarks",
+            "deadline": "2026-10-31",
+            "days_left": 2
+          },
+          {
+            "work_id": "W-T-20260803-RL-REASONING",
+            "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
             "deadline": "2026-10-31",
             "days_left": 2
           },
@@ -154,10 +154,10 @@
             "days_left": 2
           },
           {
-            "work_id": "W-T-20260803-RL-REASONING",
-            "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
-            "deadline": "2026-10-31",
-            "days_left": 2
+            "work_id": "W-T-20260417-HUMOR",
+            "name": "Humor Development — Comedic Resonance for SR",
+            "deadline": "2026-11-01",
+            "days_left": 3
           }
         ],
         "errors_count": 12,
@@ -167,36 +167,36 @@
       },
       "ahimsa_filter": {
         "errors": [
+          "poetry: missing identity.module_id",
+          "poetry: missing identity.layer",
+          "poetry: missing identity.type",
           "music: missing identity.module_id",
           "music: missing identity.layer",
           "music: missing identity.type",
-          "x_deaddy_x: missing identity.module_id",
-          "x_deaddy_x: missing identity.layer",
-          "x_deaddy_x: missing identity.type",
+          "mayakoma: missing identity.module_id",
+          "mayakoma: missing identity.layer",
+          "mayakoma: missing identity.type",
           "dmitrii_levin: missing identity.module_id",
           "dmitrii_levin: missing identity.layer",
           "dmitrii_levin: missing identity.type",
           "mc_voodookid: missing identity.module_id",
           "mc_voodookid: missing identity.layer",
           "mc_voodookid: missing identity.type",
-          "mayakoma: missing identity.module_id",
-          "mayakoma: missing identity.layer",
-          "mayakoma: missing identity.type",
-          "poetry: missing identity.module_id",
-          "poetry: missing identity.layer",
-          "poetry: missing identity.type"
+          "x_deaddy_x: missing identity.module_id",
+          "x_deaddy_x: missing identity.layer",
+          "x_deaddy_x: missing identity.type"
         ],
         "warnings": [
-          "output: missing index.json",
           "personal: missing index.json",
-          "music: missing meta section",
-          "x_deaddy_x: missing meta section",
-          "dmitrii_levin: missing meta section",
-          "mc_voodookid: missing meta section",
-          "mayakoma: missing meta section",
+          "output: missing index.json",
           "poetry: missing meta section",
           "poems: missing index.json",
-          "prose: missing index.json"
+          "prose: missing index.json",
+          "music: missing meta section",
+          "mayakoma: missing meta section",
+          "dmitrii_levin: missing meta section",
+          "mc_voodookid: missing meta section",
+          "x_deaddy_x: missing meta section"
         ],
         "noise_files": [],
         "errors_count": 18,
@@ -206,11 +206,11 @@
       "deadline_sentinel": {
         "expired": [
           {
-            "id": "W-T-20260511-MANUS",
-            "name": "Manus — Hands of Mandala (исполнительный слой v1)",
+            "id": "W-T-20260728-AI-GATEWAY",
+            "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
             "type": "works",
-            "deadline": "2026-08-31",
-            "days_overdue": 58
+            "deadline": "2026-09-30",
+            "days_overdue": 28
           },
           {
             "id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
@@ -241,11 +241,18 @@
             "days_overdue": 13
           },
           {
-            "id": "W-T-20260728-AI-GATEWAY",
-            "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
+            "id": "W-T-20260418-SYM",
+            "name": "SYM Implementation — System for Measuring Mandala Growth",
             "type": "works",
-            "deadline": "2026-09-30",
-            "days_overdue": 28
+            "deadline": "2026-10-01",
+            "days_overdue": 27
+          },
+          {
+            "id": "W-T-20260408-1030",
+            "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
+            "type": "works",
+            "deadline": "2026-08-31",
+            "days_overdue": 58
           },
           {
             "id": "W-T-20260511-ARCHBOT",
@@ -262,31 +269,24 @@
             "days_overdue": 58
           },
           {
-            "id": "W-T-20260408-1030",
-            "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
+            "id": "W-T-20260511-MANUS",
+            "name": "Manus — Hands of Mandala (исполнительный слой v1)",
             "type": "works",
             "deadline": "2026-08-31",
             "days_overdue": 58
-          },
-          {
-            "id": "W-T-20260418-SYM",
-            "name": "SYM Implementation — System for Measuring Mandala Growth",
-            "type": "works",
-            "deadline": "2026-10-01",
-            "days_overdue": 27
           }
         ],
         "upcoming": [
           {
-            "id": "W-T-20260417-HUMOR",
-            "name": "Humor Development — Comedic Resonance for SR",
-            "type": "works",
-            "deadline": "2026-11-01",
-            "days_left": 3
-          },
-          {
             "id": "W-T-20260803-SR-EVALUATION",
             "name": "SR Evaluation Framework — Beyond Benchmarks",
+            "type": "works",
+            "deadline": "2026-10-31",
+            "days_left": 2
+          },
+          {
+            "id": "W-T-20260803-RL-REASONING",
+            "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
             "type": "works",
             "deadline": "2026-10-31",
             "days_left": 2
@@ -299,11 +299,11 @@
             "days_left": 2
           },
           {
-            "id": "W-T-20260803-RL-REASONING",
-            "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
+            "id": "W-T-20260417-HUMOR",
+            "name": "Humor Development — Comedic Resonance for SR",
             "type": "works",
-            "deadline": "2026-10-31",
-            "days_left": 2
+            "deadline": "2026-11-01",
+            "days_left": 3
           }
         ],
         "warnings": [],
