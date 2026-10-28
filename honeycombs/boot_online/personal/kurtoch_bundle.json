@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-28T13:58:45Z",
+    "generated_at": "2026-10-28T14:04:16Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -2232,7 +2232,7 @@
         {
           "id": "K-019",
           "title": "Автоматизация закупок (v10.4 + PIL)",
-          "description": "Расширение системы учёта остатков v10.3 до Procurement Intelligence Layer (PIL).\n\nПРОГРЕСС (26.10):\n- PIL_archive.gs v2.0.0: archiveSmart + archiveSmartDryRun (AUTO-ADVANCE при пропуске newWeek).\n- PIL_setup: grantAllPermissions + setupTriggers + forceAuth.\n- Меню объединено в ⚙️ Куртош.\n- Архивация 26.10 — ждёт инвентаризации Центра.\n- Права Drive+Forms на Маке — не выданы (forceAuth/Manifest).\n\nВся спецификация: `honeycombs/personal/kurtoch/procurement_automation.json` (секция `pil_project`).\nTracking: `procurement_automation.json` -> `pil_project.tracking`.",
+          "description": "Расширение v10.3 до PIL.\n\nСДЕЛАНО:\n- Внедрена умная архивация (archiveSmart). Защита от перезаписи при забытом 'Начать новую неделю'.\n- Добавлены скрипты выдачи прав для новых аккаунтов (grantAllPermissions).\n- В формы добавлена возможность писать текст ('не считали'). Ссылки не менялись.\n- Архив за 26.10 успешно создан.\n\nДАЛЬШЕ:\n- s0_2-s0_4: Каркас PIL.gs (setupPIL, Настройки, Поставщики, Номенклатура).\n- s0_5: Копия таблицы (точка отката), затем заполнение Номенклатуры.",
           "priority": "critical",
           "status": "in_progress",
           "horizon": "strategic",
@@ -2245,7 +2245,7 @@
             "K-076"
           ],
           "created": "2026-09-14",
-          "updated": "2026-10-26",
+          "updated": "2026-10-28",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2257,7 +2257,7 @@
                 "id": "K-019-1",
                 "name": "Этап 0: Фундамент",
                 "status": "in_progress",
-                "desc": "Боевая подготовлена. Копия отложена (гибрид: перед s0_5). archiveSmart v2.0.0 написан + dry-run OK. Ждём архивации 26.10."
+                "desc": "Базовая система готова. Внедрены фиксы архивации и форм. Ждёт каркаса PIL.gs."
               },
               {
                 "id": "K-019-2",
