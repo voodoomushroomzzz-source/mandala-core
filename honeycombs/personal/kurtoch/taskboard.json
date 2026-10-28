@@ -86,52 +86,6 @@
         "focus": false
       },
       {
-        "id": "K-036",
-        "title": "Холодильник Нижка: разморозка",
-        "description": "Холодильник под раскаточной зоной (белый, без дверки морозилки). Замерзает после разморозки. Нужна полная разморозка на сутки. Возможно, отрегулировать температуру.",
-        "priority": "high",
-        "status": "done",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": null,
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [],
-        "created": "2026-09-21",
-        "updated": "2026-10-28",
-        "completed": "2026-10-28",
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Нижка"
-        },
-        "focus": false
-      },
-      {
-        "id": "K-043",
-        "title": "Поломанные весы",
-        "description": "Поломанные весы на Нижке. Заменить или отремонтировать.",
-        "priority": "high",
-        "status": "cancelled",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": null,
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [],
-        "created": "2026-09-21",
-        "updated": "2026-10-28",
-        "completed": "2026-10-28",
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Нижка"
-        },
-        "focus": false
-      },
-      {
         "id": "K-045",
         "title": "Карты и доставка: прокачка точки",
         "description": "Прокачать точку на внешних платформах. Цель — реклама, не источник прибыли. КАРТЫ: Яндекс.Карты (Яндекс.Бизнес), Tripadvisor, 2ГИС — карточка, фото, отзывы. ДОСТАВКА: Яндекс.Доставка (Яндекс.Еда) — как рекламный канал. Дима берёт.",
@@ -146,29 +100,6 @@
         "created": "2026-09-21",
         "updated": "2026-09-21",
         "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Общая"
-        },
-        "focus": false
-      },
-      {
-        "id": "K-046",
-        "title": "График пекаря: сдвиг на час раньше",
-        "description": "Текущий график пекаря: приход 8:40, уход 21:30–21:40 (~13 ч). ПРОБЛЕМА: утром бариста ждёт пекаря ~30 мин, к 18:30 бариста уже «закрывает ситуацию», выходит помогать. ПРЕДЛОЖЕНИЕ: сдвинуть на час раньше — приход 7:45, уход 20:45. НАДО ПРОДУМАТЬ: реальность сдвига, спросить Катрин, протестировать, связь с закрытием зала.",
-        "priority": "high",
-        "status": "done",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": null,
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [],
-        "created": "2026-09-21",
-        "updated": "2026-10-28",
-        "completed": "2026-10-28",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -1449,31 +1380,28 @@
       }
     ],
     "counters": {
-      "total": 51,
+      "total": 48,
       "by_status": {
         "todo": 43,
-        "done": 2,
-        "cancelled": 1,
         "in_progress": 4,
         "planning": 1
       },
       "by_priority": {
-        "high": 26,
+        "high": 23,
         "medium": 21,
         "critical": 3,
         "low": 1
       },
       "by_column": {
-        "Операционка — Общая": 14,
+        "Операционка — Общая": 13,
         "Операционка — Центр": 9,
-        "Операционка — Нижка": 17,
+        "Операционка — Нижка": 15,
         "Крупные вехи": 3,
         "Стратегические": 8
       },
       "by_phase": {
-        "phase_0": 51
-      },
-      "in_focus": 10
+        "phase_0": 48
+      }
     },
     "notes": {
       "priority_mode": "manual"
