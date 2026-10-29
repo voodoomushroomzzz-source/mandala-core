@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.32",
+    "version": "v2.6.33",
     "created": "2026-09-14",
     "updated": "2026-10-29",
     "layer": 2,
@@ -15,7 +15,7 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.6.32",
+    "version": "v2.6.33",
     "created": "2026-09-14",
     "updated": "2026-10-29",
     "legend": {
@@ -1450,30 +1450,80 @@
           "column": "Операционка — Центр"
         },
         "focus": false
+      },
+      {
+        "id": "K-166",
+        "title": "День народного единства (04.11) — доп. люди в Центр",
+        "description": "Праздничный день 4 ноября. В штатном графике дополнительно выйдут люди для усиления. Отметить в графике (например, другим цветом или пометкой), чтобы не пропустить.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-04",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-002"
+        ],
+        "created": "2026-10-29",
+        "updated": "2026-10-29",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        },
+        "focus": false
+      },
+      {
+        "id": "K-167",
+        "title": "Генеральная уборка (Центр)",
+        "description": "Провести генеральную уборку в Центре. Время: с 16:00 до 21:00.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-11",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-002"
+        ],
+        "created": "2026-10-29",
+        "updated": "2026-10-29",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        },
+        "focus": false
       }
     ],
     "counters": {
-      "total": 51,
+      "total": 53,
       "by_status": {
-        "todo": 46,
+        "todo": 48,
         "in_progress": 4,
         "planning": 1
       },
       "by_priority": {
-        "high": 23,
+        "high": 25,
         "medium": 24,
         "critical": 3,
         "low": 1
       },
       "by_column": {
         "Операционка — Общая": 14,
-        "Операционка — Центр": 11,
+        "Операционка — Центр": 13,
         "Операционка — Нижка": 15,
         "Крупные вехи": 3,
         "Стратегические": 8
       },
       "by_phase": {
-        "phase_0": 51
+        "phase_0": 53
       }
     },
     "notes": {
