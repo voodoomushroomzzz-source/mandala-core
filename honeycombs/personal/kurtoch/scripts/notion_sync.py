@@ -153,27 +153,6 @@ def cmd_pull_taskboard(token):
     for k, v in sorted(by_column.items(), key=lambda x: -x[1]):
         print(f"  {k or '—'}: {v}")
 
-COMMANDS = {
-    "list": cmd_list,
-    "db_taskboard": cmd_db_taskboard,
-    "pull_taskboard": cmd_pull_taskboard,
-    "kb_audit": cmd_kb_audit,
-    "kb_build": cmd_kb_build,
-    "kb_links": cmd_kb_links,
-}
-
-def main():
-    if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:
-        print("Использование: python3 notion_sync.py <command>")
-        print("Доступные команды:", ", ".join(COMMANDS.keys()))
-        sys.exit(1)
-    cmd = sys.argv[1]
-    if cmd == "list":
-        COMMANDS[cmd](None)
-        return
-    token = load_token()
-    COMMANDS[cmd](token)
-
 
 KB_PAGE_ID = "2cdc8aad8d1b4fce9559c05ee7ffc02c"
 KB_TILES = [
@@ -265,6 +244,28 @@ def cmd_kb_links(token):
     for tile in KB_TILES:
         pid = pages.get(tile["title"])
         if pid: print(f"  {tile['title']:<12} https://www.notion.so/{pid.replace('-', '')}")
+
+
+COMMANDS = {
+    "list": cmd_list,
+    "db_taskboard": cmd_db_taskboard,
+    "pull_taskboard": cmd_pull_taskboard,
+    "kb_audit": cmd_kb_audit,
+    "kb_build": cmd_kb_build,
+    "kb_links": cmd_kb_links,
+}
+
+def main():
+    if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:
+        print("Использование: python3 notion_sync.py <command>")
+        print("Доступные команды:", ", ".join(COMMANDS.keys()))
+        sys.exit(1)
+    cmd = sys.argv[1]
+    if cmd == "list":
+        COMMANDS[cmd](None)
+        return
+    token = load_token()
+    COMMANDS[cmd](token)
 
 if __name__ == "__main__":
     main()
