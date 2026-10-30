@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-30T16:41:53Z",
+    "generated_at": "2026-10-30T16:49:52Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -30,7 +30,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.15.4",
+      "version": "v2.16.0",
       "created": "2026-09-23",
       "updated": "2026-10-30",
       "layer": 2,
@@ -156,8 +156,8 @@
     },
     "health": {
       "status": "healthy",
-      "last_check": "2026-10-26",
-      "notes": "v2.12.0: PIL progress + archiveSmart + права/триггеры."
+      "last_check": "2026-10-30",
+      "notes": "v2.16.0: Добавлен notion_links (База знаний для сотрудников). Публичная страница опубликована."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -693,7 +693,20 @@
           "reason": "Нужно время, чтобы накопить данные"
         }
       ],
-      "sr_workflow": "Когда Gardener говорит: 'работаем по блоку X' — SR смотрит workspace_mirror.sections.X.status → data_gaps → запрашивает данные → патчит → меняет status. Если блок 'empty' — начинаем с нуля. Если 'partial' — достраиваем пробелы. Если 'active' — поддерживаем."
+      "sr_workflow": "Когда Gardener говорит: 'работаем по блоку X' — SR смотрит workspace_mirror.sections.X.status → data_gaps → запрашивает данные → патчит → меняет status. Если блок 'empty' — начинаем с нуля. Если 'partial' — достраиваем пробелы. Если 'active' — поддерживаем.",
+      "notion_links": {
+        "page_id": "2cdc8aad8d1b4fce9559c05ee7ffc02c",
+        "public_url": "https://speckled-marten-8fe.notion.site/2cdc8aad8d1b4fce9559c05ee7ffc02c",
+        "last_updated": "2026-10-30",
+        "child_pages": {
+          "График": "40930c88-dcb5-816a-8285-ed5286d49e85",
+          "Инструкции": "40930c88-dcb5-8143-a73b-c3cf64f716ba",
+          "ТТК": "40930c88-dcb5-81fb-a267-e50d9a45906a",
+          "Обучение": "40930c88-dcb5-8167-9a0b-f3230b5e6ff4",
+          "Контакты": "40930c88-dcb5-8185-93b9-da9d1fbe05c5",
+          "Аварии": "40930c88-dcb5-81c1-b56d-f84731da500e"
+        }
+      }
     },
     "compensation_system": {
       "rates": {
