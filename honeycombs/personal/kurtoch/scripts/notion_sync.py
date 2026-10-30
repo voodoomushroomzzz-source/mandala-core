@@ -157,6 +157,9 @@ COMMANDS = {
     "list": cmd_list,
     "db_taskboard": cmd_db_taskboard,
     "pull_taskboard": cmd_pull_taskboard,
+    "kb_audit": cmd_kb_audit,
+    "kb_build": cmd_kb_build,
+    "kb_links": cmd_kb_links,
 }
 
 def main():
@@ -170,6 +173,98 @@ def main():
         return
     token = load_token()
     COMMANDS[cmd](token)
+
+
+KB_PAGE_ID = "2cdc8aad8d1b4fce9559c05ee7ffc02c"
+KB_TILES = [
+    {"emoji": "📅", "title": "График",     "desc": "Смены, замены, отпуска"},
+    {"emoji": "📋", "title": "Инструкции", "desc": "Открытие, закрытие, чистота"},
+    {"emoji": "☕", "title": "ТТК",        "desc": "Рецептуры и стандарты"},
+    {"emoji": "🎓", "title": "Обучение",   "desc": "Программа стажёра, аттестация"},
+    {"emoji": "📞", "title": "Контакты",   "desc": "Команда и сервисы"},
+    {"emoji": "🆘", "title": "Аварии",     "desc": "Что делать, если..."},
+]
+
+def get_children(token, block_id):
+    out, cursor = [], None
+    while True:
+        path = f"blocks/{block_id}/children?page_size=100"
+        if cursor: path += f"&start_cursor={cursor}"
+        data = api(path, token)
+        out.extend(data.get("results", []))
+        if not data.get("has_more"): break
+        cursor = data.get("next_cursor")
+        time.sleep(0.35)
+    return out
+
+def cmd_kb_audit(token):
+    print(f"Main: {KB_PAGE_ID}")
+    children = get_children(token, KB_PAGE_ID)
+    pages = {c["child_page"]["title"]: c["id"] for c in children if c.get("type") == "child_page"}
+    print(f"Child pages: {len(pages)}")
+    for tile in KB_TILES:
+        mark = "V" if tile["title"] in pages else "X"
+        print(f"  [{mark}] {tile['emoji']} {tile['title']}")
+    has_tiles = any(c.get("type") == "column_list" for c in children)
+    print(f"Tiles (column_list): {'YES' if has_tiles else 'NO'}")
+
+def cmd_kb_build(token):
+    print(f"Building: {KB_PAGE_ID}")
+    children = get_children(token, KB_PAGE_ID)
+    existing = {c["child_page"]["title"]: c["id"] for c in children if c.get("type") == "child_page"}
+    ids = {}
+    for tile in KB_TILES:
+        title = tile["title"]
+        if title in existing:
+            print(f"  SKIP {title} (exists)")
+            ids[title] = existing[title]
+            continue
+        page = api("pages", token, method="POST", body={
+            "parent": {"page_id": KB_PAGE_ID},
+            "properties": {"title": [{"text": {"content": title}}]},
+            "icon": {"type": "emoji", "emoji": tile["emoji"]},
+        })
+        ids[title] = page["id"]
+        print(f"  ADD {title} -> {page['id']}")
+        time.sleep(0.35)
+
+    has_tiles = any(c.get("type") == "column_list" for c in children)
+    if has_tiles:
+        print("  SKIP Tiles (exists)")
+    else:
+        def callout(tile):
+            return {
+                "object": "block", "type": "callout",
+                "callout": {
+                    "icon": {"type": "emoji", "emoji": tile["emoji"]},
+                    "color": "gray_background",
+                    "rich_text": [
+                        {"type": "text", "text": {"content": tile["title"] + "\n"}, "annotations": {"bold": True}},
+                        {"type": "text", "text": {"content": tile["desc"]}},
+                    ],
+                }
+            }
+        row1 = {"object": "block", "type": "column_list", "column_list": {"children": [
+            {"object": "block", "type": "column", "column": {"children": [callout(KB_TILES[0])]}},
+            {"object": "block", "type": "column", "column": {"children": [callout(KB_TILES[1])]}},
+            {"object": "block", "type": "column", "column": {"children": [callout(KB_TILES[2])]}},
+        ]}}
+        row2 = {"object": "block", "type": "column_list", "column_list": {"children": [
+            {"object": "block", "type": "column", "column": {"children": [callout(KB_TILES[3])]}},
+            {"object": "block", "type": "column", "column": {"children": [callout(KB_TILES[4])]}},
+            {"object": "block", "type": "column", "column": {"children": [callout(KB_TILES[5])]}},
+        ]}}
+        header = {"object": "block", "type": "heading_2", "heading_2": {"rich_text": [{"type": "text", "text": {"content": "Разделы"}}]}}
+        api(f"blocks/{KB_PAGE_ID}/children", token, method="PATCH", body={"children": [header, row1, row2]})
+        print("  ADD Tiles (2x3)")
+
+def cmd_kb_links(token):
+    children = get_children(token, KB_PAGE_ID)
+    pages = {c["child_page"]["title"]: c["id"] for c in children if c.get("type") == "child_page"}
+    print(f"main: https://www.notion.so/{KB_PAGE_ID.replace('-', '')}")
+    for tile in KB_TILES:
+        pid = pages.get(tile["title"])
+        if pid: print(f"  {tile['title']:<12} https://www.notion.so/{pid.replace('-', '')}")
 
 if __name__ == "__main__":
     main()
