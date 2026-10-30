@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "KURTOCH-TEAM-001",
     "name": "Kurtoch — Team Roster",
-    "version": "v1.9.1",
+    "version": "v1.9.2",
     "created": "2026-09-23",
     "updated": "2026-10-30",
     "layer": 2,
     "type": "team_module",
-    "description": "Картотека сотрудников Куртош. 20 человек. v1.9.0: добавлена модель оплаты (3 уровня + гибкая ставка), раннеры переведены в left, синхронизировано с schedule_salary_automation. v1.9.1: Рыжков substitute->stopped (временно), Дарья stopped->left.",
+    "description": "Картотека сотрудников Куртош. 20 человек. v1.9.0: добавлена модель оплаты (3 уровня + гибкая ставка), раннеры переведены в left, синхронизировано с schedule_salary_automation. v1.9.1: Рыжков substitute->stopped (временно), Дарья stopped->left. v1.9.2: приоритеты смен, лимиты, фикс Александры.",
     "status": "active",
     "priority": "high",
     "parent": "index.json",
@@ -51,12 +51,13 @@
           "preferences": null,
           "availability": null,
           "shifts_per_week": {
-            "min": 3,
+            "min": 2,
             "target": 3,
-            "max": 5,
+            "max": 3,
             "type": "fixed",
-            "notes": "Без понедельника (админка). Не более 3 смен подряд."
-          }
+            "notes": "Не более 3 смен. Либо 2 full + 1 доп."
+          },
+          "scheduling_note": "Приоритет 1. Пн — админка. Max 3 смены (или 2 full + 1 доп)."
         },
         "skills": {
           "stage": "universal",
@@ -92,7 +93,7 @@
           ],
           "history": []
         },
-        "updated": "2026-10-22",
+        "updated": "2026-10-30",
         "birthday": "2007-09-11"
       },
       {
@@ -117,7 +118,7 @@
             "type": "flexible",
             "notes": "Учится. Скидывает пожелания каждую неделю."
           },
-          "scheduling_note": "Учится. Предпочитает выхи. Не может по четвергам."
+          "scheduling_note": "Приоритет 5. Добиваем оставшиеся дыры."
         },
         "skills": {
           "stage": "universal",
@@ -144,7 +145,7 @@
           "planned": [],
           "history": []
         },
-        "updated": "2026-10-22",
+        "updated": "2026-10-30",
         "birthday": "2005-01-12"
       },
       {
@@ -159,7 +160,7 @@
           "смены"
         ],
         "schedule": {
-          "notes": "не может закрываться; не более 4 смен в неделю",
+          "notes": "не более 4 смен в неделю",
           "preferences": null,
           "availability": null,
           "shifts_per_week": {
@@ -167,9 +168,9 @@
             "target": 3,
             "max": 4,
             "type": "fixed",
-            "notes": "Не может закрываться. Max 4."
+            "notes": "Мин 3 смены, не более 4."
           },
-          "scheduling_note": "Не может закрываться. При 4 сменах — невыходы."
+          "scheduling_note": "Приоритет 4. Мин 3 смены, max 4. Может закрывать."
         },
         "skills": {
           "stage": "universal",
@@ -199,7 +200,7 @@
           "planned": [],
           "history": []
         },
-        "updated": "2026-10-14"
+        "updated": "2026-10-30"
       },
       {
         "id": "EMP-004",
@@ -508,7 +509,7 @@
             "type": "flexible",
             "notes": "Работает на другой работе. Скидывает пожелания каждую неделю."
           },
-          "scheduling_note": "Работает на другой работе. Скидывает пожелания каждую неделю."
+          "scheduling_note": "Приоритет 5. Добиваем оставшиеся дыры."
         },
         "skills": {
           "stage": "pechka_done",
@@ -536,7 +537,7 @@
           "planned": [],
           "history": []
         },
-        "updated": "2026-10-22",
+        "updated": "2026-10-30",
         "birthday": "1999-04-20"
       },
       {
@@ -735,9 +736,9 @@
             "target": 3,
             "max": 4,
             "type": "fixed",
-            "notes": null
+            "notes": "Минимум 3 смены в неделю."
           },
-          "scheduling_note": "Старший бариста. Target 3, max 4."
+          "scheduling_note": "Приоритет 2. Мин 3 смены."
         },
         "skills": {
           "stage": "universal",
@@ -767,7 +768,7 @@
           "planned": [],
           "history": []
         },
-        "updated": "2026-10-22",
+        "updated": "2026-10-30",
         "birthday": "1997-11-16"
       },
       {
@@ -790,9 +791,9 @@
             "target": 4,
             "max": 4,
             "type": "fixed",
-            "notes": null
+            "notes": "Ровно 4 смены в неделю."
           },
-          "scheduling_note": "Target 4 смены."
+          "scheduling_note": "Приоритет 3. Ровно 4 смены."
         },
         "skills": {
           "stage": "coffee",
@@ -817,7 +818,7 @@
         "data_gaps": [
           "schedule.notes"
         ],
-        "updated": "2026-10-22",
+        "updated": "2026-10-30",
         "vacation": {
           "planned": [],
           "history": []
