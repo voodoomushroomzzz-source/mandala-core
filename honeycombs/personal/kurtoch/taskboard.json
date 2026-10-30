@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.35",
+    "version": "v2.6.37",
     "created": "2026-09-14",
     "updated": "2026-10-30",
     "layer": 2,
@@ -15,7 +15,7 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.6.35",
+    "version": "v2.6.37",
     "created": "2026-09-14",
     "updated": "2026-10-30",
     "legend": {
@@ -1525,30 +1525,55 @@
           "column": "Стратегические"
         },
         "focus": true
+      },
+      {
+        "id": "K-169",
+        "title": "Вернуть музыку по Bluetooth (Центр)",
+        "description": "Подключили музыку по проводу, из-за этого очень много фона (шум/помехи). Нужно вернуть обратно беспроводное подключение по Bluetooth.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-02",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-002"
+        ],
+        "created": "2026-10-30",
+        "updated": "2026-10-30",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        },
+        "focus": true
       }
     ],
     "counters": {
-      "total": 54,
+      "total": 55,
       "by_status": {
-        "todo": 49,
+        "todo": 50,
         "in_progress": 4,
         "planning": 1
       },
       "by_priority": {
-        "high": 26,
+        "high": 27,
         "medium": 24,
         "critical": 3,
         "low": 1
       },
       "by_column": {
         "Операционка — Общая": 14,
-        "Операционка — Центр": 13,
+        "Операционка — Центр": 14,
         "Операционка — Нижка": 15,
         "Крупные вехи": 3,
         "Стратегические": 9
       },
       "by_phase": {
-        "phase_0": 54
+        "phase_0": 55
       }
     },
     "notes": {
