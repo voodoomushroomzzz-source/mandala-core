@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261102-070105-584",
+  "title": "WorldBridge: Bridging Video and Action for Task Generalization in World Action Models",
+  "url": "https://arxiv.org/abs/2610.40748",
+  "description": "arXiv:2610.40748v1 Announce Type: new \nAbstract: Achieving the broad task generalization of embodied models in physical environments remains a central challenge in robot learning. We study this challenge in World Action Models (WAMs) through two complementary capabilities: video generalization, which predicts the visual evolution of new tasks, and action generalization, which translates these predictions into executable behavior through a video-to-action bridge. By varying video and action super",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-11-02T07:01:05.797274",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
