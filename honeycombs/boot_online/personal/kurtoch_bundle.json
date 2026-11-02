@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-11-02T06:43:21Z",
+    "generated_at": "2026-11-02T11:34:43Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -1303,7 +1303,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.6.39",
+      "version": "v2.6.41",
       "created": "2026-09-14",
       "updated": "2026-11-02",
       "layer": 2,
@@ -1316,7 +1316,7 @@
     },
     "taskboard": {
       "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-      "version": "v2.6.39",
+      "version": "v2.6.41",
       "created": "2026-09-14",
       "updated": "2026-11-02",
       "legend": {
@@ -2902,30 +2902,108 @@
             "column": "Операционка — Центр"
           },
           "focus": false
+        },
+        {
+          "id": "K-172",
+          "title": "Правка графика: убрать смену у Александры 12.11",
+          "description": "В расписании на 12 ноября у Александры (EMP-003) не должно быть смены. Убрать её из графика.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-12",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "EMP-003"
+          ],
+          "created": "2026-11-02",
+          "updated": "2026-11-02",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "focus": false
+        },
+        {
+          "id": "K-173",
+          "title": "Замена фильтров воды (Центр)",
+          "description": "Сегодня заменить угольные фильтры для воды в Центре. (Осмос — если подошло время).",
+          "priority": "critical",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-02",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-110",
+            "K-167",
+            "M-002"
+          ],
+          "created": "2026-11-02",
+          "updated": "2026-11-02",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          },
+          "focus": true
+        },
+        {
+          "id": "K-174",
+          "title": "Подготовить и провести каппинг (22.11)",
+          "description": "Подготовка и проведение каппинга.\n1. Закупить необходимое зерно (ответственная: Аня).\n2. Сделать анонс заблаговременно в соцсетях (ответственная: Настя).\n3. Провести сам каппинг — собрать гостей и провести мероприятие (ответственные: Аня и Настя совместно).",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-22",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "EMP-007",
+            "EMP-020"
+          ],
+          "created": "2026-11-02",
+          "updated": "2026-11-02",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "focus": false
         }
       ],
       "counters": {
-        "total": 57,
+        "total": 60,
         "by_status": {
-          "todo": 52,
+          "todo": 55,
           "in_progress": 4,
           "planning": 1
         },
         "by_priority": {
-          "high": 27,
-          "medium": 26,
-          "critical": 3,
+          "high": 28,
+          "medium": 27,
+          "critical": 4,
           "low": 1
         },
         "by_column": {
-          "Операционка — Общая": 15,
-          "Операционка — Центр": 15,
+          "Операционка — Общая": 17,
+          "Операционка — Центр": 16,
           "Операционка — Нижка": 15,
           "Крупные вехи": 3,
           "Стратегические": 9
         },
         "by_phase": {
-          "phase_0": 57
+          "phase_0": 60
         }
       },
       "notes": {
