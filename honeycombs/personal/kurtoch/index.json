@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.18.0",
+    "version": "v2.19.0",
     "created": "2026-09-23",
     "updated": "2026-11-04",
     "layer": 2,
@@ -1317,7 +1317,52 @@
             "name": "🍰 ТТК",
             "id": "40930c88-dcb5-811e-a39c-cdd4091428aa",
             "purpose": "Техкарты, рецептуры, стандарты",
-            "id_status": "confirmed"
+            "id_status": "confirmed",
+            "children": {
+              "bar": {
+                "name": "☕ БАР",
+                "children": {
+                  "classic": {
+                    "name": "Классика",
+                    "id": "40930c88-dcb5-81fe-86cc-f409ebf7943c"
+                  },
+                  "specials": {
+                    "name": "Спешлы",
+                    "id": "40930c88-dcb5-8156-aa24-dc904c38d02f"
+                  },
+                  "seasonal": {
+                    "name": "Бар: Сезонка",
+                    "id": "40e30c88-dcb5-8048-b34c-ff4745d3d6ed"
+                  },
+                  "prep": {
+                    "name": "Бар: Заготовки",
+                    "id": "40930c88-dcb5-8111-92f2-cc25b0d38588"
+                  }
+                }
+              },
+              "kitchen": {
+                "name": "🥐 КУХНЯ",
+                "children": {
+                  "dough": {
+                    "name": "Тесто",
+                    "id": "40930c88-dcb5-8192-830e-fc138c0797fa"
+                  },
+                  "kalach": {
+                    "name": "Калачи",
+                    "id": "40930c88-dcb5-817a-b632-e46abed7c380"
+                  },
+                  "seasonal": {
+                    "name": "Кухня: Сезонка",
+                    "id": "40e30c88-dcb5-80b2-8176-d3b37cf6a532"
+                  },
+                  "prep": {
+                    "name": "Кухня: Заготовки",
+                    "id": "40930c88-dcb5-8177-b5c2-de8e2f2a5f24"
+                  }
+                }
+              }
+            },
+            "description": "Дерево техкарт: БАР (4) и КУХНЯ (4)."
           },
           "instructions": {
             "name": "📋 Инструкции",
