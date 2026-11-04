@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.20.1",
+    "version": "v2.20.2",
     "created": "2026-09-23",
     "updated": "2026-11-04",
     "layer": 2,
@@ -1386,7 +1386,9 @@
               "database_id": "0850869e-b474-4506-9ec9-fbb3285b4ca4",
               "data_source_id": "e8a5bae0-7e64-48a2-a1af-3bab7dced38a",
               "logic": "Единая база. Категория + Подкатегория = фильтры. Статус: Утверждена / В разработке / В архиве. Виды (Архив, Утверждено) и Linked View на страницах-категориях — следующий шаг. Порядок вручную перетаскиванием.",
-              "status": "created"
+              "status": "created",
+              "host_page_id": "40e30c88-dcb5-8003-aaf0-ea51b16be77e",
+              "host_page_url": "https://app.notion.com/p/40e30c88dcb58003aaf0ea51b16be77e"
             }
           },
           "instructions": {
