@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-11-04T16:20:55Z",
+    "generated_at": "2026-11-04T16:26:32Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -32,7 +32,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.22.0",
+      "version": "v2.22.1",
       "created": "2026-09-23",
       "updated": "2026-11-04",
       "layer": 2,
@@ -1374,7 +1374,8 @@
                       "id": "40930c88-dcb5-8111-92f2-cc25b0d38588",
                       "icon": "🧪"
                     }
-                  }
+                  },
+                  "description": "Выберите категорию, чтобы перейти к техкартам и рецептам бара."
                 },
                 "kitchen": {
                   "name": "🥐 КУХНЯ",
@@ -1401,7 +1402,8 @@
                       "id": "40930c88-dcb5-8177-b5c2-de8e2f2a5f24",
                       "icon": "🥣"
                     }
-                  }
+                  },
+                  "description": "Выберите категорию, чтобы перейти к техкартам и стандартам кухни."
                 }
               },
               "description": "Дерево техкарт: БАР (4) и КУХНЯ (4).",
