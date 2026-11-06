@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261106-070105-611",
+  "title": "Jev with Foresight: Safe Language-Guided Autonomous Driving via a Language World Model",
+  "url": "https://arxiv.org/abs/2611.05448",
+  "description": "arXiv:2611.05448v1 Announce Type: new \nAbstract: Large language models understand passengers' driving commands, but as driving agents they reason in generated text for seconds and must infer each action's consequences implicitly from the scene. We present Jev-AD, which pairs Jev, a typed decision model that answers predefined questions with probabilities, not generated text, with a language world model that predicts for every candidate action how nearby vehicles move over the next two seconds. C",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-11-06T07:01:05.123079",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

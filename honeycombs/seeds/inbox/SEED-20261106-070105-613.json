@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261106-070105-613",
+  "title": "ELA: End-to-End Latent Action Policy Learning from Video Demonstrations",
+  "url": "https://arxiv.org/abs/2611.05571",
+  "description": "arXiv:2611.05571v1 Announce Type: new \nAbstract: Robot imitation learning is limited by the scarcity of action-labeled data, while action-free demonstrations such as videos are abundant. Recent latent-action methods learn action-relevant representations from observation transitions, but they do not optimize latent actions for downstream control, leading to latent representations that are difficult for policies to model and difficult to accurately decode into continuous robot actions. This paper ",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-11-06T07:01:05.958201",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
