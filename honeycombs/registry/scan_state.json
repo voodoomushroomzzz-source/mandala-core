@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-11-08T07:10:43.636874",
+  "last_scan": "2026-11-08T15:38:25.011832",
   "honeycomb_hashes": {
     "honeycombs/works": "17c3b2d40ef4362603f3b3f4fe0ee8ae",
     "honeycombs/protocols": "67cf1df15cde701e4e26c0eb1f630629",
@@ -19,7 +19,7 @@
     "honeycombs/seeds": "06d0cb2a546f6edb8715aa4c6091b32c",
     "honeycombs/seeds/inbox": "aefaccd45d5b913b478a1c4a593fade3",
     "honeycombs/personal": "c50560fae1ed5d7e9a1d27b4d80e063f",
-    "honeycombs/personal/kurtoch": "3f7d8176fbf6850c6297b30cf7215766",
+    "honeycombs/personal/kurtoch": "47c13f9734daa105baa2bc15380b7630",
     "honeycombs/personal/poetry": "81910ec1557b92407acc03541546acdd",
     "honeycombs/personal/music": "0e28d6f8aed71b8673a9bbcdba7e9ee2",
     "honeycombs/personal/music/mayakoma": "56647ee0e1411622382a32324418cae7",
@@ -38,7 +38,7 @@
     "errors": 0,
     "warnings": 6,
     "total_files": 1596,
-    "total_size_kb": 4974.81
+    "total_size_kb": 4975.99
   },
   "seeds_health": {
     "root_count": 21,
@@ -55,7 +55,7 @@
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-11-08T07:10:43.636895",
+    "last_check": "2026-11-08T15:38:25.011850",
     "errors_count": 30,
     "warnings_count": 10,
     "expired_tasks": 14,
