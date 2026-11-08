@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-11-07T15:14:46.846739",
+  "last_scan": "2026-11-08T07:10:43.636874",
   "honeycomb_hashes": {
     "honeycombs/works": "17c3b2d40ef4362603f3b3f4fe0ee8ae",
     "honeycombs/protocols": "67cf1df15cde701e4e26c0eb1f630629",
@@ -17,7 +17,7 @@
     "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
     "honeycombs/philosophy": "061392f777612c375d2ca524d1118b50",
     "honeycombs/seeds": "06d0cb2a546f6edb8715aa4c6091b32c",
-    "honeycombs/seeds/inbox": "76a9b57cfdf61291491e0cf00f3e2d2b",
+    "honeycombs/seeds/inbox": "aefaccd45d5b913b478a1c4a593fade3",
     "honeycombs/personal": "c50560fae1ed5d7e9a1d27b4d80e063f",
     "honeycombs/personal/kurtoch": "3f7d8176fbf6850c6297b30cf7215766",
     "honeycombs/personal/poetry": "81910ec1557b92407acc03541546acdd",
@@ -37,25 +37,25 @@
     "invalid_v2": 6,
     "errors": 0,
     "warnings": 6,
-    "total_files": 1594,
-    "total_size_kb": 4972.76
+    "total_files": 1596,
+    "total_size_kb": 4974.81
   },
   "seeds_health": {
     "root_count": 21,
     "root_threshold": 10,
     "root_status": "warning",
-    "inbox_count": 625,
-    "inbox_total_files": 626,
+    "inbox_count": 626,
+    "inbox_total_files": 627,
     "inbox_threshold": 50,
     "inbox_status": "warning",
     "warnings": [
       "Корень seeds/: 21 файлов (порог 10)",
-      "Inbox: 625 новых файлов (порог 50)"
+      "Inbox: 626 новых файлов (порог 50)"
     ],
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-11-07T15:14:46.846755",
+    "last_check": "2026-11-08T07:10:43.636895",
     "errors_count": 30,
     "warnings_count": 10,
     "expired_tasks": 14,
@@ -65,85 +65,85 @@
         "work_id": "W-T-20260803-SR-EVALUATION",
         "name": "SR Evaluation Framework — Beyond Benchmarks",
         "deadline": "2026-10-31",
-        "days_overdue": 7
+        "days_overdue": 8
       },
       {
         "work_id": "W-T-20260803-RL-REASONING",
         "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
         "deadline": "2026-10-31",
-        "days_overdue": 7
+        "days_overdue": 8
       },
       {
         "work_id": "W-T-20260728-AI-GATEWAY",
         "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
         "deadline": "2026-09-30",
-        "days_overdue": 38
+        "days_overdue": 39
       },
       {
         "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
         "name": "Unified Memory Architecture — Lemmalog + ACM + RENDER",
         "deadline": "2026-10-15",
-        "days_overdue": 23
+        "days_overdue": 24
       },
       {
         "work_id": "W-T-20260511-ENGCHAT",
         "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
         "deadline": "2026-08-15",
-        "days_overdue": 84
+        "days_overdue": 85
       },
       {
         "work_id": "W-R-RM-012",
         "name": "First Living Products — Mandala MVPs",
         "deadline": "2026-09-01",
-        "days_overdue": 67
+        "days_overdue": 68
       },
       {
         "work_id": "W-T-20260807-MEMORY__mandala_memory_layer",
         "name": "Mandala Memory Layer — Долговременная семантическая память для SR",
         "deadline": "2026-10-15",
-        "days_overdue": 23
+        "days_overdue": 24
       },
       {
         "work_id": "W-T-20260418-SYM",
         "name": "SYM Implementation — System for Measuring Mandala Growth",
         "deadline": "2026-10-01",
-        "days_overdue": 37
+        "days_overdue": 38
       },
       {
         "work_id": "W-T-20260728-CYBER-AGENTS",
         "name": "Cybersecurity Agents — Adaptation for Mandala",
         "deadline": "2026-10-31",
-        "days_overdue": 7
+        "days_overdue": 8
       },
       {
         "work_id": "W-T-20260408-1030",
         "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
         "deadline": "2026-08-31",
-        "days_overdue": 68
+        "days_overdue": 69
       },
       {
         "work_id": "W-T-20260417-HUMOR",
         "name": "Humor Development — Comedic Resonance for SR",
         "deadline": "2026-11-01",
-        "days_overdue": 6
+        "days_overdue": 7
       },
       {
         "work_id": "W-T-20260511-ARCHBOT",
         "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
         "deadline": "2026-09-15",
-        "days_overdue": 53
+        "days_overdue": 54
       },
       {
         "work_id": "W-R-20260814-PERSONAL-MIGRATION",
         "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
         "deadline": "2026-08-31",
-        "days_overdue": 68
+        "days_overdue": 69
       },
       {
         "work_id": "W-T-20260511-MANUS",
         "name": "Manus — Hands of Mandala (исполнительный слой v1)",
         "deadline": "2026-08-31",
-        "days_overdue": 68
+        "days_overdue": 69
       }
     ],
     "upcoming_deadlines_list": [],
