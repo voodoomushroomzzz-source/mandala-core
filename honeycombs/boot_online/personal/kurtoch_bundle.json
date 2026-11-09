@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-11-08T15:21:54Z",
+    "generated_at": "2026-11-09T13:35:34Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -1472,9 +1472,9 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.6.52",
+      "version": "v2.6.53",
       "created": "2026-09-14",
-      "updated": "2026-11-08",
+      "updated": "2026-11-09",
       "layer": 2,
       "type": "taskboard_module",
       "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -1485,9 +1485,9 @@
     },
     "taskboard": {
       "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-      "version": "v2.6.52",
+      "version": "v2.6.53",
       "created": "2026-09-14",
-      "updated": "2026-11-08",
+      "updated": "2026-11-09",
       "legend": {
         "priority": {
           "critical": "Горит. Сегодня-завтра.",
@@ -1552,29 +1552,6 @@
             "bot_task_id": null,
             "notion_page_id": null,
             "column": "Операционка — Центр"
-          },
-          "focus": false
-        },
-        {
-          "id": "K-045",
-          "title": "Карты и доставка: прокачка точки",
-          "description": "Прокачать точку на внешних платформах. Цель — реклама, не источник прибыли. КАРТЫ: Яндекс.Карты (Яндекс.Бизнес), Tripadvisor, 2ГИС — карточка, фото, отзывы. ДОСТАВКА: Яндекс.Доставка (Яндекс.Еда) — как рекламный канал. Дима берёт.",
-          "priority": "high",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": null,
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [],
-          "created": "2026-09-21",
-          "updated": "2026-09-21",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Общая"
           },
           "focus": false
         },
@@ -3181,30 +3158,108 @@
             "column": "Операционка — Общая"
           },
           "focus": true
+        },
+        {
+          "id": "K-186",
+          "title": "Переоформить Google Карты Куртоша",
+          "description": "Переоформить карточку Google Карты. Добавить новые фотографии, сместить точку на актуальное место (если возможно).",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-30",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-187",
+            "K-188"
+          ],
+          "created": "2026-11-09",
+          "updated": "2026-11-09",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "focus": true
+        },
+        {
+          "id": "K-187",
+          "title": "Запустить доставку с Центра",
+          "description": "Запустить доставку с точки Центр (настроить механизм, уточнить точки).",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-30",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-186",
+            "K-188"
+          ],
+          "created": "2026-11-09",
+          "updated": "2026-11-09",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          },
+          "focus": true
+        },
+        {
+          "id": "K-188",
+          "title": "Механизм работы с отзывами и акции на картах",
+          "description": "Проработать механизм работы с комментариями и отзывами на площадках (Яндекс.Карты, Google, 2ГИС). Дополнительно: добавить акции, кнопки, кэшбэки на этих площадках как инструмент привлечения.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-30",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-186",
+            "K-187"
+          ],
+          "created": "2026-11-09",
+          "updated": "2026-11-09",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "focus": false
         }
       ],
       "counters": {
-        "total": 61,
+        "total": 63,
         "by_status": {
-          "todo": 55,
+          "todo": 57,
           "in_progress": 5,
           "planning": 1
         },
         "by_priority": {
-          "high": 29,
+          "high": 31,
           "medium": 27,
           "critical": 3,
           "low": 2
         },
         "by_column": {
-          "Операционка — Общая": 18,
-          "Операционка — Центр": 17,
+          "Операционка — Общая": 19,
+          "Операционка — Центр": 18,
           "Операционка — Нижка": 16,
           "Крупные вехи": 3,
           "Стратегические": 7
         },
         "by_phase": {
-          "phase_0": 61
+          "phase_0": 63
         }
       },
       "notes": {
@@ -3322,7 +3377,7 @@
       "name": "Kurtoch — Taskboard Archive",
       "version": "v1.3.0",
       "created": "2026-09-23",
-      "updated": "2026-11-05",
+      "updated": "2026-11-09",
       "type": "taskboard_archive",
       "parent": "taskboard.json",
       "description": "Архив завершённых задач (done + cancelled).",
@@ -6069,12 +6124,41 @@
           },
           "focus": true,
           "archived_at": "2026-11-05"
+        },
+        {
+          "id": "K-045",
+          "title": "Карты и доставка: прокачка точки",
+          "description": "Прокачать точку на внешних платформах. Цель — реклама, не источник прибыли. КАРТЫ: Яндекс.Карты (Яндекс.Бизнес), Tripadvisor, 2ГИС — карточка, фото, отзывы. ДОСТАВКА: Яндекс.Доставка (Яндекс.Еда) — как рекламный канал. Дима берёт.",
+          "priority": "high",
+          "status": "cancelled",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-11-09",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая",
+            "merged_into": [
+              "K-186",
+              "K-187",
+              "K-188"
+            ]
+          },
+          "focus": false,
+          "archived_at": "2026-11-09"
         }
       ],
-      "total": 112,
+      "total": 113,
       "by_status": {
         "done": 94,
-        "cancelled": 18
+        "cancelled": 19
       }
     },
     "navigation": {
