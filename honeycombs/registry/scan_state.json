@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-11-09T07:10:41.951292",
+  "last_scan": "2026-11-09T19:16:10.315975",
   "honeycomb_hashes": {
     "honeycombs/works": "17c3b2d40ef4362603f3b3f4fe0ee8ae",
     "honeycombs/protocols": "67cf1df15cde701e4e26c0eb1f630629",
@@ -38,7 +38,7 @@
     "errors": 0,
     "warnings": 6,
     "total_files": 1608,
-    "total_size_kb": 4990.59
+    "total_size_kb": 4999.6
   },
   "seeds_health": {
     "root_count": 21,
@@ -55,7 +55,7 @@
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-11-09T07:10:41.951300",
+    "last_check": "2026-11-09T19:16:10.315989",
     "errors_count": 30,
     "warnings_count": 10,
     "expired_tasks": 14,
