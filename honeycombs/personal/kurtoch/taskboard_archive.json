@@ -4,7 +4,7 @@
     "name": "Kurtoch — Taskboard Archive",
     "version": "v1.3.0",
     "created": "2026-09-23",
-    "updated": "2026-11-05",
+    "updated": "2026-11-09",
     "type": "taskboard_archive",
     "parent": "taskboard.json",
     "description": "Архив завершённых задач (done + cancelled).",
@@ -2751,12 +2751,41 @@
         },
         "focus": true,
         "archived_at": "2026-11-05"
+      },
+      {
+        "id": "K-045",
+        "title": "Карты и доставка: прокачка точки",
+        "description": "Прокачать точку на внешних платформах. Цель — реклама, не источник прибыли. КАРТЫ: Яндекс.Карты (Яндекс.Бизнес), Tripadvisor, 2ГИС — карточка, фото, отзывы. ДОСТАВКА: Яндекс.Доставка (Яндекс.Еда) — как рекламный канал. Дима берёт.",
+        "priority": "high",
+        "status": "cancelled",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-11-09",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая",
+          "merged_into": [
+            "K-186",
+            "K-187",
+            "K-188"
+          ]
+        },
+        "focus": false,
+        "archived_at": "2026-11-09"
       }
     ],
-    "total": 112,
+    "total": 113,
     "by_status": {
       "done": 94,
-      "cancelled": 18
+      "cancelled": 19
     }
   },
   "navigation": {
