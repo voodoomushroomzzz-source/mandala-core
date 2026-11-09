@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261109-070109-629",
+  "title": "CS-Pi: Constraint-Satisfying Flow Policy Sampling",
+  "url": "https://arxiv.org/abs/2611.08654",
+  "description": "arXiv:2611.08654v1 Announce Type: new \nAbstract: A flow-matching policy deployed in the field must often satisfy a constraint that was absent from its demonstrations, such as avoiding an obstacle it has never seen. Retraining for every new constraint is impractical, so the constraint must be enforced at inference time. Enforcing it must not discard what the policy learned: an action the policy would rarely sample may avoid the obstacle yet fail the task. We therefore want actions that are both s",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-11-09T07:01:09.831067",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
