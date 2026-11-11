@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261111-070106-646",
+  "title": "RoboACE: Adversarial Co-Evolution for Robot Self-Improvement",
+  "url": "https://arxiv.org/abs/2611.13034",
+  "description": "arXiv:2611.13034v1 Announce Type: new \nAbstract: Robot agents can improve reusable skills, planning procedures, and recovery strategies from execution feedback, yet a fixed practice source leaves the search for new weaknesses unchanged. Useful practice depends on the agent's current capabilities, so the procedure that chooses practice must also be revisable. We present RoboACE (Robot Adversarial Co-Evolution), a framework that jointly evolves curriculum and execution harnesses around frozen foun",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-11-11T07:01:06.644844",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
