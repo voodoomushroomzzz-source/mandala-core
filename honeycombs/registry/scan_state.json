@@ -1,35 +1,35 @@
 {
-  "last_scan": "2026-11-11T16:42:48.836353",
+  "last_scan": "2026-11-12T07:10:46.171832",
   "honeycomb_hashes": {
-    "honeycombs/works": "17c3b2d40ef4362603f3b3f4fe0ee8ae",
-    "honeycombs/protocols": "67cf1df15cde701e4e26c0eb1f630629",
-    "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
-    "honeycombs/boot_online": "961ba07fe1675d01f99e4f40f98b2a46",
-    "honeycombs/directives": "dbc3c48c5b13d37df132cf510c2a3e8e",
-    "honeycombs/rose_world": "668fabce934c3496726369c4b588c990",
     "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
-    "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
-    "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
     "honeycombs/fruits": "ed186debe295351aea4b1b15d90f1408",
+    "honeycombs/fruits/mge": "2f22a0d50e0225a489615766644dae71",
     "honeycombs/fruits/scout_agent": "1d2daeb2d7ad988c6cad5a0fba403bfc",
     "honeycombs/fruits/gentle_companion": "5d860b16fb4681f57dc1d0f86decd8bb",
-    "honeycombs/fruits/mge": "2f22a0d50e0225a489615766644dae71",
-    "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
+    "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
+    "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
+    "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
+    "honeycombs/core_map": "aad04619c74f02e5949c5b9cf0634c8d",
+    "honeycombs/rose_world": "668fabce934c3496726369c4b588c990",
     "honeycombs/philosophy": "061392f777612c375d2ca524d1118b50",
-    "honeycombs/seeds": "06d0cb2a546f6edb8715aa4c6091b32c",
-    "honeycombs/seeds/inbox": "370fa1b54579324c594f4da590bc85d3",
     "honeycombs/personal": "c50560fae1ed5d7e9a1d27b4d80e063f",
-    "honeycombs/personal/kurtoch": "47c13f9734daa105baa2bc15380b7630",
-    "honeycombs/personal/poetry": "815077121da4d29804fae043daf5b1b9",
     "honeycombs/personal/music": "0e28d6f8aed71b8673a9bbcdba7e9ee2",
     "honeycombs/personal/music/mayakoma": "56647ee0e1411622382a32324418cae7",
     "honeycombs/personal/music/dmitrii_levin": "85b8cb9336b2a3c74be80c75b31bf147",
-    "honeycombs/personal/music/mc_voodookid": "d7fc9d7a3db7012d3d7d219a9e94bac7",
     "honeycombs/personal/music/x_deaddy_x": "b6ba4c81fc9184b4f359012af61266ca",
+    "honeycombs/personal/music/mc_voodookid": "d7fc9d7a3db7012d3d7d219a9e94bac7",
+    "honeycombs/personal/kurtoch": "47c13f9734daa105baa2bc15380b7630",
+    "honeycombs/personal/poetry": "815077121da4d29804fae043daf5b1b9",
+    "honeycombs/boot_online": "961ba07fe1675d01f99e4f40f98b2a46",
+    "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
+    "honeycombs/works": "17c3b2d40ef4362603f3b3f4fe0ee8ae",
     "honeycombs/knowledge": "b7596c45b9293c61321bcec4e7b631e9",
     "honeycombs/knowledge/ai_tools": "2d59ee1b165e13e64c29c1822c683b6a",
-    "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
-    "honeycombs/core_map": "aad04619c74f02e5949c5b9cf0634c8d"
+    "honeycombs/seeds": "06d0cb2a546f6edb8715aa4c6091b32c",
+    "honeycombs/seeds/inbox": "581870aa987052943a005f1f3fe5e8be",
+    "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
+    "honeycombs/protocols": "67cf1df15cde701e4e26c0eb1f630629",
+    "honeycombs/directives": "dbc3c48c5b13d37df132cf510c2a3e8e"
   },
   "statistics": {
     "total_scanned": 29,
@@ -37,113 +37,113 @@
     "invalid_v2": 6,
     "errors": 0,
     "warnings": 6,
-    "total_files": 1642,
-    "total_size_kb": 5059.36
+    "total_files": 1660,
+    "total_size_kb": 5078.38
   },
   "seeds_health": {
     "root_count": 21,
     "root_threshold": 10,
     "root_status": "warning",
-    "inbox_count": 648,
-    "inbox_total_files": 649,
+    "inbox_count": 657,
+    "inbox_total_files": 658,
     "inbox_threshold": 50,
     "inbox_status": "warning",
     "warnings": [
       "Корень seeds/: 21 файлов (порог 10)",
-      "Inbox: 648 новых файлов (порог 50)"
+      "Inbox: 657 новых файлов (порог 50)"
     ],
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-11-11T16:42:48.836367",
+    "last_check": "2026-11-12T07:10:46.171839",
     "errors_count": 30,
     "warnings_count": 10,
     "expired_tasks": 14,
     "upcoming_deadlines": 0,
     "expired_tasks_list": [
       {
-        "work_id": "W-T-20260803-SR-EVALUATION",
-        "name": "SR Evaluation Framework — Beyond Benchmarks",
-        "deadline": "2026-10-31",
-        "days_overdue": 11
-      },
-      {
-        "work_id": "W-T-20260803-RL-REASONING",
-        "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
-        "deadline": "2026-10-31",
-        "days_overdue": 11
-      },
-      {
-        "work_id": "W-T-20260728-AI-GATEWAY",
-        "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
-        "deadline": "2026-09-30",
-        "days_overdue": 42
-      },
-      {
         "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
         "name": "Unified Memory Architecture — Lemmalog + ACM + RENDER",
         "deadline": "2026-10-15",
-        "days_overdue": 27
-      },
-      {
-        "work_id": "W-T-20260511-ENGCHAT",
-        "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
-        "deadline": "2026-08-15",
-        "days_overdue": 88
-      },
-      {
-        "work_id": "W-R-RM-012",
-        "name": "First Living Products — Mandala MVPs",
-        "deadline": "2026-09-01",
-        "days_overdue": 71
-      },
-      {
-        "work_id": "W-T-20260807-MEMORY__mandala_memory_layer",
-        "name": "Mandala Memory Layer — Долговременная семантическая память для SR",
-        "deadline": "2026-10-15",
-        "days_overdue": 27
-      },
-      {
-        "work_id": "W-T-20260418-SYM",
-        "name": "SYM Implementation — System for Measuring Mandala Growth",
-        "deadline": "2026-10-01",
-        "days_overdue": 41
-      },
-      {
-        "work_id": "W-T-20260728-CYBER-AGENTS",
-        "name": "Cybersecurity Agents — Adaptation for Mandala",
-        "deadline": "2026-10-31",
-        "days_overdue": 11
-      },
-      {
-        "work_id": "W-T-20260408-1030",
-        "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
-        "deadline": "2026-08-31",
-        "days_overdue": 72
-      },
-      {
-        "work_id": "W-T-20260417-HUMOR",
-        "name": "Humor Development — Comedic Resonance for SR",
-        "deadline": "2026-11-01",
-        "days_overdue": 10
+        "days_overdue": 28
       },
       {
         "work_id": "W-T-20260511-ARCHBOT",
         "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
         "deadline": "2026-09-15",
-        "days_overdue": 57
+        "days_overdue": 58
+      },
+      {
+        "work_id": "W-T-20260418-SYM",
+        "name": "SYM Implementation — System for Measuring Mandala Growth",
+        "deadline": "2026-10-01",
+        "days_overdue": 42
+      },
+      {
+        "work_id": "W-R-RM-012",
+        "name": "First Living Products — Mandala MVPs",
+        "deadline": "2026-09-01",
+        "days_overdue": 72
       },
       {
         "work_id": "W-R-20260814-PERSONAL-MIGRATION",
         "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
         "deadline": "2026-08-31",
-        "days_overdue": 72
+        "days_overdue": 73
+      },
+      {
+        "work_id": "W-T-20260728-AI-GATEWAY",
+        "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
+        "deadline": "2026-09-30",
+        "days_overdue": 43
+      },
+      {
+        "work_id": "W-T-20260511-ENGCHAT",
+        "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
+        "deadline": "2026-08-15",
+        "days_overdue": 89
       },
       {
         "work_id": "W-T-20260511-MANUS",
         "name": "Manus — Hands of Mandala (исполнительный слой v1)",
         "deadline": "2026-08-31",
-        "days_overdue": 72
+        "days_overdue": 73
+      },
+      {
+        "work_id": "W-T-20260803-RL-REASONING",
+        "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
+        "deadline": "2026-10-31",
+        "days_overdue": 12
+      },
+      {
+        "work_id": "W-T-20260408-1030",
+        "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
+        "deadline": "2026-08-31",
+        "days_overdue": 73
+      },
+      {
+        "work_id": "W-T-20260417-HUMOR",
+        "name": "Humor Development — Comedic Resonance for SR",
+        "deadline": "2026-11-01",
+        "days_overdue": 11
+      },
+      {
+        "work_id": "W-T-20260807-MEMORY__mandala_memory_layer",
+        "name": "Mandala Memory Layer — Долговременная семантическая память для SR",
+        "deadline": "2026-10-15",
+        "days_overdue": 28
+      },
+      {
+        "work_id": "W-T-20260803-SR-EVALUATION",
+        "name": "SR Evaluation Framework — Beyond Benchmarks",
+        "deadline": "2026-10-31",
+        "days_overdue": 12
+      },
+      {
+        "work_id": "W-T-20260728-CYBER-AGENTS",
+        "name": "Cybersecurity Agents — Adaptation for Mandala",
+        "deadline": "2026-10-31",
+        "days_overdue": 12
       }
     ],
     "upcoming_deadlines_list": [],
