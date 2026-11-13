@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-11-12T17:11:03.516148",
+  "last_scan": "2026-11-13T07:10:41.115248",
   "honeycomb_hashes": {
     "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
     "honeycombs/fruits": "ed186debe295351aea4b1b15d90f1408",
@@ -26,7 +26,7 @@
     "honeycombs/knowledge": "b7596c45b9293c61321bcec4e7b631e9",
     "honeycombs/knowledge/ai_tools": "2d59ee1b165e13e64c29c1822c683b6a",
     "honeycombs/seeds": "06d0cb2a546f6edb8715aa4c6091b32c",
-    "honeycombs/seeds/inbox": "581870aa987052943a005f1f3fe5e8be",
+    "honeycombs/seeds/inbox": "d4e0f1805b31a8fed53f884d86f7843a",
     "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
     "honeycombs/protocols": "67cf1df15cde701e4e26c0eb1f630629",
     "honeycombs/directives": "dbc3c48c5b13d37df132cf510c2a3e8e"
@@ -55,7 +55,7 @@
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-11-12T17:11:03.516161",
+    "last_check": "2026-11-13T07:10:41.115258",
     "errors_count": 30,
     "warnings_count": 10,
     "expired_tasks": 14,
@@ -65,85 +65,85 @@
         "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
         "name": "Unified Memory Architecture — Lemmalog + ACM + RENDER",
         "deadline": "2026-10-15",
-        "days_overdue": 28
+        "days_overdue": 29
       },
       {
         "work_id": "W-T-20260511-ARCHBOT",
         "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
         "deadline": "2026-09-15",
-        "days_overdue": 58
+        "days_overdue": 59
       },
       {
         "work_id": "W-T-20260418-SYM",
         "name": "SYM Implementation — System for Measuring Mandala Growth",
         "deadline": "2026-10-01",
-        "days_overdue": 42
+        "days_overdue": 43
       },
       {
         "work_id": "W-R-RM-012",
         "name": "First Living Products — Mandala MVPs",
         "deadline": "2026-09-01",
-        "days_overdue": 72
+        "days_overdue": 73
       },
       {
         "work_id": "W-R-20260814-PERSONAL-MIGRATION",
         "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
         "deadline": "2026-08-31",
-        "days_overdue": 73
+        "days_overdue": 74
       },
       {
         "work_id": "W-T-20260728-AI-GATEWAY",
         "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
         "deadline": "2026-09-30",
-        "days_overdue": 43
+        "days_overdue": 44
       },
       {
         "work_id": "W-T-20260511-ENGCHAT",
         "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
         "deadline": "2026-08-15",
-        "days_overdue": 89
+        "days_overdue": 90
       },
       {
         "work_id": "W-T-20260511-MANUS",
         "name": "Manus — Hands of Mandala (исполнительный слой v1)",
         "deadline": "2026-08-31",
-        "days_overdue": 73
+        "days_overdue": 74
       },
       {
         "work_id": "W-T-20260803-RL-REASONING",
         "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
         "deadline": "2026-10-31",
-        "days_overdue": 12
+        "days_overdue": 13
       },
       {
         "work_id": "W-T-20260408-1030",
         "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
         "deadline": "2026-08-31",
-        "days_overdue": 73
+        "days_overdue": 74
       },
       {
         "work_id": "W-T-20260417-HUMOR",
         "name": "Humor Development — Comedic Resonance for SR",
         "deadline": "2026-11-01",
-        "days_overdue": 11
+        "days_overdue": 12
       },
       {
         "work_id": "W-T-20260807-MEMORY__mandala_memory_layer",
         "name": "Mandala Memory Layer — Долговременная семантическая память для SR",
         "deadline": "2026-10-15",
-        "days_overdue": 28
+        "days_overdue": 29
       },
       {
         "work_id": "W-T-20260803-SR-EVALUATION",
         "name": "SR Evaluation Framework — Beyond Benchmarks",
         "deadline": "2026-10-31",
-        "days_overdue": 12
+        "days_overdue": 13
       },
       {
         "work_id": "W-T-20260728-CYBER-AGENTS",
         "name": "Cybersecurity Agents — Adaptation for Mandala",
         "deadline": "2026-10-31",
-        "days_overdue": 12
+        "days_overdue": 13
       }
     ],
     "upcoming_deadlines_list": [],
