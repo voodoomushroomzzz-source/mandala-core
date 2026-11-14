@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.12.2",
+    "version": "v2.16.1",
     "created": "2026-09-23",
-    "updated": "2026-11-08",
+    "updated": "2026-11-14",
     "layer": 2,
     "type": "personal_subhub_index",
-    "description": "Хаб проекта 'Куртош'. v2.12.0: +procurement_pil_progress (archiveSmart v2.0.0, PIL_setup, прогресс stage_0). v2.13.0: +schedule_recent 11.1 +pre-release_check. v2.13.1: фикс 11.1 (Денис вых 05.11, строгое 2/2 Нижка). v2.14.3: финальный фикс расписаний 11.1 и 11.2. v2.14.5: фикс 11.2 (Юля Пн-Вт, Анна Ср-Чт). v2.15.4: фикс 11.1 (Пт: Оля full, Денис 11-19). v2.16.0: +notion_hub (карта Notion-воркспейса).",
+    "description": "Хаб проекта 'Куртош'. v2.12.0: +procurement_pil_progress (archiveSmart v2.0.0, PIL_setup, прогресс stage_0). v2.13.0: +schedule_recent 11.1 +pre-release_check. v2.13.1: фикс 11.1 (Денис вых 05.11, строгое 2/2 Нижка). v2.14.3: финальный фикс расписаний 11.1 и 11.2. v2.14.5: фикс 11.2 (Юля Пн-Вт, Анна Ср-Чт). v2.15.4: фикс 11.1 (Пт: Оля full, Денис 11-19). v2.16.0: +notion_hub (карта Notion-воркспейса). v2.16.1: временное правило — Пт без доп. смены (2 full).",
     "status": "active",
     "priority": "critical",
     "tags": [
@@ -128,7 +128,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-11-04",
+    "last_check": "2026-11-14",
     "notes": "v2.16.0: добавлена карта notion_hub."
   },
   "snapshots": {
@@ -848,9 +848,9 @@
     "identity": {
       "module_id": "KURTOCH-SCHEDULING-GUIDE-001",
       "name": "Scheduling Guide",
-      "version": "v1.1.0",
+      "version": "v1.1.1",
       "created": "2026-10-16",
-      "updated": "2026-10-20",
+      "updated": "2026-11-14",
       "description": "Правила и логика составления расписания смен Куртош.",
       "status": "active"
     },
@@ -863,7 +863,8 @@
         },
         "fri": {
           "base": 2,
-          "extra": "runner 16:00-close"
+          "extra": null,
+          "notes": "Временно: 2 full, без доп"
         },
         "sat": {
           "base": 2,
@@ -1040,6 +1041,13 @@
         "Пустая смена обозначается пустой строкой ''.",
         "Всего элементов в каждой строке (включая имя) должно быть 8."
       ]
+    },
+    "temporary_overrides": {
+      "fri_no_extra": {
+        "active": true,
+        "since": "2026-11-14",
+        "reason": "Доп с 16 и 11-19 временно убраны, Пт = 2 full."
+      }
     }
   },
   "schedule_recent": {
