@@ -13231,3 +13231,59 @@
 [2026-11-14 07:01:06] [INFO]   Total duplicates: 7
 [2026-11-14 07:01:06] [INFO]   Total removed (old): 0
 [2026-11-14 07:01:06] [INFO] ============================================================
+[2026-11-14 15:35:06] [INFO] ============================================================
+[2026-11-14 15:35:06] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-11-14 15:35:06] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-11-14 15:35:06] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-11-14 15:35:06] [INFO]   → Found 15 raw items, 15 recent
+[2026-11-14 15:35:06] [INFO]   → Filtered to 5 relevant items
+[2026-11-14 15:35:06] [INFO]   ⏭️ Duplicate: Zugwise: Domain-Aware Game Reconstruction for Digi...
+[2026-11-14 15:35:07] [INFO]   ⏭️ Duplicate: Cleaning an Agent's History Hurts When the World S...
+[2026-11-14 15:35:07] [INFO]   ⏭️ Duplicate: Together Compiler: Continual Compilation for AI In...
+[2026-11-14 15:35:07] [INFO]   ⏭️ Duplicate: When Should Semantic Priors Enter Partially-Identi...
+[2026-11-14 15:35:07] [INFO]   ⏭️ Duplicate: SynthCorp: A Platform for Creating Benchmarks for ...
+[2026-11-14 15:35:07] [INFO]   📊 arXiv AI: saved 0, duplicates 5
+[2026-11-14 15:35:07] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-11-14 15:35:07] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-11-14 15:35:07] [INFO]   → Found 0 raw items, 0 recent
+[2026-11-14 15:35:07] [INFO]   → Filtered to 0 relevant items
+[2026-11-14 15:35:07] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-11-14 15:35:07] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-11-14 15:35:07] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-11-14 15:35:07] [ERROR]   ❌ RSS error: 419 Client Error:  for url: https://news.ycombinator.com/rss
+[2026-11-14 15:35:07] [INFO]   📊 Hacker News: saved 0, duplicates 0
+[2026-11-14 15:35:07] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-11-14 15:35:07] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-11-14 15:35:08] [INFO]   → Found 15 raw items, 15 recent
+[2026-11-14 15:35:08] [INFO]   → Filtered to 5 relevant items
+[2026-11-14 15:35:08] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-11-14 15:35:08] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-11-14 15:35:09] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-11-14 15:35:09] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-11-14 15:35:09] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-11-14 15:35:09] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-11-14 15:35:09] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-11-14 15:35:09] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-11-14 15:35:09] [INFO]   → Found 15 raw items, 5 recent
+[2026-11-14 15:35:09] [INFO]   → Filtered to 5 relevant items
+[2026-11-14 15:35:09] [INFO]   ⏭️ Duplicate: Jensen Huang’s departure blasts big hole in AI sta...
+[2026-11-14 15:35:09] [INFO]   ⏭️ Duplicate: AI agent startup LangChain hits $3B valuation...
+[2026-11-14 15:35:09] [INFO]   ⏭️ Duplicate: Export-banned Nvidia chips are behind China’s most...
+[2026-11-14 15:35:09] [INFO]   ⏭️ Duplicate: ChatGPT’s new Wallet lets AI agents shop and check...
+[2026-11-14 15:35:10] [INFO]   ⏭️ Duplicate: The unfolding Jensen Huang scandal: a timeline...
+[2026-11-14 15:35:10] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-11-14 15:35:10] [INFO]   🗑️ Cleaning old seeds (date <= 2026-11-14)...
+[2026-11-14 15:35:10] [INFO]   ✅ No old seeds to remove
+[2026-11-14 15:35:10] [INFO]   📝 Updated inbox/index.json with last_processed=2026-11-14
+[2026-11-14 15:35:10] [INFO] 
+============================================================
+[2026-11-14 15:35:10] [INFO] ✅ Scout Agent v2.2 finished
+[2026-11-14 15:35:10] [INFO]   Total saved: 0
+[2026-11-14 15:35:10] [INFO]   Total duplicates: 15
+[2026-11-14 15:35:10] [INFO]   Total removed (old): 0
+[2026-11-14 15:35:10] [INFO] ============================================================
