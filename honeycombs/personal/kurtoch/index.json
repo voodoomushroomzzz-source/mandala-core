@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.16.1",
+    "version": "v2.16.2",
     "created": "2026-09-23",
     "updated": "2026-11-14",
     "layer": 2,
@@ -1075,7 +1075,7 @@
               "пн": "адм",
               "вт": "full",
               "ср": null,
-              "чт": null,
+              "чт": "с 16",
               "пт": "full",
               "сб": null,
               "вс": "11-19"
@@ -1088,8 +1088,8 @@
               "пн": null,
               "вт": "full",
               "ср": "full",
-              "чт": null,
-              "пт": "full",
+              "чт": "с 16",
+              "пт": null,
               "сб": null,
               "вс": null
             }
@@ -1114,8 +1114,8 @@
               "пн": "full",
               "вт": null,
               "ср": null,
-              "чт": "full",
-              "пт": null,
+              "чт": null,
+              "пт": "full",
               "сб": "full",
               "вс": "full"
             }
