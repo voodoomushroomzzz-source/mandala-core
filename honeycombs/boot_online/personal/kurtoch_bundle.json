@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-11-09T13:35:34Z",
+    "generated_at": "2026-11-14T10:03:50Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -1472,9 +1472,9 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.6.53",
+      "version": "v2.6.54",
       "created": "2026-09-14",
-      "updated": "2026-11-09",
+      "updated": "2026-11-13",
       "layer": 2,
       "type": "taskboard_module",
       "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -1485,9 +1485,9 @@
     },
     "taskboard": {
       "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-      "version": "v2.6.53",
+      "version": "v2.6.54",
       "created": "2026-09-14",
-      "updated": "2026-11-09",
+      "updated": "2026-11-13",
       "legend": {
         "priority": {
           "critical": "Горит. Сегодня-завтра.",
@@ -3236,30 +3236,185 @@
             "column": "Операционка — Общая"
           },
           "focus": false
+        },
+        {
+          "id": "K-189",
+          "title": "Починить стул (Центр)",
+          "description": "В Центре сломался стул (раскачался). Попросить Антона, чтобы он его поправил.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-15",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-002",
+            "K-179"
+          ],
+          "created": "2026-11-13",
+          "updated": "2026-11-13",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          },
+          "focus": false
+        },
+        {
+          "id": "K-190",
+          "title": "Оформить зону дрип-пакетов (Центр)",
+          "description": "В Центре оформить зону под штучные дрип-пакеты (кофе). Сделать так, чтобы гости визуально видели, что у нас можно покупать их поштучно (3 пакета) себе домой.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-20",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-002",
+            "K-185"
+          ],
+          "created": "2026-11-13",
+          "updated": "2026-11-13",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          },
+          "focus": false
+        },
+        {
+          "id": "K-191",
+          "title": "Купить запасную печатающую голову для принтера (Центр)",
+          "description": "Заменить старую печатающую голову для принтера, чтобы была запасная (купить новую/запасную).",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-30",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-002"
+          ],
+          "created": "2026-11-13",
+          "updated": "2026-11-13",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          },
+          "focus": false
+        },
+        {
+          "id": "K-192",
+          "title": "Внедрить цветовую градацию инвентаря (Центр)",
+          "description": "В Центре внедрить систему цветового кодирования для уборочного инвентаря (досточки, губки, тряпочки и прочее), чтобы разделить зоны использования и соблюдать санитарные нормы.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-30",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-002",
+            "K-167"
+          ],
+          "created": "2026-11-13",
+          "updated": "2026-11-13",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          },
+          "focus": true
+        },
+        {
+          "id": "K-193",
+          "title": "Завести рабочие номера (Центр и Нижка)",
+          "description": "Оформить/завести рабочие номера телефонов для точек Центр и Нижка (для связи с гостями, доставки и т.д.).",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-30",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-001",
+            "M-002"
+          ],
+          "created": "2026-11-13",
+          "updated": "2026-11-13",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "focus": false
+        },
+        {
+          "id": "K-194",
+          "title": "Сверить накладные Метро, оплатить Гагаринский, выгрузить платежи",
+          "description": "1. Сверить все накладные по Метро и поставить их в оплату на завтра.\n2. Добавить в оплату Гагаринский (ТЦ).\n3. Проверить фонды (перевели ли средства на другие фонды).\n4. Со склада выгрузить платежи в банк.",
+          "priority": "critical",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-13",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-078",
+            "K-019"
+          ],
+          "created": "2026-11-13",
+          "updated": "2026-11-13",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "focus": true
         }
       ],
       "counters": {
-        "total": 63,
+        "total": 69,
         "by_status": {
-          "todo": 57,
+          "todo": 63,
           "in_progress": 5,
           "planning": 1
         },
         "by_priority": {
-          "high": 31,
-          "medium": 27,
-          "critical": 3,
+          "high": 33,
+          "medium": 30,
+          "critical": 4,
           "low": 2
         },
         "by_column": {
-          "Операционка — Общая": 19,
-          "Операционка — Центр": 18,
+          "Операционка — Общая": 21,
+          "Операционка — Центр": 22,
           "Операционка — Нижка": 16,
           "Крупные вехи": 3,
           "Стратегические": 7
         },
         "by_phase": {
-          "phase_0": 63
+          "phase_0": 69
         }
       },
       "notes": {
@@ -6170,19 +6325,19 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.9.2",
+      "version": "v1.9.3",
       "created": "2026-09-23",
-      "updated": "2026-10-30",
+      "updated": "2026-11-14",
       "layer": 2,
       "type": "team_module",
-      "description": "Картотека сотрудников Куртош. 20 человек. v1.9.0: добавлена модель оплаты (3 уровня + гибкая ставка), раннеры переведены в left, синхронизировано с schedule_salary_automation. v1.9.1: Рыжков substitute->stopped (временно), Дарья stopped->left. v1.9.2: приоритеты смен, лимиты, фикс Александры.",
+      "description": "Картотека сотрудников Куртош. 20 человек. v1.9.0: добавлена модель оплаты (3 уровня + гибкая ставка), раннеры переведены в left, синхронизировано с schedule_salary_automation. v1.9.1: Рыжков substitute->stopped (временно), Дарья stopped->left. v1.9.2: приоритеты смен, лимиты, фикс Александры. v1.9.3: лимиты смен (Оля 2.5/3/4, Александра 3/4/4, Никита 2/2/4, Денис 2/2/4), универсальное правило 'не более 2 смен подряд'.",
       "status": "active",
       "priority": "high",
       "parent": "index.json",
       "resonance": "100%"
     },
     "team_roster": {
-      "last_updated": "2026-10-30",
+      "last_updated": "2026-11-14",
       "total_employees": 22,
       "by_status": {
         "core": 2,
@@ -6215,7 +6370,7 @@
             "обучение стажёров"
           ],
           "schedule": {
-            "notes": "пн — админка; может в любые дни; не более 3 смен подряд",
+            "notes": "пн — админка; может в любые дни; не более 2 смен подряд",
             "preferences": null,
             "availability": null,
             "shifts_per_week": {
@@ -6261,7 +6416,7 @@
             ],
             "history": []
           },
-          "updated": "2026-10-30",
+          "updated": "2026-11-14",
           "birthday": "2007-09-11"
         },
         {
@@ -6280,11 +6435,11 @@
             "preferences": "выхи",
             "availability": null,
             "shifts_per_week": {
-              "min": 0,
-              "target": 0,
-              "max": 7,
+              "min": 2,
+              "target": 2,
+              "max": 4,
               "type": "flexible",
-              "notes": "Учится. Скидывает пожелания каждую неделю."
+              "notes": "Учится. Скидывает пожелания каждую неделю. Желательно >=2, макс 4."
             },
             "scheduling_note": "Приоритет 5. Добиваем оставшиеся дыры."
           },
@@ -6313,7 +6468,7 @@
             "planned": [],
             "history": []
           },
-          "updated": "2026-10-30",
+          "updated": "2026-11-14",
           "birthday": "2005-01-12"
         },
         {
@@ -6333,10 +6488,10 @@
             "availability": null,
             "shifts_per_week": {
               "min": 3,
-              "target": 3,
+              "target": 4,
               "max": 4,
               "type": "fixed",
-              "notes": "Мин 3 смены, не более 4."
+              "notes": "Мин 3, в среднем 4, макс 4."
             },
             "scheduling_note": "Приоритет 4. Мин 3 смены, max 4. Может закрывать."
           },
@@ -6368,7 +6523,7 @@
             "planned": [],
             "history": []
           },
-          "updated": "2026-10-30"
+          "updated": "2026-11-14"
         },
         {
           "id": "EMP-004",
@@ -6671,11 +6826,11 @@
             "preferences": null,
             "availability": null,
             "shifts_per_week": {
-              "min": 0,
-              "target": 0,
-              "max": 7,
+              "min": 2,
+              "target": 2,
+              "max": 4,
               "type": "flexible",
-              "notes": "Работает на другой работе. Скидывает пожелания каждую неделю."
+              "notes": "Работает на другой работе. Скидывает пожелания каждую неделю. Желательно >=2, макс 4."
             },
             "scheduling_note": "Приоритет 5. Добиваем оставшиеся дыры."
           },
@@ -6705,7 +6860,7 @@
             "planned": [],
             "history": []
           },
-          "updated": "2026-10-30",
+          "updated": "2026-11-14",
           "birthday": "1999-04-20"
         },
         {
@@ -6955,13 +7110,13 @@
             "preferences": null,
             "availability": null,
             "shifts_per_week": {
-              "min": 4,
-              "target": 4,
+              "min": 2.5,
+              "target": 3,
               "max": 4,
               "type": "fixed",
-              "notes": "Ровно 4 смены в неделю."
+              "notes": "Среднее 3, мин 2.5, макс 4."
             },
-            "scheduling_note": "Приоритет 3. Ровно 4 смены."
+            "scheduling_note": "Приоритет 3. 2.5–4, цель 3."
           },
           "skills": {
             "stage": "coffee",
@@ -6986,7 +7141,7 @@
           "data_gaps": [
             "schedule.notes"
           ],
-          "updated": "2026-10-30",
+          "updated": "2026-11-14",
           "vacation": {
             "planned": [],
             "history": []
