@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.16.2",
+    "version": "v2.16.3",
     "created": "2026-09-23",
     "updated": "2026-11-14",
     "layer": 2,
     "type": "personal_subhub_index",
-    "description": "Хаб проекта 'Куртош'. v2.12.0: +procurement_pil_progress (archiveSmart v2.0.0, PIL_setup, прогресс stage_0). v2.13.0: +schedule_recent 11.1 +pre-release_check. v2.13.1: фикс 11.1 (Денис вых 05.11, строгое 2/2 Нижка). v2.14.3: финальный фикс расписаний 11.1 и 11.2. v2.14.5: фикс 11.2 (Юля Пн-Вт, Анна Ср-Чт). v2.15.4: фикс 11.1 (Пт: Оля full, Денис 11-19). v2.16.0: +notion_hub (карта Notion-воркспейса). v2.16.1: временное правило — Пт без доп. смены (2 full).",
+    "description": "Хаб проекта 'Куртош'. v2.12.0: +procurement_pil_progress (archiveSmart v2.0.0, PIL_setup, прогресс stage_0). v2.13.0: +schedule_recent 11.1 +pre-release_check. v2.13.1: фикс 11.1 (Денис вых 05.11, строгое 2/2 Нижка). v2.14.3: финальный фикс расписаний 11.1 и 11.2. v2.14.5: фикс 11.2 (Юля Пн-Вт, Анна Ср-Чт). v2.15.4: фикс 11.1 (Пт: Оля full, Денис 11-19). v2.16.0: +notion_hub (карта Notion-воркспейса). v2.16.1: временное правило — Пт без доп. смены (2 full). v2.16.3: +schedule_recent 11.3 и 11.4 (Центр и Нижка), архив 11.1 удален.",
     "status": "active",
     "priority": "critical",
     "tags": [
@@ -1063,9 +1063,9 @@
     "rule": "Хранить 2 последних недели. При добавлении 3-й — самая старая удаляется.",
     "weeks": [
       {
-        "week_label": "11.2",
-        "period": "09.11 – 15.11",
-        "created": "2026-10-30",
+        "week_label": "11.3",
+        "period": "16.11 – 22.11",
+        "created": "2026-11-14",
         "verified_by_gardener": true,
         "rows": [
           {
@@ -1073,12 +1073,12 @@
             "point": "Ц",
             "schedule": {
               "пн": "адм",
-              "вт": "full",
-              "ср": null,
-              "чт": "с 16",
+              "вт": null,
+              "ср": "full",
+              "чт": null,
               "пт": "full",
               "сб": null,
-              "вс": "11-19"
+              "вс": null
             }
           },
           {
@@ -1087,9 +1087,9 @@
             "schedule": {
               "пн": null,
               "вт": "full",
-              "ср": "full",
-              "чт": "с 16",
-              "пт": null,
+              "ср": null,
+              "чт": "full",
+              "пт": "full",
               "сб": null,
               "вс": null
             }
@@ -1100,10 +1100,10 @@
             "schedule": {
               "пн": "full",
               "вт": null,
-              "ср": "full",
-              "чт": null,
-              "пт": "11-19",
-              "сб": null,
+              "ср": null,
+              "чт": "full",
+              "пт": null,
+              "сб": "full",
               "вс": null
             }
           },
@@ -1111,11 +1111,11 @@
             "name": "Александра",
             "point": "Ц",
             "schedule": {
-              "пн": "full",
+              "пн": null,
               "вт": null,
-              "ср": null,
-              "чт": null,
-              "пт": "full",
+              "ср": "full",
+              "чт": "full",
+              "пт": null,
               "сб": "full",
               "вс": "full"
             }
@@ -1125,37 +1125,24 @@
             "point": "Ц",
             "schedule": {
               "пн": null,
-              "вт": null,
+              "вт": "full",
               "ср": null,
               "чт": null,
               "пт": null,
-              "сб": "full",
-              "вс": "full"
+              "сб": null,
+              "вс": "11-19"
             }
           },
           {
             "name": "Денис",
             "point": "Ц",
             "schedule": {
-              "пн": null,
+              "пн": "full",
               "вт": null,
               "ср": null,
-              "чт": "full",
+              "чт": null,
               "пт": null,
               "сб": "11-19",
-              "вс": null
-            }
-          },
-          {
-            "name": "Юля",
-            "point": "Н",
-            "schedule": {
-              "пн": "full",
-              "вт": "full",
-              "ср": null,
-              "чт": null,
-              "пт": "full",
-              "сб": "full",
               "вс": null
             }
           },
@@ -1163,38 +1150,38 @@
             "name": "Анна",
             "point": "Н",
             "schedule": {
-              "пн": null,
+              "пн": "full",
               "вт": null,
-              "ср": "full",
+              "ср": null,
               "чт": "full",
-              "пт": null,
+              "пт": "full",
               "сб": null,
+              "вс": null
+            }
+          },
+          {
+            "name": "Юля",
+            "point": "Н",
+            "schedule": {
+              "пн": null,
+              "вт": "full",
+              "ср": "full",
+              "чт": null,
+              "пт": null,
+              "сб": "full",
               "вс": "full"
             }
           }
         ]
       },
       {
-        "week_label": "11.1",
-        "period": "02.11 – 08.11",
-        "created": "2026-10-30",
+        "week_label": "11.4",
+        "period": "23.11 – 29.11",
+        "created": "2026-11-14",
         "verified_by_gardener": true,
         "rows": [
           {
             "name": "Катрин",
-            "point": "Ц",
-            "schedule": {
-              "пн": "адм",
-              "вт": "full",
-              "ср": "11-19",
-              "чт": null,
-              "пт": "full",
-              "сб": null,
-              "вс": null
-            }
-          },
-          {
-            "name": "Маша",
             "point": "Ц",
             "schedule": {
               "пн": null,
@@ -1202,6 +1189,19 @@
               "ср": "full",
               "чт": "full",
               "пт": null,
+              "сб": null,
+              "вс": "11-19"
+            }
+          },
+          {
+            "name": "Маша",
+            "point": "Ц",
+            "schedule": {
+              "пн": null,
+              "вт": "full",
+              "ср": null,
+              "чт": null,
+              "пт": "full",
               "сб": null,
               "вс": "full"
             }
@@ -1211,11 +1211,11 @@
             "point": "Ц",
             "schedule": {
               "пн": null,
-              "вт": null,
+              "вт": "full",
               "ср": "full",
               "чт": null,
-              "пт": "full",
-              "сб": "full",
+              "пт": null,
+              "сб": null,
               "вс": null
             }
           },
@@ -1223,12 +1223,12 @@
             "name": "Александра",
             "point": "Ц",
             "schedule": {
-              "пн": "full",
+              "пн": null,
               "вт": null,
-              "ср": null,
-              "чт": "full",
-              "пт": null,
-              "сб": null,
+              "ср": "full",
+              "чт": null,
+              "пт": "full",
+              "сб": "full",
               "вс": "full"
             }
           },
@@ -1249,25 +1249,12 @@
             "name": "Денис",
             "point": "Ц",
             "schedule": {
-              "пн": null,
-              "вт": "full",
-              "ср": null,
-              "чт": null,
-              "пт": "11-19",
-              "сб": "11-19",
-              "вс": null
-            }
-          },
-          {
-            "name": "Юля",
-            "point": "Н",
-            "schedule": {
               "пн": "full",
               "вт": null,
               "ср": null,
               "чт": "full",
-              "пт": "full",
-              "сб": null,
+              "пт": null,
+              "сб": "11-19",
               "вс": null
             }
           },
@@ -1275,12 +1262,25 @@
             "name": "Анна",
             "point": "Н",
             "schedule": {
-              "пн": null,
+              "пн": "full",
               "вт": "full",
-              "ср": "full",
+              "ср": null,
               "чт": null,
-              "пт": null,
+              "пт": "full",
               "сб": "full",
+              "вс": null
+            }
+          },
+          {
+            "name": "Юля",
+            "point": "Н",
+            "schedule": {
+              "пн": null,
+              "вт": null,
+              "ср": "full",
+              "чт": "full",
+              "пт": null,
+              "сб": null,
               "вс": "full"
             }
           }
