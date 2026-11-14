@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-11-14T07:10:44.542493",
+  "last_scan": "2026-11-14T15:23:21.570490",
   "honeycomb_hashes": {
     "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
     "honeycombs/fruits": "ed186debe295351aea4b1b15d90f1408",
@@ -18,7 +18,7 @@
     "honeycombs/personal/music/dmitrii_levin": "85b8cb9336b2a3c74be80c75b31bf147",
     "honeycombs/personal/music/x_deaddy_x": "b6ba4c81fc9184b4f359012af61266ca",
     "honeycombs/personal/music/mc_voodookid": "d7fc9d7a3db7012d3d7d219a9e94bac7",
-    "honeycombs/personal/kurtoch": "47c13f9734daa105baa2bc15380b7630",
+    "honeycombs/personal/kurtoch": "796048314000c4bf513f8f6811674604",
     "honeycombs/personal/poetry": "815077121da4d29804fae043daf5b1b9",
     "honeycombs/boot_online": "961ba07fe1675d01f99e4f40f98b2a46",
     "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
@@ -38,7 +38,7 @@
     "errors": 0,
     "warnings": 6,
     "total_files": 1684,
-    "total_size_kb": 5116.07
+    "total_size_kb": 5124.55
   },
   "seeds_health": {
     "root_count": 21,
@@ -55,7 +55,7 @@
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-11-14T07:10:44.542503",
+    "last_check": "2026-11-14T15:23:21.570498",
     "errors_count": 30,
     "warnings_count": 10,
     "expired_tasks": 14,
