@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.16.3",
+    "version": "v2.16.4",
     "created": "2026-09-23",
     "updated": "2026-11-14",
     "layer": 2,
     "type": "personal_subhub_index",
-    "description": "Хаб проекта 'Куртош'. v2.12.0: +procurement_pil_progress (archiveSmart v2.0.0, PIL_setup, прогресс stage_0). v2.13.0: +schedule_recent 11.1 +pre-release_check. v2.13.1: фикс 11.1 (Денис вых 05.11, строгое 2/2 Нижка). v2.14.3: финальный фикс расписаний 11.1 и 11.2. v2.14.5: фикс 11.2 (Юля Пн-Вт, Анна Ср-Чт). v2.15.4: фикс 11.1 (Пт: Оля full, Денис 11-19). v2.16.0: +notion_hub (карта Notion-воркспейса). v2.16.1: временное правило — Пт без доп. смены (2 full). v2.16.3: +schedule_recent 11.3 и 11.4 (Центр и Нижка), архив 11.1 удален.",
+    "description": "Хаб проекта 'Куртош'. v2.12.0: +procurement_pil_progress (archiveSmart v2.0.0, PIL_setup, прогресс stage_0). v2.13.0: +schedule_recent 11.1 +pre-release_check. v2.13.1: фикс 11.1 (Денис вых 05.11, строгое 2/2 Нижка). v2.14.3: финальный фикс расписаний 11.1 и 11.2. v2.14.5: фикс 11.2 (Юля Пн-Вт, Анна Ср-Чт). v2.15.4: фикс 11.1 (Пт: Оля full, Денис 11-19). v2.16.0: +notion_hub (карта Notion-воркспейса). v2.16.1: временное правило — Пт без доп. смены (2 full). v2.16.3: +schedule_recent 11.3 и 11.4 (Центр и Нижка), архив 11.1 удален. v2.16.4: фикс 11.4 — добавлена админка Катрин в Пн.",
     "status": "active",
     "priority": "critical",
     "tags": [
@@ -1184,7 +1184,7 @@
             "name": "Катрин",
             "point": "Ц",
             "schedule": {
-              "пн": null,
+              "пн": "адм",
               "вт": null,
               "ср": "full",
               "чт": "full",
