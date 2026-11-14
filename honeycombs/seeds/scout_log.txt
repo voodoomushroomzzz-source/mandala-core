@@ -13175,3 +13175,59 @@
 [2026-11-13 16:57:36] [INFO]   Total duplicates: 5
 [2026-11-13 16:57:36] [INFO]   Total removed (old): 0
 [2026-11-13 16:57:36] [INFO] ============================================================
+[2026-11-14 07:01:01] [INFO] ============================================================
+[2026-11-14 07:01:01] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-11-14 07:01:01] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-11-14 07:01:01] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-11-14 07:01:01] [INFO]   → Found 15 raw items, 15 recent
+[2026-11-14 07:01:01] [INFO]   → Filtered to 5 relevant items
+[2026-11-14 07:01:01] [INFO]   ✅ Saved: SEED-20261114-070101-662.json
+[2026-11-14 07:01:02] [INFO]   ✅ Saved: SEED-20261114-070102-663.json
+[2026-11-14 07:01:02] [INFO]   ✅ Saved: SEED-20261114-070102-664.json
+[2026-11-14 07:01:03] [INFO]   ✅ Saved: SEED-20261114-070103-665.json
+[2026-11-14 07:01:03] [INFO]   ✅ Saved: SEED-20261114-070103-666.json
+[2026-11-14 07:01:03] [INFO]   📊 arXiv AI: saved 5, duplicates 0
+[2026-11-14 07:01:03] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-11-14 07:01:03] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-11-14 07:01:03] [INFO]   → Found 0 raw items, 0 recent
+[2026-11-14 07:01:03] [INFO]   → Filtered to 0 relevant items
+[2026-11-14 07:01:03] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-11-14 07:01:03] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-11-14 07:01:03] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-11-14 07:01:03] [ERROR]   ❌ RSS error: 419 Client Error:  for url: https://news.ycombinator.com/rss
+[2026-11-14 07:01:03] [INFO]   📊 Hacker News: saved 0, duplicates 0
+[2026-11-14 07:01:03] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-11-14 07:01:03] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-11-14 07:01:04] [INFO]   → Found 15 raw items, 15 recent
+[2026-11-14 07:01:04] [INFO]   → Filtered to 5 relevant items
+[2026-11-14 07:01:04] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-11-14 07:01:04] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-11-14 07:01:05] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-11-14 07:01:05] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-11-14 07:01:05] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-11-14 07:01:05] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-11-14 07:01:05] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-11-14 07:01:05] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-11-14 07:01:05] [INFO]   → Found 15 raw items, 8 recent
+[2026-11-14 07:01:05] [INFO]   → Filtered to 5 relevant items
+[2026-11-14 07:01:05] [INFO]   ✅ Saved: SEED-20261114-070105-667.json
+[2026-11-14 07:01:05] [INFO]   ✅ Saved: SEED-20261114-070105-668.json
+[2026-11-14 07:01:06] [INFO]   ✅ Saved: SEED-20261114-070106-669.json
+[2026-11-14 07:01:06] [INFO]   ⏭️ Duplicate: ChatGPT’s new Wallet lets AI agents shop and check...
+[2026-11-14 07:01:06] [INFO]   ⏭️ Duplicate: The unfolding Jensen Huang scandal: a timeline...
+[2026-11-14 07:01:06] [INFO]   📊 TechCrunch AI: saved 3, duplicates 2
+[2026-11-14 07:01:06] [INFO]   🗑️ Cleaning old seeds (date <= 2026-11-13)...
+[2026-11-14 07:01:06] [INFO]   ✅ No old seeds to remove
+[2026-11-14 07:01:06] [INFO]   📝 Updated inbox/index.json with last_processed=2026-11-14
+[2026-11-14 07:01:06] [INFO] 
+============================================================
+[2026-11-14 07:01:06] [INFO] ✅ Scout Agent v2.2 finished
+[2026-11-14 07:01:06] [INFO]   Total saved: 8
+[2026-11-14 07:01:06] [INFO]   Total duplicates: 7
+[2026-11-14 07:01:06] [INFO]   Total removed (old): 0
+[2026-11-14 07:01:06] [INFO] ============================================================
