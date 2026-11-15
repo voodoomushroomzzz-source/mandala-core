@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-11-14T10:55:42Z",
+    "generated_at": "2026-11-15T20:30:14Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -6333,9 +6333,9 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.9.3",
+      "version": "v1.9.1",
       "created": "2026-09-23",
-      "updated": "2026-11-14",
+      "updated": "2026-11-15",
       "layer": 2,
       "type": "team_module",
       "description": "Картотека сотрудников Куртош. 20 человек. v1.9.0: добавлена модель оплаты (3 уровня + гибкая ставка), раннеры переведены в left, синхронизировано с schedule_salary_automation. v1.9.1: Рыжков substitute->stopped (временно), Дарья stopped->left. v1.9.2: приоритеты смен, лимиты, фикс Александры. v1.9.3: лимиты смен (Оля 2.5/3/4, Александра 3/4/4, Никита 2/2/4, Денис 2/2/4), универсальное правило 'не более 2 смен подряд'.",
@@ -6346,12 +6346,12 @@
     },
     "team_roster": {
       "last_updated": "2026-11-14",
-      "total_employees": 22,
+      "total_employees": 21,
       "by_status": {
         "core": 2,
         "working": 6,
         "left": 6,
-        "stopped": 4,
+        "stopped": 3,
         "management": 4
       },
       "skill_ladder": {
@@ -6531,7 +6531,8 @@
             "planned": [],
             "history": []
           },
-          "updated": "2026-11-14"
+          "updated": "2026-11-15",
+          "birthday": "2007-11-16"
         },
         {
           "id": "EMP-004",
@@ -6631,50 +6632,6 @@
           },
           "updated": "2026-10-22",
           "birthday": "2003-07-29"
-        },
-        {
-          "id": "EMP-006",
-          "name": "Саша",
-          "role": "Стажёр",
-          "contacts": {
-            "phone": "89961972167",
-            "telegram": "@ilmintra_neek"
-          },
-          "functions": [
-            "смены"
-          ],
-          "schedule": {
-            "notes": "3 мены в неделю, лайт",
-            "preferences": null,
-            "availability": null
-          },
-          "skills": {
-            "stage": "pechka_done",
-            "pechka": "yes",
-            "coffee": "no",
-            "kassa": "no",
-            "notes": "Печка — сама. Кофе и касса — не умеет. Сотрудник на печку."
-          },
-          "nijka": {
-            "attitude": null,
-            "notes": null
-          },
-          "pay": {
-            "base": "200 руб/ч",
-            "notes": "Стажёр (лайт). Временно на паузе."
-          },
-          "status": "stopped",
-          "risks": [],
-          "notes": "Временно на паузе. Недостаточный уровень мастерства / не подходит.",
-          "data_gaps": [
-            "nijka.attitude"
-          ],
-          "updated": "2026-10-22",
-          "vacation": {
-            "planned": [],
-            "history": []
-          },
-          "birthday": "2007-11-16"
         },
         {
           "id": "EMP-007",
