@@ -212,7 +212,7 @@
       "type": "work",
       "path": "honeycombs/works/W-T-20260511-ARCHBOT__architect_bot.json",
       "description": "",
-      "deadline": "2026-09-15",
+      "deadline": null,
       "progress": 0
     },
     {
@@ -220,7 +220,7 @@
       "type": "work",
       "path": "honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json",
       "description": "",
-      "deadline": "2026-08-15",
+      "deadline": null,
       "progress": 0
     },
     {
@@ -228,7 +228,7 @@
       "type": "work",
       "path": "honeycombs/works/W-T-20260511-MANUS__manus_hands.json",
       "description": "",
-      "deadline": "2026-08-31",
+      "deadline": null,
       "progress": 0
     },
     {
@@ -296,14 +296,6 @@
       "progress": 0
     },
     {
-      "id": "W-R-20260803-KURTOCH-FRANCHISE",
-      "type": "work",
-      "path": "honeycombs/works/W-R-20260803-KURTOCH-FRANCHISE.json",
-      "description": "",
-      "deadline": null,
-      "progress": 0
-    },
-    {
       "id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
       "type": "work",
       "path": "honeycombs/works/W-T-20260902-MEMORY-ARCH__unified_memory_architecture.json",
@@ -322,7 +314,7 @@
     {
       "id": "W-T-20261015-MGE",
       "type": "work",
-      "path": "honeycombs/works/W-T-20261015-MGE.json",
+      "path": "honeycombs/works/W-T-20261015-MGE__mandala_graph_explorer.json",
       "description": "",
       "deadline": "2026-11-15",
       "progress": 0
@@ -330,7 +322,7 @@
     {
       "id": "W-T-20261017-MGE-BUNDLE",
       "type": "work",
-      "path": "honeycombs/works/W-T-20261017-MGE-BUNDLE.json",
+      "path": "honeycombs/works/W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json",
       "description": "",
       "deadline": "2026-11-15",
       "progress": 0
@@ -340,14 +332,14 @@
       "type": "fruit",
       "path": "honeycombs/fruits/gentle_companion/index.json",
       "description": "A closed architectural module of Mandala Symbiosis — personal bot for the Architect. Публичный Gentle Companion для широкого круга будет выделен позже.",
-      "status": "active",
+      "status": "paused",
       "version": "v7.39.81"
     },
     {
       "id": "fruit-engineer-chat-001",
       "type": "fruit",
       "path": "honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json",
-      "description": "The brain of Mandala — reads the repository, analyzes data from the sandbox, directs Manus.",
+      "description": "Локальное приложение Мандалы с чатом, дашбордами и базовой проекцией Сада. Клиенты ПК и телефона работают с одним Садом и напрямую синхронизируют его по локальной сети.",
       "status": "active",
       "version": "v4.0.0-simbiosis"
     },
@@ -355,16 +347,16 @@
       "id": "fruit-manus-001",
       "type": "fruit",
       "path": "honeycombs/works/W-T-20260511-MANUS__manus_hands.json",
-      "description": "Isolated execution layer in Docker sandbox. Performs real-world actions: HTTP checks, shell commands, API calls.",
-      "status": "in_development",
+      "description": "Слой доступа Engineer Chat к выбранным папкам, файлам и возможностям приложений. Разрешения задаются и отзываются на каждом устройстве.",
+      "status": "planned",
       "version": "v0.0.0"
     },
     {
       "id": "fruit-architect-bot-001",
       "type": "fruit",
       "path": "honeycombs/works/W-T-20260511-ARCHBOT__architect_bot.json",
-      "description": "Personal Telegram bot for the Architect. Mobile interface to Engineer Chat and Manus.",
-      "status": "in_development",
+      "description": "Возможный дополнительный Telegram-интерфейс Мандалы. Основная работа с Садом на телефоне предусмотрена в мобильном Engineer Chat.",
+      "status": "paused",
       "version": "v0.0.0"
     },
     {
@@ -655,11 +647,6 @@
     },
     {
       "from": "works",
-      "to": "W-R-20260803-KURTOCH-FRANCHISE",
-      "type": "contains"
-    },
-    {
-      "from": "works",
       "to": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
       "type": "contains"
     },
@@ -850,11 +837,11 @@
     }
   ],
   "analysis": {
-    "total_nodes": 62,
-    "total_edges": 77,
+    "total_nodes": 61,
+    "total_edges": 76,
     "by_type": {
       "honeycomb": 17,
-      "work": 27,
+      "work": 26,
       "fruit": 8,
       "knowledge": 8,
       "missing": 2
@@ -864,9 +851,9 @@
     ],
     "unregistered_honeycombs": [],
     "missing_honeycombs": [],
-    "seeds_inbox_count": 682,
-    "seeds_root_count": 21,
-    "seeds_total": 703,
+    "seeds_inbox_count": 482,
+    "seeds_root_count": 24,
+    "seeds_total": 506,
     "islands": [],
     "broken_refs": [
       {
@@ -981,12 +968,12 @@
       "W-T-20260511-MANUS",
       "W-T-20260807-MEMORY"
     ],
-    "reachable_from_core": 62,
+    "reachable_from_core": 61,
     "unreachable": [],
     "top_hubs": [
       {
         "id": "works",
-        "degree": 28
+        "degree": 27
       },
       {
         "id": "core_map",
