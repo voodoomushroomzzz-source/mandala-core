@@ -1,0 +1,38 @@
+{
+    "seed_id":  "SEED-20260904-070056-029",
+    "title":  "Fresh Memory, Stale Plans: Dependency-Scoped Validation for Distributed LLM-Agent Memory",
+    "url":  "https://arxiv.org/abs/2609.03340",
+    "description":  "arXiv:2609.03340v1 Announce Type: new \nAbstract: Distributed LLM-agent teams can read the latest shared facts and still act on an obsolete plan. A planner may derive an action from requirement $r_3$, another agent may commit $r_4$, and an executor may receive $r_4$ without replacing the plan derived from $r_3$. We call this \\emph{stale-plan execution}: state freshness does not establish that the plan authorizing an action remains valid. We introduce PlanFence, a dependency-scoped action-validati",
+    "source":  "arXiv AI",
+    "collected_at":  "2026-09-04T07:00:56.846148",
+    "status":  "promoted",
+    "evaluation":  {
+                       "score_novelty":  9,
+                       "score_feasibility":  8,
+                       "score_relevance":  10,
+                       "score_impact":  10,
+                       "total_score":  37,
+                       "mandala_relevance":  "Manus: проверка версий входных данных перед действием.",
+                       "reason_selected":  "В 30 контролируемых сценариях проверка предотвратила действия по устаревшему плану.",
+                       "action":  "promote"
+                   },
+    "promotion_notes":  {
+                            "promoted_at":  "2026-11-16",
+                            "promoted_by":  "Codex",
+                            "work_created":  ""
+                        },
+    "work_analysis":  {
+                          "analysis_date":  "",
+                          "source_links":  [
+
+                                           ],
+                          "research_summary":  "",
+                          "key_insights":  [
+
+                                           ],
+                          "related_work":  [
+
+                                           ],
+                          "implementation_notes":  ""
+                      }
+}
