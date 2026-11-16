@@ -101,7 +101,6 @@
       "W-R-RC-002__company_vessel": null,
       "W-R-RM-011__merkaba_visualizations": "2026-08-01",
       "W-R-RM-012__living_products_mvps": null,
-      "W-R-RM-014__gardener_transition": null,
       "W-T-20260408-1030__gentle_companion_bot": null,
       "W-T-20260417-HUMOR__humor_development": null,
       "W-T-20260418-SYM__sym_growth_system": null,
@@ -110,8 +109,6 @@
       "W-T-20260511-ENGCHAT__engineer_chat": null,
       "W-T-20260511-MANUS__manus_hands": null,
       "W-R-ECO-001": null,
-      "W-R-ECOMM-001": null,
-      "W-T-20260713-YOUTUBE_GAMING_CHANNEL": null,
       "W-T-20260713-YOUTUBE_MANDALA_PROMO": null,
       "W-R-ROSE-001": "2026-12-31",
       "W-T-20260728-AI-GATEWAY": "2026-09-30",
@@ -129,7 +126,6 @@
       "W-R-RC-002__company_vessel": 0,
       "W-R-RM-011__merkaba_visualizations": 0,
       "W-R-RM-012__living_products_mvps": 0,
-      "W-R-RM-014__gardener_transition": 0,
       "W-T-20260408-1030__gentle_companion_bot": 65,
       "W-T-20260417-HUMOR__humor_development": 0,
       "W-T-20260418-SYM__sym_growth_system": 0,
@@ -138,8 +134,6 @@
       "W-T-20260511-ENGCHAT__engineer_chat": 0,
       "W-T-20260511-MANUS__manus_hands": 0,
       "W-R-ECO-001": 0,
-      "W-R-ECOMM-001": 0,
-      "W-T-20260713-YOUTUBE_GAMING_CHANNEL": 0,
       "W-T-20260713-YOUTUBE_MANDALA_PROMO": 0,
       "W-R-ROSE-001": 30,
       "W-T-20260728-AI-GATEWAY": 0,
@@ -154,31 +148,18 @@
     },
     "progress_updated": "2026-10-14",
     "related_works": {
-      "W-R-ECOMM-001": [
-        "W-R-RM-014"
-      ],
-      "W-T-20260713-YOUTUBE_GAMING_CHANNEL": [
-        "W-R-RM-014",
-        "W-R-ECOMM-001"
-      ],
-      "W-T-20260713-YOUTUBE_MANDALA_PROMO": [
-        "W-R-RM-014",
-        "W-R-ECOMM-001"
-      ],
-      "W-R-ROSE-001": [
-        "W-R-RM-014",
-        "W-R-ECOMM-001",
+      "W-R-ROSE-001__rose_world_ethical_filter": [
         "W-T-20260713-YOUTUBE_MANDALA_PROMO"
       ],
       "W-T-20260728-CYBER-AGENTS": [
         "W-T-20260728-AI-GATEWAY"
       ],
       "W-T-20260803-RL-REASONING": [
-        "W-T-20260511-ENGCHAT",
-        "W-T-20260511-MANUS"
+        "W-T-20260511-ENGCHAT__engineer_chat",
+        "W-T-20260511-MANUS__manus_hands"
       ],
       "W-T-20260803-SR-EVALUATION": [
-        "W-T-20260511-ENGCHAT",
+        "W-T-20260511-ENGCHAT__engineer_chat",
         "W-T-20260803-RL-REASONING"
       ],
       "W-T-20260807-MEMORY__mandala_memory_layer": [

@@ -139,7 +139,11 @@
     }
   },
   "financial_sustainability_notes": {
-    "purpose": "This work is a parallel financial sustainability track, similar to W-R-ECOMM-001 and W-R-RM-014.",
+    "purpose": "This work is a parallel financial sustainability track alongside e-commerce and career development.",
+    "related_to": [
+      "honeycombs/personal/ecommerce.json",
+      "honeycombs/personal/career.json"
+    ],
     "relationship": "All three works aim to increase Gardener's financial independence, enabling full-time focus on Mandala Symbiosis.",
     "priority": "This is a 'probe' work — test the waters with minimal investment, scale if successful."
   },

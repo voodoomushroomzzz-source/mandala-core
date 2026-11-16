@@ -101,7 +101,11 @@
   },
   "financial_note": "This pipeline is designed to be completely free. No paid subscriptions required. All tools have free tiers or are open-source. The goal is brand awareness, not direct monetization (though AdSense can be added later).",
   "connectivity": {
-    "related_to": ["W-R-RM-014", "W-R-ECOMM-001", "W-T-20260713-YOUTUBE_GAMING_CHANNEL"],
+    "related_to": [
+      "honeycombs/personal/career.json",
+      "honeycombs/personal/ecommerce.json",
+      "honeycombs/personal/youtube.json"
+    ],
     "relationship": "Part of the financial sustainability track — builds visibility for Mandala ecosystem."
   },
   "notes": [

@@ -2,6 +2,12 @@
 from collections import defaultdict
 
 
+def find_orphans(node_ids, edges) -> list:
+    """Return nodes with no incoming or outgoing edges."""
+    connected = {edge[end] for edge in edges for end in ("from", "to")}
+    return [node_id for node_id in node_ids if node_id not in connected]
+
+
 class Graph:
     def __init__(self):
         self.nodes = {}
@@ -21,8 +27,7 @@ class Graph:
         return dict(deg)
 
     def orphans(self) -> list:
-        incoming = self.in_degree()
-        return [nid for nid in self.nodes if incoming.get(nid, 0) == 0]
+        return find_orphans(self.nodes, self.edges)
 
     def to_dict(self) -> dict:
         return {"nodes": list(self.nodes.values()), "edges": self.edges, "analysis": {"total_nodes": len(self.nodes), "total_edges": len(self.edges), "orphans": self.orphans()}}

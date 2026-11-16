@@ -1,18 +1,18 @@
 name: Build MGE Graph
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
     paths:
       - 'honeycombs/**'
+      - '.github/workflows/build-mge-graph.yml'
       - '!honeycombs/fruits/mge/output/**'
-      - '!honeycombs/fruits/mge/mge/**'
       - '!honeycombs/boot_online/boot_online_onboarding_pc.json'
       - '!honeycombs/boot_online/personal/**'
       - '!honeycombs/registry/registry.json'
       - '!honeycombs/registry/scan_state.json'
-      - '!.github/workflows/build-mge-graph.yml'
 
 permissions:
   contents: write

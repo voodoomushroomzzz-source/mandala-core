@@ -104,12 +104,12 @@
     }
   },
   "notes": [
-    "This work is a parallel financial sustainability track, linked conceptually to W-R-RM-014 but not as a dependency.",
+    "This is a parallel financial sustainability track alongside the career plan.",
     "Focus on non-apparel goods to avoid the complexities of fashion sourcing.",
     "Leverage AI (Scout Agent for market research, LLMs for listing optimization) to minimize manual effort."
   ],
   "connectivity": {
-    "related_to": "W-R-RM-014",
+    "related_to": "honeycombs/personal/career.json",
     "relationship": "Both works aim to increase Gardener's financial independence, enabling full-time focus on Mandala Symbiosis."
   },
   "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-13",

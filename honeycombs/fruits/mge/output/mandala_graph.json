@@ -438,20 +438,6 @@
       "type": "knowledge",
       "path": "honeycombs/knowledge/soup_finetuning.json",
       "description": "Открытый CLI-инструмент для тонкой настройки LLM. Layer streaming: обучение 8B модели на 4 GB VRAM. Автор — Alpamys Makazhan (Казахстан). Apache-2.0."
-    },
-    {
-      "id": "W-R-RM-014",
-      "type": "missing",
-      "path": "",
-      "description": "Referenced by 4 node(s) but does not exist",
-      "referenced_count": 4
-    },
-    {
-      "id": "W-R-ECOMM-001",
-      "type": "missing",
-      "path": "",
-      "description": "Referenced by 3 node(s) but does not exist",
-      "referenced_count": 3
     }
   ],
   "edges": [
@@ -666,42 +652,7 @@
       "type": "contains"
     },
     {
-      "from": "W-R-ECOMM-001",
-      "to": "W-R-RM-014",
-      "type": "related_works"
-    },
-    {
-      "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-      "to": "W-R-RM-014",
-      "type": "related_works"
-    },
-    {
-      "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-      "to": "W-R-ECOMM-001",
-      "type": "related_works"
-    },
-    {
-      "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-      "to": "W-R-RM-014",
-      "type": "related_works"
-    },
-    {
-      "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-      "to": "W-R-ECOMM-001",
-      "type": "related_works"
-    },
-    {
-      "from": "W-R-ROSE-001",
-      "to": "W-R-RM-014",
-      "type": "related_works"
-    },
-    {
-      "from": "W-R-ROSE-001",
-      "to": "W-R-ECOMM-001",
-      "type": "related_works"
-    },
-    {
-      "from": "W-R-ROSE-001",
+      "from": "W-R-ROSE-001__rose_world_ethical_filter",
       "to": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
       "type": "related_works"
     },
@@ -711,8 +662,73 @@
       "type": "related_works"
     },
     {
+      "from": "W-T-20260803-RL-REASONING",
+      "to": "W-T-20260511-ENGCHAT__engineer_chat",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260803-RL-REASONING",
+      "to": "W-T-20260511-MANUS__manus_hands",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260803-SR-EVALUATION",
+      "to": "W-T-20260511-ENGCHAT__engineer_chat",
+      "type": "related_works"
+    },
+    {
       "from": "W-T-20260803-SR-EVALUATION",
       "to": "W-T-20260803-RL-REASONING",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260807-MEMORY__mandala_memory_layer",
+      "to": "W-T-20260511-ENGCHAT__engineer_chat",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260807-MEMORY__mandala_memory_layer",
+      "to": "W-T-20260511-MANUS__manus_hands",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260807-MEMORY__mandala_memory_layer",
+      "to": "W-R-ROSE-001__rose_world_ethical_filter",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+      "to": "W-T-20260807-MEMORY__mandala_memory_layer",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+      "to": "W-T-20260511-ENGCHAT__engineer_chat",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+      "to": "W-T-20260511-MANUS__manus_hands",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+      "to": "W-R-ROSE-001__rose_world_ethical_filter",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20261015-MGE",
+      "to": "W-T-20260511-ENGCHAT__engineer_chat",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20261015-MGE",
+      "to": "W-T-20260418-SYM__sym_growth_system",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20261015-MGE",
+      "to": "W-T-20260807-MEMORY__mandala_memory_layer",
       "type": "related_works"
     },
     {
@@ -799,176 +815,28 @@
       "from": "knowledge",
       "to": "K-soup_finetuning",
       "type": "contains"
-    },
-    {
-      "from": "W-R-ECOMM-001",
-      "to": "W-R-RM-014",
-      "type": "broken_link"
-    },
-    {
-      "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-      "to": "W-R-RM-014",
-      "type": "broken_link"
-    },
-    {
-      "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-      "to": "W-R-ECOMM-001",
-      "type": "broken_link"
-    },
-    {
-      "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-      "to": "W-R-RM-014",
-      "type": "broken_link"
-    },
-    {
-      "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-      "to": "W-R-ECOMM-001",
-      "type": "broken_link"
-    },
-    {
-      "from": "W-R-ROSE-001",
-      "to": "W-R-RM-014",
-      "type": "broken_link"
-    },
-    {
-      "from": "W-R-ROSE-001",
-      "to": "W-R-ECOMM-001",
-      "type": "broken_link"
     }
   ],
   "analysis": {
-    "total_nodes": 61,
-    "total_edges": 76,
+    "total_nodes": 59,
+    "total_edges": 75,
     "by_type": {
       "honeycomb": 17,
       "work": 26,
       "fruit": 8,
-      "knowledge": 8,
-      "missing": 2
+      "knowledge": 8
     },
-    "orphans": [
-      "core_map"
-    ],
+    "orphans": [],
     "unregistered_honeycombs": [],
     "missing_honeycombs": [],
     "seeds_inbox_count": 482,
     "seeds_root_count": 24,
     "seeds_total": 506,
     "islands": [],
-    "broken_refs": [
-      {
-        "from": "W-R-ECOMM-001",
-        "to": "W-R-RM-014",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-        "to": "W-R-RM-014",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-        "to": "W-R-ECOMM-001",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-        "to": "W-R-RM-014",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-        "to": "W-R-ECOMM-001",
-        "type": "related_works"
-      },
-      {
-        "from": "W-R-ROSE-001",
-        "to": "W-R-RM-014",
-        "type": "related_works"
-      },
-      {
-        "from": "W-R-ROSE-001",
-        "to": "W-R-ECOMM-001",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260803-RL-REASONING",
-        "to": "W-T-20260511-ENGCHAT",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260803-RL-REASONING",
-        "to": "W-T-20260511-MANUS",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260803-SR-EVALUATION",
-        "to": "W-T-20260511-ENGCHAT",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260807-MEMORY__mandala_memory_layer",
-        "to": "W-T-20260511-ENGCHAT",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260807-MEMORY__mandala_memory_layer",
-        "to": "W-T-20260511-MANUS",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260807-MEMORY__mandala_memory_layer",
-        "to": "W-R-ROSE-001",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-        "to": "W-T-20260807-MEMORY",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-        "to": "W-T-20260511-ENGCHAT",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-        "to": "W-T-20260511-MANUS",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-        "to": "W-R-ROSE-001",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20261015-MGE",
-        "to": "W-T-20260511-ENGCHAT",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20261015-MGE",
-        "to": "W-T-20260418-SYM",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20261015-MGE",
-        "to": "W-T-20260807-MEMORY",
-        "type": "related_works"
-      }
-    ],
-    "missing_node_ids": [
-      "W-R-ECOMM-001",
-      "W-R-RM-014"
-    ],
-    "id_format_mismatches": [
-      "W-R-ROSE-001",
-      "W-T-20260418-SYM",
-      "W-T-20260511-ENGCHAT",
-      "W-T-20260511-MANUS",
-      "W-T-20260807-MEMORY"
-    ],
-    "reachable_from_core": 61,
+    "broken_refs": [],
+    "missing_node_ids": [],
+    "id_format_mismatches": [],
+    "reachable_from_core": 59,
     "unreachable": [],
     "top_hubs": [
       {
@@ -988,8 +856,8 @@
         "degree": 9
       },
       {
-        "id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-        "degree": 5
+        "id": "W-T-20260511-ENGCHAT__engineer_chat",
+        "degree": 6
       }
     ]
   }

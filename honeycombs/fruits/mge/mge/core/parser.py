@@ -3,6 +3,8 @@ import json
 import os
 from pathlib import Path
 
+from mge.core.graph import find_orphans
+
 
 def find_repo_root(start: Path = None) -> Path:
     """Walk up from start until we find honeycombs/core_map/index.json."""
@@ -124,7 +126,10 @@ def parse_works(works_path=None) -> dict:
     edges = []
     manifest = data.get("manifest", {})
 
-    for work_id in manifest.get("works_list", []):
+    work_ids = manifest.get("works_list", [])
+    ids_by_prefix = {}
+    for work_id in work_ids:
+        ids_by_prefix.setdefault(normalize_work_id(work_id), []).append(work_id)
         work_file = works_path.parent / f"{work_id}.json"
         if not work_file.is_file():
             matching_files = sorted(works_path.parent.glob(f"{work_id}__*.json"))
@@ -140,12 +145,20 @@ def parse_works(works_path=None) -> dict:
         })
         edges.append({"from": "works", "to": work_id, "type": "contains"})
 
+    exact_ids = set(work_ids)
+
+    def resolve_work_id(work_id):
+        if work_id in exact_ids:
+            return work_id
+        candidates = ids_by_prefix.get(normalize_work_id(work_id), [])
+        return candidates[0] if len(candidates) == 1 else work_id
+
     related = manifest.get("related_works", {})
     for src, targets in related.items():
         if isinstance(targets, list):
+            source = resolve_work_id(src)
             for tgt in targets:
-                tgt_clean = tgt.split("__")[0] if "__" in tgt else tgt
-                edges.append({"from": src, "to": tgt_clean, "type": "related_works"})
+                edges.append({"from": source, "to": resolve_work_id(tgt), "type": "related_works"})
 
     return {"nodes": nodes, "edges": edges}
 
@@ -370,16 +383,6 @@ def parse_all() -> dict:
             seen_edges[key] = e
     edges = list(seen_edges.values())
 
-    incoming = {}
-    for e in edges:
-        incoming[e["to"]] = incoming.get(e["to"], 0) + 1
-    orphans = [n["id"] for n in all_nodes if incoming.get(n["id"], 0) == 0]
-
-    by_type = {}
-    for n in all_nodes:
-        t = n.get("type", "unknown")
-        by_type[t] = by_type.get(t, 0) + 1
-
     islands = find_islands(all_nodes, edges, root="core_map")
     broken_refs = find_broken_refs(all_nodes, edges)
     top_hubs = find_top_hubs(all_nodes, edges, top=5)
@@ -410,7 +413,7 @@ def parse_all() -> dict:
             "total_nodes": len(all_nodes),
             "total_edges": len(edges),
             "by_type": by_type,
-            "orphans": orphans,
+            "orphans": find_orphans((node["id"] for node in all_nodes), edges),
             "unregistered_honeycombs": unregistered_info["unregistered"],
             "missing_honeycombs": unregistered_info["missing"],
             "seeds_inbox_count": seeds_info["seeds_inbox_count"],
