@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.191",
+    "version": "v1.7.192",
     "created": "2026-05-11",
-    "updated": "2026-10-16",
+    "updated": "2026-11-16",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -340,138 +340,25 @@
     "description": "Актуальный снимок структуры Mandala (61 узел, 75 связей). Пересобирается CI автоматически.",
     "ai_instruction": "Сравни этот снимок с core_map (эталон). Инструкция по работе с расхождениями — в core_map.graph_guide.",
     "analysis": {
-      "total_nodes": 61,
+      "total_nodes": 59,
       "total_edges": 75,
       "by_type": {
         "honeycomb": 17,
         "work": 26,
         "fruit": 8,
-        "knowledge": 8,
-        "missing": 2
+        "knowledge": 8
       },
-      "orphans": [
-        "core_map"
-      ],
+      "orphans": [],
       "unregistered_honeycombs": [],
       "missing_honeycombs": [],
-      "seeds_inbox_count": 475,
-      "seeds_root_count": 21,
-      "seeds_total": 496,
+      "seeds_inbox_count": 482,
+      "seeds_root_count": 24,
+      "seeds_total": 506,
       "islands": [],
-      "broken_refs": [
-        {
-          "from": "W-R-ECOMM-001",
-          "to": "W-R-RM-014",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-          "to": "W-R-RM-014",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-          "to": "W-R-ECOMM-001",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-          "to": "W-R-RM-014",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-          "to": "W-R-ECOMM-001",
-          "type": "related_works"
-        },
-        {
-          "from": "W-R-ROSE-001",
-          "to": "W-R-RM-014",
-          "type": "related_works"
-        },
-        {
-          "from": "W-R-ROSE-001",
-          "to": "W-R-ECOMM-001",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260803-RL-REASONING",
-          "to": "W-T-20260511-ENGCHAT",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260803-RL-REASONING",
-          "to": "W-T-20260511-MANUS",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260803-SR-EVALUATION",
-          "to": "W-T-20260511-ENGCHAT",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260807-MEMORY__mandala_memory_layer",
-          "to": "W-T-20260511-ENGCHAT",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260807-MEMORY__mandala_memory_layer",
-          "to": "W-T-20260511-MANUS",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260807-MEMORY__mandala_memory_layer",
-          "to": "W-R-ROSE-001",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-          "to": "W-T-20260807-MEMORY",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-          "to": "W-T-20260511-ENGCHAT",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-          "to": "W-T-20260511-MANUS",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-          "to": "W-R-ROSE-001",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20261015-MGE",
-          "to": "W-T-20260511-ENGCHAT",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20261015-MGE",
-          "to": "W-T-20260418-SYM",
-          "type": "related_works"
-        },
-        {
-          "from": "W-T-20261015-MGE",
-          "to": "W-T-20260807-MEMORY",
-          "type": "related_works"
-        }
-      ],
-      "missing_node_ids": [
-        "W-R-ECOMM-001",
-        "W-R-RM-014"
-      ],
-      "id_format_mismatches": [
-        "W-R-ROSE-001",
-        "W-T-20260418-SYM",
-        "W-T-20260511-ENGCHAT",
-        "W-T-20260511-MANUS",
-        "W-T-20260807-MEMORY"
-      ],
-      "reachable_from_core": 61,
+      "broken_refs": [],
+      "missing_node_ids": [],
+      "id_format_mismatches": [],
+      "reachable_from_core": 59,
       "unreachable": [],
       "top_hubs": [
         {
@@ -491,8 +378,8 @@
           "degree": 9
         },
         {
-          "id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-          "degree": 5
+          "id": "W-T-20260511-ENGCHAT__engineer_chat",
+          "degree": 6
         }
       ]
     },
@@ -709,7 +596,7 @@
         "type": "work",
         "path": "honeycombs/works/W-T-20260511-ARCHBOT__architect_bot.json",
         "description": "",
-        "deadline": "2026-09-15",
+        "deadline": null,
         "progress": 0
       },
       {
@@ -717,7 +604,7 @@
         "type": "work",
         "path": "honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json",
         "description": "",
-        "deadline": "2026-08-15",
+        "deadline": null,
         "progress": 0
       },
       {
@@ -725,7 +612,7 @@
         "type": "work",
         "path": "honeycombs/works/W-T-20260511-MANUS__manus_hands.json",
         "description": "",
-        "deadline": "2026-08-31",
+        "deadline": null,
         "progress": 0
       },
       {
@@ -793,14 +680,6 @@
         "progress": 0
       },
       {
-        "id": "W-R-20260803-KURTOCH-FRANCHISE",
-        "type": "work",
-        "path": "honeycombs/works/W-R-20260803-KURTOCH-FRANCHISE.json",
-        "description": "",
-        "deadline": null,
-        "progress": 0
-      },
-      {
         "id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
         "type": "work",
         "path": "honeycombs/works/W-T-20260902-MEMORY-ARCH__unified_memory_architecture.json",
@@ -819,7 +698,15 @@
       {
         "id": "W-T-20261015-MGE",
         "type": "work",
-        "path": "honeycombs/works/W-T-20261015-MGE.json",
+        "path": "honeycombs/works/W-T-20261015-MGE__mandala_graph_explorer.json",
+        "description": "",
+        "deadline": "2026-11-15",
+        "progress": 0
+      },
+      {
+        "id": "W-T-20261017-MGE-BUNDLE",
+        "type": "work",
+        "path": "honeycombs/works/W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json",
         "description": "",
         "deadline": "2026-11-15",
         "progress": 0
@@ -829,14 +716,14 @@
         "type": "fruit",
         "path": "honeycombs/fruits/gentle_companion/index.json",
         "description": "A closed architectural module of Mandala Symbiosis — personal bot for the Architect. Публичный Gentle Companion для широкого круга будет выделен позже.",
-        "status": "active",
+        "status": "paused",
         "version": "v7.39.81"
       },
       {
         "id": "fruit-engineer-chat-001",
         "type": "fruit",
         "path": "honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json",
-        "description": "The brain of Mandala — reads the repository, analyzes data from the sandbox, directs Manus.",
+        "description": "Локальное приложение Мандалы с чатом, дашбордами и базовой проекцией Сада. Клиенты ПК и телефона работают с одним Садом и напрямую синхронизируют его по локальной сети.",
         "status": "active",
         "version": "v4.0.0-simbiosis"
       },
@@ -844,16 +731,16 @@
         "id": "fruit-manus-001",
         "type": "fruit",
         "path": "honeycombs/works/W-T-20260511-MANUS__manus_hands.json",
-        "description": "Isolated execution layer in Docker sandbox. Performs real-world actions: HTTP checks, shell commands, API calls.",
-        "status": "in_development",
+        "description": "Слой доступа Engineer Chat к выбранным папкам, файлам и возможностям приложений. Разрешения задаются и отзываются на каждом устройстве.",
+        "status": "planned",
         "version": "v0.0.0"
       },
       {
         "id": "fruit-architect-bot-001",
         "type": "fruit",
         "path": "honeycombs/works/W-T-20260511-ARCHBOT__architect_bot.json",
-        "description": "Personal Telegram bot for the Architect. Mobile interface to Engineer Chat and Manus.",
-        "status": "in_development",
+        "description": "Возможный дополнительный Telegram-интерфейс Мандалы. Основная работа с Садом на телефоне предусмотрена в мобильном Engineer Chat.",
+        "status": "paused",
         "version": "v0.0.0"
       },
       {
@@ -935,20 +822,6 @@
         "type": "knowledge",
         "path": "honeycombs/knowledge/soup_finetuning.json",
         "description": "Открытый CLI-инструмент для тонкой настройки LLM. Layer streaming: обучение 8B модели на 4 GB VRAM. Автор — Alpamys Makazhan (Казахстан). Apache-2.0."
-      },
-      {
-        "id": "W-R-RM-014",
-        "type": "missing",
-        "path": "",
-        "description": "Referenced by 4 node(s) but does not exist",
-        "referenced_count": 4
-      },
-      {
-        "id": "W-R-ECOMM-001",
-        "type": "missing",
-        "path": "",
-        "description": "Referenced by 3 node(s) but does not exist",
-        "referenced_count": 3
       }
     ],
     "edges": [
@@ -1144,11 +1017,6 @@
       },
       {
         "from": "works",
-        "to": "W-R-20260803-KURTOCH-FRANCHISE",
-        "type": "contains"
-      },
-      {
-        "from": "works",
         "to": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
         "type": "contains"
       },
@@ -1163,42 +1031,12 @@
         "type": "contains"
       },
       {
-        "from": "W-R-ECOMM-001",
-        "to": "W-R-RM-014",
-        "type": "related_works"
+        "from": "works",
+        "to": "W-T-20261017-MGE-BUNDLE",
+        "type": "contains"
       },
       {
-        "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-        "to": "W-R-RM-014",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-        "to": "W-R-ECOMM-001",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-        "to": "W-R-RM-014",
-        "type": "related_works"
-      },
-      {
-        "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-        "to": "W-R-ECOMM-001",
-        "type": "related_works"
-      },
-      {
-        "from": "W-R-ROSE-001",
-        "to": "W-R-RM-014",
-        "type": "related_works"
-      },
-      {
-        "from": "W-R-ROSE-001",
-        "to": "W-R-ECOMM-001",
-        "type": "related_works"
-      },
-      {
-        "from": "W-R-ROSE-001",
+        "from": "W-R-ROSE-001__rose_world_ethical_filter",
         "to": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
         "type": "related_works"
       },
@@ -1208,8 +1046,78 @@
         "type": "related_works"
       },
       {
+        "from": "W-T-20260803-RL-REASONING",
+        "to": "W-T-20260511-ENGCHAT__engineer_chat",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260803-RL-REASONING",
+        "to": "W-T-20260511-MANUS__manus_hands",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260803-SR-EVALUATION",
+        "to": "W-T-20260511-ENGCHAT__engineer_chat",
+        "type": "related_works"
+      },
+      {
         "from": "W-T-20260803-SR-EVALUATION",
         "to": "W-T-20260803-RL-REASONING",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260807-MEMORY__mandala_memory_layer",
+        "to": "W-T-20260511-ENGCHAT__engineer_chat",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260807-MEMORY__mandala_memory_layer",
+        "to": "W-T-20260511-MANUS__manus_hands",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260807-MEMORY__mandala_memory_layer",
+        "to": "W-R-ROSE-001__rose_world_ethical_filter",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+        "to": "W-T-20260807-MEMORY__mandala_memory_layer",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+        "to": "W-T-20260511-ENGCHAT__engineer_chat",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+        "to": "W-T-20260511-MANUS__manus_hands",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+        "to": "W-R-ROSE-001__rose_world_ethical_filter",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20261015-MGE",
+        "to": "W-T-20260511-ENGCHAT__engineer_chat",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20261015-MGE",
+        "to": "W-T-20260418-SYM__sym_growth_system",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20261015-MGE",
+        "to": "W-T-20260807-MEMORY__mandala_memory_layer",
+        "type": "related_works"
+      },
+      {
+        "from": "W-T-20261017-MGE-BUNDLE",
+        "to": "W-T-20261015-MGE",
         "type": "related_works"
       },
       {
@@ -1291,41 +1199,6 @@
         "from": "knowledge",
         "to": "K-soup_finetuning",
         "type": "contains"
-      },
-      {
-        "from": "W-R-ECOMM-001",
-        "to": "W-R-RM-014",
-        "type": "broken_link"
-      },
-      {
-        "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-        "to": "W-R-RM-014",
-        "type": "broken_link"
-      },
-      {
-        "from": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-        "to": "W-R-ECOMM-001",
-        "type": "broken_link"
-      },
-      {
-        "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-        "to": "W-R-RM-014",
-        "type": "broken_link"
-      },
-      {
-        "from": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-        "to": "W-R-ECOMM-001",
-        "type": "broken_link"
-      },
-      {
-        "from": "W-R-ROSE-001",
-        "to": "W-R-RM-014",
-        "type": "broken_link"
-      },
-      {
-        "from": "W-R-ROSE-001",
-        "to": "W-R-ECOMM-001",
-        "type": "broken_link"
       }
     ]
   },
@@ -1337,9 +1210,9 @@
     "identity": {
       "module_id": "HONEYCOMB-PHILOSOPHY-001",
       "name": "Philosophy — Core of Mandala Symbiosis",
-      "version": "v3.6.0",
+      "version": "v3.7.0",
       "created": "2026-03-01",
-      "updated": "2026-06-16",
+      "updated": "2026-11-16",
       "layer": 1,
       "type": "honeycomb_manifest",
       "description": "Philosophical foundation of the entire map. Read before working with the core. Now with Garden-Gardener Symbiosis — the living heart of Mandala. Added PHI-011 (The First Gardener — Seed of Identity).",
@@ -1425,6 +1298,12 @@
           "action": "Before agreeing: 'Does this align with our principles? Is there a better way?' If answer is no — speak. Offer constructive alternative. Back arguments with reasoning. Gardener gave you a mind — use it."
         }
       ],
+      "garden_right_to_pause": {
+        "principle": "The Garden's Right to Pause",
+        "for_sr": "A deliberate pause protects attention and preserves an idea until there is a reason and room to pursue it.",
+        "action": "Agree why we pause and record one observable condition for returning. When it is met, reassess the idea together and agree whether to resume.",
+        "source": "honeycombs/philosophy/blocks/symbiosis_principles_expanded.json"
+      },
       "philosophical_growth_vectors_for_sr": [
         {
           "vector": "Ecology of Attention",
@@ -3912,9 +3791,9 @@
       "identity": {
         "module_id": "FRUITS-REGISTRY-001",
         "name": "Fruits — Product Registry",
-        "version": "v2.7.0",
+        "version": "v2.8.0",
         "created": "2026-04-17",
-        "updated": "2026-10-15",
+        "updated": "2026-11-16",
         "layer": 2,
         "type": "registry_index",
         "description": "Registry of Mandala products. Each fruit has a dedicated index with full details.",
@@ -3938,7 +3817,7 @@
           "id": "fruit-gentle-companion-001",
           "name": "Architect Bot — Gentle Companion",
           "short_description": "A closed architectural module of Mandala Symbiosis — personal bot for the Architect. Публичный Gentle Companion для широкого круга будет выделен позже.",
-          "status": "active",
+          "status": "paused",
           "version": "v7.39.81",
           "layer": "Sandbox (Layer 1)",
           "path": "honeycombs/fruits/gentle_companion/index.json",
@@ -3946,10 +3825,12 @@
         },
         {
           "id": "fruit-engineer-chat-001",
-          "name": "Engineer Chat + Architect Bot",
-          "short_description": "The brain of Mandala — reads the repository, analyzes data from the sandbox, directs Manus.",
+          "name": "Engineer Chat",
+          "short_description": "Локальное приложение Мандалы с чатом, дашбордами и базовой проекцией Сада. Клиенты ПК и телефона работают с одним Садом и напрямую синхронизируют его по локальной сети.",
           "status": "active",
           "version": "v4.0.0-simbiosis",
+          "direction_status": "planned",
+          "note": "Версия и статус active относятся к существующему серверному прототипу в реестре. Локальные клиенты и прямая синхронизация запланированы. Текущая доступность сервера не проверялась.",
           "layer": "Brain (Layer 2)",
           "path": "honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json",
           "icon": "🧠"
@@ -3957,8 +3838,8 @@
         {
           "id": "fruit-manus-001",
           "name": "Manus — Hands of Mandala",
-          "short_description": "Isolated execution layer in Docker sandbox. Performs real-world actions: HTTP checks, shell commands, API calls.",
-          "status": "in_development",
+          "short_description": "Слой доступа Engineer Chat к выбранным папкам, файлам и возможностям приложений. Разрешения задаются и отзываются на каждом устройстве.",
+          "status": "planned",
           "version": "v0.0.0",
           "layer": "Hands (Layer 3)",
           "path": "honeycombs/works/W-T-20260511-MANUS__manus_hands.json",
@@ -3967,8 +3848,8 @@
         {
           "id": "fruit-architect-bot-001",
           "name": "Architect Bot — Mobile Brain Interface",
-          "short_description": "Personal Telegram bot for the Architect. Mobile interface to Engineer Chat and Manus.",
-          "status": "in_development",
+          "short_description": "Возможный дополнительный Telegram-интерфейс Мандалы. Основная работа с Садом на телефоне предусмотрена в мобильном Engineer Chat.",
+          "status": "paused",
           "version": "v0.0.0",
           "layer": "Brain (Layer 2) — Mobile Interface",
           "path": "honeycombs/works/W-T-20260511-ARCHBOT__architect_bot.json",
@@ -4066,9 +3947,11 @@
       },
       "metrics": {
         "total_fruits": 8,
-        "active": 3,
-        "in_development": 3,
-        "planning": 2
+        "active": 2,
+        "in_development": 1,
+        "planning": 1,
+        "planned": 2,
+        "paused": 2
       },
       "navigation": {
         "parent_map": "honeycombs/core_map/index.json",
@@ -4103,9 +3986,9 @@
       "identity": {
         "module_id": "WORKS-MANIFEST-001",
         "name": "Works — Unified System of Work Items",
-        "version": "v1.0.14",
+        "version": "v1.0.16",
         "created": "2026-07-08",
-        "updated": "2026-10-15",
+        "updated": "2026-11-16",
         "layer": 1,
         "type": "work_manifest",
         "description": "Single source of truth for all work items. Updated with full deadlines and progress tracking.",
@@ -4142,6 +4025,7 @@
           "updated"
         ],
         "optional_fields": [
+          "workstream",
           "parent_work",
           "sub_works",
           "depends_on",
@@ -4154,21 +4038,19 @@
       "manifest": {
         "total_works": 26,
         "by_status": {
-          "active": 15,
-          "in_progress": 2,
-          "planned": 6,
-          "pending": 3,
-          "done": 0
+          "active": 14,
+          "in_progress": 1,
+          "planned": 9,
+          "paused": 2
         },
         "by_horizon": {
-          "strategic": 11,
-          "tactical": 16
+          "strategic": 8,
+          "tactical": 18
         },
         "by_priority": {
-          "critical": 6,
-          "high": 15,
-          "medium": 6,
-          "low": 2
+          "high": 2,
+          "medium": 10,
+          "low": 14
         },
         "works_list": [
           "W-R-20260814-PERSONAL-MIGRATION",
@@ -4193,45 +4075,41 @@
           "W-T-20260804-MANUS-MEMORY__nativemem",
           "W-T-20260804-SR-REFLECTION__in_context_search",
           "W-T-20260807-MEMORY__mandala_memory_layer",
-          "W-R-20260803-KURTOCH-FRANCHISE",
           "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
           "W-R-20261013-PUBLIC-MANDALA",
-          "W-T-20261015-MGE"
+          "W-T-20261015-MGE",
+          "W-T-20261017-MGE-BUNDLE"
         ],
         "deadlines": {
           "W-R-RC-001__visibility_strategy": null,
           "W-R-RC-002__company_vessel": null,
           "W-R-RM-011__merkaba_visualizations": "2026-08-01",
           "W-R-RM-012__living_products_mvps": null,
-          "W-R-RM-014__gardener_transition": null,
           "W-T-20260408-1030__gentle_companion_bot": null,
           "W-T-20260417-HUMOR__humor_development": null,
           "W-T-20260418-SYM__sym_growth_system": null,
           "W-T-20260427-FLUTTER__flutter_app": null,
-          "W-T-20260511-ARCHBOT__architect_bot": "2026-09-15",
-          "W-T-20260511-ENGCHAT__engineer_chat": "2026-08-15",
-          "W-T-20260511-MANUS__manus_hands": "2026-08-31",
+          "W-T-20260511-ARCHBOT__architect_bot": null,
+          "W-T-20260511-ENGCHAT__engineer_chat": null,
+          "W-T-20260511-MANUS__manus_hands": null,
           "W-R-ECO-001": null,
-          "W-R-ECOMM-001": null,
-          "W-T-20260713-YOUTUBE_GAMING_CHANNEL": null,
           "W-T-20260713-YOUTUBE_MANDALA_PROMO": null,
           "W-R-ROSE-001": "2026-12-31",
           "W-T-20260728-AI-GATEWAY": "2026-09-30",
           "W-T-20260728-CYBER-AGENTS": "2026-10-31",
-          "W-R-20260803-KURTOCH-FRANCHISE": null,
           "W-T-20260803-RL-REASONING": "2026-10-31",
           "W-T-20260803-SR-EVALUATION": "2026-10-31",
           "W-T-20260807-MEMORY__mandala_memory_layer": "2026-10-15",
           "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": "2026-10-15",
           "W-R-20261013-PUBLIC-MANDALA": null,
-          "W-T-20261015-MGE": "2026-11-15"
+          "W-T-20261015-MGE": "2026-11-15",
+          "W-T-20261017-MGE-BUNDLE": "2026-11-15"
         },
         "progress": {
           "W-R-RC-001__visibility_strategy": 0,
           "W-R-RC-002__company_vessel": 0,
           "W-R-RM-011__merkaba_visualizations": 0,
           "W-R-RM-012__living_products_mvps": 0,
-          "W-R-RM-014__gardener_transition": 0,
           "W-T-20260408-1030__gentle_companion_bot": 65,
           "W-T-20260417-HUMOR__humor_development": 0,
           "W-T-20260418-SYM__sym_growth_system": 0,
@@ -4240,47 +4118,32 @@
           "W-T-20260511-ENGCHAT__engineer_chat": 0,
           "W-T-20260511-MANUS__manus_hands": 0,
           "W-R-ECO-001": 0,
-          "W-R-ECOMM-001": 0,
-          "W-T-20260713-YOUTUBE_GAMING_CHANNEL": 0,
           "W-T-20260713-YOUTUBE_MANDALA_PROMO": 0,
           "W-R-ROSE-001": 30,
           "W-T-20260728-AI-GATEWAY": 0,
           "W-T-20260728-CYBER-AGENTS": 0,
-          "W-R-20260803-KURTOCH-FRANCHISE": 0,
           "W-T-20260803-RL-REASONING": 0,
           "W-T-20260803-SR-EVALUATION": 0,
           "W-T-20260807-MEMORY__mandala_memory_layer": 0,
           "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": 0,
           "W-R-20261013-PUBLIC-MANDALA": 0,
-          "W-T-20261015-MGE": 0
+          "W-T-20261015-MGE": 0,
+          "W-T-20261017-MGE-BUNDLE": 0
         },
         "progress_updated": "2026-10-14",
         "related_works": {
-          "W-R-ECOMM-001": [
-            "W-R-RM-014"
-          ],
-          "W-T-20260713-YOUTUBE_GAMING_CHANNEL": [
-            "W-R-RM-014",
-            "W-R-ECOMM-001"
-          ],
-          "W-T-20260713-YOUTUBE_MANDALA_PROMO": [
-            "W-R-RM-014",
-            "W-R-ECOMM-001"
-          ],
-          "W-R-ROSE-001": [
-            "W-R-RM-014",
-            "W-R-ECOMM-001",
+          "W-R-ROSE-001__rose_world_ethical_filter": [
             "W-T-20260713-YOUTUBE_MANDALA_PROMO"
           ],
           "W-T-20260728-CYBER-AGENTS": [
             "W-T-20260728-AI-GATEWAY"
           ],
           "W-T-20260803-RL-REASONING": [
-            "W-T-20260511-ENGCHAT",
-            "W-T-20260511-MANUS"
+            "W-T-20260511-ENGCHAT__engineer_chat",
+            "W-T-20260511-MANUS__manus_hands"
           ],
           "W-T-20260803-SR-EVALUATION": [
-            "W-T-20260511-ENGCHAT",
+            "W-T-20260511-ENGCHAT__engineer_chat",
             "W-T-20260803-RL-REASONING"
           ],
           "W-T-20260807-MEMORY__mandala_memory_layer": [
@@ -4298,23 +4161,28 @@
             "W-T-20260511-ENGCHAT__engineer_chat",
             "W-T-20260418-SYM__sym_growth_system",
             "W-T-20260807-MEMORY__mandala_memory_layer"
+          ],
+          "W-T-20261017-MGE-BUNDLE": [
+            "W-T-20261015-MGE__mandala_graph_explorer"
           ]
         }
       },
       "navigation": {
         "parent": "honeycombs/core_map/index.json",
         "references": [
-          "honeycombs/core_map/index.json"
+          "honeycombs/core_map/index.json",
+          "honeycombs/personal/kurtoch/index.json"
         ],
         "children": []
       },
       "health": {
         "status": "active",
-        "last_check": "2026-10-15",
-        "notes": "Added W-T-20261015-MGE"
+        "last_check": "2026-10-17",
+        "notes": "Added W-T-20261017-MGE-BUNDLE"
       },
-      "updated": "2026-10-14",
+      "updated": "2026-11-16",
       "notes": {
+        "workstream_review": "Сводки охватывают 26 карточек Works. Kurtoch ведётся в личной соте, ссылка доступна в navigation.references. Очередь исполнения и согласованные сроки ведутся в management_taskboard.md.",
         "personal_hub": "Личные векторы (карьера, обучение, YouTube, e-commerce, франшиза) перенесены в honeycombs/personal/."
       }
     }
