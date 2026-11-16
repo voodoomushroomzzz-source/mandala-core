@@ -1,8 +1,9 @@
 {
+  "workstream": "Публичность и сообщество",
   "work_id": "W-R-20261013-PUBLIC-MANDALA",
   "name": "Mandala Public Knowledge System — Notion-first, website-ready",
   "status": "planned",
-  "priority": "high",
+  "priority": "medium",
   "horizon": "strategic",
   "description": "Design and launch a public knowledge resource for Mandala. Use Notion as the first publishing surface while keeping the content model and identifiers ready for a future website. Separate core knowledge, curated knowledge, public content, presentation, internal material, and personal information. Unknown visibility defaults to non-public. Each content item has one editing source and a stable ID. Draft is the default; deletion is never automatic. Publishing pipeline: Source, Validate, Resolve IDs and Relations, Dry Run, Review, Apply, Verify, Report.",
   "created": "2026-10-14",

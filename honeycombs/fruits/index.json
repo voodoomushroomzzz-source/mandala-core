@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "FRUITS-REGISTRY-001",
     "name": "Fruits — Product Registry",
-    "version": "v2.7.0",
+    "version": "v2.8.0",
     "created": "2026-04-17",
-    "updated": "2026-10-15",
+    "updated": "2026-11-16",
     "layer": 2,
     "type": "registry_index",
     "description": "Registry of Mandala products. Each fruit has a dedicated index with full details.",
@@ -28,7 +28,7 @@
       "id": "fruit-gentle-companion-001",
       "name": "Architect Bot — Gentle Companion",
       "short_description": "A closed architectural module of Mandala Symbiosis — personal bot for the Architect. Публичный Gentle Companion для широкого круга будет выделен позже.",
-      "status": "active",
+      "status": "paused",
       "version": "v7.39.81",
       "layer": "Sandbox (Layer 1)",
       "path": "honeycombs/fruits/gentle_companion/index.json",
@@ -36,10 +36,12 @@
     },
     {
       "id": "fruit-engineer-chat-001",
-      "name": "Engineer Chat + Architect Bot",
-      "short_description": "The brain of Mandala — reads the repository, analyzes data from the sandbox, directs Manus.",
+      "name": "Engineer Chat",
+      "short_description": "Локальное приложение Мандалы с чатом, дашбордами и базовой проекцией Сада. Клиенты ПК и телефона работают с одним Садом и напрямую синхронизируют его по локальной сети.",
       "status": "active",
       "version": "v4.0.0-simbiosis",
+      "direction_status": "planned",
+      "note": "Версия и статус active относятся к существующему серверному прототипу в реестре. Локальные клиенты и прямая синхронизация запланированы. Текущая доступность сервера не проверялась.",
       "layer": "Brain (Layer 2)",
       "path": "honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json",
       "icon": "🧠"
@@ -47,8 +49,8 @@
     {
       "id": "fruit-manus-001",
       "name": "Manus — Hands of Mandala",
-      "short_description": "Isolated execution layer in Docker sandbox. Performs real-world actions: HTTP checks, shell commands, API calls.",
-      "status": "in_development",
+      "short_description": "Слой доступа Engineer Chat к выбранным папкам, файлам и возможностям приложений. Разрешения задаются и отзываются на каждом устройстве.",
+      "status": "planned",
       "version": "v0.0.0",
       "layer": "Hands (Layer 3)",
       "path": "honeycombs/works/W-T-20260511-MANUS__manus_hands.json",
@@ -57,8 +59,8 @@
     {
       "id": "fruit-architect-bot-001",
       "name": "Architect Bot — Mobile Brain Interface",
-      "short_description": "Personal Telegram bot for the Architect. Mobile interface to Engineer Chat and Manus.",
-      "status": "in_development",
+      "short_description": "Возможный дополнительный Telegram-интерфейс Мандалы. Основная работа с Садом на телефоне предусмотрена в мобильном Engineer Chat.",
+      "status": "paused",
       "version": "v0.0.0",
       "layer": "Brain (Layer 2) — Mobile Interface",
       "path": "honeycombs/works/W-T-20260511-ARCHBOT__architect_bot.json",
@@ -156,9 +158,11 @@
   },
   "metrics": {
     "total_fruits": 8,
-    "active": 3,
-    "in_development": 3,
-    "planning": 2
+    "active": 2,
+    "in_development": 1,
+    "planning": 1,
+    "planned": 2,
+    "paused": 2
   },
   "navigation": {
     "parent_map": "honeycombs/core_map/index.json",

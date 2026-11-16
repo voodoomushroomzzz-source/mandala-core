@@ -1,8 +1,9 @@
 {
+  "workstream": "Локальный Сад и память",
   "work_id": "W-T-20260728-AI-GATEWAY",
   "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
   "status": "active",
-  "priority": "high",
+  "priority": "medium",
   "horizon": "strategic",
   "description": "На основе идеи Сатьи Наделлы (TechCrunch, 2026-07-27): 'Companies that trust one AI for everything may not survive.' Mandala должна развиваться как экосистема, работающая поверх любых моделей (DeepSeek, Claude, Grok, GPT и др.). Это не просто техническая фича — это философский и стратегический принцип.",
   "parent_work": null,

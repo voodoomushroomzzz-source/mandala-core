@@ -1,27 +1,26 @@
 {
-  "identity": {
-    "work_id": "W-T-20261017-MGE-BUNDLE",
-    "name": "MGE Bundle Builder — Custom Module Bundles",
-    "status": "planned",
-    "priority": "medium",
-    "horizon": "tactical",
-    "created": "2026-10-17",
-    "updated": "2026-10-17",
-    "deadline": "2026-11-15",
-    "progress": 0,
-    "effort_estimate": "10-15 часов",
-    "parent_work": "W-T-20261015-MGE",
-    "tags": [
-      "mge",
-      "bundle",
-      "html",
-      "ci",
-      "auto-build",
-      "drafts"
-    ]
-  },
+  "workstream": "Управление и качество",
+  "work_id": "W-T-20261017-MGE-BUNDLE",
+  "name": "MGE Bundle Builder — Custom Module Bundles",
+  "status": "planned",
+  "priority": "low",
+  "horizon": "tactical",
+  "description": "Инструмент автосборки кастомных бандлов Mandala. Позволяет выбирать любые соты через HTML-граф MGE и собирать из них монолит (JSON), доступный по ссылке. Опционально — автосборщик через CI, как build-onboarding.",
+  "created": "2026-10-17",
+  "updated": "2026-11-16",
+  "deadline": "2026-11-15",
+  "progress": 0,
+  "effort_estimate": "10-15 часов",
+  "parent_work": "W-T-20261015-MGE",
+  "tags": [
+    "mge",
+    "bundle",
+    "html",
+    "ci",
+    "auto-build",
+    "drafts"
+  ],
   "meta": {
-    "description": "Инструмент автосборки кастомных бандлов Mandala. Позволяет выбирать любые соты через HTML-граф MGE и собирать из них монолит (JSON), доступный по ссылке. Опционально — автосборщик через CI, как build-onboarding.",
     "purpose": "Дать Садовнику и SR возможность компоновать Mandala под задачу: выбрать релевантные соты → собрать кастомный бандл → использовать в сессии или для автосборки.",
     "how_to_use": "HTML: выбрать соты в графе → кнопка «Экспорт для SR» (карта) или «Полный бандл» (монолит). Автосборщик: drafts.json + build_bundle.py + workflow.",
     "change_requires": "gardener_approval"

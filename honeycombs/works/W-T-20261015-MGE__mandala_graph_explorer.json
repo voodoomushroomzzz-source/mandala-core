@@ -1,26 +1,25 @@
 {
-  "identity": {
-    "work_id": "W-T-20261015-MGE",
-    "name": "MGE — Mandala Graph Explorer",
-    "status": "active",
-    "priority": "medium",
-    "horizon": "tactical",
-    "created": "2026-10-15",
-    "updated": "2026-10-15",
-    "deadline": "2026-11-15",
-    "progress": 0,
-    "effort_estimate": "10-15 часов",
-    "tags": [
-      "graph",
-      "visualization",
-      "tool",
-      "ai-access",
-      "knowledge",
-      "fruit"
-    ]
-  },
+  "workstream": "Управление и качество",
+  "work_id": "W-T-20261015-MGE",
+  "name": "MGE — Mandala Graph Explorer",
+  "status": "active",
+  "priority": "high",
+  "horizon": "tactical",
+  "description": "Инструмент для визуализации и анализа графа Mandala. Два входа: HTML для Садовника, JSON для SR/ИИ.",
+  "created": "2026-10-15",
+  "updated": "2026-11-16",
+  "deadline": "2026-11-15",
+  "progress": 0,
+  "effort_estimate": "10-15 часов",
+  "tags": [
+    "graph",
+    "visualization",
+    "tool",
+    "ai-access",
+    "knowledge",
+    "fruit"
+  ],
   "meta": {
-    "description": "Инструмент для визуализации и анализа графа Mandala. Два входа: HTML для Садовника, JSON для SR/ИИ.",
     "purpose": "Закрывает 6 болей: не видно структуры, сироты/острова, ручной поиск, рассинхрон core_map, нет инструмента для SR, нет истории эволюции.",
     "how_to_use": "mge scan → mandala_graph.json + mandala_graph.html + mandala_graph.mmd",
     "change_requires": "gardener_approval",

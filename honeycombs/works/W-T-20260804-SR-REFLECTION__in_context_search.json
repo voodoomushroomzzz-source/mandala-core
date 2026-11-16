@@ -1,8 +1,9 @@
 {
+  "workstream": "Управление и качество",
   "work_id": "W-T-20260804-SR-REFLECTION__in_context_search",
   "name": "In-Context Search Theory — внедрение саморефлексии в SR",
   "status": "active",
-  "priority": "high",
+  "priority": "medium",
   "horizon": "tactical",
   "description": "Внедрить механизм саморефлексии и итеративного поиска решений в работу SR на основе теории in-context search. Улучшить качество рассуждений и способность к самоисправлению.",
   "created": "2026-08-04",

@@ -1,10 +1,20 @@
 {
+  "workstream": "Локальный Сад и память",
   "work_id": "W-T-20260511-ENGCHAT",
-  "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
-  "status": "active",
-  "priority": "HIGH",
+  "name": "Engineer Chat — локальное рабочее пространство Мандалы",
+  "status": "planned",
+  "priority": "medium",
   "horizon": "tactical",
-  "description": "Transform Engineer Chat from a standalone WebSocket analysis tool into the central integration hub of Mandala. Engineer Chat is already live (v4.0.0-simbiosis, main.py on Render) and serves as the Architect's primary interface for repository analysis, code review, and web search. This task adds: Architect Bot WebSocket integration, Manus direct control, sandbox analytics dashboards, and the data pipeline from Gentle Companion observations into actionable insights. Архитектура усиливается исследованиями по улучшению работы с графами знаний, причинно-следственными цепочками и проверкой фактов.",
+  "description": "Устанавливаемое приложение Мандала Симбиоза с чатом, дашбордами и поддержкой локальных моделей. Клиенты на ПК и телефоне открывают один Сад и продолжают работу с общими задачами, семенами, заметками и согласованными решениями.",
+  "product_vision": {
+    "first_launch": "Создать личный Сад из базовой проекции Мандалы или подключить существующий. Проекция содержит фундаментальные принципы, ключевые вехи и стартовую карту структуры со ссылками на первоисточники.",
+    "local_workspace": "Каждое устройство хранит локальную копию Сада. Работа продолжается офлайн. Возможности модели и подключённых инструментов зависят от устройства.",
+    "sync": "Первый режим — прямой обмен между доверенными устройствами по локальной Wi-Fi-сети без доступа к интернету. Изменения ждут следующего соединения, если второе устройство недоступно. Конфликтующие правки показываются пользователю для разрешения. GitHub — опциональный транспорт, формат Сада от него не зависит.",
+    "manus_boundary": "Manus выдаёт доступ к выбранным ресурсам устройства. Синхронизируются данные Сада и явно сохранённые в нём результаты. Разрешения Manus и подключённые внешние папки остаются на устройстве.",
+    "mobile_interface": "Мобильный клиент входит в Engineer Chat. Architect Bot остаётся возможным дополнительным Telegram-интерфейсом при подтверждённом сценарии.",
+    "first_milestone": "Один Сад, два устройства, одна задача. Создать задачу на ПК, продолжить на телефоне, получить результат на ПК и проверить конфликт после параллельных офлайн-правок.",
+    "prototype": "Серверная реализация v4.0.0-simbiosis описана в engineer-chat/index.json. Локальные клиенты и прямая синхронизация — перспективная разработка. Прежний срок 2026-08-15 относился к серверному плану."
+  },
   "parent_work": null,
   "sub_works": [],
   "depends_on": [],
@@ -18,9 +28,9 @@
     "analytics",
     "knowledge_graph"
   ],
-  "deadline": "2026-08-15",
+  "deadline": null,
   "created": "2026-05-11",
-  "updated": "2026-09-02",
+  "updated": "2026-11-16",
   "source": {
     "type": "task",
     "original_id": "T-20260511-ENGCHAT",
@@ -59,6 +69,7 @@
   ],
   "notes": "Интегрированы исследования по улучшению работы с графами знаний, причинно-следственными цепочками, проверкой фактов и обнаружением инструментов (011, 040, 107, 109).",
   "related_works": [
-    "W-T-20260902-MEMORY-ARCH__unified_memory_architecture"
+    "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+    "W-T-20260511-MANUS"
   ]
 }

@@ -1,8 +1,9 @@
 {
+  "workstream": "Управление и качество",
   "work_id": "W-T-20260418-SYM",
   "name": "SYM Implementation — System for Measuring Mandala Growth",
   "status": "planned",
-  "priority": "MEDIUM",
+  "priority": "low",
   "horizon": "tactical",
   "description": "Implement the SYM system as proposed by Internal SR: a growth measurement system that quantifies creative actions, motivates participants, and prepares infrastructure for future tokenization.",
   "parent_work": null,

@@ -1,8 +1,9 @@
 {
+  "workstream": "Локальный Сад и память",
   "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
   "name": "Unified Memory Architecture — Lemmalog + ACM + RENDER",
   "status": "active",
-  "priority": "critical",
+  "priority": "medium",
   "horizon": "tactical",
   "description": "Интеграция трёх подходов к памяти в единую архитектуру: Lemmalog (Datalog-движок для фактов), ACM (жизненный цикл контекста), RENDER (формат представления). Ядро Memory Layer для Мандалы.",
   "parent_work": "W-T-20260807-MEMORY__mandala_memory_layer",

@@ -1,8 +1,9 @@
 {
+  "workstream": "Стратегия и личный контур",
   "work_id": "W-R-ECO-001",
   "name": "Autonomous Ecosystem — From Room to Self-Sustaining Greenhouse",
   "status": "active",
-  "priority": "critical",
+  "priority": "medium",
   "horizon": "strategic",
   "description": "Development and implementation of a three-phase autonomous ecosystem under AI control. Phase 1: indoor ecosystem with plant zoning (split into 1a: sensors + data collection, 1b: AI control). Phase 2: fully autonomous year-round greenhouse. Phase 3: integration of renewable energy sources (solar, wind, water) for complete energy independence. Includes computer vision for plant health monitoring, real-time dashboard, and Scout Agent integration.",
   "parent_work": null,

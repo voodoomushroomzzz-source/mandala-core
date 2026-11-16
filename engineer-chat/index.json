@@ -5,6 +5,12 @@
   "last_updated": "2026-06-16",
   "authors": ["External SR (Claude)"],
   "status": "active",
+  "product_direction": {
+    "status": "planned",
+    "description": "Этот индекс описывает серверный прототип. Целевой Engineer Chat — локальное приложение с чатом и дашбордами на ПК и телефоне, общей проекцией Сада и прямой синхронизацией.",
+    "work": "honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json",
+    "manus_work": "honeycombs/works/W-T-20260511-MANUS__manus_hands.json"
+  },
 
   "description": "Engineer Chat — Layer 2 (Brain) of Mandala Symbiosis. WebSocket server with DeepSeek via OpenRouter. Sits between Gentle Companion (Sandbox) and Manus (Hands).",
 

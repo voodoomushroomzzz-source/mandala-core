@@ -125,10 +125,15 @@ def parse_works(works_path=None) -> dict:
     manifest = data.get("manifest", {})
 
     for work_id in manifest.get("works_list", []):
+        work_file = works_path.parent / f"{work_id}.json"
+        if not work_file.is_file():
+            matching_files = sorted(works_path.parent.glob(f"{work_id}__*.json"))
+            if len(matching_files) == 1:
+                work_file = matching_files[0]
         nodes.append({
             "id": work_id,
             "type": "work",
-            "path": "honeycombs/works/" + work_id + ".json",
+            "path": "honeycombs/works/" + work_file.name,
             "description": "",
             "deadline": manifest.get("deadlines", {}).get(work_id),
             "progress": manifest.get("progress", {}).get(work_id, 0)

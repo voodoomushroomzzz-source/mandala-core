@@ -1,8 +1,9 @@
 {
+  "workstream": "Бот и продукты",
   "work_id": "W-T-20260408-1030",
   "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
-  "status": "in_progress",
-  "priority": "highest",
+  "status": "paused",
+  "priority": "low",
   "horizon": "tactical",
   "description": "Основная работа по боту Gentle Companion. Включает разработку, баг-фиксы, стратегические улучшения и внедрение автоочистки неактивных садовников. **Пометка (2026-09-19):** этот бот одновременно является **Architect Bot — Gentle Companion** — закрытым архитектурным модулем Мандалы. Из него в будущем выделится публичный Gentle Companion для широкого круга.",
   "active_bugs": [
