@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261116-070107-675",
+  "title": "Agentic-Teacher: An Agentic Data Engine for Failure-Driven VLA Post-Training",
+  "url": "https://arxiv.org/abs/2611.17394",
+  "description": "arXiv:2611.17394v1 Announce Type: new \nAbstract: Improving a pretrained vision-language-action (VLA) model requires demonstrations that address its weaknesses and provide effective supervision for learning. Coding agents can autonomously generate demonstrations through environment interaction, yet successful execution alone does not ensure effective supervision for VLA learning. We introduce Agentic-Teacher, an autonomous data engine for failure-driven VLA post-training. Given a VLA checkpoint, ",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-11-16T07:01:07.638912",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

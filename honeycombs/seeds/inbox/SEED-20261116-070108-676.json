@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261116-070108-676",
+  "title": "Racing the Clock: Teaching VLNs Budget-Conditioned Object Search",
+  "url": "https://arxiv.org/abs/2611.17442",
+  "description": "arXiv:2611.17442v1 Announce Type: new \nAbstract: A rescue robot entering a building with thirty seconds on the clock should sprint toward the single most promising room; given ten minutes, it should instead explore a broader tour. Yet vision-language-navigation (VLN) models are typically evaluated under a fixed episode limit that the policy never observes, even though time-critical missions require behavior to adapt to the available budget. We study budget-conditioned object search: given a targ",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-11-16T07:01:08.028833",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
