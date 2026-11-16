@@ -1,41 +1,41 @@
 {
-    "identity":  {
-                     "module_id":  "SEEDS-INBOX-INDEX-001",
-                     "name":  "Seeds Inbox Index",
-                     "version":  "v2.1.0",
-                     "created":  "2026-08-24",
-                     "updated":  "2026-11-16",
-                     "layer":  3,
-                     "type":  "seed_inbox_index",
-                     "status":  "active",
-                     "description":  "Inbox processing log. Contains last_processed date and promoted seeds list."
-                 },
-    "meta":  {
-                 "description":  "Inbox index for tracking processed seeds. Scout Agent uses last_processed to clean old seeds.",
-                 "last_processed":  "2026-11-16",
-                 "processed_by":  "Codex",
-                 "total_processed":  996,
-                 "promoted_to_root":  6
-             },
-    "promoted_seeds":  [
-                           "SEED-20260826-070055-030",
-                           "SEED-20260826-070056-040",
-                           "SEED-20260829-070059-072",
-                           "SEED-20260904-070056-029",
-                           "SEED-20260907-070056-057",
-                           "SEED-20260917-070058-180"
-                       ],
-    "navigation":  {
-                       "parent":  "honeycombs/seeds/index.json",
-                       "related":  [
-                                       "honeycombs/seeds/index.json",
-                                       "honeycombs/registry/scan_state.json",
-                                       "honeycombs/protocols/seed_to_work.json"
-                                   ]
-                   },
-    "health":  {
-                   "status":  "ok",
-                   "last_check":  "2026-11-16",
-                   "notes":  "200 seeds processed. 3 promoted to root, 197 deleted."
-               }
+  "identity": {
+    "module_id": "SEEDS-INBOX-INDEX-001",
+    "name": "Seeds Inbox Index",
+    "version": "v2.1.0",
+    "created": "2026-08-24",
+    "updated": "2026-11-16",
+    "layer": 3,
+    "type": "seed_inbox_index",
+    "status": "active",
+    "description": "Inbox processing log. Contains last_processed date and promoted seeds list."
+  },
+  "meta": {
+    "description": "Inbox index for tracking processed seeds. Scout Agent uses last_processed to clean old seeds.",
+    "last_processed": "2026-11-16",
+    "processed_by": "Scout Agent",
+    "total_processed": 1001,
+    "promoted_to_root": 6
+  },
+  "promoted_seeds": [
+    "SEED-20260826-070055-030",
+    "SEED-20260826-070056-040",
+    "SEED-20260829-070059-072",
+    "SEED-20260904-070056-029",
+    "SEED-20260907-070056-057",
+    "SEED-20260917-070058-180"
+  ],
+  "navigation": {
+    "parent": "honeycombs/seeds/index.json",
+    "related": [
+      "honeycombs/seeds/index.json",
+      "honeycombs/registry/scan_state.json",
+      "honeycombs/protocols/seed_to_work.json"
+    ]
+  },
+  "health": {
+    "status": "ok",
+    "last_check": "2026-11-16",
+    "notes": "200 seeds processed. 3 promoted to root, 197 deleted."
+  }
 }
