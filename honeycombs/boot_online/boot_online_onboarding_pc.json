@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.193",
+    "version": "v1.7.194",
     "created": "2026-05-11",
     "updated": "2026-11-17",
     "layer": 1,
@@ -341,7 +341,7 @@
     "ai_instruction": "Сравни этот снимок с core_map (эталон). Инструкция по работе с расхождениями — в core_map.graph_guide.",
     "analysis": {
       "total_nodes": 60,
-      "total_edges": 78,
+      "total_edges": 89,
       "by_type": {
         "honeycomb": 17,
         "work": 27,
@@ -370,16 +370,16 @@
           "degree": 16
         },
         {
+          "id": "W-T-20260511-ENGCHAT__engineer_chat",
+          "degree": 10
+        },
+        {
           "id": "fruits",
           "degree": 9
         },
         {
           "id": "knowledge",
           "degree": 9
-        },
-        {
-          "id": "W-T-20260511-ENGCHAT__engineer_chat",
-          "degree": 7
         }
       ]
     },
@@ -1222,6 +1222,61 @@
         "from": "knowledge",
         "to": "K-soup_finetuning",
         "type": "contains"
+      },
+      {
+        "from": "W-T-20260511-ENGCHAT__engineer_chat",
+        "to": "W-T-20260427-FLUTTER__flutter_app",
+        "type": "sub_work"
+      },
+      {
+        "from": "W-R-20261116-MANDALA-LOCAL-APP",
+        "to": "W-T-20260511-ENGCHAT__engineer_chat",
+        "type": "sub_work"
+      },
+      {
+        "from": "W-R-20261116-MANDALA-LOCAL-APP",
+        "to": "W-T-20260511-MANUS__manus_hands",
+        "type": "sub_work"
+      },
+      {
+        "from": "W-T-20260807-MEMORY__mandala_memory_layer",
+        "to": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+        "type": "sub_work"
+      },
+      {
+        "from": "W-T-20261015-MGE",
+        "to": "W-T-20261017-MGE-BUNDLE",
+        "type": "sub_work"
+      },
+      {
+        "from": "fruit-gentle-companion-001",
+        "to": "W-T-20260408-1030__gentle_companion_bot",
+        "type": "product_work"
+      },
+      {
+        "from": "fruit-engineer-chat-001",
+        "to": "W-T-20260511-ENGCHAT__engineer_chat",
+        "type": "product_work"
+      },
+      {
+        "from": "fruit-manus-001",
+        "to": "W-T-20260511-MANUS__manus_hands",
+        "type": "product_work"
+      },
+      {
+        "from": "fruit-architect-bot-001",
+        "to": "W-T-20260511-ARCHBOT__architect_bot",
+        "type": "product_work"
+      },
+      {
+        "from": "fruit-autonomous-ecosystem-001",
+        "to": "W-R-ECO-001__autonomous_ecosystem",
+        "type": "product_work"
+      },
+      {
+        "from": "fruit-mge-001",
+        "to": "W-T-20261015-MGE",
+        "type": "product_work"
       }
     ]
   },
@@ -3844,6 +3899,7 @@
           "version": "v7.39.81",
           "layer": "Sandbox (Layer 1)",
           "path": "honeycombs/fruits/gentle_companion/index.json",
+          "work_id": "W-T-20260408-1030",
           "icon": "🌿"
         },
         {
@@ -3917,6 +3973,7 @@
           "version": "v0.0.0",
           "layer": "Tool (Layer 2)",
           "path": "honeycombs/fruits/mge/index.json",
+          "work_id": "W-T-20261015-MGE",
           "icon": "🕸️"
         }
       ],
