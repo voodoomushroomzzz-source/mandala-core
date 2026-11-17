@@ -27,6 +27,9 @@
     "priority_global": "critical"
   },
   "contents": {
+    "mobile_manager_onboarding.md": {
+      "description": "Вход мобильного проекта «Куртош Менеджер» по команде «Резонанс», карта рабочих файлов и запись задач через Notion и GitHub."
+    },
     "taskboard.json": {
       "version": "v2.6.6",
       "description": "Активные задачи + вехи M-001..M-003."
@@ -147,7 +150,8 @@
     "critical": "Если токен случайно попадёт в git — GitHub автоматически отзовёт его. Немедленно удалить из истории."
   },
   "workflow_for_new_sr": {
-    "description": "Пошаговое руководство для нового System Resonator (SR), работающего с проектом Куртош.",
+    "description": "Ниже описан прежний рабочий маршрут для ПК. Для мобильного «Куртош Менеджера» используй mobile_manager_onboarding.md.",
+    "mobile_entry": "honeycombs/personal/kurtoch/mobile_manager_onboarding.md",
     "read_me_first": [
       {
         "step": 1,
