@@ -643,10 +643,6 @@
       "version": "v2.2.1",
       "date": "2026-09-03",
       "changes": [
-        "TZ-ARCHITECT-INTEGRATION-003: Добавлена синхронизация данных Архитектора (ID 224736062) в profile_deep.json.",
-        "config.py: добавлена константа CORE_DEEP_PROFILE_PATH.",
-        "github_api.py: добавлена функция _sync_architect_data() — обновляет section_B и synthesis_layer_2.",
-        "main.py: добавлена джоба architect_sync (интервал 3 минуты).",
         "short_responses: Добавлено правило краткости в боевой SR_CORE_PROMPT (sr_prompts.py).",
         "Удалён подтверждённо мёртвый код SR_INTENT_MAP (~13 КБ)."
       ]

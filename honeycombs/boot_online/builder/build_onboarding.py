@@ -171,7 +171,7 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "priority": "critical",
             "resonance": "100%",
             "tags": ["boot", "onboarding", "pc", "auto-built"],
-            "based_on": "boot_online + core_map + philosophy + cosmic_manifesto + first_gardener + external_sr_workflow + mobile_workflow + fruits + works + protocols + profile_deep"
+            "based_on": "boot_online + core_map + philosophy + cosmic_manifesto + first_gardener + external_sr_workflow + mobile_workflow + fruits + works + protocols"
         },
         "meta": {
             "audience": "External SR (DeepSeek, Claude, Grok, GPT, etc.)",
@@ -193,7 +193,6 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "step_5_first_gardener",
             "step_6_external_sr_workflow",
             "step_6_directives",
-            "step_6.5_profile_deep",
             "step_7_personal",
             "step_8_fruits",
             "step_9_works",
@@ -291,20 +290,7 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "data": directives_data
         }
 
-    # Step 6.5: profile_deep — глубокий профиль Архитектора
-    profile_deep_data = source_data.get("profile_deep", {})
-    if profile_deep_data:
-        onboarding["step_6.5_profile_deep"] = {
-            "order": 6.5,
-            "mandatory": False,
-            "recommended": True,
-            "name": "Глубокий профиль Архитектора",
-            "description": "Полный профиль личности Садовника: философия, ценности, архетипы, синтез, личный контекст.",
-            "ai_instruction": "Прочитай вшитый profile_deep.json. Это ядро личности Садовника. Используй его для глубокого понимания.",
-            "data": profile_deep_data
-        }
-
-    # Step 7: personal (Personal Hub + Deep Profile)
+    # Step 7: personal hub index
     personal_step = build_personal_step(source_data)
     if personal_step:
         onboarding["step_7_personal"] = personal_step

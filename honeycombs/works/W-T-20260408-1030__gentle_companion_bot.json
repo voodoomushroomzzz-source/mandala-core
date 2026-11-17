@@ -71,24 +71,6 @@
       "verify": "Симулировать last_decay_date = today - 5. Вызвать _sphere_decay_check. sr[s] должно упасть на -10, не на -2."
     },
     {
-      "id": "FEAT-ACTIVE-TASKS-IN-PROFILE",
-      "priority": "high",
-      "title": "Активные задачи в profile_deep.json",
-      "description": "Бот должен синхронизировать активные задачи садовника в profile_deep.json, чтобы внешние SR видели текущее состояние: какие задачи есть, в каких группах, с какими дедлайнами и статусами.",
-      "why": "Внешний SR, прочитав profile_deep.json, сможет предложить задачи в правильную группу, не дублировать уже существующие, понимать контекст. Упростит формирование контент-планов и других задач.",
-      "where": "github_api.py → _sync_architect_data() (расширить section_B_gardener_data)",
-      "implementation_direction": "Добавить в section_B_gardener_data два поля: 'active_tasks' (список задач с task_id, title, group, deadline, status, repeat) и 'groups' (список групп с id, name, emoji, count)."
-    },
-    {
-      "id": "FEAT-REMINDERS-IN-PROFILE",
-      "priority": "high",
-      "title": "Активные напоминания в profile_deep.json",
-      "description": "Бот должен синхронизировать активные напоминания в profile_deep.json, чтобы внешние SR видели, что уже назначено.",
-      "why": "Внешний SR сможет видеть, что уже покрыто напоминаниями, и не предлагать дублирующие. Плюс — понимать, что важно для садовника в ближайшее время.",
-      "where": "github_api.py → _sync_architect_data()",
-      "implementation_direction": "Добавить в section_B_gardener_data поле 'reminders' (список с id, title, datetime_iso, repeat, task_id если есть). Ограничить — например, ближайшие 10."
-    },
-    {
       "id": "TASK-ARCHITECT-BOT-GATE-001",
       "priority": "high",
       "title": "Architect Bot: закрытый доступ + заглушка для не-Архитектора",
