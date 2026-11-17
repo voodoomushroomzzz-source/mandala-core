@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.192",
+    "version": "v1.7.193",
     "created": "2026-05-11",
-    "updated": "2026-11-16",
+    "updated": "2026-11-17",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -340,30 +340,30 @@
     "description": "Актуальный снимок структуры Mandala (61 узел, 75 связей). Пересобирается CI автоматически.",
     "ai_instruction": "Сравни этот снимок с core_map (эталон). Инструкция по работе с расхождениями — в core_map.graph_guide.",
     "analysis": {
-      "total_nodes": 59,
-      "total_edges": 75,
+      "total_nodes": 60,
+      "total_edges": 78,
       "by_type": {
         "honeycomb": 17,
-        "work": 26,
+        "work": 27,
         "fruit": 8,
         "knowledge": 8
       },
       "orphans": [],
       "unregistered_honeycombs": [],
       "missing_honeycombs": [],
-      "seeds_inbox_count": 482,
+      "seeds_inbox_count": 493,
       "seeds_root_count": 24,
-      "seeds_total": 506,
+      "seeds_total": 517,
       "islands": [],
       "broken_refs": [],
       "missing_node_ids": [],
       "id_format_mismatches": [],
-      "reachable_from_core": 59,
+      "reachable_from_core": 60,
       "unreachable": [],
       "top_hubs": [
         {
           "id": "works",
-          "degree": 27
+          "degree": 28
         },
         {
           "id": "core_map",
@@ -379,7 +379,7 @@
         },
         {
           "id": "W-T-20260511-ENGCHAT__engineer_chat",
-          "degree": 6
+          "degree": 7
         }
       ]
     },
@@ -691,6 +691,14 @@
         "id": "W-R-20261013-PUBLIC-MANDALA",
         "type": "work",
         "path": "honeycombs/works/W-R-20261013-PUBLIC-MANDALA.json",
+        "description": "",
+        "deadline": null,
+        "progress": 0
+      },
+      {
+        "id": "W-R-20261116-MANDALA-LOCAL-APP",
+        "type": "work",
+        "path": "honeycombs/works/W-R-20261116-MANDALA-LOCAL-APP.json",
         "description": "",
         "deadline": null,
         "progress": 0
@@ -1027,6 +1035,11 @@
       },
       {
         "from": "works",
+        "to": "W-R-20261116-MANDALA-LOCAL-APP",
+        "type": "contains"
+      },
+      {
+        "from": "works",
         "to": "W-T-20261015-MGE",
         "type": "contains"
       },
@@ -1034,6 +1047,16 @@
         "from": "works",
         "to": "W-T-20261017-MGE-BUNDLE",
         "type": "contains"
+      },
+      {
+        "from": "W-R-20261116-MANDALA-LOCAL-APP",
+        "to": "W-T-20260511-ENGCHAT__engineer_chat",
+        "type": "related_works"
+      },
+      {
+        "from": "W-R-20261116-MANDALA-LOCAL-APP",
+        "to": "W-T-20260511-MANUS__manus_hands",
+        "type": "related_works"
       },
       {
         "from": "W-R-ROSE-001__rose_world_ethical_filter",
@@ -4036,20 +4059,20 @@
         ]
       },
       "manifest": {
-        "total_works": 26,
+        "total_works": 27,
         "by_status": {
           "active": 14,
           "in_progress": 1,
-          "planned": 9,
+          "planned": 10,
           "paused": 2
         },
         "by_horizon": {
-          "strategic": 8,
+          "strategic": 9,
           "tactical": 18
         },
         "by_priority": {
           "high": 2,
-          "medium": 10,
+          "medium": 11,
           "low": 14
         },
         "works_list": [
@@ -4077,6 +4100,7 @@
           "W-T-20260807-MEMORY__mandala_memory_layer",
           "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
           "W-R-20261013-PUBLIC-MANDALA",
+          "W-R-20261116-MANDALA-LOCAL-APP",
           "W-T-20261015-MGE",
           "W-T-20261017-MGE-BUNDLE"
         ],
@@ -4102,6 +4126,7 @@
           "W-T-20260807-MEMORY__mandala_memory_layer": "2026-10-15",
           "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": "2026-10-15",
           "W-R-20261013-PUBLIC-MANDALA": null,
+          "W-R-20261116-MANDALA-LOCAL-APP": null,
           "W-T-20261015-MGE": "2026-11-15",
           "W-T-20261017-MGE-BUNDLE": "2026-11-15"
         },
@@ -4127,11 +4152,16 @@
           "W-T-20260807-MEMORY__mandala_memory_layer": 0,
           "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": 0,
           "W-R-20261013-PUBLIC-MANDALA": 0,
+          "W-R-20261116-MANDALA-LOCAL-APP": 0,
           "W-T-20261015-MGE": 0,
           "W-T-20261017-MGE-BUNDLE": 0
         },
         "progress_updated": "2026-10-14",
         "related_works": {
+          "W-R-20261116-MANDALA-LOCAL-APP": [
+            "W-T-20260511-ENGCHAT__engineer_chat",
+            "W-T-20260511-MANUS__manus_hands"
+          ],
           "W-R-ROSE-001__rose_world_ethical_filter": [
             "W-T-20260713-YOUTUBE_MANDALA_PROMO"
           ],
@@ -4182,7 +4212,7 @@
       },
       "updated": "2026-11-16",
       "notes": {
-        "workstream_review": "Сводки охватывают 26 карточек Works. Kurtoch ведётся в личной соте, ссылка доступна в navigation.references. Очередь исполнения и согласованные сроки ведутся в management_taskboard.md.",
+        "workstream_review": "Сводки охватывают карточки Works. Kurtoch ведётся в личной соте, ссылка доступна в navigation.references. Очередь исполнения и согласованные сроки ведутся в management_taskboard.md.",
         "personal_hub": "Личные векторы (карьера, обучение, YouTube, e-commerce, франшиза) перенесены в honeycombs/personal/."
       }
     }
