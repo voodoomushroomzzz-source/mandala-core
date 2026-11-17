@@ -52,6 +52,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <body>
 <div id="header">
   <h1>Mandala Graph Explorer</h1>
+  <a class="link" href="../../../../index.html">Главная</a>
+  <a class="link" href="mandala_graph.json">JSON</a>
+  <a class="link" href="mandala_graph.mmd">Mermaid</a>
   <span class="stat" id="stat">nodes: 0 / edges: 0 / seeds: 0</span>
   <span id="unreg-badge"></span>
   <span id="broken-badge"></span>
@@ -292,6 +295,14 @@ document.getElementById("search").addEventListener("input", function(e) {
     network.emit("click", { nodes: [found.id] });
   }
 });
+const selectedNode = new URLSearchParams(window.location.search).get("node");
+if (selectedNode && findNode(selectedNode)) {
+  network.once("stabilized", () => {
+    network.selectNodes([selectedNode]);
+    network.focus(selectedNode, { scale: 1.2 });
+    network.emit("click", { nodes: [selectedNode] });
+  });
+}
 </script>
 </body>
 </html>

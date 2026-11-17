@@ -370,6 +370,21 @@ def parse_all() -> dict:
                 seen_nodes.add(n["id"])
         all_edges.extend(p.get("edges", []))
 
+    root = find_repo_root()
+    works_by_path = {node["path"]: node["id"] for node in parts[1]["nodes"]}
+    work_cards = {
+        graph_id: read_json(root / path)
+        for path, graph_id in works_by_path.items()
+    }
+    works_by_id = {card["work_id"]: graph_id for graph_id, card in work_cards.items() if card.get("work_id")}
+    for graph_id, card in work_cards.items():
+        if parent := works_by_id.get(card.get("parent_work")):
+            all_edges.append({"from": parent, "to": graph_id, "type": "sub_work"})
+    for fruit in read_json(root / "honeycombs/fruits/index.json").get("fruits", []):
+        work = works_by_id.get(fruit.get("work_id")) or works_by_path.get(fruit.get("path"))
+        if work:
+            all_edges.append({"from": fruit["id"], "to": work, "type": "product_work"})
+
     for n in unregistered_info["nodes"]:
         if n["id"] not in seen_nodes:
             all_nodes.append(n)

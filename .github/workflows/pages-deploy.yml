@@ -5,7 +5,10 @@ on:
   push:
     paths:
       - 'index.html'
-      - 'engineer-chat/main.py'
+      - 'engineer-chat.html'
+      - '.github/workflows/pages-deploy.yml'
+      - 'honeycombs/**'
+      - '!honeycombs/fruits/mge/output/**'
     branches:
       - main
 
@@ -27,11 +30,14 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          source: ./
-          destination: ./_site
+          python-version: '3.12'
+
+      - name: Build Mandala dashboards
+        working-directory: honeycombs/fruits/mge
+        run: python -m mge dashboard --output "${{ github.workspace }}/_site"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4

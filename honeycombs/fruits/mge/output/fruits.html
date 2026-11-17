@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Продукты — Мандала</title>
+<style>
+  * { box-sizing: border-box; }
+  body { background: #0d1117; color: #e6edf3; font: 16px/1.55 "Segoe UI", sans-serif; margin: 0; }
+  main { max-width: 1080px; margin: auto; padding: 28px 20px 48px; }
+  a { color: #84b9ff; } a:hover { color: #b8d8ff; }
+  nav, .controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; }
+  nav { padding-bottom: 16px; border-bottom: 1px solid #30363d; }
+  h1 { font-size: clamp(28px, 5vw, 42px); margin: 26px 0 14px; }
+  h2 { margin-bottom: 10px; } h3 { margin: 0; font-size: 18px; overflow-wrap: anywhere; }
+  label { display: grid; gap: 4px; } input, select { font: inherit; padding: 8px; color: inherit;
+    background: #161b22; border: 1px solid #58616e; border-radius: 6px; min-width: 0; max-width: 100%; }
+  input { width: min(290px, 85vw); } .grid { display: grid; gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  article, .queue { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 16px; }
+  article:target { outline: 2px solid #84b9ff; } .meta { color: #b5c0cf; font-size: 14px; }
+  article p { white-space: pre-line; } article p:last-child { margin-bottom: 0; }
+  .queue { padding-left: 38px; } .queue li + li { margin-top: 10px; }
+  .lanes { display: grid; gap: 12px; align-items: start;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+  .lane { padding: 12px; background: #101720; border-radius: 10px; border-top: 3px solid #58616e; }
+  .lane[data-group="critical"], .lane[data-group="high"] { border-top-color: #e78476; }
+  .lane[data-group="medium"] { border-top-color: #d6ab59; }
+  .lane[data-group="low"] { border-top-color: #8aa9dc; }
+  .lane > h3 { margin: 0 0 10px; font-size: 16px; }
+  .lane article { padding: 0; margin-bottom: 8px; }
+  .lane article:last-child { margin-bottom: 0; }
+  .lane summary { cursor: pointer; padding: 12px; min-height: 44px; font-weight: 600; overflow-wrap: anywhere; }
+  .lane summary:hover { background: #212c3b; border-radius: 9px; }
+  .lane summary time, .lane summary small { display: block; color: #b5c0cf; font-weight: 400; font-size: 13px; }
+  .card-body { padding: 12px; border-top: 1px solid #30363d; }
+  .lane details[open] > summary { background: #212c3b; border-radius: 9px 9px 0 0; }
+  .queue-more { margin-top: 20px; }
+  [hidden] { display: none !important; }
+</style>
+<main>
+  <nav aria-label="Разделы Мандалы">
+    <a href="../../../../index.html">Главная</a>
+    <a href="mandala_graph.html">Карта</a>
+    <a href="works.html">Работы</a>
+    <a href="knowledge.html">Знания</a>
+    <a href="fruits.html">Продукты</a>
+  </nav>
+  <h1>Продукты</h1>
+
+  <div class="controls">
+    <label>Поиск<input type="search" id="search"></label>
+    <label>Статус продукта<select data-field="status"><option value="">Все</option><option value="active">Активно</option><option value="in_development">В разработке</option><option value="paused">На паузе</option><option value="planned">Запланировано</option><option value="planning">Планируется</option></select></label>
+  </div>
+  <p id="results" class="meta" aria-live="polite"></p>
+  <section class="grid" aria-label="Каталог"><article id="fruit-gentle-companion-001" data-status="paused"><h3>Architect Bot — Gentle Companion</h3><div class="meta">На паузе · v7.39.81</div><p>A closed architectural module of Mandala Symbiosis — personal bot for the Architect. Публичный Gentle Companion для широкого круга будет выделен позже.</p><p><a href="works.html#W-T-20260408-1030__gentle_companion_bot">Telegram Bot SR Gentle Companion (Mandala Symbiosis)</a><br>Приоритет работы: Низкий</p><p><a href="mandala_graph.html?node=fruit-gentle-companion-001">На карте</a> · <a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/fruits/gentle_companion/index.json">Исходник</a></p></article>
+<article id="fruit-engineer-chat-001" data-status="active"><h3>Engineer Chat</h3><div class="meta">Серверный прототип: Активно · v4.0.0-simbiosis · Локальное направление: Запланировано</div><p>Локальное приложение Мандалы с чатом, дашбордами и базовой проекцией Сада. Клиенты ПК и телефона работают с одним Садом и напрямую синхронизируют его по локальной сети.</p><p><a href="works.html#W-T-20260511-ENGCHAT__engineer_chat">Engineer Chat — локальное рабочее пространство Мандалы</a> · Проект: <a href="works.html#W-R-20261116-MANDALA-LOCAL-APP">Мандала Симбиоза — локальное приложение</a><br>Приоритет работы: Средний</p><details><summary>Вехи</summary><ul><li>Один Сад, два устройства, одна задача</li><li>Первый сценарий Manus</li></ul></details><p><a href="mandala_graph.html?node=fruit-engineer-chat-001">На карте</a> · <a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json">Исходник</a></p></article>
+<article id="fruit-manus-001" data-status="planned"><h3>Manus — Hands of Mandala</h3><div class="meta">Запланировано · v0.0.0</div><p>Слой доступа Engineer Chat к выбранным папкам, файлам и возможностям приложений. Разрешения задаются и отзываются на каждом устройстве.</p><p><a href="works.html#W-T-20260511-MANUS__manus_hands">Manus — доступ к ресурсам устройства для Engineer Chat</a> · Проект: <a href="works.html#W-R-20261116-MANDALA-LOCAL-APP">Мандала Симбиоза — локальное приложение</a><br>Приоритет работы: Средний</p><details><summary>Вехи</summary><ul><li>Один Сад, два устройства, одна задача</li><li>Первый сценарий Manus</li></ul></details><p><a href="mandala_graph.html?node=fruit-manus-001">На карте</a> · <a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/works/W-T-20260511-MANUS__manus_hands.json">Исходник</a></p></article>
+<article id="fruit-architect-bot-001" data-status="paused"><h3>Architect Bot — Mobile Brain Interface</h3><div class="meta">На паузе · v0.0.0</div><p>Возможный дополнительный Telegram-интерфейс Мандалы. Основная работа с Садом на телефоне предусмотрена в мобильном Engineer Chat.</p><p><a href="works.html#W-T-20260511-ARCHBOT__architect_bot">Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration</a><br>Приоритет работы: Низкий</p><p><a href="mandala_graph.html?node=fruit-architect-bot-001">На карте</a> · <a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/works/W-T-20260511-ARCHBOT__architect_bot.json">Исходник</a></p></article>
+<article id="fruit-scout-agent-001" data-status="active"><h3>Scout Agent — Autonomous Seed Collector</h3><div class="meta">Активно · v2.1</div><p>Collects seeds from external sources and saves them to honeycombs/seeds/.</p><p><a href="mandala_graph.html?node=fruit-scout-agent-001">На карте</a> · <a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/fruits/scout_agent/index.json">Исходник</a></p></article>
+<article id="fruit-autonomous-ecosystem-001" data-status="planning"><h3>Autonomous Ecosystem — from Room to Self-Sustaining Greenhouse</h3><div class="meta">Планируется · v0.0.0</div><p>A three-phase autonomous ecosystem under AI control: indoor plant zoning → fully automated greenhouse → energy-independent biosphere.</p><p><a href="works.html#W-R-ECO-001__autonomous_ecosystem">Autonomous Ecosystem — From Room to Self-Sustaining Greenhouse</a><br>Приоритет работы: Средний</p><details><summary>Вехи</summary><ul><li>Indoor Ecosystem</li><li>Outdoor Autonomous Greenhouse</li><li>Energy Autonomy</li></ul></details><p><a href="mandala_graph.html?node=fruit-autonomous-ecosystem-001">На карте</a> · <a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/works/W-R-ECO-001__autonomous_ecosystem.json">Исходник</a></p></article>
+<article id="fruit-gentle-companion-public-001" data-status="planned"><h3>Gentle Companion (Public)</h3><div class="meta">Запланировано · v0.0.0</div><p>Public AI companion for the wide audience — будет выделен из Architect Bot после завершения его полной разработки. Урезанный функционал для широкого круга.</p><p><a href="mandala_graph.html?node=fruit-gentle-companion-public-001">На карте</a></p></article>
+<article id="fruit-mge-001" data-status="in_development"><h3>MGE — Mandala Graph Explorer</h3><div class="meta">В разработке · v0.0.0</div><p>Инструмент визуализации и анализа графа Mandala. Два входа: HTML для Садовника, JSON для SR/ИИ.</p><p><a href="works.html#W-T-20261015-MGE">MGE — Mandala Graph Explorer</a><br>Приоритет работы: Высокий</p><details><summary>Вехи</summary><ul><li>Core MVP — JSON-граф сот</li><li>HTML-визуализация</li><li>Расширение: works + seeds + knowledge</li><li>Анализ: сироты, острова, рассинхрон</li><li>Live-сервер</li><li>Git-интеграция</li></ul></details><p><a href="mandala_graph.html?node=fruit-mge-001">На карте</a> · <a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/fruits/mge/index.json">Исходник</a></p></article></section>
+
+</main>
+<script>
+  const cards = [...document.querySelectorAll("article")];
+  const search = document.getElementById("search");
+  const filters = [...document.querySelectorAll("select[data-field]")];
+  function update() {
+    const query = search.value.trim().toLocaleLowerCase("ru");
+    let count = 0;
+    for (const card of cards) {
+      const matches = filters.every(filter => !filter.value || card.dataset[filter.dataset.field] === filter.value);
+      card.hidden = !matches || !card.textContent.toLocaleLowerCase("ru").includes(query);
+      if (!card.hidden) count++;
+    }
+    for (const lane of document.querySelectorAll(".lane")) {
+      lane.hidden = !lane.querySelector("article:not([hidden])");
+    }
+    document.getElementById("results").textContent = count ? "Показано: " + count + " из " + cards.length : "Ничего не найдено";
+  }
+  search.addEventListener("input", update);
+  for (const filter of filters) filter.addEventListener("change", update);
+  update();
+  function revealLinkedCard() {
+    try {
+      const card = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      const details = card?.querySelector("details");
+      if (details) {
+        if (card.hidden) {
+          search.value = "";
+          for (const filter of filters) filter.value = "";
+          update();
+        }
+        details.open = true;
+        card.scrollIntoView({ block: "nearest" });
+      }
+    } catch (error) {
+      if (!(error instanceof URIError)) throw error;
+    }
+  }
+  addEventListener("hashchange", revealLinkedCard);
+  revealLinkedCard();
+</script>
+</html>
