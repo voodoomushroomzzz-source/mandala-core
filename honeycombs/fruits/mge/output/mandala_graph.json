@@ -312,6 +312,14 @@
       "progress": 0
     },
     {
+      "id": "W-R-20261116-MANDALA-LOCAL-APP",
+      "type": "work",
+      "path": "honeycombs/works/W-R-20261116-MANDALA-LOCAL-APP.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
       "id": "W-T-20261015-MGE",
       "type": "work",
       "path": "honeycombs/works/W-T-20261015-MGE__mandala_graph_explorer.json",
@@ -643,6 +651,11 @@
     },
     {
       "from": "works",
+      "to": "W-R-20261116-MANDALA-LOCAL-APP",
+      "type": "contains"
+    },
+    {
+      "from": "works",
       "to": "W-T-20261015-MGE",
       "type": "contains"
     },
@@ -650,6 +663,16 @@
       "from": "works",
       "to": "W-T-20261017-MGE-BUNDLE",
       "type": "contains"
+    },
+    {
+      "from": "W-R-20261116-MANDALA-LOCAL-APP",
+      "to": "W-T-20260511-ENGCHAT__engineer_chat",
+      "type": "related_works"
+    },
+    {
+      "from": "W-R-20261116-MANDALA-LOCAL-APP",
+      "to": "W-T-20260511-MANUS__manus_hands",
+      "type": "related_works"
     },
     {
       "from": "W-R-ROSE-001__rose_world_ethical_filter",
@@ -818,30 +841,30 @@
     }
   ],
   "analysis": {
-    "total_nodes": 59,
-    "total_edges": 75,
+    "total_nodes": 60,
+    "total_edges": 78,
     "by_type": {
       "honeycomb": 17,
-      "work": 26,
+      "work": 27,
       "fruit": 8,
       "knowledge": 8
     },
     "orphans": [],
     "unregistered_honeycombs": [],
     "missing_honeycombs": [],
-    "seeds_inbox_count": 482,
+    "seeds_inbox_count": 493,
     "seeds_root_count": 24,
-    "seeds_total": 506,
+    "seeds_total": 517,
     "islands": [],
     "broken_refs": [],
     "missing_node_ids": [],
     "id_format_mismatches": [],
-    "reachable_from_core": 59,
+    "reachable_from_core": 60,
     "unreachable": [],
     "top_hubs": [
       {
         "id": "works",
-        "degree": 27
+        "degree": 28
       },
       {
         "id": "core_map",
@@ -857,7 +880,7 @@
       },
       {
         "id": "W-T-20260511-ENGCHAT__engineer_chat",
-        "degree": 6
+        "degree": 7
       }
     ]
   }

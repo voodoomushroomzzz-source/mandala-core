@@ -52,20 +52,20 @@
     ]
   },
   "manifest": {
-    "total_works": 26,
+    "total_works": 27,
     "by_status": {
       "active": 14,
       "in_progress": 1,
-      "planned": 9,
+      "planned": 10,
       "paused": 2
     },
     "by_horizon": {
-      "strategic": 8,
+      "strategic": 9,
       "tactical": 18
     },
     "by_priority": {
       "high": 2,
-      "medium": 10,
+      "medium": 11,
       "low": 14
     },
     "works_list": [
@@ -93,6 +93,7 @@
       "W-T-20260807-MEMORY__mandala_memory_layer",
       "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
       "W-R-20261013-PUBLIC-MANDALA",
+      "W-R-20261116-MANDALA-LOCAL-APP",
       "W-T-20261015-MGE",
       "W-T-20261017-MGE-BUNDLE"
     ],
@@ -118,6 +119,7 @@
       "W-T-20260807-MEMORY__mandala_memory_layer": "2026-10-15",
       "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": "2026-10-15",
       "W-R-20261013-PUBLIC-MANDALA": null,
+      "W-R-20261116-MANDALA-LOCAL-APP": null,
       "W-T-20261015-MGE": "2026-11-15",
       "W-T-20261017-MGE-BUNDLE": "2026-11-15"
     },
@@ -143,11 +145,16 @@
       "W-T-20260807-MEMORY__mandala_memory_layer": 0,
       "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": 0,
       "W-R-20261013-PUBLIC-MANDALA": 0,
+      "W-R-20261116-MANDALA-LOCAL-APP": 0,
       "W-T-20261015-MGE": 0,
       "W-T-20261017-MGE-BUNDLE": 0
     },
     "progress_updated": "2026-10-14",
     "related_works": {
+      "W-R-20261116-MANDALA-LOCAL-APP": [
+        "W-T-20260511-ENGCHAT__engineer_chat",
+        "W-T-20260511-MANUS__manus_hands"
+      ],
       "W-R-ROSE-001__rose_world_ethical_filter": [
         "W-T-20260713-YOUTUBE_MANDALA_PROMO"
       ],
@@ -198,7 +205,7 @@
   },
   "updated": "2026-11-16",
   "notes": {
-    "workstream_review": "Сводки охватывают 26 карточек Works. Kurtoch ведётся в личной соте, ссылка доступна в navigation.references. Очередь исполнения и согласованные сроки ведутся в management_taskboard.md.",
+    "workstream_review": "Сводки охватывают карточки Works. Kurtoch ведётся в личной соте, ссылка доступна в navigation.references. Очередь исполнения и согласованные сроки ведутся в management_taskboard.md.",
     "personal_hub": "Личные векторы (карьера, обучение, YouTube, e-commerce, франшиза) перенесены в honeycombs/personal/."
   }
 }
