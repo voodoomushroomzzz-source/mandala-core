@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-11-17T14:37:48Z",
+    "generated_at": "2026-11-17T14:51:33Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -6351,9 +6351,9 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.9.1",
+      "version": "v1.9.2",
       "created": "2026-09-23",
-      "updated": "2026-11-15",
+      "updated": "2026-11-17",
       "layer": 2,
       "type": "team_module",
       "description": "Картотека сотрудников Куртош. 20 человек. v1.9.0: добавлена модель оплаты (3 уровня + гибкая ставка), раннеры переведены в left, синхронизировано с schedule_salary_automation. v1.9.1: Рыжков substitute->stopped (временно), Дарья stopped->left. v1.9.2: приоритеты смен, лимиты, фикс Александры. v1.9.3: лимиты смен (Оля 2.5/3/4, Александра 3/4/4, Никита 2/2/4, Денис 2/2/4), универсальное правило 'не более 2 смен подряд'.",
@@ -6363,7 +6363,7 @@
       "resonance": "100%"
     },
     "team_roster": {
-      "last_updated": "2026-11-14",
+      "last_updated": "2026-11-17",
       "total_employees": 21,
       "by_status": {
         "core": 2,
@@ -7086,7 +7086,8 @@
             "telegram": "@helgadubova"
           },
           "functions": [
-            "смены"
+            "смены",
+            "подготовка материалов для будущей базы знаний"
           ],
           "schedule": {
             "notes": "пробная смена в воскресенье",
@@ -7114,7 +7115,9 @@
           },
           "pay": {
             "base": "250 руб/ч",
-            "notes": "Аттестация: нужна."
+            "notes": "Аттестация: нужна. Доплата с ноября 2026 года за подготовку материалов, которые войдут в будущую базу знаний.",
+            "knowledge_base_materials_surcharge": "10 000 руб/мес",
+            "knowledge_base_materials_surcharge_start_month": "2026-11"
           },
           "status": "working",
           "risks": [
@@ -7124,7 +7127,7 @@
           "data_gaps": [
             "schedule.notes"
           ],
-          "updated": "2026-11-14",
+          "updated": "2026-11-17",
           "vacation": {
             "planned": [],
             "history": []
