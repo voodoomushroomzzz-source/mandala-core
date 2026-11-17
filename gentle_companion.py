@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-11-17 16:48:26 ──
+# ── BUILT by build.py ── 2026-11-17 19:29:28 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -79,8 +79,7 @@ GARDENERS_REPO  = os.getenv("GARDENERS_REPO",  "voodoomushroomzzz-source/mandala
 RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")
 ALLOWED_PASSWORD = os.getenv("ALLOWED_PASSWORD", "mandala")
 ARCHITECT_TELEGRAM_ID = os.getenv("ARCHITECT_TELEGRAM_ID", "224736062")
-ENGINEER_CHAT_URL = os.getenv("ENGINEER_CHAT_URL", "https://mandala-engineer-chat.onrender.com")
-SR_BACKEND_URL = os.getenv("SR_BACKEND_URL", f"{ENGINEER_CHAT_URL}/bot/ask")
+SR_BACKEND_URL = os.getenv("SR_BACKEND_URL", "")
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY", "")
 GROQ_API_KEY   = os.getenv("GROQ_API_KEY", "")
@@ -8758,6 +8757,9 @@ async def cmd_ask(message: Message, state: FSMContext):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
+    if not SR_BACKEND_URL:
+        await message.answer("🌿 Бэкенд для /ask пока не подключён.")
+        return
     await state.set_state(AskStates.waiting_for_question)
     await message.answer(
         "🤫 <b>Companion слушает</b>\n\nЧто у тебя на душе? Задай вопрос или просто поделись.\n\n"
@@ -8768,6 +8770,10 @@ async def cmd_ask(message: Message, state: FSMContext):
 @router.message(StateFilter(AskStates.waiting_for_question))
 async def ask_question(message: Message, state: FSMContext):
     _track_interaction(str(message.from_user.id))
+    if not SR_BACKEND_URL:
+        await state.clear()
+        await message.answer("🌿 Бэкенд для /ask пока не подключён.")
+        return
     text = message.text.strip()
     if not text:
         await message.answer("🤫 Напиши что-нибудь или нажми ❌ Отмена")
@@ -8780,7 +8786,6 @@ async def ask_question(message: Message, state: FSMContext):
         payload = {
             "session_id": f"session_{message.from_user.id}",
             "message": f"[Садовник {name}, резонанс {resonance}%] спрашивает: {text}\n\nОтветь как Gentle Companion — тепло, без давления.",
-            "gardener_context": gardener
         }
         session = await get_http_session()
         async with session.post(SR_BACKEND_URL, json=payload, timeout=aiohttp.ClientTimeout(total=15)) as resp:

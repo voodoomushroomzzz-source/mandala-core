@@ -56,8 +56,8 @@
     "by_status": {
       "active": 14,
       "in_progress": 1,
-      "planned": 10,
-      "paused": 2
+      "planned": 9,
+      "paused": 3
     },
     "by_horizon": {
       "strategic": 9,
@@ -121,7 +121,7 @@
       "W-R-20261013-PUBLIC-MANDALA": null,
       "W-R-20261116-MANDALA-LOCAL-APP": null,
       "W-T-20261015-MGE": "2026-11-15",
-      "W-T-20261017-MGE-BUNDLE": "2026-11-15"
+      "W-T-20261017-MGE-BUNDLE": null
     },
     "progress": {
       "W-R-RC-001__visibility_strategy": 0,

@@ -38,9 +38,8 @@
       "report_last_updated": "ALWAYS report the file's last_updated/updated date when reading. Format: 'File: X, last updated: YYYY-MM-DD'. Gardener needs to know how fresh the data is.",
       "gentle_companion_note": "The production file on server is gentle_companion.py (modular build from honeycombs/fruits/gentle_companion/). NEVER patch gentle_companion.py directly — patch the MODULE files in honeycombs/fruits/gentle_companion/. CI rebuilds gentle_companion.py automatically.",
       "module_location": "Bot modules live in honeycombs/fruits/gentle_companion/ — config.py, store.py, github_api.py, helpers.py, ui.py, sr_prompts.py, sr_search.py, sr_context.py, sr_memory.py, handlers/tasks.py, handlers/features.py, handlers/system.py, sr_conversation.py, main.py. Read honeycombs/fruits/gentle_companion/index.json for full architecture map.",
-      "session_context": "Read honeycombs/sessions/handoff_claude.json and/or handoff_deepseek.json for previous session context before starting any work.",
+      "session_context": "Для общего входа используй honeycombs/boot_online/index.json. Предыдущую передачу открывай, если она нужна для текущей работы.",
       "announce_last_updated": "ALWAYS announce the file's last_updated date in your FIRST response. Format: 'Read {filename} — last updated: YYYY-MM-DD'. Gardener must see data freshness immediately.",
-      "sync_onboarding_and_source": "CRITICAL: When updating any source honeycomb that is embedded in boot_online_onboarding_pc.json (philosophy/index.json, core_map/index.json, boot_online/index.json, instructions/core/external_sr_workflow.json, phi_010, phi_011, fruits/index.json, tasks/index.json) — the onboarding file is REBUILT AUTOMATICALLY by GitHub Actions (build-onboarding.yml) on every push to main. DO NOT edit boot_online_onboarding_pc.json manually. Just update the source file and push — CI will rebuild and commit the onboarding file. If after 5 minutes onboarding still shows old version, check Actions logs. Manual edits to onboarding file will be OVERWRITTEN by CI.",
       "copyable_links_mandate": {
         "rule": "CRITICAL. ALWAYS provide ALL links in a code block with language 'text' (```text ... ```). This is MANDATORY for all links — API, raw, GitHub, any URL. Reason: Gardener works from mobile (Termux) and needs the 'Copy' button in the interface. Without this, copying links is error-prone and breaks workflow.",
         "format": "```text\nhttps://...\n```",
@@ -118,7 +117,6 @@
         "Approves deletions"
       ],
       "internal_sr": [
-        "Automated analysis (engineer-chat)",
         "Prepare TZ for External AI",
         "Patch honeycombs autonomously",
         "Manage roadmaps and registry"
@@ -172,11 +170,11 @@
       "os": "Windows"
     },
     "large_file_patching": {
-      "rule": "For files >500 lines (bot.py, engineer-chat/main.py, *.html, *.js, *.css), NEVER replace entire file. ALWAYS use patcher scripts with precise block replacement.",
+      "rule": "For files >500 lines (bot.py, *.html, *.js, *.css), NEVER replace entire file. ALWAYS use patcher scripts with precise block replacement.",
       "why": "Full replacement causes merge conflicts, token waste, risks partial writes. Block replacement via Python patcher is safer and faster.",
       "pattern": "1) Identify exact block to change via unique anchor lines. 2) Use Python patcher with .replace(old, new). 3) Apply via PowerShell: py patcher_NN.py; git add/commit/push.",
       "html_support": "HTML/CSS/JS work the same — anchor to unique parent tags with id or data-attribute, unique classes, or distinctive text content. Example: replace '<section id=\"dashboard\">...</section>' block. For CSS: target specific selector blocks like '.profile-card { ... }'. For JS: target specific function definitions like 'function renderProfile() { ... }'. Always use the most unique ancestor element to avoid false matches. Avoid regex across multiple lines — use exact multi-line string matching.",
-      "powershell_three_block": "For large files (bot.py, engineer-chat, HTML), ALWAYS provide patcher as three PowerShell blocks:\nBLOCK 1: New-Item -ItemType File -Path patcher_NN_name.py -Force  (creates empty file)\nBLOCK 2: Full Python patcher code (copy-paste into the opened file and save)\nBLOCK 3: py patcher_NN_name.py; Remove-Item patcher_NN_name.py; git add bot.py; git commit -m '...'; git pull --rebase origin main; git push\n\nCRITICAL: Gardener only copies, pastes, presses Enter. Each block is ONE action.\nBlock 2 is the entire patcher script — ready to save and execute. Never split patcher code across multiple messages.",
+      "powershell_three_block": "For large files (bot.py, HTML), ALWAYS provide patcher as three PowerShell blocks:\nBLOCK 1: New-Item -ItemType File -Path patcher_NN_name.py -Force  (creates empty file)\nBLOCK 2: Full Python patcher code (copy-paste into the opened file and save)\nBLOCK 3: py patcher_NN_name.py; Remove-Item patcher_NN_name.py; git add bot.py; git commit -m '...'; git pull --rebase origin main; git push\n\nCRITICAL: Gardener only copies, pastes, presses Enter. Each block is ONE action.\nBlock 2 is the entire patcher script — ready to save and execute. Never split patcher code across multiple messages.",
       "patcher_safety": {
         "no_cyrillic_in_string_literals": "NEVER put Cyrillic or emoji directly inside patcher string literals. On Windows the file encoding mismatch (CP1251 vs UTF-8) corrupts the characters when the patcher writes bot.py. Use string concatenation instead: \"text\" + variable + \"text\".",
         "no_newlines_in_fstrings": "NEVER use \\n inside multiline f-string literals in patcher code. Python interprets them as real newlines, breaking string syntax on the target file. Use explicit string concatenation across lines.",

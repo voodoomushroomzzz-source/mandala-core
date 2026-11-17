@@ -213,9 +213,8 @@ def render_queue(root, works_by_file):
 
 
 def build_catalogs(root, site, output, graph):
-    for name in ("index.html", "engineer-chat.html"):
-        if site != root:
-            (site / name).write_text((root / name).read_text(encoding="utf-8"), encoding="utf-8", newline="\n")
+    if site != root:
+        (site / "index.html").write_text((root / "index.html").read_text(encoding="utf-8"), encoding="utf-8", newline="\n")
 
     nodes = {node["id"]: node for node in graph["nodes"]}
     work_cards = {}

@@ -40,7 +40,7 @@
       "type": "honeycomb",
       "source": "core_map",
       "path": "honeycombs/protocols/index.json",
-      "description": "Activation protocols: PROTO-004, PROTO-005, PROTO-006, PROTO-009, PROTO-011."
+      "description": "Activation protocols: PROTO-004, PROTO-006, PROTO-009, PROTO-011."
     },
     {
       "id": "akasha",
@@ -332,7 +332,7 @@
       "type": "work",
       "path": "honeycombs/works/W-T-20261017-MGE-BUNDLE__mge_bundle_builder.json",
       "description": "",
-      "deadline": "2026-11-15",
+      "deadline": null,
       "progress": 0
     },
     {
@@ -348,8 +348,8 @@
       "type": "fruit",
       "path": "honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json",
       "description": "Локальное приложение Мандалы с чатом, дашбордами и базовой проекцией Сада. Клиенты ПК и телефона работают с одним Садом и напрямую синхронизируют его по локальной сети.",
-      "status": "active",
-      "version": "v4.0.0-simbiosis"
+      "status": "planned",
+      "version": null
     },
     {
       "id": "fruit-manus-001",

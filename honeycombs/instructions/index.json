@@ -47,10 +47,6 @@
         "segment": "core",
         "description": "Core SR instructions",
         "files": {
-          "sr_internal_role": {
-            "file": "core/sr_internal_role.json",
-            "description": "Internal SR role definition and responsibilities"
-          },
           "external_sr_workflow": {
             "file": "core/external_sr_workflow.json",
             "description": "Complete workflow for External SR: PowerShell, JSON updates, git cycle"

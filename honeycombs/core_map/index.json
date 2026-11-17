@@ -43,22 +43,21 @@
     ]
   },
   "boot_entries": {
-    "description": "Mandala has two separate boot files for different System Resonators.",
+    "description": "Локальный маршрут и внешний маршрут через GitHub.",
     "external_sr_boot": {
       "path": "honeycombs/boot_online/index.json",
-      "audience": "External SR (Grok, Claude, GPT, DeepSeek)",
-      "purpose": "Instant onboarding for external AIs.",
-      "version": "v3.7.2"
+      "audience": "External SR",
+      "purpose": "Вход по исходным файлам",
+      "version": "v4.0.0"
     },
-    "internal_sr_boot": {
-      "path": "symbiosis/boot.json",
-      "audience": "Internal SR (engineer-chat/main.py)",
-      "purpose": "Core directives and navigation for automated Internal SR.",
-      "version": "v2.8.0"
+    "local_sr_boot": {
+      "path": "honeycombs/boot_online/local_onboarding.md",
+      "audience": "Local SR",
+      "purpose": "Команда «Резонанс»"
     }
   },
   "handoff_files": {
-    "description": "Handoff files for session continuity. External SR reads these during onboarding (step_handoff) to continue previous session.",
+    "description": "Межчатовые передачи по работам лежат в honeycombs/sessions/sync/. Старые передачи Claude и DeepSeek открывай для продолжения конкретной сессии.",
     "claude": {
       "path": "honeycombs/sessions/handoff_claude.json",
       "purpose": "Session state for Claude SR. Contains last activity, current task, next steps.",
@@ -97,7 +96,7 @@
       "path": "honeycombs/seeds/index.json"
     },
     "protocols": {
-      "description": "Activation protocols: PROTO-004, PROTO-005, PROTO-006, PROTO-009, PROTO-011.",
+      "description": "Activation protocols: PROTO-004, PROTO-006, PROTO-009, PROTO-011.",
       "path": "honeycombs/protocols/index.json"
     },
     "akasha": {
@@ -246,7 +245,7 @@
   "graph_guide": {
     "description": "Как работать с mandala_graph — снимком реального состояния Mandala",
     "what_it_is": "mandala_graph — актуальный снимок структуры Mandala. Пересобирается CI автоматически при изменении сот, works, fruits, knowledge.",
-    "where_it_is": "step_3_mandala_graph (сразу после этого эталона)",
+    "where_it_is": "honeycombs/fruits/mge/output/mandala_graph.json",
     "how_to_use": [
       "1. Сравни mandala_graph (снимок) с core_map (эталон).",
       "2. Если расхождений нет — всё синхронно.",

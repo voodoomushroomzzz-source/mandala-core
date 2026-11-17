@@ -23,7 +23,7 @@
   "honeycombs": {
     "boot_online": {
       "manifest": "honeycombs/boot_online/index.json",
-      "description": "Сота онбординга. Точка входа для внешних SR. Содержит index.json + boot_online_onboarding_pc.json.",
+      "description": "Точка входа для локального и внешнего SR. Маршруты описаны в индексе Boot Online.",
       "status": "active"
     },
     "core_map": {
@@ -54,8 +54,7 @@
         "core": [
           "core/external_sr_workflow.json",
           "core/file_naming.json",
-          "core/manifest_standard_v2.json",
-          "core/sr_internal_role.json"
+          "core/manifest_standard_v2.json"
         ],
         "workflows": [
           "mobile_workflow.json"

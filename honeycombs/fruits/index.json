@@ -39,10 +39,9 @@
       "id": "fruit-engineer-chat-001",
       "name": "Engineer Chat",
       "short_description": "Локальное приложение Мандалы с чатом, дашбордами и базовой проекцией Сада. Клиенты ПК и телефона работают с одним Садом и напрямую синхронизируют его по локальной сети.",
-      "status": "active",
-      "version": "v4.0.0-simbiosis",
-      "direction_status": "planned",
-      "note": "Версия и статус active относятся к существующему серверному прототипу в реестре. Локальные клиенты и прямая синхронизация запланированы. Текущая доступность сервера не проверялась.",
+      "status": "planned",
+      "version": null,
+      "note": "Старый серверный прототип снят. Актуальная карточка описывает будущий локальный Engineer Chat.",
       "layer": "Brain (Layer 2)",
       "path": "honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json",
       "icon": "🧠"
@@ -159,11 +158,11 @@
   },
   "metrics": {
     "total_fruits": 8,
-    "active": 2,
-    "in_development": 1,
+    "paused": 2,
+    "planned": 3,
+    "active": 1,
     "planning": 1,
-    "planned": 2,
-    "paused": 2
+    "in_development": 1
   },
   "navigation": {
     "parent_map": "honeycombs/core_map/index.json",

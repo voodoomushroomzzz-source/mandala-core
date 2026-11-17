@@ -7,14 +7,9 @@
     "note": "All sub-protocols are located in protocols/ subfolders. Paths are relative to honeycombs/protocols/.",
     "available_protocols": {
       "Onboarding": {
-        "description": "Session start — loads core map, seeds, workflow, philosophy, scan_state (PROTO-004)",
+        "description": "Резонанс: вход по исходным файлам через Boot Online или локальный маршрут (PROTO-004).",
         "path": "onboarding.json",
         "id": "PROTO-004"
-      },
-      "Internal-Onboarding": {
-        "description": "Quick session start for Internal SR — loads boot, role, core map, seeds",
-        "path": "internal/onboarding.json",
-        "id": "PROTO-005"
       },
       "Ideas-Roadmaps": {
         "description": "Analyze seeds, tasks, roadmaps — statistics and update recommendations",
@@ -43,17 +38,17 @@
     "description": "Protocols Hub — activation protocols for Mandala Symbiosis.",
     "migration_status": "completed_v3.0.0",
     "total_size_kb": 12,
-    "total_subprotocols": 5,
-    "segments": 5,
+    "total_subprotocols": 4,
+    "segments": 4,
     "parent_honeycomb": "core_map",
     "honeycomb_name": "protocols"
   },
   "identity": {
-    "updated": "2026-07-15",
+    "updated": "2026-11-17",
     "layer": 3,
     "type": "protocol_hub",
     "version": "v3.6.0",
-    "description": "Central hub of Mandala protocols. 5 active protocols with explicit paths.",
+    "description": "Central hub of Mandala protocols. 4 active protocols with explicit paths.",
     "created": "2026-03-05",
     "name": "Protocols Hub",
     "module_id": "PROTOCOLS-INDEX-001",
@@ -70,9 +65,9 @@
     ]
   },
   "registry": {
-    "total_protocols": 5,
-    "active_protocols": 5,
-    "last_updated": "2026-07-15",
-    "notes": "v3.6.0: added explicit paths to all protocols in index"
+    "total_protocols": 4,
+    "active_protocols": 4,
+    "last_updated": "2026-11-17",
+    "notes": "Старый внутренний вход снят вместе с серверным прототипом."
   }
 }

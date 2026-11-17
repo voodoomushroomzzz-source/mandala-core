@@ -21,8 +21,8 @@
   },
   "modules": {
     "boot": {
-      "file": "simbiosis/boot.json",
-      "description": "Загрузочный модуль. Философия, директивы, инструкции СР. ЧИТАТЬ ВСЕГДА.",
+      "file": "honeycombs/boot_online/index.json",
+      "description": "Вход внешнего SR через GitHub.",
       "size_kb": "?",
       "status": "active"
     },
@@ -33,5 +33,5 @@
       "status": "active"
     }
   },
-  "navigation_hint": "Эти модули загружаются при старте системы. boot.json — обязателен для понимания философии."
+  "navigation_hint": "Для локального входа используй honeycombs/boot_online/local_onboarding.md. Для внешнего входа используй Boot Online."
 }

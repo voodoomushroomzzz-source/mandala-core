@@ -46,10 +46,6 @@
       "version": "v1.3.0",
       "description": "Архив завершённых задач (done + cancelled)."
     },
-    "kurtoch_bundle.json": {
-      "version": "v1.0.0",
-      "description": "Единый файл онбординга (автосборка)."
-    },
     "procurement_automation.json": {
       "version": "v10.4.0",
       "description": "Закупки Куртош: ТЗ v10.3 + блок pil_project (PIL v2.1.0) — полное ТЗ, план, трекинг.",
@@ -71,7 +67,7 @@
     }
   },
   "scripts": {
-    "description": "Скрипты для работы с Notion и обслуживания хаба. Полные тексты — в bundle.",
+    "description": "Скрипты для работы с Notion и обслуживания хаба.",
     "existing": [
       "notion_sync.py",
       "notion_runner.sh",
@@ -79,7 +75,6 @@
       "patch_schema.py",
       "fix_two_ids.py",
       "archive_done.py",
-      "build_bundle.py",
       "split_archive.py",
       "split_franchise.py"
     ],

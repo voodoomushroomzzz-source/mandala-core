@@ -5,7 +5,6 @@ on:
   push:
     paths:
       - 'index.html'
-      - 'engineer-chat.html'
       - '.github/workflows/pages-deploy.yml'
       - 'honeycombs/**'
       - '!honeycombs/fruits/mge/output/**'

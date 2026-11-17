@@ -756,31 +756,6 @@
     "connection_to_poetry": "Проза является логическим продолжением поэзии: те же темы, те же образы, но в развёрнутой форме. Стихи — это крик, проза — это дыхание."
   },
   "build_tasks": {
-    "track_d": {
-      "name": "Автосборка литературного вектора",
-      "deadline": "2026-09-15",
-      "goal": "Создать скрипт автосборки, который собирает все стихи и прозу в один файл literary_core.json",
-      "priority": "critical",
-      "tasks": [
-        {
-          "id": "BUILD-001",
-          "title": "Создать скрипт build_literary_core.py",
-          "status": "done"
-        },
-        {
-          "id": "BUILD-002",
-          "title": "Настроить обновление literary_core.json при изменении файлов",
-          "status": "done"
-        },
-        {
-          "id": "BUILD-003",
-          "title": "Добавить литературный слепок в индекс",
-          "status": "done"
-        }
-      ],
-      "progress": 3,
-      "status": "done"
-    },
     "track_e": {
       "name": "Редакция и подготовка к изданию",
       "deadline": "2027-03-31",
@@ -813,12 +788,10 @@
       "gate_dependency": "readiness_gate"
     }
   },
-  "literary_core": {
-    "path": "honeycombs/boot_online/personal/literary_core_boot.json",
-    "description": "Собранный слепок всей литературной ветки (стихи + проза + индекс)",
-    "created": "2026-08-20",
-    "purpose": "Один файл для загрузки в любой External SR",
-    "source": "Автосборка из honeycombs/personal/poetry/"
-  },
-  "last_updated": "2026-11-11"
+  "last_updated": "2026-11-17",
+  "reading_route": {
+    "instruction": "Сначала прочитай индекс поэзии, затем подгрузи только тексты, относящиеся к запросу. Перед обзором корпуса сверяй актуальное количество файлов в poems/ и prose/. Поле total отражает последнюю сверку.",
+    "poems": "poems/",
+    "prose": "prose/"
+  }
 }
