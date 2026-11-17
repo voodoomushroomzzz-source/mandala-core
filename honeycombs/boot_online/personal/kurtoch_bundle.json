@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-11-17T14:30:12Z",
+    "generated_at": "2026-11-17T14:37:48Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -1484,7 +1484,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.6.55",
+      "version": "v2.6.56",
       "created": "2026-09-14",
       "updated": "2026-11-17",
       "layer": 2,
@@ -1497,7 +1497,7 @@
     },
     "taskboard": {
       "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-      "version": "v2.6.55",
+      "version": "v2.6.56",
       "created": "2026-09-14",
       "updated": "2026-11-17",
       "legend": {
@@ -2979,7 +2979,7 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-11-15",
+          "deadline": "2026-11-25",
           "reminder": null,
           "depends_on": [],
           "related_to": [
@@ -2987,7 +2987,7 @@
             "K-179"
           ],
           "created": "2026-11-13",
-          "updated": "2026-11-13",
+          "updated": "2026-11-17",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
