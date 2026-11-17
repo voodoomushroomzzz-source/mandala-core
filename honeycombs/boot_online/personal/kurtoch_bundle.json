@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-11-17T14:20:40Z",
+    "generated_at": "2026-11-17T14:30:12Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -1484,9 +1484,9 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.6.54",
+      "version": "v2.6.55",
       "created": "2026-09-14",
-      "updated": "2026-11-13",
+      "updated": "2026-11-17",
       "layer": 2,
       "type": "taskboard_module",
       "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -1497,9 +1497,9 @@
     },
     "taskboard": {
       "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-      "version": "v2.6.54",
+      "version": "v2.6.55",
       "created": "2026-09-14",
-      "updated": "2026-11-13",
+      "updated": "2026-11-17",
       "legend": {
         "priority": {
           "critical": "Горит. Сегодня-завтра.",
@@ -1529,12 +1529,12 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-11-01",
+          "deadline": "2026-11-30",
           "reminder": null,
           "depends_on": [],
           "related_to": [],
           "created": "2026-09-14",
-          "updated": "2026-10-19",
+          "updated": "2026-11-17",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -1552,12 +1552,12 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-11-04",
+          "deadline": "2026-11-30",
           "reminder": null,
           "depends_on": [],
           "related_to": [],
           "created": "2026-09-21",
-          "updated": "2026-10-16",
+          "updated": "2026-11-17",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2079,14 +2079,14 @@
           "status": "todo",
           "horizon": "strategic",
           "phase": "phase_0",
-          "deadline": "2026-11-01",
+          "deadline": "2026-11-30",
           "reminder": null,
           "depends_on": [],
           "related_to": [
             "K-077"
           ],
           "created": "2026-09-25",
-          "updated": "2026-10-28",
+          "updated": "2026-11-17",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2104,12 +2104,12 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-11-11",
+          "deadline": "2026-11-30",
           "reminder": null,
           "depends_on": [],
           "related_to": [],
           "created": "2026-09-25",
-          "updated": "2026-11-05",
+          "updated": "2026-11-17",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2301,56 +2301,6 @@
           "focus": false
         },
         {
-          "id": "K-130",
-          "title": "Капинг в 2U (01.11)",
-          "description": "Кофейный капинг (дегустация) зерна от обжарщиков QQ Coffee в кофейне 2U.\n\n2U — кофейня наших друзей.\nЦель: капить зерно от QQ Coffee.\n\nСвязь: KB → coffee_suppliers (QQ — поставщик).",
-          "priority": "medium",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-11-01",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [],
-          "created": "2026-10-14",
-          "updated": "2026-10-14",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Общая"
-          },
-          "focus": false
-        },
-        {
-          "id": "K-135",
-          "title": "Обсудить с Олей план базы знаний",
-          "description": "В понедельник 19.10 — встреча/разговор с Олей (EMP-016), обсудить план базы знаний.\n\nЧто обсудить:\n- Структура базы знаний (секции: чек-листы, регламенты, техкарты, обучение, ЦУ)\n- Формат хранения (Notion? Google? бот?)\n- Кто наполняет, в какие сроки\n- Приоритеты — что наполнять первым\n\nСвязь: K-076 (База знаний — консолидация), M-002.",
-          "priority": "high",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-11-01",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [
-            "K-076",
-            "M-002",
-            "EMP-016"
-          ],
-          "created": "2026-10-15",
-          "updated": "2026-10-28",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Стратегические"
-          },
-          "focus": false
-        },
-        {
           "id": "K-138",
           "title": "Привезти блогера Настю на обзор кофейни (кофе)",
           "description": "Привезти блогера Настю (кофе-обзорщица) на обзор нашей кофейни.\n\nПланирование отдачи:\n- Согласовать дату и точку (Центр / Нижка)\n- Подготовить позиции для съёмки (сезонка, фирменные напитки)\n- Согласовать формат обзора\n- После обзора — репост/шеры в наш SMM\n\nСвязь: EMP-020 (Настя SMM), K-103 (Сезонка).",
@@ -2358,7 +2308,7 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-11-15",
+          "deadline": "2026-12-15",
           "reminder": null,
           "depends_on": [],
           "related_to": [
@@ -2366,7 +2316,7 @@
             "K-103"
           ],
           "created": "2026-10-16",
-          "updated": "2026-10-16",
+          "updated": "2026-11-17",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2481,7 +2431,7 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-10-31",
+          "deadline": "2026-11-30",
           "reminder": null,
           "depends_on": [],
           "related_to": [
@@ -2489,7 +2439,7 @@
             "K-145"
           ],
           "created": "2026-10-20",
-          "updated": "2026-10-21",
+          "updated": "2026-11-17",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2556,14 +2506,14 @@
           "status": "in_progress",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-11-15",
+          "deadline": "2026-11-30",
           "reminder": null,
           "depends_on": [],
           "related_to": [
             "K-019"
           ],
           "created": "2026-10-22",
-          "updated": "2026-11-05",
+          "updated": "2026-11-17",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2604,14 +2554,14 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-11-10",
+          "deadline": "2026-11-30",
           "reminder": null,
           "depends_on": [],
           "related_to": [
             "M-001"
           ],
           "created": "2026-10-23",
-          "updated": "2026-10-23",
+          "updated": "2026-11-17",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2652,12 +2602,12 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-11-15",
+          "deadline": "2026-12-01",
           "reminder": null,
           "depends_on": [],
           "related_to": [],
           "created": "2026-10-23",
-          "updated": "2026-10-23",
+          "updated": "2026-11-17",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2791,134 +2741,6 @@
           "focus": false
         },
         {
-          "id": "K-166",
-          "title": "День народного единства (04.11) — доп. люди в Центр",
-          "description": "Праздничный день 4 ноября. В штатном графике дополнительно выйдут люди для усиления. Отметить в графике (например, другим цветом или пометкой), чтобы не пропустить.",
-          "priority": "high",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-11-04",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [
-            "M-002"
-          ],
-          "created": "2026-10-29",
-          "updated": "2026-10-29",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Центр"
-          },
-          "focus": false
-        },
-        {
-          "id": "K-167",
-          "title": "Генеральная уборка (Центр) + общая планёрка",
-          "description": "Провести генеральную уборку в Центре с 16:00 до 21:00. В рамках дня — общая планёрка с сотрудниками.\n\nВОПРОСЫ НА ПЛАНЁРКУ:\n1. Общение с гостями: приветствие, прощание (важный момент).\n2. Маркировки: ежедневные маркировки, контроль маркировок посредством старших смены.\n3. Зоны закрытия: ещё раз пройти с ребятами, какие зоны важно закрывать и не забывать. На что нужно обращать внимание по чистоте.\n\nРАБОТЫ НА ГЕНУБОРКЕ:\n- Обязательно заменить фильтры для воды.\n- Демонтаж разрывной системы струи под раковиной (из K-080).\n- Убрать/закрасить белые пятна в туалете (поговорить с Витей) (из K-171).",
-          "priority": "high",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-11-11",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [
-            "M-002"
-          ],
-          "created": "2026-10-29",
-          "updated": "2026-11-05",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Центр"
-          },
-          "focus": true
-        },
-        {
-          "id": "K-171",
-          "title": "Убрать белые пятна в туалете (Центр)",
-          "description": "Поговорить с Витей по поводу белых пятен в туалете. Обсудить возможность закрасить их во время генеральной уборки.",
-          "priority": "medium",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-11-11",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [
-            "K-167",
-            "M-002"
-          ],
-          "created": "2026-11-02",
-          "updated": "2026-11-02",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Центр"
-          },
-          "focus": false
-        },
-        {
-          "id": "K-172",
-          "title": "Правка графика: убрать смену у Александры 12.11",
-          "description": "В расписании на 12 ноября у Александры (EMP-003) не должно быть смены. Убрать её из графика.",
-          "priority": "high",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-11-12",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [
-            "EMP-003"
-          ],
-          "created": "2026-11-02",
-          "updated": "2026-11-02",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Общая"
-          },
-          "focus": false
-        },
-        {
-          "id": "K-173",
-          "title": "Замена фильтров воды (Центр)",
-          "description": "Сегодня заменить угольные фильтры для воды в Центре. (Осмос — если подошло время).",
-          "priority": "critical",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-11-02",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [
-            "K-110",
-            "K-167",
-            "M-002"
-          ],
-          "created": "2026-11-02",
-          "updated": "2026-11-02",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Центр"
-          },
-          "focus": true
-        },
-        {
           "id": "K-174",
           "title": "Подготовить и провести каппинг (22.11)",
           "description": "Подготовка и проведение каппинга.\n1. Закупить необходимое зерно (ответственная: Аня).\n2. Сделать анонс заблаговременно в соцсетях (ответственная: Настя).\n3. Провести сам каппинг — собрать гостей и провести мероприятие (ответственные: Аня и Настя совместно).",
@@ -2945,29 +2767,6 @@
           "focus": true
         },
         {
-          "id": "K-175",
-          "title": "Перенести холодильник со склада в Центр",
-          "description": "Перенести холодильник со склада в Центр Куртоша.",
-          "priority": "high",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-11-03",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [
-            "M-002"
-          ],
-          "created": "2026-11-02",
-          "updated": "2026-11-02",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "column": "Операционка — Центр"
-          },
-          "focus": true
-        },
-        {
           "id": "K-178",
           "title": "Ежедневный план выручки + бонусная система за сезонку и десерты",
           "description": "1. Сделать план на каждый день (дневной план).\n2. Разработать и продумать бонусную систему сотрудникам (процент с продаж) за сезонку и десерты.\n3. Завести это в определённое место (таблицу/систему), чтобы ребятам на каждый день автоматически выкатывался актуальный план.",
@@ -2975,7 +2774,7 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-11-15",
+          "deadline": "2026-11-30",
           "reminder": null,
           "depends_on": [],
           "related_to": [
@@ -2983,7 +2782,7 @@
             "K-150"
           ],
           "created": "2026-11-03",
-          "updated": "2026-11-03",
+          "updated": "2026-11-17",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -3017,31 +2816,6 @@
             "column": "Операционка — Центр"
           },
           "focus": false
-        },
-        {
-          "id": "K-180",
-          "title": "Вызвать техника по кофемашине (Нижка)",
-          "description": "Вызвать техника по кофемашине на Нижку. Причина: скачет давление у машинки.",
-          "priority": "high",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-11-05",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [
-            "M-001"
-          ],
-          "created": "2026-11-05",
-          "updated": "2026-11-05",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Нижка"
-          },
-          "focus": true
         },
         {
           "id": "K-181",
@@ -3089,58 +2863,6 @@
             "bot_task_id": null,
             "notion_page_id": null,
             "column": "Стратегические"
-          },
-          "focus": true
-        },
-        {
-          "id": "K-183",
-          "title": "Заказать соусники + подносы (Центр/Нижка)",
-          "description": "1. Заказать соусники (4 шт.) в Центр.\n2. Заказать дополнительные подносы: 2 шт. для Центра (новые).\n3. Распределить имеющиеся подносы: 2 шт. отправить на Нижку (из тех, что уже есть).",
-          "priority": "medium",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-11-15",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [
-            "M-001",
-            "M-002"
-          ],
-          "created": "2026-11-05",
-          "updated": "2026-11-05",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Общая"
-          },
-          "focus": false
-        },
-        {
-          "id": "K-184",
-          "title": "Согласовать и выдать ЗП (понедельник)",
-          "description": "Предварительно всё согласовать с ребятами (суммы, часы, бонусы/удержания), затем выдать заработную плату.",
-          "priority": "high",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-11-09",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [
-            "K-027",
-            "K-182"
-          ],
-          "created": "2026-11-05",
-          "updated": "2026-11-05",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Общая"
           },
           "focus": true
         },
@@ -3276,32 +2998,6 @@
           "focus": false
         },
         {
-          "id": "K-190",
-          "title": "Оформить зону дрип-пакетов (Центр)",
-          "description": "В Центре оформить зону под штучные дрип-пакеты (кофе). Сделать так, чтобы гости визуально видели, что у нас можно покупать их поштучно (3 пакета) себе домой.",
-          "priority": "medium",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-11-20",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [
-            "M-002",
-            "K-185"
-          ],
-          "created": "2026-11-13",
-          "updated": "2026-11-13",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Центр"
-          },
-          "focus": false
-        },
-        {
           "id": "K-191",
           "title": "Купить запасную печатающую голову для принтера (Центр)",
           "description": "Заменить старую печатающую голову для принтера, чтобы была запасная (купить новую/запасную).",
@@ -3377,56 +3073,31 @@
             "column": "Операционка — Общая"
           },
           "focus": false
-        },
-        {
-          "id": "K-194",
-          "title": "Сверить накладные Метро, оплатить Гагаринский, выгрузить платежи",
-          "description": "1. Сверить все накладные по Метро и поставить их в оплату на завтра.\n2. Добавить в оплату Гагаринский (ТЦ).\n3. Проверить фонды (перевели ли средства на другие фонды).\n4. Со склада выгрузить платежи в банк.",
-          "priority": "critical",
-          "status": "todo",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-11-13",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [
-            "K-078",
-            "K-019"
-          ],
-          "created": "2026-11-13",
-          "updated": "2026-11-13",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Общая"
-          },
-          "focus": true
         }
       ],
       "counters": {
-        "total": 69,
+        "total": 56,
         "by_status": {
-          "todo": 63,
+          "todo": 50,
           "in_progress": 5,
           "planning": 1
         },
         "by_priority": {
-          "high": 33,
-          "medium": 30,
-          "critical": 4,
+          "high": 26,
+          "medium": 26,
+          "critical": 2,
           "low": 2
         },
         "by_column": {
-          "Операционка — Общая": 21,
-          "Операционка — Центр": 22,
-          "Операционка — Нижка": 16,
+          "Операционка — Общая": 16,
+          "Операционка — Центр": 16,
+          "Операционка — Нижка": 15,
           "Крупные вехи": 3,
-          "Стратегические": 7
+          "Стратегические": 6
         },
         "by_phase": {
-          "phase_0": 69
+          "phase_0": 55,
+          "phase_1": 1
         }
       },
       "notes": {
@@ -3542,9 +3213,9 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-ARCHIVE-001",
       "name": "Kurtoch — Taskboard Archive",
-      "version": "v1.3.0",
+      "version": "v1.3.1",
       "created": "2026-09-23",
-      "updated": "2026-11-09",
+      "updated": "2026-11-17",
       "type": "taskboard_archive",
       "parent": "taskboard.json",
       "description": "Архив завершённых задач (done + cancelled).",
@@ -6320,11 +5991,354 @@
           },
           "focus": false,
           "archived_at": "2026-11-09"
+        },
+        {
+          "id": "K-130",
+          "title": "Капинг в 2U (01.11)",
+          "description": "Кофейный капинг (дегустация) зерна от обжарщиков QQ Coffee в кофейне 2U.\n\n2U — кофейня наших друзей.\nЦель: капить зерно от QQ Coffee.\n\nСвязь: KB → coffee_suppliers (QQ — поставщик).",
+          "priority": "medium",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-01",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-10-14",
+          "updated": "2026-11-17",
+          "completed": "2026-11-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "focus": false,
+          "archived_at": "2026-11-17"
+        },
+        {
+          "id": "K-135",
+          "title": "Обсудить с Олей план базы знаний",
+          "description": "В понедельник 19.10 — встреча/разговор с Олей (EMP-016), обсудить план базы знаний.\n\nЧто обсудить:\n- Структура базы знаний (секции: чек-листы, регламенты, техкарты, обучение, ЦУ)\n- Формат хранения (Notion? Google? бот?)\n- Кто наполняет, в какие сроки\n- Приоритеты — что наполнять первым\n\nСвязь: K-076 (База знаний — консолидация), M-002.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-01",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-076",
+            "M-002",
+            "EMP-016"
+          ],
+          "created": "2026-10-15",
+          "updated": "2026-11-17",
+          "completed": "2026-11-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          },
+          "focus": false,
+          "archived_at": "2026-11-17"
+        },
+        {
+          "id": "K-166",
+          "title": "День народного единства (04.11) — доп. люди в Центр",
+          "description": "Праздничный день 4 ноября. В штатном графике дополнительно выйдут люди для усиления. Отметить в графике (например, другим цветом или пометкой), чтобы не пропустить.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-04",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-002"
+          ],
+          "created": "2026-10-29",
+          "updated": "2026-11-17",
+          "completed": "2026-11-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          },
+          "focus": false,
+          "archived_at": "2026-11-17"
+        },
+        {
+          "id": "K-167",
+          "title": "Генеральная уборка (Центр) + общая планёрка",
+          "description": "Провести генеральную уборку в Центре с 16:00 до 21:00. В рамках дня — общая планёрка с сотрудниками.\n\nВОПРОСЫ НА ПЛАНЁРКУ:\n1. Общение с гостями: приветствие, прощание (важный момент).\n2. Маркировки: ежедневные маркировки, контроль маркировок посредством старших смены.\n3. Зоны закрытия: ещё раз пройти с ребятами, какие зоны важно закрывать и не забывать. На что нужно обращать внимание по чистоте.\n\nРАБОТЫ НА ГЕНУБОРКЕ:\n- Обязательно заменить фильтры для воды.\n- Демонтаж разрывной системы струи под раковиной (из K-080).\n- Убрать/закрасить белые пятна в туалете (поговорить с Витей) (из K-171).",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-11",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-002"
+          ],
+          "created": "2026-10-29",
+          "updated": "2026-11-17",
+          "completed": "2026-11-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          },
+          "focus": true,
+          "archived_at": "2026-11-17"
+        },
+        {
+          "id": "K-171",
+          "title": "Убрать белые пятна в туалете (Центр)",
+          "description": "Поговорить с Витей по поводу белых пятен в туалете. Обсудить возможность закрасить их во время генеральной уборки.",
+          "priority": "medium",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-11",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-167",
+            "M-002"
+          ],
+          "created": "2026-11-02",
+          "updated": "2026-11-17",
+          "completed": "2026-11-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          },
+          "focus": false,
+          "archived_at": "2026-11-17"
+        },
+        {
+          "id": "K-172",
+          "title": "Правка графика: убрать смену у Александры 12.11",
+          "description": "В расписании на 12 ноября у Александры (EMP-003) не должно быть смены. Убрать её из графика.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-12",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "EMP-003"
+          ],
+          "created": "2026-11-02",
+          "updated": "2026-11-17",
+          "completed": "2026-11-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "focus": false,
+          "archived_at": "2026-11-17"
+        },
+        {
+          "id": "K-173",
+          "title": "Замена фильтров воды (Центр)",
+          "description": "Сегодня заменить угольные фильтры для воды в Центре. (Осмос — если подошло время).",
+          "priority": "critical",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-02",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-110",
+            "K-167",
+            "M-002"
+          ],
+          "created": "2026-11-02",
+          "updated": "2026-11-17",
+          "completed": "2026-11-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          },
+          "focus": true,
+          "archived_at": "2026-11-17"
+        },
+        {
+          "id": "K-175",
+          "title": "Перенести холодильник со склада в Центр",
+          "description": "Перенести холодильник со склада в Центр Куртоша.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-03",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-002"
+          ],
+          "created": "2026-11-02",
+          "updated": "2026-11-17",
+          "completed": "2026-11-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "column": "Операционка — Центр"
+          },
+          "focus": true,
+          "archived_at": "2026-11-17"
+        },
+        {
+          "id": "K-180",
+          "title": "Вызвать техника по кофемашине (Нижка)",
+          "description": "Вызвать техника по кофемашине на Нижку. Причина: скачет давление у машинки.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-05",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-001"
+          ],
+          "created": "2026-11-05",
+          "updated": "2026-11-17",
+          "completed": "2026-11-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          },
+          "focus": true,
+          "archived_at": "2026-11-17"
+        },
+        {
+          "id": "K-183",
+          "title": "Заказать соусники + подносы (Центр/Нижка)",
+          "description": "1. Заказать соусники (4 шт.) в Центр.\n2. Заказать дополнительные подносы: 2 шт. для Центра (новые).\n3. Распределить имеющиеся подносы: 2 шт. отправить на Нижку (из тех, что уже есть).",
+          "priority": "medium",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-15",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-001",
+            "M-002"
+          ],
+          "created": "2026-11-05",
+          "updated": "2026-11-17",
+          "completed": "2026-11-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "focus": false,
+          "archived_at": "2026-11-17"
+        },
+        {
+          "id": "K-184",
+          "title": "Согласовать и выдать ЗП (понедельник)",
+          "description": "Предварительно всё согласовать с ребятами (суммы, часы, бонусы/удержания), затем выдать заработную плату.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-09",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-027",
+            "K-182"
+          ],
+          "created": "2026-11-05",
+          "updated": "2026-11-17",
+          "completed": "2026-11-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "focus": true,
+          "archived_at": "2026-11-17"
+        },
+        {
+          "id": "K-190",
+          "title": "Оформить зону дрип-пакетов (Центр)",
+          "description": "В Центре оформить зону под штучные дрип-пакеты (кофе). Сделать так, чтобы гости визуально видели, что у нас можно покупать их поштучно (3 пакета) себе домой.",
+          "priority": "medium",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-20",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-002",
+            "K-185"
+          ],
+          "created": "2026-11-13",
+          "updated": "2026-11-17",
+          "completed": "2026-11-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          },
+          "focus": false,
+          "archived_at": "2026-11-17"
+        },
+        {
+          "id": "K-194",
+          "title": "Сверить накладные Метро, оплатить Гагаринский, выгрузить платежи",
+          "description": "1. Сверить все накладные по Метро и поставить их в оплату на завтра.\n2. Добавить в оплату Гагаринский (ТЦ).\n3. Проверить фонды (перевели ли средства на другие фонды).\n4. Со склада выгрузить платежи в банк.",
+          "priority": "critical",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-11-13",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-078",
+            "K-019"
+          ],
+          "created": "2026-11-13",
+          "updated": "2026-11-17",
+          "completed": "2026-11-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "focus": true,
+          "archived_at": "2026-11-17"
         }
       ],
-      "total": 113,
+      "total": 126,
       "by_status": {
-        "done": 94,
+        "done": 107,
         "cancelled": 19
       }
     },
