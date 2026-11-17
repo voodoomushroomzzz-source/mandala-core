@@ -1,34 +1,34 @@
 {
-  "last_scan": "2026-11-17T07:10:43.105398",
+  "last_scan": "2026-11-17T17:57:17.867503",
   "honeycomb_hashes": {
     "honeycombs/akasha": "682590839d458e1aa647a6fb0d4b1b43",
-    "honeycombs/fruits": "5a6082e205606532e2e30d4336c4a96e",
+    "honeycombs/fruits": "4fec631274da7349566b319304287fc6",
     "honeycombs/fruits/mge": "2f22a0d50e0225a489615766644dae71",
     "honeycombs/fruits/scout_agent": "1d2daeb2d7ad988c6cad5a0fba403bfc",
-    "honeycombs/fruits/gentle_companion": "9a1728487846531559170109fcb08cee",
+    "honeycombs/fruits/gentle_companion": "c32431ca10da7ad6e9aee537da7447a2",
     "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
-    "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
+    "honeycombs/instructions": "525a60fff38b3f2f76d846fb687f53e5",
     "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
-    "honeycombs/core_map": "aad04619c74f02e5949c5b9cf0634c8d",
+    "honeycombs/core_map": "aa246a608899e4308a307638847082cc",
     "honeycombs/rose_world": "668fabce934c3496726369c4b588c990",
     "honeycombs/philosophy": "fd05008634be1ed9e63189c6d7c5d0bd",
-    "honeycombs/personal": "c50560fae1ed5d7e9a1d27b4d80e063f",
+    "honeycombs/personal": "2eb8eb9d7097634a047a17514b7547ab",
     "honeycombs/personal/music": "0e28d6f8aed71b8673a9bbcdba7e9ee2",
     "honeycombs/personal/music/mayakoma": "56647ee0e1411622382a32324418cae7",
     "honeycombs/personal/music/dmitrii_levin": "85b8cb9336b2a3c74be80c75b31bf147",
     "honeycombs/personal/music/x_deaddy_x": "b6ba4c81fc9184b4f359012af61266ca",
     "honeycombs/personal/music/mc_voodookid": "d7fc9d7a3db7012d3d7d219a9e94bac7",
-    "honeycombs/personal/kurtoch": "796048314000c4bf513f8f6811674604",
-    "honeycombs/personal/poetry": "815077121da4d29804fae043daf5b1b9",
-    "honeycombs/boot_online": "961ba07fe1675d01f99e4f40f98b2a46",
+    "honeycombs/personal/kurtoch": "5c2635e66f2c27631fa3d013aca41c04",
+    "honeycombs/personal/poetry": "35910e9a0fb638e6db94756f89341904",
+    "honeycombs/boot_online": "32ef1d46f89bc3fdcd59cd7b7df52103",
     "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
-    "honeycombs/works": "0ec05622fb4bd4def8ce727e909ec366",
+    "honeycombs/works": "9e7e720b6aec8a7eced3480d6b0f8e10",
     "honeycombs/knowledge": "b7596c45b9293c61321bcec4e7b631e9",
     "honeycombs/knowledge/ai_tools": "2d59ee1b165e13e64c29c1822c683b6a",
     "honeycombs/seeds": "be2f3e08de805cee8036714094e797e6",
     "honeycombs/seeds/inbox": "704aae37474e75d2ef38f514d9b6b727",
     "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
-    "honeycombs/protocols": "67cf1df15cde701e4e26c0eb1f630629",
+    "honeycombs/protocols": "cc4a79a67d5b41605f4df93294d16a35",
     "honeycombs/directives": "dbc3c48c5b13d37df132cf510c2a3e8e"
   },
   "statistics": {
@@ -37,8 +37,8 @@
     "invalid_v2": 6,
     "errors": 0,
     "warnings": 6,
-    "total_files": 1335,
-    "total_size_kb": 4762.63
+    "total_files": 1330,
+    "total_size_kb": 3654.38
   },
   "seeds_health": {
     "root_count": 24,
@@ -55,10 +55,10 @@
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-11-17T07:10:43.105409",
+    "last_check": "2026-11-17T17:57:17.867510",
     "errors_count": 18,
-    "warnings_count": 10,
-    "expired_tasks": 13,
+    "warnings_count": 9,
+    "expired_tasks": 12,
     "upcoming_deadlines": 0,
     "expired_tasks_list": [
       {
@@ -84,12 +84,6 @@
         "name": "First Living Products — Mandala MVPs",
         "deadline": "2026-09-01",
         "days_overdue": 77
-      },
-      {
-        "work_id": "W-T-20261017-MGE-BUNDLE",
-        "name": "MGE Bundle Builder — Custom Module Bundles",
-        "deadline": "2026-11-15",
-        "days_overdue": 2
       },
       {
         "work_id": "W-R-20260814-PERSONAL-MIGRATION",

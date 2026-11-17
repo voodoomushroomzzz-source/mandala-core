@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 29,
-    "total_size_kb": 4762.63,
+    "total_size_kb": 3654.38,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,7 +44,7 @@
   },
   "registry": {
     "total_files": 29,
-    "total_size_kb": 4762.63,
+    "total_size_kb": 3654.38,
     "last_updated": "2026-11-17",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
@@ -83,12 +83,6 @@
             "name": "First Living Products — Mandala MVPs",
             "deadline": "2026-09-01",
             "days_overdue": 77
-          },
-          {
-            "work_id": "W-T-20261017-MGE-BUNDLE",
-            "name": "MGE Bundle Builder — Custom Module Bundles",
-            "deadline": "2026-11-15",
-            "days_overdue": 2
           },
           {
             "work_id": "W-R-20260814-PERSONAL-MIGRATION",
@@ -142,7 +136,7 @@
         "upcoming_deadlines": [],
         "errors_count": 0,
         "warnings_count": 0,
-        "expired_count": 13,
+        "expired_count": 12,
         "upcoming_count": 0
       },
       "ahimsa_filter": {
@@ -175,12 +169,11 @@
           "mc_voodookid: missing meta section",
           "poetry: missing meta section",
           "poems: missing index.json",
-          "prose: missing index.json",
-          "personal: missing index.json"
+          "prose: missing index.json"
         ],
         "noise_files": [],
         "errors_count": 18,
-        "warnings_count": 10,
+        "warnings_count": 9,
         "noise_count": 0
       },
       "deadline_sentinel": {
@@ -212,13 +205,6 @@
             "type": "works",
             "deadline": "2026-09-01",
             "days_overdue": 77
-          },
-          {
-            "id": "W-T-20261017-MGE-BUNDLE",
-            "name": "MGE Bundle Builder — Custom Module Bundles",
-            "type": "works",
-            "deadline": "2026-11-15",
-            "days_overdue": 2
           },
           {
             "id": "W-R-20260814-PERSONAL-MIGRATION",
@@ -279,7 +265,7 @@
         ],
         "upcoming": [],
         "warnings": [],
-        "expired_count": 13,
+        "expired_count": 12,
         "upcoming_count": 0
       },
       "integrity_check": {
