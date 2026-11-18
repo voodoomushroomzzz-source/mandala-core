@@ -61,16 +61,10 @@
         "warnings": [],
         "expired_tasks": [
           {
-            "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-            "name": "Unified Memory Architecture — Lemmalog + ACM + RENDER",
-            "deadline": "2026-10-15",
-            "days_overdue": 34
-          },
-          {
-            "work_id": "W-T-20260418-SYM",
-            "name": "SYM Implementation — System for Measuring Mandala Growth",
-            "deadline": "2026-10-01",
-            "days_overdue": 48
+            "work_id": "W-R-RM-012",
+            "name": "First Living Products — Mandala MVPs",
+            "deadline": "2026-09-01",
+            "days_overdue": 78
           },
           {
             "work_id": "W-T-20261015-MGE",
@@ -79,40 +73,22 @@
             "days_overdue": 3
           },
           {
-            "work_id": "W-R-RM-012",
-            "name": "First Living Products — Mandala MVPs",
-            "deadline": "2026-09-01",
-            "days_overdue": 78
-          },
-          {
-            "work_id": "W-R-20260814-PERSONAL-MIGRATION",
-            "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
-            "deadline": "2026-08-31",
-            "days_overdue": 79
-          },
-          {
-            "work_id": "W-T-20260728-AI-GATEWAY",
-            "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
-            "deadline": "2026-09-30",
-            "days_overdue": 49
-          },
-          {
-            "work_id": "W-T-20260803-RL-REASONING",
-            "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
-            "deadline": "2026-10-31",
-            "days_overdue": 18
-          },
-          {
             "work_id": "W-T-20260408-1030",
             "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
             "deadline": "2026-08-31",
             "days_overdue": 79
           },
           {
-            "work_id": "W-T-20260417-HUMOR",
-            "name": "Humor Development — Comedic Resonance for SR",
-            "deadline": "2026-11-01",
-            "days_overdue": 17
+            "work_id": "W-T-20260728-CYBER-AGENTS",
+            "name": "Cybersecurity Agents — Adaptation for Mandala",
+            "deadline": "2026-10-31",
+            "days_overdue": 18
+          },
+          {
+            "work_id": "W-T-20260803-RL-REASONING",
+            "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
+            "deadline": "2026-10-31",
+            "days_overdue": 18
           },
           {
             "work_id": "W-T-20260807-MEMORY__mandala_memory_layer",
@@ -127,10 +103,34 @@
             "days_overdue": 18
           },
           {
-            "work_id": "W-T-20260728-CYBER-AGENTS",
-            "name": "Cybersecurity Agents — Adaptation for Mandala",
-            "deadline": "2026-10-31",
-            "days_overdue": 18
+            "work_id": "W-T-20260417-HUMOR",
+            "name": "Humor Development — Comedic Resonance for SR",
+            "deadline": "2026-11-01",
+            "days_overdue": 17
+          },
+          {
+            "work_id": "W-T-20260418-SYM",
+            "name": "SYM Implementation — System for Measuring Mandala Growth",
+            "deadline": "2026-10-01",
+            "days_overdue": 48
+          },
+          {
+            "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+            "name": "Unified Memory Architecture — Lemmalog + ACM + RENDER",
+            "deadline": "2026-10-15",
+            "days_overdue": 34
+          },
+          {
+            "work_id": "W-R-20260814-PERSONAL-MIGRATION",
+            "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
+            "deadline": "2026-08-31",
+            "days_overdue": 79
+          },
+          {
+            "work_id": "W-T-20260728-AI-GATEWAY",
+            "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
+            "deadline": "2026-09-30",
+            "days_overdue": 49
           }
         ],
         "upcoming_deadlines": [],
@@ -141,35 +141,35 @@
       },
       "ahimsa_filter": {
         "errors": [
+          "poetry: missing identity.module_id",
+          "poetry: missing identity.layer",
+          "poetry: missing identity.type",
           "music: missing identity.module_id",
           "music: missing identity.layer",
           "music: missing identity.type",
-          "mayakoma: missing identity.module_id",
-          "mayakoma: missing identity.layer",
-          "mayakoma: missing identity.type",
-          "dmitrii_levin: missing identity.module_id",
-          "dmitrii_levin: missing identity.layer",
-          "dmitrii_levin: missing identity.type",
-          "x_deaddy_x: missing identity.module_id",
-          "x_deaddy_x: missing identity.layer",
-          "x_deaddy_x: missing identity.type",
           "mc_voodookid: missing identity.module_id",
           "mc_voodookid: missing identity.layer",
           "mc_voodookid: missing identity.type",
-          "poetry: missing identity.module_id",
-          "poetry: missing identity.layer",
-          "poetry: missing identity.type"
+          "x_deaddy_x: missing identity.module_id",
+          "x_deaddy_x: missing identity.layer",
+          "x_deaddy_x: missing identity.type",
+          "dmitrii_levin: missing identity.module_id",
+          "dmitrii_levin: missing identity.layer",
+          "dmitrii_levin: missing identity.type",
+          "mayakoma: missing identity.module_id",
+          "mayakoma: missing identity.layer",
+          "mayakoma: missing identity.type"
         ],
         "warnings": [
           "output: missing index.json",
-          "music: missing meta section",
-          "mayakoma: missing meta section",
-          "dmitrii_levin: missing meta section",
-          "x_deaddy_x: missing meta section",
-          "mc_voodookid: missing meta section",
           "poetry: missing meta section",
+          "prose: missing index.json",
           "poems: missing index.json",
-          "prose: missing index.json"
+          "music: missing meta section",
+          "mc_voodookid: missing meta section",
+          "x_deaddy_x: missing meta section",
+          "dmitrii_levin: missing meta section",
+          "mayakoma: missing meta section"
         ],
         "noise_files": [],
         "errors_count": 18,
@@ -179,18 +179,11 @@
       "deadline_sentinel": {
         "expired": [
           {
-            "id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-            "name": "Unified Memory Architecture — Lemmalog + ACM + RENDER",
+            "id": "W-R-RM-012",
+            "name": "First Living Products — Mandala MVPs",
             "type": "works",
-            "deadline": "2026-10-15",
-            "days_overdue": 34
-          },
-          {
-            "id": "W-T-20260418-SYM",
-            "name": "SYM Implementation — System for Measuring Mandala Growth",
-            "type": "works",
-            "deadline": "2026-10-01",
-            "days_overdue": 48
+            "deadline": "2026-09-01",
+            "days_overdue": 78
           },
           {
             "id": "W-T-20261015-MGE",
@@ -200,34 +193,6 @@
             "days_overdue": 3
           },
           {
-            "id": "W-R-RM-012",
-            "name": "First Living Products — Mandala MVPs",
-            "type": "works",
-            "deadline": "2026-09-01",
-            "days_overdue": 78
-          },
-          {
-            "id": "W-R-20260814-PERSONAL-MIGRATION",
-            "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
-            "type": "works",
-            "deadline": "2026-08-31",
-            "days_overdue": 79
-          },
-          {
-            "id": "W-T-20260728-AI-GATEWAY",
-            "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
-            "type": "works",
-            "deadline": "2026-09-30",
-            "days_overdue": 49
-          },
-          {
-            "id": "W-T-20260803-RL-REASONING",
-            "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
-            "type": "works",
-            "deadline": "2026-10-31",
-            "days_overdue": 18
-          },
-          {
             "id": "W-T-20260408-1030",
             "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
             "type": "works",
@@ -235,11 +200,18 @@
             "days_overdue": 79
           },
           {
-            "id": "W-T-20260417-HUMOR",
-            "name": "Humor Development — Comedic Resonance for SR",
+            "id": "W-T-20260728-CYBER-AGENTS",
+            "name": "Cybersecurity Agents — Adaptation for Mandala",
             "type": "works",
-            "deadline": "2026-11-01",
-            "days_overdue": 17
+            "deadline": "2026-10-31",
+            "days_overdue": 18
+          },
+          {
+            "id": "W-T-20260803-RL-REASONING",
+            "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
+            "type": "works",
+            "deadline": "2026-10-31",
+            "days_overdue": 18
           },
           {
             "id": "W-T-20260807-MEMORY__mandala_memory_layer",
@@ -256,11 +228,39 @@
             "days_overdue": 18
           },
           {
-            "id": "W-T-20260728-CYBER-AGENTS",
-            "name": "Cybersecurity Agents — Adaptation for Mandala",
+            "id": "W-T-20260417-HUMOR",
+            "name": "Humor Development — Comedic Resonance for SR",
             "type": "works",
-            "deadline": "2026-10-31",
-            "days_overdue": 18
+            "deadline": "2026-11-01",
+            "days_overdue": 17
+          },
+          {
+            "id": "W-T-20260418-SYM",
+            "name": "SYM Implementation — System for Measuring Mandala Growth",
+            "type": "works",
+            "deadline": "2026-10-01",
+            "days_overdue": 48
+          },
+          {
+            "id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+            "name": "Unified Memory Architecture — Lemmalog + ACM + RENDER",
+            "type": "works",
+            "deadline": "2026-10-15",
+            "days_overdue": 34
+          },
+          {
+            "id": "W-R-20260814-PERSONAL-MIGRATION",
+            "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
+            "type": "works",
+            "deadline": "2026-08-31",
+            "days_overdue": 79
+          },
+          {
+            "id": "W-T-20260728-AI-GATEWAY",
+            "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
+            "type": "works",
+            "deadline": "2026-09-30",
+            "days_overdue": 49
           }
         ],
         "upcoming": [],

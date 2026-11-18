@@ -1,35 +1,35 @@
 {
-  "last_scan": "2026-11-18T07:10:46.880129",
+  "last_scan": "2026-11-18T17:39:20.075553",
   "honeycomb_hashes": {
-    "honeycombs/akasha": "682590839d458e1aa647a6fb0d4b1b43",
-    "honeycombs/fruits": "4fec631274da7349566b319304287fc6",
-    "honeycombs/fruits/mge": "2f22a0d50e0225a489615766644dae71",
-    "honeycombs/fruits/scout_agent": "1d2daeb2d7ad988c6cad5a0fba403bfc",
-    "honeycombs/fruits/gentle_companion": "c32431ca10da7ad6e9aee537da7447a2",
-    "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
-    "honeycombs/instructions": "525a60fff38b3f2f76d846fb687f53e5",
-    "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
-    "honeycombs/core_map": "aa246a608899e4308a307638847082cc",
-    "honeycombs/rose_world": "668fabce934c3496726369c4b588c990",
-    "honeycombs/philosophy": "fd05008634be1ed9e63189c6d7c5d0bd",
-    "honeycombs/personal": "2eb8eb9d7097634a047a17514b7547ab",
-    "honeycombs/personal/music": "0e28d6f8aed71b8673a9bbcdba7e9ee2",
-    "honeycombs/personal/music/mayakoma": "56647ee0e1411622382a32324418cae7",
-    "honeycombs/personal/music/dmitrii_levin": "85b8cb9336b2a3c74be80c75b31bf147",
-    "honeycombs/personal/music/x_deaddy_x": "b6ba4c81fc9184b4f359012af61266ca",
-    "honeycombs/personal/music/mc_voodookid": "d7fc9d7a3db7012d3d7d219a9e94bac7",
-    "honeycombs/personal/kurtoch": "5c2635e66f2c27631fa3d013aca41c04",
-    "honeycombs/personal/poetry": "35910e9a0fb638e6db94756f89341904",
-    "honeycombs/boot_online": "32ef1d46f89bc3fdcd59cd7b7df52103",
     "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
-    "honeycombs/works": "9e7e720b6aec8a7eced3480d6b0f8e10",
     "honeycombs/knowledge": "b7596c45b9293c61321bcec4e7b631e9",
     "honeycombs/knowledge/ai_tools": "2d59ee1b165e13e64c29c1822c683b6a",
+    "honeycombs/rose_world": "668fabce934c3496726369c4b588c990",
+    "honeycombs/protocols": "cc4a79a67d5b41605f4df93294d16a35",
+    "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
+    "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
+    "honeycombs/directives": "dbc3c48c5b13d37df132cf510c2a3e8e",
+    "honeycombs/works": "9e7e720b6aec8a7eced3480d6b0f8e10",
     "honeycombs/seeds": "be2f3e08de805cee8036714094e797e6",
     "honeycombs/seeds/inbox": "4679dd06260dd52d7572752d13e2dcc1",
-    "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
-    "honeycombs/protocols": "cc4a79a67d5b41605f4df93294d16a35",
-    "honeycombs/directives": "dbc3c48c5b13d37df132cf510c2a3e8e"
+    "honeycombs/fruits": "4fec631274da7349566b319304287fc6",
+    "honeycombs/fruits/mge": "2f22a0d50e0225a489615766644dae71",
+    "honeycombs/fruits/gentle_companion": "c32431ca10da7ad6e9aee537da7447a2",
+    "honeycombs/fruits/scout_agent": "1d2daeb2d7ad988c6cad5a0fba403bfc",
+    "honeycombs/personal": "2eb8eb9d7097634a047a17514b7547ab",
+    "honeycombs/personal/poetry": "35910e9a0fb638e6db94756f89341904",
+    "honeycombs/personal/music": "0e28d6f8aed71b8673a9bbcdba7e9ee2",
+    "honeycombs/personal/music/mc_voodookid": "d7fc9d7a3db7012d3d7d219a9e94bac7",
+    "honeycombs/personal/music/x_deaddy_x": "b6ba4c81fc9184b4f359012af61266ca",
+    "honeycombs/personal/music/dmitrii_levin": "85b8cb9336b2a3c74be80c75b31bf147",
+    "honeycombs/personal/music/mayakoma": "56647ee0e1411622382a32324418cae7",
+    "honeycombs/personal/kurtoch": "5c2635e66f2c27631fa3d013aca41c04",
+    "honeycombs/instructions": "525a60fff38b3f2f76d846fb687f53e5",
+    "honeycombs/akasha": "682590839d458e1aa647a6fb0d4b1b43",
+    "honeycombs/boot_online": "32ef1d46f89bc3fdcd59cd7b7df52103",
+    "honeycombs/core_map": "aa246a608899e4308a307638847082cc",
+    "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
+    "honeycombs/philosophy": "fd05008634be1ed9e63189c6d7c5d0bd"
   },
   "statistics": {
     "total_scanned": 29,
@@ -55,23 +55,17 @@
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-11-18T07:10:46.880140",
+    "last_check": "2026-11-18T17:39:20.075564",
     "errors_count": 18,
     "warnings_count": 9,
     "expired_tasks": 12,
     "upcoming_deadlines": 0,
     "expired_tasks_list": [
       {
-        "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-        "name": "Unified Memory Architecture — Lemmalog + ACM + RENDER",
-        "deadline": "2026-10-15",
-        "days_overdue": 34
-      },
-      {
-        "work_id": "W-T-20260418-SYM",
-        "name": "SYM Implementation — System for Measuring Mandala Growth",
-        "deadline": "2026-10-01",
-        "days_overdue": 48
+        "work_id": "W-R-RM-012",
+        "name": "First Living Products — Mandala MVPs",
+        "deadline": "2026-09-01",
+        "days_overdue": 78
       },
       {
         "work_id": "W-T-20261015-MGE",
@@ -80,40 +74,22 @@
         "days_overdue": 3
       },
       {
-        "work_id": "W-R-RM-012",
-        "name": "First Living Products — Mandala MVPs",
-        "deadline": "2026-09-01",
-        "days_overdue": 78
-      },
-      {
-        "work_id": "W-R-20260814-PERSONAL-MIGRATION",
-        "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
-        "deadline": "2026-08-31",
-        "days_overdue": 79
-      },
-      {
-        "work_id": "W-T-20260728-AI-GATEWAY",
-        "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
-        "deadline": "2026-09-30",
-        "days_overdue": 49
-      },
-      {
-        "work_id": "W-T-20260803-RL-REASONING",
-        "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
-        "deadline": "2026-10-31",
-        "days_overdue": 18
-      },
-      {
         "work_id": "W-T-20260408-1030",
         "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
         "deadline": "2026-08-31",
         "days_overdue": 79
       },
       {
-        "work_id": "W-T-20260417-HUMOR",
-        "name": "Humor Development — Comedic Resonance for SR",
-        "deadline": "2026-11-01",
-        "days_overdue": 17
+        "work_id": "W-T-20260728-CYBER-AGENTS",
+        "name": "Cybersecurity Agents — Adaptation for Mandala",
+        "deadline": "2026-10-31",
+        "days_overdue": 18
+      },
+      {
+        "work_id": "W-T-20260803-RL-REASONING",
+        "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
+        "deadline": "2026-10-31",
+        "days_overdue": 18
       },
       {
         "work_id": "W-T-20260807-MEMORY__mandala_memory_layer",
@@ -128,10 +104,34 @@
         "days_overdue": 18
       },
       {
-        "work_id": "W-T-20260728-CYBER-AGENTS",
-        "name": "Cybersecurity Agents — Adaptation for Mandala",
-        "deadline": "2026-10-31",
-        "days_overdue": 18
+        "work_id": "W-T-20260417-HUMOR",
+        "name": "Humor Development — Comedic Resonance for SR",
+        "deadline": "2026-11-01",
+        "days_overdue": 17
+      },
+      {
+        "work_id": "W-T-20260418-SYM",
+        "name": "SYM Implementation — System for Measuring Mandala Growth",
+        "deadline": "2026-10-01",
+        "days_overdue": 48
+      },
+      {
+        "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+        "name": "Unified Memory Architecture — Lemmalog + ACM + RENDER",
+        "deadline": "2026-10-15",
+        "days_overdue": 34
+      },
+      {
+        "work_id": "W-R-20260814-PERSONAL-MIGRATION",
+        "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
+        "deadline": "2026-08-31",
+        "days_overdue": 79
+      },
+      {
+        "work_id": "W-T-20260728-AI-GATEWAY",
+        "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
+        "deadline": "2026-09-30",
+        "days_overdue": 49
       }
     ],
     "upcoming_deadlines_list": [],
