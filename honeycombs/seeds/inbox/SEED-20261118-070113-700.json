@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261118-070113-700",
+  "title": "Technical Report of Auriga's 1:10 Scale Autonomous Vehicle Robot",
+  "url": "https://arxiv.org/abs/2611.18855",
+  "description": "arXiv:2611.18855v1 Announce Type: new \nAbstract: This report presents the design and implementation of Auriga Robotics' 1:10 scale autonomous vehicle, developed at Shahid Beheshti University's Robotics and Intelligent Automation Laboratory. The platform integrates a custom mechanical chassis, a distributed embedded system based on ESP32 microcontrollers, and a Jetson Orin NX module for high-level perception and control. The embedded layer manages sensor interfacing, real-time data acquisition, a",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-11-18T07:01:13.737362",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
