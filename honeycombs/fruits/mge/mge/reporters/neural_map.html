@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Мандала · Карта связей</title>
+<style>
+:root { color-scheme:dark; --ink:#edf2cf; --muted:#9da88c; --line:#303d27; --gold:#e8ce83; }
+* { box-sizing:border-box; }
+body { margin:0; font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; color:var(--ink); background:#080f0b; }
+a { color:var(--gold); text-decoration:none; } a:hover { text-decoration:underline; }
+header { display:flex; align-items:center; gap:22px; padding:15px 24px; border-bottom:1px solid var(--line); background:#0d160ff2; }
+.brand { display:flex; gap:12px; align-items:center; margin-right:auto; white-space:nowrap; }
+.mark { width:13px; height:13px; border-radius:50%; background:#e8ce83; box-shadow:0 0 22px #cfb86a99; }
+h1 { font-size:16px; font-weight:500; margin:0; letter-spacing:.02em; }
+header a { font-size:12px; color:var(--muted); }
+input[type=search] { width:240px; max-width:100%; padding:9px 13px; background:#111d14; color:var(--ink); border:1px solid #39492f; border-radius:24px; outline:none; }
+input:focus-visible,button:focus-visible,a:focus-visible { outline:2px solid var(--gold); outline-offset:3px; }
+main { position:relative; height:calc(100dvh - 69px); min-height:560px; overflow:hidden; }
+#network { position:absolute; inset:0; width:100%; height:100%; touch-action:none; cursor:grab; }
+#network.dragging { cursor:grabbing; }
+.heading { position:absolute; top:26px; left:28px; pointer-events:none; }
+.eyebrow { margin:0 0 7px; color:#9ba979; font-size:10px; letter-spacing:.22em; text-transform:uppercase; }
+h2 { font-size:26px; font-weight:400; margin:0; letter-spacing:-.02em; }
+#stat { color:var(--muted); font-size:11px; margin-top:7px; }
+#diagnostics { margin-top:8px; color:#e3ab84; font-size:11px; }
+#panel { position:absolute; right:24px; top:26px; width:278px; max-height:calc(100% - 150px); overflow:auto; padding:20px; background:#111c12ed; border:1px solid #3e4b2d; border-radius:16px; box-shadow:0 16px 45px #0003; }
+#panel h3 { font-weight:500; font-size:18px; margin:4px 0 10px; color:#f0dfac; overflow-wrap:anywhere; }
+#panel p { color:#acb69b; font-size:12px; margin:10px 0; }
+#panel .path { font-size:10px; overflow-wrap:anywhere; color:#7f9077; }
+#panel .type { color:#b4c98d; font-size:10px; text-transform:uppercase; letter-spacing:.13em; }
+#panel .metric { font-size:24px; color:#e8ce83; }
+#panel .details { margin-top:14px; border-top:1px solid var(--line); padding-top:12px; }
+#panel button { margin-top:10px; }
+button { border:1px solid #465638; border-radius:8px; background:#172219; color:var(--ink); padding:7px 11px; cursor:pointer; font:inherit; }
+button:hover { background:#253323; }
+.tools { position:absolute; right:24px; bottom:65px; display:flex; gap:6px; }
+.tools button { min-width:38px; font-size:17px; }
+.tools #fit { font-size:11px; }
+#filters { position:absolute; left:24px; bottom:24px; display:flex; gap:12px; flex-wrap:wrap; max-width:calc(100% - 220px); padding:10px 14px; background:#111b12e8; border:1px solid #34432c; border-radius:12px; }
+#filters label { display:flex; align-items:center; gap:5px; cursor:pointer; color:#bdc8aa; font-size:11px; }
+input[type=checkbox] { accent-color:#bfce88; margin:0; }
+.caption { position:absolute; right:24px; bottom:24px; font-size:10px; color:#9caa87; pointer-events:none; }
+#tooltip { position:absolute; pointer-events:none; padding:7px 11px; max-width:310px; border:1px solid #596640; border-radius:8px; background:#162116f5; font-size:12px; box-shadow:0 8px 25px #0006; }
+#search-results { position:absolute; right:24px; top:0; width:280px; z-index:3; background:#172219; border:1px solid #465638; border-radius:10px; padding:6px; }
+#search-results:empty { display:none; }
+#search-results button { display:block; border:0; width:100%; text-align:left; font-size:12px; }
+#search-results p { margin:6px; color:var(--muted); font-size:12px; }
+@media(max-width:760px) {
+ header { padding:12px 16px; flex-wrap:wrap; gap:10px; } header h1 { font-size:14px; } header nav { display:none; }
+ header input { flex:1; min-width:120px; width:140px; } main { height:calc(100dvh - 65px); min-height:520px; }
+ .heading { top:18px; left:18px; } h2 { font-size:21px; }
+ #panel { top:auto; bottom:102px; right:14px; width:235px; max-height:230px; padding:14px; }
+ #panel.intro { display:none; } #filters { bottom:14px; left:14px; right:14px; max-width:none; gap:9px; }
+ .tools { bottom:108px; right:auto; left:14px; flex-direction:column; } .caption { bottom:76px; right:14px; font-size:9px; }
+ #search-results { right:14px; width:260px; }
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><span class="mark"></span><h1>Мандала · Карта связей</h1></div>
+ <nav><a href="../../../../index.html">Главная</a> &nbsp; <a href="works.html">Работы</a> &nbsp; <a href="mandala_graph.json">JSON</a> &nbsp; <a href="mandala_graph.mmd">Mermaid</a></nav>
+ <input id="search" type="search" placeholder="Найти узел…" aria-label="Поиск узла" autocomplete="off">
+</header>
+<main>
+ <canvas id="network" tabindex="0" role="img" aria-label="Интерактивная нейронная карта Мандалы. Узлы также доступны через поиск."></canvas>
+ <div class="heading"><p class="eyebrow">MGE / Живая структура</p><h2>Нейронные связи</h2><div id="stat"></div><div id="diagnostics"></div></div>
+ <div id="search-results" aria-live="polite"></div>
+ <aside id="panel" class="intro" aria-live="polite"><div class="type">Навигация по Саду</div><h3>Всё связано</h3><p>Соты — светящиеся ядра. Материалы, работы и продукты образуют ветви вокруг них.</p><p>Чем больше реальных связей, тем толще и ярче пучок. Размер малого узла отражает число его соседей.</p><div class="details"><p>Выберите узел или пучок. Потяните карту для перемещения, используйте колесо или кнопки масштаба.</p><p>Яркость показывает связность, а не приоритет работы.</p></div></aside>
+ <div class="tools"><button id="zoom-in" aria-label="Приблизить">+</button><button id="zoom-out" aria-label="Отдалить">−</button><button id="fit">Вся карта</button></div>
+ <div id="filters" aria-label="Типы узлов">
+  <label><input type="checkbox" value="honeycomb" checked>Соты</label>
+  <label><input type="checkbox" value="work" checked>Работы</label>
+  <label><input type="checkbox" value="fruit" checked>Продукты</label>
+  <label><input type="checkbox" value="knowledge" checked>Знания</label>
+  <label><input type="checkbox" value="missing" checked>Расхождения</label>
+ </div>
+ <div class="caption">Меньше связей ─── Больше связей <span style="color:#e8ce83">━━━━</span></div>
+ <div id="tooltip" hidden></div>
+</main>
+<script>const GRAPH = __GRAPH_JSON__;</script>
+<script>__NEURAL_JS__</script>
+</body>
+</html>
