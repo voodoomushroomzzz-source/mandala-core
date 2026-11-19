@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.63",
+    "version": "v2.6.64",
     "created": "2026-09-14",
     "updated": "2026-11-19",
     "layer": 2,
@@ -15,7 +15,7 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.6.63",
+    "version": "v2.6.64",
     "created": "2026-09-14",
     "updated": "2026-11-19",
     "legend": {
@@ -1822,30 +1822,57 @@
           "responsible_name": "Катрин"
         },
         "focus": false
+      },
+      {
+        "id": "K-204",
+        "title": "Создать ярлык профиля задач на рабочем столе",
+        "description": "Вынести ссылку на профиль задач Катрин на рабочий стол в виде ярлыка.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-20",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "EMP-001"
+        ],
+        "created": "2026-11-19",
+        "updated": "2026-11-19",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая",
+          "responsible_id": "EMP-001",
+          "responsible_name": "Катрин"
+        },
+        "focus": false
       }
     ],
     "counters": {
-      "total": 65,
+      "total": 66,
       "by_status": {
-        "todo": 59,
+        "todo": 60,
         "in_progress": 5,
         "planning": 1
       },
       "by_priority": {
         "high": 32,
-        "medium": 29,
+        "medium": 30,
         "critical": 2,
         "low": 2
       },
       "by_column": {
-        "Операционка — Общая": 23,
+        "Операционка — Общая": 24,
         "Операционка — Центр": 18,
         "Операционка — Нижка": 15,
         "Крупные вехи": 3,
         "Стратегические": 6
       },
       "by_phase": {
-        "phase_0": 64,
+        "phase_0": 65,
         "phase_1": 1
       }
     },
