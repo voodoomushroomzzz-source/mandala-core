@@ -38,6 +38,26 @@ class PersonalDashboardTest(unittest.TestCase):
         self.assertIn('datetime="2026-12-01"', html)
         self.assertIn("Следующий шаг: Практика", html)
 
+    def test_direction_changes_and_focus_are_rendered_from_live_data(self):
+        self.write("personal_tasks.json", {"tasks": []})
+        self.movement["personal_focus"] = {"focus": "Доход <рост>", "balance": "Без гонки & спешки"}
+        direction = self.movement["directions"][0]
+        direction.update(goal="Понять <архитектуру>", next_step="Практика", notes="Без сроков")
+        self.write("current_movement.json", self.movement)
+        build_personal(self.root, self.root)
+        html = (self.root / "personal.html").read_text(encoding="utf-8")
+        self.assertIn("Доход &lt;рост&gt;", html)
+        self.assertIn("Без гонки &amp; спешки", html)
+        self.assertIn("Понять &lt;архитектуру&gt;", html)
+        self.assertIn("Следующий шаг:</strong> Практика", html)
+        self.assertIn("Контекст:</strong> Без сроков", html)
+        direction["next_step"] = "Другой шаг"
+        self.write("current_movement.json", self.movement)
+        build_personal(self.root, self.root)
+        html = (self.root / "personal.html").read_text(encoding="utf-8")
+        self.assertIn("Другой шаг", html)
+        self.assertNotIn("Следующий шаг:</strong> Практика", html)
+
     def test_reference_reads_live_source_and_fails_when_missing(self):
         self.write("personal_tasks.json", {"tasks": [{"id": "PER-001",
                    "source_file": "honeycombs/personal/kurtoch/taskboard.json", "record_id": "K-1"}]})

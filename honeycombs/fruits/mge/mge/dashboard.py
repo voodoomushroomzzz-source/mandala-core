@@ -280,10 +280,23 @@ def build_personal(root, output):
     entries = personal_entries(root, movement)
     rows = []
     for d in movement["directions"]:
+        context = ''.join(f'<p><strong>{caption}:</strong> {escape(d[field])}</p>'
+                          for field, caption in (("goal", "Цель"), ("next_step", "Следующий шаг"),
+                                                 ("notes", "Контекст")) if d.get(field))
         rows.append(f'<article><h3>{escape(d["name"])}</h3><p>{escape(label(d["state"]))}</p>'
+                    f'{context}'
                     f'<p class="meta">Источники прочитаны: {escape(d.get("last_sync_at") or "ещё не отмечено")}<br>'
                     f'Планы подтверждены: {escape(d.get("last_confirmed_at") or "ещё не сверяли")}</p></article>')
-    intro = '<h2>Сейчас</h2>'
+    focus = movement.get("personal_focus", {})
+    intro = ''
+    if focus.get("focus"):
+        intro = '<section class="queue"><h2>Личный фокус</h2>'
+        intro += f'<p>{escape(focus["focus"])}</p>'
+        for field in ("target_note", "balance"):
+            if focus.get(field):
+                intro += f'<p>{escape(focus[field])}</p>'
+        intro += '</section>'
+    intro += '<h2>Сейчас</h2>'
     active = [e for e in entries if e["now"]]
     intro += ('<ul class="queue">' + ''.join(f'<li>{link("personal.html", e["id"], e["name"])}</li>' for e in active) + '</ul>') if active else '<p>Согласованных текущих действий пока нет.</p>'
     intro += '<h2>Доска по приоритетам</h2>'

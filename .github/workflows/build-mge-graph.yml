@@ -31,10 +31,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run MGE scan
+      - name: Build graph and dashboards
         run: |
           cd honeycombs/fruits/mge
-          python -m mge scan
+          python -m mge dashboard
 
       - name: Check if graph changed
         id: check_changes

@@ -2,6 +2,14 @@ name: Deploy Pages
 
 on:
   workflow_dispatch:
+  # The repository also has GitHub's branch-based Pages publisher. It uploads
+  # committed HTML and can finish after the generated-site deployment. Rebuild
+  # after that publisher (or the MGE snapshot build) completes so the last
+  # deployment always uses current source data. This workflow does not trigger
+  # itself, and always checks out main rather than the workflow_run event SHA.
+  workflow_run:
+    workflows: ['pages build and deployment', 'Build MGE Graph']
+    types: [completed]
   push:
     paths:
       - 'index.html'
@@ -18,8 +26,13 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: mandala-generated-pages
+  cancel-in-progress: false
+
 jobs:
   deploy:
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -27,6 +40,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          ref: main
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
