@@ -4,15 +4,15 @@
     "file_name": "pilgrimage.json",
     "version": "v0.2.0",
     "created": "2026-09-24",
-    "updated": "2026-09-24",
+    "updated": "2026-11-19",
     "description": "Пешее паломничество Владимир → Варанаси. Путь на доверии к миру: только пожертвования, только входящие предложения помощи, влог в реальном времени. Точка сборки творчества, Мандалы и личного поиска. v0.2.0: добавлены прецеденты путешественников (Кротов, Кондрашов, Кутузов), маршрут зафиксирован через Пакистан."
   },
-  "status": "seed",
+  "status": "perspective",
   "stage": "first_sketches",
-  "priority": "high",
+  "priority": null,
   "horizon": "strategic",
-  "deadline": "2029",
-  "deadline_hard": "до 40 лет (2030)",
+  "deadline": null,
+  "deadline_hard": false,
   "progress": 0,
   "tags": [
     "pilgrimage",
@@ -484,66 +484,79 @@
     "Первый набросок разработан в диалоге Gardener + DeepSeek SR, 2026-09-24."
   ],
   "source": "Диалог Gardener (Voodoo) и External SR (DeepSeek), 2026-09-24",
-  "last_updated": "2026-09-24",
-  "task_tracker": {
-    "description": "Трекер задач по паломничеству. Этап first_sketches.",
-    "tasks": [
-      {
-        "id": "PIL-001",
-        "name": "Разработать критерии готовности (индекс 0–100)",
-        "status": "pending",
-        "priority": "high",
-        "deadline": null,
-        "output": "Формализованные критерии + метрика"
-      },
-      {
-        "id": "PIL-002",
-        "name": "Детализировать маршрут по странам и переходам",
-        "status": "pending",
-        "priority": "high",
-        "deadline": null,
-        "output": "Маршрут с городами и точками"
-      },
-      {
-        "id": "PIL-003",
-        "name": "Визовый и документальный план",
-        "status": "pending",
-        "priority": "medium",
-        "deadline": null,
-        "output": "План виз и документов по странам"
-      },
-      {
-        "id": "PIL-004",
-        "name": "Базовое снаряжение — список",
-        "status": "pending",
-        "priority": "medium",
-        "deadline": null,
-        "output": "Финальный список снаряжения"
-      },
-      {
-        "id": "PIL-005",
-        "name": "Стратегия публичного выхода (фазы 1–4)",
-        "status": "pending",
-        "priority": "medium",
-        "deadline": null,
-        "output": "План по фазам с конкретными шагами"
-      },
-      {
-        "id": "PIL-006",
-        "name": "Обновить personal/index.json (добавить pilgrimage.json)",
-        "status": "done",
-        "priority": "high",
-        "deadline": "2026-09-24",
-        "output": "Индекс обновлён (v2.3.0)"
-      },
-      {
-        "id": "PIL-007",
-        "name": "Изучить выпуск Кондрашова про Пакистан (2025)",
-        "status": "pending",
-        "priority": "high",
-        "deadline": null,
-        "output": "Ответ на вопрос: сопровождение или свобода в Пакистане"
-      }
-    ]
+  "last_updated": "2026-11-19",
+  "historical_planning": {
+    "task_tracker": {
+      "description": "Трекер задач по паломничеству. Этап first_sketches.",
+      "tasks": [
+        {
+          "id": "PIL-001",
+          "name": "Разработать критерии готовности (индекс 0–100)",
+          "status": "pending",
+          "priority": "high",
+          "deadline": null,
+          "output": "Формализованные критерии + метрика"
+        },
+        {
+          "id": "PIL-002",
+          "name": "Детализировать маршрут по странам и переходам",
+          "status": "pending",
+          "priority": "high",
+          "deadline": null,
+          "output": "Маршрут с городами и точками"
+        },
+        {
+          "id": "PIL-003",
+          "name": "Визовый и документальный план",
+          "status": "pending",
+          "priority": "medium",
+          "deadline": null,
+          "output": "План виз и документов по странам"
+        },
+        {
+          "id": "PIL-004",
+          "name": "Базовое снаряжение — список",
+          "status": "pending",
+          "priority": "medium",
+          "deadline": null,
+          "output": "Финальный список снаряжения"
+        },
+        {
+          "id": "PIL-005",
+          "name": "Стратегия публичного выхода (фазы 1–4)",
+          "status": "pending",
+          "priority": "medium",
+          "deadline": null,
+          "output": "План по фазам с конкретными шагами"
+        },
+        {
+          "id": "PIL-006",
+          "name": "Обновить personal/index.json (добавить pilgrimage.json)",
+          "status": "done",
+          "priority": "high",
+          "deadline": "2026-09-24",
+          "output": "Индекс обновлён (v2.3.0)"
+        },
+        {
+          "id": "PIL-007",
+          "name": "Изучить выпуск Кондрашова про Пакистан (2025)",
+          "status": "pending",
+          "priority": "high",
+          "deadline": null,
+          "output": "Ответ на вопрос: сопровождение или свобода в Пакистане"
+        }
+      ]
+    },
+    "status_note": "Старые задачи не входят в действующий фронт; это архив прежнего плана, не подтверждение выполнения.",
+    "archived_on": "2026-11-19"
+  },
+  "current_focus": {
+    "confirmed_on": "2026-11-19",
+    "state": "perspective",
+    "active_actions": false,
+    "reason": "Необязательная дальняя идея: приключение или публичный повод, если появится смысл. Может вообще не состояться.",
+    "return_condition": "Только по новому желанию Садовника; подготовку сейчас не вести.",
+    "next_step": "Без активных действий; переоценить только по новому интересу или конкретной возможности.",
+    "route_note": "Прежний маршрут не является действующим планом поездки; научная, визовая и маршрутная актуальность не проверялась."
   }
 }

@@ -1,167 +1,259 @@
 {
-    "version":  "v1.0.0",
-    "updated":  "2026-11-19",
-    "instructions":  "personal_assistant.md",
-    "scope":  "Обзор личного курса. Даты ниже отражают только будущие фактические сверки, а не создание этой карты.",
-    "directions":  [
-                       {
-                           "id":  "work",
-                           "name":  "Работа — Куртош",
-                           "sources":  [
-                                           "kurtoch/index.json",
-                                           "kurtoch/taskboard.json"
-                                       ],
-                           "state":  "unconfirmed",
-                           "priority":  null,
-                           "goal":  null,
-                           "next_step":  null,
-                           "last_sync_at":  null,
-                           "checked_sources":  [
-
-                                               ],
-                           "last_confirmed_at":  null,
-                           "pause_reason":  null,
-                           "return_condition":  null,
-                           "notes":  "Операционный план хранится у Куртоша. Здесь сверяем личную нагрузку и связь с карьерой."
-                       },
-                       {
-                           "id":  "career",
-                           "name":  "Карьера",
-                           "sources":  [
-                                           "career.json",
-                                           "learning.json"
-                                       ],
-                           "state":  "unconfirmed",
-                           "priority":  null,
-                           "goal":  null,
-                           "next_step":  null,
-                           "last_sync_at":  null,
-                           "checked_sources":  [
-
-                                               ],
-                           "last_confirmed_at":  null,
-                           "pause_reason":  null,
-                           "return_condition":  null,
-                           "notes":  "Планы и сроки требуют сверки с Садовником."
-                       },
-                       {
-                           "id":  "learning",
-                           "name":  "Обучение",
-                           "sources":  [
-                                           "learning.json",
-                                           "career.json"
-                                       ],
-                           "state":  "unconfirmed",
-                           "priority":  null,
-                           "goal":  null,
-                           "next_step":  null,
-                           "last_sync_at":  null,
-                           "checked_sources":  [
-
-                                               ],
-                           "last_confirmed_at":  null,
-                           "pause_reason":  null,
-                           "return_condition":  null,
-                           "notes":  "Сроки курсов в разных разделах расходятся. Выполнение не подтверждено."
-                       },
-                       {
-                           "id":  "creative",
-                           "name":  "Творчество",
-                           "sources":  [
-                                           "creative.json",
-                                           "poetry/index.json",
-                                           "music/index.json"
-                                       ],
-                           "state":  "unconfirmed",
-                           "priority":  null,
-                           "goal":  null,
-                           "next_step":  null,
-                           "last_sync_at":  null,
-                           "checked_sources":  [
-
-                                               ],
-                           "last_confirmed_at":  null,
-                           "pause_reason":  null,
-                           "return_condition":  null,
-                           "notes":  "Общий creative.json содержит старые задачи. Литературный корпус и музыкальные проекты имеют отдельные индексы."
-                       },
-                       {
-                           "id":  "publishing",
-                           "name":  "Публичность",
-                           "sources":  [
-                                           "instagram.json",
-                                           "youtube.json"
-                                       ],
-                           "state":  "unconfirmed",
-                           "priority":  null,
-                           "goal":  null,
-                           "next_step":  null,
-                           "last_sync_at":  null,
-                           "checked_sources":  [
-
-                                               ],
-                           "last_confirmed_at":  null,
-                           "pause_reason":  null,
-                           "return_condition":  null,
-                           "notes":  "Прежние контент-планы требуют проверки актуальности."
-                       },
-                       {
-                           "id":  "income",
-                           "name":  "Дополнительный доход",
-                           "sources":  [
-                                           "ecommerce.json",
-                                           "gov_orders.json"
-                                       ],
-                           "state":  "unconfirmed",
-                           "priority":  null,
-                           "goal":  null,
-                           "next_step":  null,
-                           "last_sync_at":  null,
-                           "checked_sources":  [
-
-                                               ],
-                           "last_confirmed_at":  null,
-                           "pause_reason":  null,
-                           "return_condition":  null,
-                           "notes":  "Прежние идеи и статусы не означают текущий приоритет."
-                       },
-                       {
-                           "id":  "self_development",
-                           "name":  "Саморазвитие",
-                           "sources":  [
-                                           "self_development.json"
-                                       ],
-                           "state":  "unconfirmed",
-                           "priority":  null,
-                           "goal":  null,
-                           "next_step":  null,
-                           "last_sync_at":  null,
-                           "checked_sources":  [
-
-                                               ],
-                           "last_confirmed_at":  null,
-                           "pause_reason":  null,
-                           "return_condition":  null,
-                           "notes":  "Темы предстоит сопоставить с текущими потребностями и доступным временем."
-                       },
-                       {
-                           "id":  "pilgrimage",
-                           "name":  "Личный путь и паломничество",
-                           "sources":  [
-                                           "pilgrimage.json"
-                                       ],
-                           "state":  "unconfirmed",
-                           "priority":  null,
-                           "goal":  null,
-                           "next_step":  null,
-                           "last_sync_at":  null,
-                           "checked_sources":  [
-
-                                               ],
-                           "last_confirmed_at":  null,
-                           "pause_reason":  null,
-                           "return_condition":  null,
-                           "notes":  "Долгосрочный замысел и прежний горизонт требуют подтверждения."
-                       }
-                   ]
+  "version": "v1.0.0",
+  "updated": "2026-11-19",
+  "instructions": "personal_assistant.md",
+  "scope": "Обзор личного курса. Даты ниже отражают только будущие фактические сверки, а не создание этой карты.",
+  "directions": [
+    {
+      "id": "work",
+      "name": "Работа — Куртош",
+      "sources": [
+        "kurtoch/index.json",
+        "kurtoch/taskboard.json"
+      ],
+      "state": "active",
+      "priority": null,
+      "goal": "Сохранить доход от Куртоша и повышать самостоятельность процессов через автоматизацию и возможное делегирование.",
+      "next_step": "Операционные действия вести в задачнике Куртоша; личную нагрузку учитывать при выборе новых проектов.",
+      "last_sync_at": "2026-11-19T21:43:10+03:00",
+      "checked_sources": [
+        {
+          "path": "honeycombs/personal/kurtoch/index.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "f997eec57a9fdc5c55391dd6f4623d5b1ad321b1",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        }
+      ],
+      "last_confirmed_at": "2026-11-19T21:43:10+03:00",
+      "pause_reason": null,
+      "return_condition": null,
+      "notes": "По словам Садовника — 2–3 часа сосредоточенной работы в будни. Возможные помощник и перераспределение бюджета не утверждены. Операционный задачник в этой пакетной сверке не перечитывался."
+    },
+    {
+      "id": "career",
+      "name": "Карьера",
+      "sources": [
+        "career.json",
+        "learning.json"
+      ],
+      "state": "active",
+      "priority": "high",
+      "goal": "Укрепить устойчивый совокупный доход до ориентира от 200 тыс. ₽ в месяц, сохраняя время для Мандалы, творчества и жизни.",
+      "next_step": "Вернуться к подготовке черновиков резюме по команде Садовника; этапы и дедлайн публикации — в личных задачах.",
+      "last_sync_at": "2026-11-19T21:43:10+03:00",
+      "checked_sources": [
+        {
+          "path": "honeycombs/personal/career.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "ace667c446290201767dc69b69e52323ff212049",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        },
+        {
+          "path": "honeycombs/personal/learning.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "13d953c0a449e438f58c4ec264f9a190f8d4750e",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        }
+      ],
+      "last_confirmed_at": "2026-11-19T21:43:10+03:00",
+      "pause_reason": null,
+      "return_condition": null,
+      "notes": "Мастер-резюме создано. Конечные версии, площадки и публикация ещё не готовы. Текущий фокус согласован, прежние карьерные треки и сроки не возвращаются автоматически."
+    },
+    {
+      "id": "learning",
+      "name": "Обучение",
+      "sources": [
+        "learning.json",
+        "career.json"
+      ],
+      "state": "active",
+      "priority": null,
+      "goal": "Глубже понимать разработку, архитектуру программных систем и безопасность через практику; английский — для будущего международного общения.",
+      "next_step": "После карьерного этапа подобрать прикладной маршрут, опираясь на реальные пробелы; конкретный курс и нагрузку пока не назначать.",
+      "last_sync_at": "2026-11-19T21:43:10+03:00",
+      "checked_sources": [
+        {
+          "path": "honeycombs/personal/learning.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "13d953c0a449e438f58c4ec264f9a190f8d4750e",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        },
+        {
+          "path": "honeycombs/personal/career.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "ace667c446290201767dc69b69e52323ff212049",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        }
+      ],
+      "last_confirmed_at": "2026-11-19T21:43:10+03:00",
+      "pause_reason": null,
+      "return_condition": null,
+      "notes": "Базовый сертификатный ИИ-план и сроки B2/C1 не действуют. Духовное чтение — свободный интерес, не учебная обязанность."
+    },
+    {
+      "id": "creative",
+      "name": "Творчество",
+      "sources": [
+        "creative.json",
+        "poetry/index.json",
+        "music/index.json",
+        "music/dmitrii_levin/index.json"
+      ],
+      "state": "active",
+      "priority": null,
+      "goal": "Продолжать музыку, стихи и прозу по вдохновению, без обязательного плана, дат и ожидания дохода.",
+      "next_step": "Свободно возвращаться к творчеству; ближайшая музыкальная возможность — самостоятельная финальная обработка трека Dmitrii Levin.",
+      "last_sync_at": "2026-11-19T21:43:10+03:00",
+      "checked_sources": [
+        {
+          "path": "honeycombs/personal/creative.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "e44e0d430ef85fb2aa8af9f227fc02b2a6482aee",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        },
+        {
+          "path": "honeycombs/personal/poetry/index.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "910f632b6e2a864079237be1ae9460ca69f70b7b",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        },
+        {
+          "path": "honeycombs/personal/music/index.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "2e7007baf67172d16d5e548b5e4a42aab144d1d8",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        },
+        {
+          "path": "honeycombs/personal/music/dmitrii_levin/index.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "12db326a9ba01764c205159d39a12ea378caa336",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        }
+      ],
+      "last_confirmed_at": "2026-11-19T21:43:10+03:00",
+      "pause_reason": null,
+      "return_condition": null,
+      "notes": "Музыкальный порядок интереса: Dmitrii Levin → X Deaddy X → Маякома. MC Voodookid имеет черновик. Финальная обработка сольного трека не начата. Недавно опубликовано стихотворение, подробности не сообщены; тексты не перечитывались."
+    },
+    {
+      "id": "publishing",
+      "name": "Публичность",
+      "sources": [
+        "instagram.json",
+        "youtube.json"
+      ],
+      "state": "active",
+      "priority": null,
+      "goal": "Поддерживать Instagram фоном по желанию, без контент-плана; YouTube оставить перспективой.",
+      "next_step": "Без активной программы роста; делегирование рассмотреть только при интересе и подходящем бюджете.",
+      "last_sync_at": "2026-11-19T21:43:10+03:00",
+      "checked_sources": [
+        {
+          "path": "honeycombs/personal/instagram.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "ef814cbde91b65aca609a6f0b8a6728eb9f1ab1a",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        },
+        {
+          "path": "honeycombs/personal/youtube.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "524a274162fc49fa4fa151fde4bf88107bd3fbb6",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        }
+      ],
+      "last_confirmed_at": "2026-11-19T21:43:10+03:00",
+      "pause_reason": null,
+      "return_condition": null,
+      "notes": "Собственный монтаж и регулярная подготовка контента не привлекают. Состояние смешанное: Instagram продолжается, YouTube — без деятельности. Метрики не обновлялись."
+    },
+    {
+      "id": "income",
+      "name": "Дополнительный доход",
+      "sources": [
+        "ecommerce.json",
+        "gov_orders.json"
+      ],
+      "state": "perspective",
+      "priority": null,
+      "goal": "Сохранить маркетплейсы и госзаказы как возможные идеи без активного запуска.",
+      "next_step": "Не предпринимать активных действий; вернуться при конкретной интересной возможности и ресурсах.",
+      "last_sync_at": "2026-11-19T21:43:10+03:00",
+      "checked_sources": [
+        {
+          "path": "honeycombs/personal/ecommerce.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "3f524f034c52b2ded59050cb824c6be6d5d77c70",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        },
+        {
+          "path": "honeycombs/personal/gov_orders.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "83ae5efb947bf8a730c6eec7186abf66c743e95d",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        }
+      ],
+      "last_confirmed_at": "2026-11-19T21:43:10+03:00",
+      "pause_reason": null,
+      "return_condition": null,
+      "notes": "Маркетплейсы вызывают вопросы к капиталу и рискам, интерес к госзаказам не определён. Основной текущий путь дохода — управление и автоматизация в career, не обязательный запуск этих идей."
+    },
+    {
+      "id": "self_development",
+      "name": "Саморазвитие",
+      "sources": [
+        "self_development.json"
+      ],
+      "state": "active",
+      "priority": null,
+      "goal": "Сохранять свободное духовное/философское чтение, поддержание тонуса и практический интерес без набора новых обязательств.",
+      "next_step": "Читать в своём ритме; техническое обучение вести через learning.",
+      "last_sync_at": "2026-11-19T21:43:10+03:00",
+      "checked_sources": [
+        {
+          "path": "honeycombs/personal/self_development.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "073a9f1b948afd10d5c8db3ccf19c57a4a045591",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        }
+      ],
+      "last_confirmed_at": "2026-11-19T21:43:10+03:00",
+      "pause_reason": null,
+      "return_condition": null,
+      "notes": "Сейчас «Веды. Тайны Востока», Бхактиведанта Свами Прабхупада, со слов Садовника. Спорт — для тонуса. Восемь старых тем не являются параллельной обязательной программой."
+    },
+    {
+      "id": "pilgrimage",
+      "name": "Личный путь и паломничество",
+      "sources": [
+        "pilgrimage.json"
+      ],
+      "state": "perspective",
+      "priority": null,
+      "goal": "Сохранить необязательную идею приключения или публичного повода на далёкое будущее.",
+      "next_step": "Без подготовки и дат; возвращаться только при новом желании и смысле.",
+      "last_sync_at": "2026-11-19T21:43:10+03:00",
+      "checked_sources": [
+        {
+          "path": "honeycombs/personal/pilgrimage.json",
+          "git_commit": "90ed19a454cb7918604d7d4c3ac1a132502df0cb",
+          "blob_sha": "5f4e1d586d3bdf70a0ec88c38e94935c7f22eea5",
+          "scope": "Проверена исходная версия перед согласованной пакетной правкой; итоговые изменения проверяются отдельно после публикации."
+        }
+      ],
+      "last_confirmed_at": "2026-11-19T21:43:10+03:00",
+      "pause_reason": null,
+      "return_condition": null,
+      "notes": "Может не состояться. Прежний маршрут и сроки не являются текущим планом."
+    }
+  ],
+  "personal_focus": {
+    "confirmed_at": "2026-11-19T21:43:10+03:00",
+    "focus": "Устойчивый доход как ближайшая опора для свободы, Мандалы и всестороннего развития.",
+    "income_target_rub_monthly": 200000,
+    "target_note": "Совокупный доход от этой суммы; не обещание и не зарплата одной вакансии.",
+    "balance": "Продолжать творчество и Мандалу в комфортном ритме, не откладывая жизнь до финансового результата.",
+    "mandala_source": "honeycombs/fruits/mandala_vision_handoff_20261119.md",
+    "task_source": "honeycombs/personal/personal_tasks.json"
+  }
 }

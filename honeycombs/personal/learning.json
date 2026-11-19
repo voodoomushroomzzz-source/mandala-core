@@ -3,7 +3,7 @@
     "name": "Learning & Certificates — Dima (Gardener)",
     "version": "v1.6.0",
     "created": "2026-08-14",
-    "updated": "2026-10-13",
+    "updated": "2026-11-19",
     "description": "Обучение, сертификаты, английский. Симбиоз с career.json. v1.6.0: английский реалистичный (B2 31.08.2027, C1 30.06.2029, темп 3-4ч/нед). Приоритеты — Anthropic → Submarine → Harvard."
   },
   "symbiosis": {
@@ -32,9 +32,8 @@
         "IBM AI Engineering"
       ]
     },
-    "key_principle": "Все курсы в плане дают проверяемый сертификат. Курсы без сертификата — удалены."
+    "key_principle": "Обучение должно помогать реальным задачам и пониманию; сертификат не обязателен и не является самоцелью."
   },
-  "strategy": "Стратегия: сначала БЫСТРЫЕ сертификаты (Anthropic-цикл). Потом Submarine. Elements paused. Harvard CS50 AI — долгий, параллельно. Английский — 3-4ч/нед, B2 до 31.08.2027, C1 до 30.06.2029. Платные — после дохода.",
   "courses": {
     "level_1_free_with_certificate": {
       "description": "✅ Бесплатные курсы с проверяемыми сертификатами. Начать сейчас.",
@@ -276,363 +275,389 @@
       ]
     }
   },
-  "unified_certificate_track": {
-    "description": "Единый трек сертификатов. Только курсы с проверяемыми сертификатами.",
-    "last_updated": "2026-10-05",
-    "total": 15,
-    "certificates": [
-      {
-        "order": 1,
-        "name": "Anthropic Academy: Claude 101",
-        "platform": "Anthropic (Skilljar)",
-        "level": "1 (free)",
-        "url": "https://anthropic.skilljar.com",
-        "time_estimate": "1 час",
-        "deadline": "2026-10-27",
-        "priority": "critical",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "Completion Certificate. Быстро."
-      },
-      {
-        "order": 2,
-        "name": "Anthropic Academy: Claude Code 101",
-        "platform": "Anthropic (Skilljar)",
-        "level": "1 (free)",
-        "url": "https://anthropic.skilljar.com",
-        "time_estimate": "2 часа",
-        "deadline": "2026-10-29",
-        "priority": "critical",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "Completion Certificate. Claude Code для AI Ops."
-      },
-      {
-        "order": 3,
-        "name": "Anthropic Academy: Building with Claude API",
-        "platform": "Anthropic (Skilljar)",
-        "level": "1 (free)",
-        "url": "https://anthropic.skilljar.com",
-        "time_estimate": "3 часа",
-        "deadline": "2026-11-02",
-        "priority": "high",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "API-интеграция для AI Ops."
-      },
-      {
-        "order": 4,
-        "name": "Submarine Вайбкодинг",
-        "platform": "Submarine",
-        "level": "1 (free)",
-        "url": "https://submarine.club/",
-        "time_estimate": "Мастер-класс",
-        "deadline": "2026-11-10",
-        "priority": "high",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "Практика vibe coding. Бесплатно."
-      },
-      {
-        "order": 5,
-        "name": "Elements of AI",
-        "platform": "University of Helsinki",
-        "level": "1 (free)",
-        "url": "https://www.elementsofai.com/",
-        "time_estimate": "30 часов",
-        "deadline": "2026-11-15",
-        "priority": "critical",
-        "status": "paused",
-        "in_resume": true,
-        "why": "Университетский сертификат. Бесплатно.",
-        "note": "Слишком базовая. Продолжить после Anthropic + Submarine."
-      },
-      {
-        "order": 6,
-        "name": "Harvard CS50 AI",
-        "platform": "Harvard (edX)",
-        "level": "1 (free)",
-        "url": "https://cs50.harvard.edu/ai/",
-        "time_estimate": "70-210 часов",
-        "deadline": "2027-03-31",
-        "priority": "high",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "Гарвард в резюме. Python + ML."
-      },
-      {
-        "order": 7,
-        "name": "Google AI Essentials",
-        "platform": "Coursera",
-        "level": "2 (paid)",
-        "url": "https://grow.google/certificates/",
-        "cost": "$49 / aid",
-        "time_estimate": "10 часов",
-        "priority": "high",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "Google бренд. Узнаваемый."
-      },
-      {
-        "order": 8,
-        "name": "GitHub Foundations",
-        "platform": "GitHub",
-        "level": "2 (paid)",
-        "url": "https://education.github.com/",
-        "cost": "$99",
-        "time_estimate": "20-30 часов",
-        "priority": "high",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "Tech-порог."
-      },
-      {
-        "order": 9,
-        "name": "Claude Certified Associate (CCAF)",
-        "platform": "Anthropic",
-        "level": "2 (paid)",
-        "url": "https://anthropic.skilljar.com",
-        "cost": "$99",
-        "time_estimate": "Экзамен",
-        "priority": "high",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "Официальная сертификация Anthropic. Credly badge."
-      },
-      {
-        "order": 10,
-        "name": "Microsoft AI-901",
-        "platform": "Microsoft",
-        "level": "2 (paid)",
-        "url": "https://learn.microsoft.com/credentials/",
-        "cost": "$50-99",
-        "time_estimate": "10 часов",
-        "priority": "medium",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "Замена AI-900 (отменён 30.06.2026)."
-      },
-      {
-        "order": 11,
-        "name": "Claude Certified Architect (CCAA)",
-        "platform": "Anthropic",
-        "level": "3 (pro)",
-        "url": "https://anthropic.skilljar.com",
-        "cost": "$125",
-        "time_estimate": "Экзамен",
-        "priority": "high",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "Pro-уровень. Credly badge."
-      },
-      {
-        "order": 12,
-        "name": "Azure AI Engineer (AI-102)",
-        "platform": "Microsoft",
-        "level": "3 (pro)",
-        "url": "https://learn.microsoft.com/credentials/",
-        "cost": "$165",
-        "time_estimate": "Экзамен",
-        "priority": "medium",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "Для международного рынка."
-      },
-      {
-        "order": 13,
-        "name": "Google Professional ML Engineer",
-        "platform": "Google Cloud",
-        "level": "3 (pro)",
-        "url": "https://cloud.google.com/certification/machine-learning-engineer",
-        "cost": "$200",
-        "time_estimate": "Экзамен",
-        "priority": "medium",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "Высшая планка. Для глобалки."
-      },
-      {
-        "order": 14,
-        "name": "Deep Learning AI (Andrew Ng)",
-        "platform": "Coursera",
-        "level": "3 (pro)",
-        "url": "https://www.deeplearning.ai/",
-        "cost": "Coursera subscription",
-        "time_estimate": "5 курсов, ~2-3 месяца",
-        "priority": "medium",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "ML, TensorFlow, нейросети."
-      },
-      {
-        "order": 15,
-        "name": "IBM AI Engineering",
-        "platform": "Coursera",
-        "level": "3 (pro)",
-        "url": "https://www.coursera.org/professional-certificates/ai-engineer",
-        "cost": "~$200",
-        "time_estimate": "13 курсов, ~4 месяца",
-        "priority": "medium",
-        "status": "not_started",
-        "in_resume": true,
-        "why": "ML, Deep Learning, LLM, RAG."
-      }
-    ]
+  "last_updated": "2026-11-19",
+  "historical_planning": {
+    "task_tracker": {
+      "description": "Трекер обучения. Выровнен под 1ч/будни, старт с 06.10.2026.",
+      "tasks": [
+        {
+          "id": "LRN-001",
+          "name": "Anthropic: Claude 101",
+          "status": "not_started",
+          "priority": "critical",
+          "deadline": "2026-10-13",
+          "output": "Completion Certificate (verify.skilljar.com)",
+          "in_resume": true,
+          "note": "🔥 #1 — сегодня, 1 час"
+        },
+        {
+          "id": "LRN-002",
+          "name": "Anthropic: Claude Code 101",
+          "status": "not_started",
+          "priority": "critical",
+          "deadline": "2026-10-14",
+          "output": "Completion Certificate",
+          "in_resume": true,
+          "note": "🔥 #2 — 2 часа"
+        },
+        {
+          "id": "LRN-003",
+          "name": "Anthropic: Building with Claude API",
+          "status": "not_started",
+          "priority": "high",
+          "deadline": "2026-10-17",
+          "output": "Completion Certificate",
+          "in_resume": true,
+          "note": "🔥 #3 — 3 часа, закрывает Anthropic"
+        },
+        {
+          "id": "LRN-015",
+          "name": "Submarine Вайбкодинг",
+          "status": "not_started",
+          "priority": "high",
+          "deadline": "2026-10-25",
+          "output": "Сертификат участника",
+          "in_resume": true,
+          "note": "🎯 #4 — vibe coding"
+        },
+        {
+          "id": "LRN-001-EOAI",
+          "name": "Elements of AI",
+          "status": "not_started",
+          "priority": "medium",
+          "deadline": "2026-11-15",
+          "output": "Сертификат University of Helsinki",
+          "in_resume": true,
+          "note": "⏸️ paused — слишком базовая"
+        },
+        {
+          "id": "LRN-005",
+          "name": "Harvard CS50 AI",
+          "status": "not_started",
+          "priority": "high",
+          "deadline": "2027-03-31",
+          "output": "CS50 Certificate",
+          "in_resume": true,
+          "note": "🎓 долгий, но сильный"
+        },
+        {
+          "id": "LRN-006",
+          "name": "UML (YouTube + Habr)",
+          "status": "not_started",
+          "priority": "high",
+          "deadline": "2026-12-15",
+          "output": "Диаграммы",
+          "in_resume": false,
+          "note": "Track B, без сертификата"
+        },
+        {
+          "id": "LRN-007",
+          "name": "BPMN 2.0 (Stepik)",
+          "status": "not_started",
+          "priority": "high",
+          "deadline": "2026-12-27",
+          "output": "Практика схем",
+          "in_resume": false,
+          "note": "Track B"
+        },
+        {
+          "id": "LRN-008",
+          "name": "SQL для начинающих (Stepik)",
+          "status": "not_started",
+          "priority": "high",
+          "deadline": "2027-01-20",
+          "output": "Запросы",
+          "in_resume": false,
+          "note": "Track B"
+        },
+        {
+          "id": "LRN-009",
+          "name": "Swagger / OpenAPI",
+          "status": "not_started",
+          "priority": "high",
+          "deadline": "2027-01-27",
+          "output": "Спецификации",
+          "in_resume": false,
+          "note": "Track B"
+        },
+        {
+          "id": "LRN-010",
+          "name": "English B2",
+          "status": "not_started",
+          "priority": "high",
+          "deadline": "2027-08-31",
+          "output": "B2 certificate",
+          "in_resume": true,
+          "note": "3-4ч/нед, реалистичный темп"
+        },
+        {
+          "id": "LRN-011",
+          "name": "English C1",
+          "status": "not_started",
+          "priority": "high",
+          "deadline": "2029-06-30",
+          "output": "C1 certificate",
+          "in_resume": true,
+          "note": "После B2, 3-4ч/нед"
+        },
+        {
+          "id": "LRN-012",
+          "name": "Google AI Essentials (paid)",
+          "status": "not_started",
+          "priority": "medium",
+          "deadline": null,
+          "output": "Google Certificate",
+          "in_resume": true,
+          "note": "после дохода"
+        },
+        {
+          "id": "LRN-013",
+          "name": "GitHub Foundations (paid)",
+          "status": "not_started",
+          "priority": "medium",
+          "deadline": null,
+          "output": "GitHub Certificate",
+          "in_resume": true,
+          "note": "после дохода"
+        },
+        {
+          "id": "LRN-014",
+          "name": "Claude Certified Associate (CCAF)",
+          "status": "not_started",
+          "priority": "high",
+          "deadline": null,
+          "output": "CCAF Credential",
+          "in_resume": true,
+          "note": "после дохода"
+        }
+      ]
+    },
+    "strategy": "Стратегия: сначала БЫСТРЫЕ сертификаты (Anthropic-цикл). Потом Submarine. Elements paused. Harvard CS50 AI — долгий, параллельно. Английский — 3-4ч/нед, B2 до 31.08.2027, C1 до 30.06.2029. Платные — после дохода.",
+    "unified_certificate_track": {
+      "description": "Единый трек сертификатов. Только курсы с проверяемыми сертификатами.",
+      "last_updated": "2026-10-05",
+      "total": 15,
+      "certificates": [
+        {
+          "order": 1,
+          "name": "Anthropic Academy: Claude 101",
+          "platform": "Anthropic (Skilljar)",
+          "level": "1 (free)",
+          "url": "https://anthropic.skilljar.com",
+          "time_estimate": "1 час",
+          "deadline": "2026-10-27",
+          "priority": "critical",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "Completion Certificate. Быстро."
+        },
+        {
+          "order": 2,
+          "name": "Anthropic Academy: Claude Code 101",
+          "platform": "Anthropic (Skilljar)",
+          "level": "1 (free)",
+          "url": "https://anthropic.skilljar.com",
+          "time_estimate": "2 часа",
+          "deadline": "2026-10-29",
+          "priority": "critical",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "Completion Certificate. Claude Code для AI Ops."
+        },
+        {
+          "order": 3,
+          "name": "Anthropic Academy: Building with Claude API",
+          "platform": "Anthropic (Skilljar)",
+          "level": "1 (free)",
+          "url": "https://anthropic.skilljar.com",
+          "time_estimate": "3 часа",
+          "deadline": "2026-11-02",
+          "priority": "high",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "API-интеграция для AI Ops."
+        },
+        {
+          "order": 4,
+          "name": "Submarine Вайбкодинг",
+          "platform": "Submarine",
+          "level": "1 (free)",
+          "url": "https://submarine.club/",
+          "time_estimate": "Мастер-класс",
+          "deadline": "2026-11-10",
+          "priority": "high",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "Практика vibe coding. Бесплатно."
+        },
+        {
+          "order": 5,
+          "name": "Elements of AI",
+          "platform": "University of Helsinki",
+          "level": "1 (free)",
+          "url": "https://www.elementsofai.com/",
+          "time_estimate": "30 часов",
+          "deadline": "2026-11-15",
+          "priority": "critical",
+          "status": "paused",
+          "in_resume": true,
+          "why": "Университетский сертификат. Бесплатно.",
+          "note": "Слишком базовая. Продолжить после Anthropic + Submarine."
+        },
+        {
+          "order": 6,
+          "name": "Harvard CS50 AI",
+          "platform": "Harvard (edX)",
+          "level": "1 (free)",
+          "url": "https://cs50.harvard.edu/ai/",
+          "time_estimate": "70-210 часов",
+          "deadline": "2027-03-31",
+          "priority": "high",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "Гарвард в резюме. Python + ML."
+        },
+        {
+          "order": 7,
+          "name": "Google AI Essentials",
+          "platform": "Coursera",
+          "level": "2 (paid)",
+          "url": "https://grow.google/certificates/",
+          "cost": "$49 / aid",
+          "time_estimate": "10 часов",
+          "priority": "high",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "Google бренд. Узнаваемый."
+        },
+        {
+          "order": 8,
+          "name": "GitHub Foundations",
+          "platform": "GitHub",
+          "level": "2 (paid)",
+          "url": "https://education.github.com/",
+          "cost": "$99",
+          "time_estimate": "20-30 часов",
+          "priority": "high",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "Tech-порог."
+        },
+        {
+          "order": 9,
+          "name": "Claude Certified Associate (CCAF)",
+          "platform": "Anthropic",
+          "level": "2 (paid)",
+          "url": "https://anthropic.skilljar.com",
+          "cost": "$99",
+          "time_estimate": "Экзамен",
+          "priority": "high",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "Официальная сертификация Anthropic. Credly badge."
+        },
+        {
+          "order": 10,
+          "name": "Microsoft AI-901",
+          "platform": "Microsoft",
+          "level": "2 (paid)",
+          "url": "https://learn.microsoft.com/credentials/",
+          "cost": "$50-99",
+          "time_estimate": "10 часов",
+          "priority": "medium",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "Замена AI-900 (отменён 30.06.2026)."
+        },
+        {
+          "order": 11,
+          "name": "Claude Certified Architect (CCAA)",
+          "platform": "Anthropic",
+          "level": "3 (pro)",
+          "url": "https://anthropic.skilljar.com",
+          "cost": "$125",
+          "time_estimate": "Экзамен",
+          "priority": "high",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "Pro-уровень. Credly badge."
+        },
+        {
+          "order": 12,
+          "name": "Azure AI Engineer (AI-102)",
+          "platform": "Microsoft",
+          "level": "3 (pro)",
+          "url": "https://learn.microsoft.com/credentials/",
+          "cost": "$165",
+          "time_estimate": "Экзамен",
+          "priority": "medium",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "Для международного рынка."
+        },
+        {
+          "order": 13,
+          "name": "Google Professional ML Engineer",
+          "platform": "Google Cloud",
+          "level": "3 (pro)",
+          "url": "https://cloud.google.com/certification/machine-learning-engineer",
+          "cost": "$200",
+          "time_estimate": "Экзамен",
+          "priority": "medium",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "Высшая планка. Для глобалки."
+        },
+        {
+          "order": 14,
+          "name": "Deep Learning AI (Andrew Ng)",
+          "platform": "Coursera",
+          "level": "3 (pro)",
+          "url": "https://www.deeplearning.ai/",
+          "cost": "Coursera subscription",
+          "time_estimate": "5 курсов, ~2-3 месяца",
+          "priority": "medium",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "ML, TensorFlow, нейросети."
+        },
+        {
+          "order": 15,
+          "name": "IBM AI Engineering",
+          "platform": "Coursera",
+          "level": "3 (pro)",
+          "url": "https://www.coursera.org/professional-certificates/ai-engineer",
+          "cost": "~$200",
+          "time_estimate": "13 курсов, ~4 месяца",
+          "priority": "medium",
+          "status": "not_started",
+          "in_resume": true,
+          "why": "ML, Deep Learning, LLM, RAG."
+        }
+      ]
+    },
+    "status_note": "Сертификатный маршрут, прежняя нагрузка и сроки B2/C1 не подтверждены и не действуют как текущий план.",
+    "archived_on": "2026-11-19"
   },
-  "task_tracker": {
-    "description": "Трекер обучения. Выровнен под 1ч/будни, старт с 06.10.2026.",
-    "tasks": [
-      {
-        "id": "LRN-001",
-        "name": "Anthropic: Claude 101",
-        "status": "not_started",
-        "priority": "critical",
-        "deadline": "2026-10-13",
-        "output": "Completion Certificate (verify.skilljar.com)",
-        "in_resume": true,
-        "note": "🔥 #1 — сегодня, 1 час"
-      },
-      {
-        "id": "LRN-002",
-        "name": "Anthropic: Claude Code 101",
-        "status": "not_started",
-        "priority": "critical",
-        "deadline": "2026-10-14",
-        "output": "Completion Certificate",
-        "in_resume": true,
-        "note": "🔥 #2 — 2 часа"
-      },
-      {
-        "id": "LRN-003",
-        "name": "Anthropic: Building with Claude API",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2026-10-17",
-        "output": "Completion Certificate",
-        "in_resume": true,
-        "note": "🔥 #3 — 3 часа, закрывает Anthropic"
-      },
-      {
-        "id": "LRN-015",
-        "name": "Submarine Вайбкодинг",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2026-10-25",
-        "output": "Сертификат участника",
-        "in_resume": true,
-        "note": "🎯 #4 — vibe coding"
-      },
-      {
-        "id": "LRN-001-EOAI",
-        "name": "Elements of AI",
-        "status": "not_started",
-        "priority": "medium",
-        "deadline": "2026-11-15",
-        "output": "Сертификат University of Helsinki",
-        "in_resume": true,
-        "note": "⏸️ paused — слишком базовая"
-      },
-      {
-        "id": "LRN-005",
-        "name": "Harvard CS50 AI",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2027-03-31",
-        "output": "CS50 Certificate",
-        "in_resume": true,
-        "note": "🎓 долгий, но сильный"
-      },
-      {
-        "id": "LRN-006",
-        "name": "UML (YouTube + Habr)",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2026-12-15",
-        "output": "Диаграммы",
-        "in_resume": false,
-        "note": "Track B, без сертификата"
-      },
-      {
-        "id": "LRN-007",
-        "name": "BPMN 2.0 (Stepik)",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2026-12-27",
-        "output": "Практика схем",
-        "in_resume": false,
-        "note": "Track B"
-      },
-      {
-        "id": "LRN-008",
-        "name": "SQL для начинающих (Stepik)",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2027-01-20",
-        "output": "Запросы",
-        "in_resume": false,
-        "note": "Track B"
-      },
-      {
-        "id": "LRN-009",
-        "name": "Swagger / OpenAPI",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2027-01-27",
-        "output": "Спецификации",
-        "in_resume": false,
-        "note": "Track B"
-      },
-      {
-        "id": "LRN-010",
-        "name": "English B2",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2027-08-31",
-        "output": "B2 certificate",
-        "in_resume": true,
-        "note": "3-4ч/нед, реалистичный темп"
-      },
-      {
-        "id": "LRN-011",
-        "name": "English C1",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2029-06-30",
-        "output": "C1 certificate",
-        "in_resume": true,
-        "note": "После B2, 3-4ч/нед"
-      },
-      {
-        "id": "LRN-012",
-        "name": "Google AI Essentials (paid)",
-        "status": "not_started",
-        "priority": "medium",
-        "deadline": null,
-        "output": "Google Certificate",
-        "in_resume": true,
-        "note": "после дохода"
-      },
-      {
-        "id": "LRN-013",
-        "name": "GitHub Foundations (paid)",
-        "status": "not_started",
-        "priority": "medium",
-        "deadline": null,
-        "output": "GitHub Certificate",
-        "in_resume": true,
-        "note": "после дохода"
-      },
-      {
-        "id": "LRN-014",
-        "name": "Claude Certified Associate (CCAF)",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": null,
-        "output": "CCAF Credential",
-        "in_resume": true,
-        "note": "после дохода"
-      }
-    ]
-  },
-  "last_updated": "2026-10-05"
+  "strategy": "Прикладное освоение разработки, архитектуры программных систем и безопасности через собственные проекты. Курсы и нагрузку выбрать после карьерного этапа; общий ИИ-сертификатный маршрут автоматически не продолжать.",
+  "current_focus": {
+    "confirmed_on": "2026-11-19",
+    "technical": [
+      "Архитектура программных систем и решений с ИИ",
+      "Базовые понятия разработки для общения с разработчиками",
+      "Безопасность и применение в собственных проектах"
+    ],
+    "method": "Практика и разбор реальных решений; конкретные курсы пока не выбраны.",
+    "english": {
+      "purpose": "Перспектива общения с зарубежными инвесторами и компаниями, включая представление Мандалы.",
+      "urgency": "Острого дефицита сейчас не ощущает.",
+      "experience": "Писал и периодически пишет англоязычные тексты; есть англоязычные песни в Dmitrii Levin и X Deaddy X.",
+      "support": "Допускает помощь переводчиков и ИИ, но хотел бы понимать и общаться самостоятельно.",
+      "level": "B1 из прежнего резюме; текущая оценка не проводилась.",
+      "deadline": null,
+      "load": null
+    },
+    "next_step": "После резюме и проверки площадок определить конкретные пробелы и подобрать интересный прикладной маршрут.",
+    "catalog_note": "courses остаётся историческим каталогом кандидатов. Цены, сертификаты, даты и статусы в нём не проверены; до выбора курса исследовать заново."
+  }
 }

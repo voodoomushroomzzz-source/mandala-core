@@ -3,11 +3,11 @@
     "name": "Творчество — Поэзия, музыка, проза",
     "version": "v0.1.0",
     "created": "2026-08-17",
-    "updated": "2026-08-17",
+    "updated": "2026-11-19",
     "description": "Структурированное творческое наследие и планы: поэзия, музыкальные проекты, проза."
   },
-  "status": "planning",
-  "priority": "medium",
+  "status": "active",
+  "priority": null,
   "horizon": "strategic",
   "deadline": null,
   "progress": 0,
@@ -73,42 +73,54 @@
     "Связать с философией Mandala."
   ],
   "source": "Диалог Gardener (Voodoo) и External SR (DeepSeek), 2026-08-17",
-  "last_updated": "2026-08-17",
-  "task_tracker": {
-    "description": "Трекер задач по творчеству",
-    "tasks": [
-      {
-        "id": "CRT-001",
-        "name": "Собрать все стихотворения в единый файл",
-        "status": "pending",
-        "priority": "high",
-        "deadline": "2026-08-31",
-        "output": "Структурированный сборник поэзии"
-      },
-      {
-        "id": "CRT-002",
-        "name": "Собрать прозу (внутренние монологи, письма)",
-        "status": "pending",
-        "priority": "medium",
-        "deadline": "2026-09-15",
-        "output": "Структурированный сборник прозы"
-      },
-      {
-        "id": "CRT-003",
-        "name": "Описать музыкальные проекты и их связь с Mandala",
-        "status": "pending",
-        "priority": "medium",
-        "deadline": "2026-09-30",
-        "output": "Описание проектов + философская связь"
-      },
-      {
-        "id": "CRT-004",
-        "name": "Создать план публикации творчества",
-        "status": "pending",
-        "priority": "low",
-        "deadline": "2026-10-31",
-        "output": "План публикаций"
-      }
-    ]
+  "last_updated": "2026-11-19",
+  "historical_planning": {
+    "task_tracker": {
+      "description": "Трекер задач по творчеству",
+      "tasks": [
+        {
+          "id": "CRT-001",
+          "name": "Собрать все стихотворения в единый файл",
+          "status": "pending",
+          "priority": "high",
+          "deadline": "2026-08-31",
+          "output": "Структурированный сборник поэзии"
+        },
+        {
+          "id": "CRT-002",
+          "name": "Собрать прозу (внутренние монологи, письма)",
+          "status": "pending",
+          "priority": "medium",
+          "deadline": "2026-09-15",
+          "output": "Структурированный сборник прозы"
+        },
+        {
+          "id": "CRT-003",
+          "name": "Описать музыкальные проекты и их связь с Mandala",
+          "status": "pending",
+          "priority": "medium",
+          "deadline": "2026-09-30",
+          "output": "Описание проектов + философская связь"
+        },
+        {
+          "id": "CRT-004",
+          "name": "Создать план публикации творчества",
+          "status": "pending",
+          "priority": "low",
+          "deadline": "2026-10-31",
+          "output": "План публикаций"
+        }
+      ]
+    },
+    "status_note": "Старые творческие задачи и сроки не являются действующими обязательствами. Подробные литературные результаты смотреть в poetry/index.json.",
+    "archived_on": "2026-11-19"
+  },
+  "current_focus": {
+    "confirmed_on": "2026-11-19",
+    "mode": "Свободный творческий ритм, без обязательного плана и дат.",
+    "music_source": "honeycombs/personal/music/index.json",
+    "literature": "Периодически пишет стихи и прозу по вдохновению. Недавно опубликовал новое стихотворение; название и дата не сообщены.",
+    "publication_ideas": "Идеи сборников сохраняются без назначения сроков.",
+    "next_step": "Не назначать задания и даты; возвращаться к конкретным текстам или трекам по инициативе Садовника."
   }
 }

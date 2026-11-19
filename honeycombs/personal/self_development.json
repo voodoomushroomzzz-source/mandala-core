@@ -3,7 +3,7 @@
     "name": "Саморазвитие — 8 тем для изучения",
     "version": "v1.0.0",
     "created": "2026-08-16",
-    "updated": "2026-08-16",
+    "updated": "2026-11-19",
     "description": "Адаптивный список из 8 ключевых тем для саморазвития: деньги, психология, общение, ИИ, инвестиции, бизнес, философия, здоровье.",
     "source": "wryazanov (Instagram), адаптировано под личный контекст"
   },
@@ -125,50 +125,62 @@
     ],
     "tone": "Говори как внимательный садовник: коротко, по существу, с уважением к вниманию человека. Не дави. Предлагай, а не указывай."
   },
-  "last_updated": "2026-08-16",
-  "task_tracker": {
-    "description": "Трекер задач по саморазвитию (8 тем)",
-    "tasks": [
-      {
-        "id": "SD-001",
-        "name": "Адаптировать 8 тем под себя (уровень, приоритеты)",
-        "status": "pending",
-        "priority": "high",
-        "deadline": "2026-08-31",
-        "output": "Personalized list"
-      },
-      {
-        "id": "SD-002",
-        "name": "Выбрать 1-2 приоритетные темы для старта",
-        "status": "pending",
-        "priority": "high",
-        "deadline": "2026-09-07",
-        "output": "Selected topics"
-      },
-      {
-        "id": "SD-003",
-        "name": "Найти 1-2 ключевых ресурса по выбранным темам",
-        "status": "pending",
-        "priority": "medium",
-        "deadline": "2026-09-14",
-        "output": "Resource list"
-      },
-      {
-        "id": "SD-004",
-        "name": "Пройти первый мини-эксперимент по теме (2-4 недели)",
-        "status": "pending",
-        "priority": "medium",
-        "deadline": "2026-10-15",
-        "output": "Experiment results"
-      },
-      {
-        "id": "SD-005",
-        "name": "Задокументировать прогресс и скорректировать план",
-        "status": "pending",
-        "priority": "low",
-        "deadline": "2026-11-01",
-        "output": "Progress report"
-      }
-    ]
+  "last_updated": "2026-11-19",
+  "historical_planning": {
+    "task_tracker": {
+      "description": "Трекер задач по саморазвитию (8 тем)",
+      "tasks": [
+        {
+          "id": "SD-001",
+          "name": "Адаптировать 8 тем под себя (уровень, приоритеты)",
+          "status": "pending",
+          "priority": "high",
+          "deadline": "2026-08-31",
+          "output": "Personalized list"
+        },
+        {
+          "id": "SD-002",
+          "name": "Выбрать 1-2 приоритетные темы для старта",
+          "status": "pending",
+          "priority": "high",
+          "deadline": "2026-09-07",
+          "output": "Selected topics"
+        },
+        {
+          "id": "SD-003",
+          "name": "Найти 1-2 ключевых ресурса по выбранным темам",
+          "status": "pending",
+          "priority": "medium",
+          "deadline": "2026-09-14",
+          "output": "Resource list"
+        },
+        {
+          "id": "SD-004",
+          "name": "Пройти первый мини-эксперимент по теме (2-4 недели)",
+          "status": "pending",
+          "priority": "medium",
+          "deadline": "2026-10-15",
+          "output": "Experiment results"
+        },
+        {
+          "id": "SD-005",
+          "name": "Задокументировать прогресс и скорректировать план",
+          "status": "pending",
+          "priority": "low",
+          "deadline": "2026-11-01",
+          "output": "Progress report"
+        }
+      ]
+    },
+    "status_note": "Прежний список учебных задач не является текущей обязательной программой.",
+    "archived_on": "2026-11-19"
+  },
+  "current_focus": {
+    "confirmed_on": "2026-11-19",
+    "free_reading": "Духовные и философские книги; сейчас «Веды. Тайны Востока», Бхактиведанта Свами Прабхупада, со слов Садовника.",
+    "technical_source": "honeycombs/personal/learning.json",
+    "health": "Тренажёрный зал, единоборства, летом скейт — поддержание тонуса без спортивных достижений как цели.",
+    "next_step": "Сохранять свободный интерес; новые области обучения не добавлять без потребности.",
+    "topics_note": "Восемь прежних тем — справочная карта, не восемь параллельных обязательств."
   }
 }

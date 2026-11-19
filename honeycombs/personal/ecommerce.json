@@ -3,15 +3,15 @@
     "name": "E-commerce — China Sourcing & Marketplaces",
     "version": "v1.0.0",
     "created": "2026-08-14",
-    "updated": "2026-08-14",
+    "updated": "2026-11-19",
     "description": "Стратегия закупок в Китае и выхода на Ozon/Яндекс Маркет."
   },
   "work_id": "W-R-ECOMM-001",
-  "status": "active",
-  "priority": "high",
+  "status": "perspective",
+  "priority": null,
   "horizon": "strategic",
   "description": "Develop a sourcing strategy from Chinese platforms (1688 and alternatives) for non-apparel consumer goods. Includes analysis of dropshipping model (no upfront inventory) using professional agents (Zendrop, SourcinBox, BuckyDrop) and direct sourcing. Create a step-by-step launch plan for Ozon (primary) and Yandex Market with minimal financial risk.",
-  "deadline": "2026-10-31",
+  "deadline": null,
   "progress": 0,
   "tags": [
     "ecommerce",
@@ -24,85 +24,6 @@
     "financial-sustainability",
     "dropshipping"
   ],
-  "phases": {
-    "phase_0_dropship_setup": {
-      "name": "Dropshipping Research & Setup",
-      "description": "Research dropshipping agents, select 2-3 suppliers, test order fulfillment process without holding inventory.",
-      "deadline": "2026-07-25",
-      "tasks": [
-        "Research and select 1-2 dropshipping agents (Zendrop, SourcinBox, or BuckyDrop)",
-        "Create accounts on Ozon as a seller",
-        "Select 2-3 test products (no certification required)",
-        "Test ordering process through dropshipping agent",
-        "Set up product listings on Ozon with proper SEO"
-      ],
-      "deliverables": [
-        "Active Ozon seller account",
-        "2-3 test products selected from dropshipping catalog",
-        "Test order completed successfully"
-      ]
-    },
-    "phase_1_analysis": {
-      "name": "Sourcing Platforms Analysis",
-      "description": "Research and compare 1688 and its alternatives: Yiwugo, YiShou (if apparel), JD B2B, and Taobao for specific niches. Assess logistics, payment methods, and language barriers.",
-      "deadline": "2026-08-01",
-      "key_questions": [
-        "What are the total landed costs (product + freight + customs + fees)?",
-        "Which platform offers the best match for our chosen product categories?",
-        "How to handle communication with suppliers (translators, agents)?"
-      ],
-      "deliverables": [
-        "Shortlist of 2-3 platforms for sourcing",
-        "Cost calculation model (product + logistics + customs)",
-        "List of potential suppliers"
-      ]
-    },
-    "phase_2_product_selection": {
-      "name": "Product Selection and Testing",
-      "description": "Identify 2-3 product categories with good margin potential, low competition on Ozon/Yandex, and manageable shipping. Order samples for quality check.",
-      "deadline": "2026-08-15",
-      "key_questions": [
-        "What are the current top-selling products on Ozon/Yandex?",
-        "What products have a margin of 100%+?",
-        "How to use AI (Scout Agent, LLMs) for product trend analysis?"
-      ],
-      "deliverables": [
-        "Selected 2-3 product categories",
-        "Samples ordered and evaluated",
-        "Preliminary margin calculation"
-      ]
-    },
-    "phase_3_launch_strategy": {
-      "name": "Launch on Ozon/Yandex Market",
-      "description": "Set up seller accounts, product listings, optimize for search, and plan a launch campaign with minimal initial stock.",
-      "deadline": "2026-09-15",
-      "tasks": [
-        "Register as a seller on Ozon and Yandex Market.",
-        "Create product listings with high-quality visuals and SEO-optimized descriptions.",
-        "Plan a small promotional campaign (advertising, discounts)."
-      ],
-      "deliverables": [
-        "Active seller accounts on Ozon and Yandex Market",
-        "Live product listings (3-5 SKUs)",
-        "Launch campaign budget and plan"
-      ]
-    },
-    "phase_4_analysis_and_scale": {
-      "name": "Performance Analysis and Scaling",
-      "description": "Analyze sales data, review customer feedback, and plan for scaling to new products or platforms.",
-      "deadline": "2026-10-15",
-      "tasks": [
-        "Track key metrics: AOV, conversion rate, DRR, profit margin.",
-        "Adjust product strategy based on best-sellers.",
-        "Plan to source new products from 1688."
-      ],
-      "deliverables": [
-        "Performance report with key metrics",
-        "Optimized product portfolio",
-        "Scaling plan for next 3 months"
-      ]
-    }
-  },
   "notes": [
     "This is a parallel financial sustainability track alongside the career plan.",
     "Focus on non-apparel goods to avoid the complexities of fashion sourcing.",
@@ -162,58 +83,150 @@
     ],
     "certification_note": "Certain product categories (electronics, children's goods) require mandatory certification in Russia. Start with categories that don't require certification."
   },
-  "last_updated": "2026-08-14",
-  "task_tracker": {
-    "description": "Трекер задач по e-commerce и Китаю",
-    "tasks": [
-      {
-        "id": "ECO-001",
-        "name": "Выбрать дропшиппинг-агента (Zendrop/SourcinBox)",
-        "status": "pending",
-        "priority": "high",
+  "last_updated": "2026-11-19",
+  "historical_planning": {
+    "task_tracker": {
+      "description": "Трекер задач по e-commerce и Китаю",
+      "tasks": [
+        {
+          "id": "ECO-001",
+          "name": "Выбрать дропшиппинг-агента (Zendrop/SourcinBox)",
+          "status": "pending",
+          "priority": "high",
+          "deadline": "2026-07-25",
+          "output": "Agent selected"
+        },
+        {
+          "id": "ECO-002",
+          "name": "Создать аккаунт продавца на Ozon",
+          "status": "pending",
+          "priority": "high",
+          "deadline": "2026-07-31",
+          "output": "Ozon seller account"
+        },
+        {
+          "id": "ECO-003",
+          "name": "Выбрать 2-3 тестовых продукта",
+          "status": "pending",
+          "priority": "high",
+          "deadline": "2026-08-15",
+          "output": "Products selected"
+        },
+        {
+          "id": "ECO-004",
+          "name": "Протестировать процесс заказа через агента",
+          "status": "pending",
+          "priority": "medium",
+          "deadline": "2026-08-31",
+          "output": "Test order completed"
+        },
+        {
+          "id": "ECO-005",
+          "name": "Создать листинги на Ozon (3-5 SKU)",
+          "status": "pending",
+          "priority": "medium",
+          "deadline": "2026-09-15",
+          "output": "Live listings"
+        },
+        {
+          "id": "ECO-006",
+          "name": "Проанализировать продажи и скорректировать стратегию",
+          "status": "pending",
+          "priority": "low",
+          "deadline": "2026-10-15",
+          "output": "Performance report"
+        }
+      ]
+    },
+    "status_note": "Старые этапы и задачи исторические; текущая позиция — перспектива без активных действий.",
+    "archived_on": "2026-11-19",
+    "phases": {
+      "phase_0_dropship_setup": {
+        "name": "Dropshipping Research & Setup",
+        "description": "Research dropshipping agents, select 2-3 suppliers, test order fulfillment process without holding inventory.",
         "deadline": "2026-07-25",
-        "output": "Agent selected"
+        "tasks": [
+          "Research and select 1-2 dropshipping agents (Zendrop, SourcinBox, or BuckyDrop)",
+          "Create accounts on Ozon as a seller",
+          "Select 2-3 test products (no certification required)",
+          "Test ordering process through dropshipping agent",
+          "Set up product listings on Ozon with proper SEO"
+        ],
+        "deliverables": [
+          "Active Ozon seller account",
+          "2-3 test products selected from dropshipping catalog",
+          "Test order completed successfully"
+        ]
       },
-      {
-        "id": "ECO-002",
-        "name": "Создать аккаунт продавца на Ozon",
-        "status": "pending",
-        "priority": "high",
-        "deadline": "2026-07-31",
-        "output": "Ozon seller account"
+      "phase_1_analysis": {
+        "name": "Sourcing Platforms Analysis",
+        "description": "Research and compare 1688 and its alternatives: Yiwugo, YiShou (if apparel), JD B2B, and Taobao for specific niches. Assess logistics, payment methods, and language barriers.",
+        "deadline": "2026-08-01",
+        "key_questions": [
+          "What are the total landed costs (product + freight + customs + fees)?",
+          "Which platform offers the best match for our chosen product categories?",
+          "How to handle communication with suppliers (translators, agents)?"
+        ],
+        "deliverables": [
+          "Shortlist of 2-3 platforms for sourcing",
+          "Cost calculation model (product + logistics + customs)",
+          "List of potential suppliers"
+        ]
       },
-      {
-        "id": "ECO-003",
-        "name": "Выбрать 2-3 тестовых продукта",
-        "status": "pending",
-        "priority": "high",
+      "phase_2_product_selection": {
+        "name": "Product Selection and Testing",
+        "description": "Identify 2-3 product categories with good margin potential, low competition on Ozon/Yandex, and manageable shipping. Order samples for quality check.",
         "deadline": "2026-08-15",
-        "output": "Products selected"
+        "key_questions": [
+          "What are the current top-selling products on Ozon/Yandex?",
+          "What products have a margin of 100%+?",
+          "How to use AI (Scout Agent, LLMs) for product trend analysis?"
+        ],
+        "deliverables": [
+          "Selected 2-3 product categories",
+          "Samples ordered and evaluated",
+          "Preliminary margin calculation"
+        ]
       },
-      {
-        "id": "ECO-004",
-        "name": "Протестировать процесс заказа через агента",
-        "status": "pending",
-        "priority": "medium",
-        "deadline": "2026-08-31",
-        "output": "Test order completed"
-      },
-      {
-        "id": "ECO-005",
-        "name": "Создать листинги на Ozon (3-5 SKU)",
-        "status": "pending",
-        "priority": "medium",
+      "phase_3_launch_strategy": {
+        "name": "Launch on Ozon/Yandex Market",
+        "description": "Set up seller accounts, product listings, optimize for search, and plan a launch campaign with minimal initial stock.",
         "deadline": "2026-09-15",
-        "output": "Live listings"
+        "tasks": [
+          "Register as a seller on Ozon and Yandex Market.",
+          "Create product listings with high-quality visuals and SEO-optimized descriptions.",
+          "Plan a small promotional campaign (advertising, discounts)."
+        ],
+        "deliverables": [
+          "Active seller accounts on Ozon and Yandex Market",
+          "Live product listings (3-5 SKUs)",
+          "Launch campaign budget and plan"
+        ]
       },
-      {
-        "id": "ECO-006",
-        "name": "Проанализировать продажи и скорректировать стратегию",
-        "status": "pending",
-        "priority": "low",
+      "phase_4_analysis_and_scale": {
+        "name": "Performance Analysis and Scaling",
+        "description": "Analyze sales data, review customer feedback, and plan for scaling to new products or platforms.",
         "deadline": "2026-10-15",
-        "output": "Performance report"
+        "tasks": [
+          "Track key metrics: AOV, conversion rate, DRR, profit margin.",
+          "Adjust product strategy based on best-sellers.",
+          "Plan to source new products from 1688."
+        ],
+        "deliverables": [
+          "Performance report with key metrics",
+          "Optimized product portfolio",
+          "Scaling plan for next 3 months"
+        ]
       }
-    ]
+    }
+  },
+  "current_focus": {
+    "confirmed_on": "2026-11-19",
+    "state": "perspective",
+    "active_actions": false,
+    "reason": "Нет решения запускать: нужен стартовый капитал, есть опасения по рискам и неясен интерес.",
+    "return_condition": "При появлении конкретной интересной возможности с понятной экономикой и ресурсами — обсудить заново.",
+    "next_step": "Без активных действий; переоценить только по новому интересу или конкретной возможности.",
+    "risk_note": "Опасения по ситуации в мире и складам — слова Садовника, не проверенная оценка рынка. Предпочтение сейчас — знакомые управленческие проекты и Мандала."
   }
 }
