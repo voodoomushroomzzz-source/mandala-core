@@ -48,10 +48,8 @@
         "why": "Mobile interface (Telegram/Web) shows a 'Copy' button ONLY for code blocks with a language tag. No tag = no button = manual selection = mistakes."
       },
       "post_check_via_link": {
-        "rule": "PRIORITY. ALWAYS perform post-check via DIRECT LINK (https://github.com/.../blob/...). This is the PRIMARY method. Reason: Direct link shows the actual file content from the current commit WITHOUT caching. API and Raw URLs may have 5-10 min delay or be cached. Direct link is ALWAYS up-to-date.",
-        "format": "```text\nhttps://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/{path}\n```",
-        "why": "GitHub web interface (blob) displays content from the current HEAD commit. No CDN, no cache, no delay. Instant and accurate.",
-        "fallback": "If direct link is unavailable, use API (api.github.com) as fallback to verify SHA and version."
+        "source": "honeycombs/instructions/core/external_context_saving.md#Проверка страниц и сборок",
+        "instruction": "Для обычной записи данных внешним ассистентом применяй общий источник: после успешного сохранения дай ссылку без обязательной проверки страницы и ожидания сборок. Проверки для исправления ошибки или изменения кода выполняются по правилам задачи; не сообщай непроверенный успех отображения."
       },
       "python_package_cli_rule": "For any Python package with CLI (invoked as 'python -m pkg ...'), ALWAYS create pkg/__main__.py with: from pkg.cli import main; if __name__ == '__main__': main(). Without __main__.py, 'python -m pkg' fails with 'No module named pkg.__main__'. This is a standard Python requirement, not optional.",
       "batched_context_saving": {
@@ -405,7 +403,7 @@
         "Выбрать kind и area по README и taxonomy.json; сохранить источники и дату проверки фактов",
         "При локальном доступе запустить python -m mge dashboard из honeycombs/fruits/mge: индекс, страницы и граф обновятся автоматически",
         "При работе только через GitHub сохранить исходник: после публикации индекс пересобирает MGE, а страницы — GitHub Pages",
-        "Проверить готовые страницы, индекс и отсутствие ошибок сборки"
+        "Проверки страниц и сборок для внешнего диалогового ведения данных — по honeycombs/instructions/core/external_context_saving.md, раздел «Проверка страниц и сборок». При изменении кода или сборки применить проверки Knowledge/MGE."
       ],
       "example_resource": {
         "schema_version": "1.0",
@@ -486,7 +484,7 @@
     "updated": "2026-11-19",
     "layer": 2,
     "type": "workflow_guide",
-    "version": "v1.8.2",
+    "version": "v1.8.3",
     "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + dual GitHub repo routing (mandala-core + mandala-gardeners). v1.6.3: + pre-check raw, post-check API, report last_updated rules. + module patching rule, session context, announce last_updated. + sync onboarding ↔ source rule. v1.8.2: + python_package_cli_rule (__main__.py mandatory for CLI packages). + sync_onboarding_and_source clarified: onboarding is auto-rebuilt by CI, do NOT edit manually.",
     "created": "2026-04-09",
     "name": "External SR Workflow",
