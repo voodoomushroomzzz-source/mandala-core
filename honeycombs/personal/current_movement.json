@@ -1,0 +1,167 @@
+{
+    "version":  "v1.0.0",
+    "updated":  "2026-11-19",
+    "instructions":  "personal_assistant.md",
+    "scope":  "Обзор личного курса. Даты ниже отражают только будущие фактические сверки, а не создание этой карты.",
+    "directions":  [
+                       {
+                           "id":  "work",
+                           "name":  "Работа — Куртош",
+                           "sources":  [
+                                           "kurtoch/index.json",
+                                           "kurtoch/taskboard.json"
+                                       ],
+                           "state":  "unconfirmed",
+                           "priority":  null,
+                           "goal":  null,
+                           "next_step":  null,
+                           "last_sync_at":  null,
+                           "checked_sources":  [
+
+                                               ],
+                           "last_confirmed_at":  null,
+                           "pause_reason":  null,
+                           "return_condition":  null,
+                           "notes":  "Операционный план хранится у Куртоша. Здесь сверяем личную нагрузку и связь с карьерой."
+                       },
+                       {
+                           "id":  "career",
+                           "name":  "Карьера",
+                           "sources":  [
+                                           "career.json",
+                                           "learning.json"
+                                       ],
+                           "state":  "unconfirmed",
+                           "priority":  null,
+                           "goal":  null,
+                           "next_step":  null,
+                           "last_sync_at":  null,
+                           "checked_sources":  [
+
+                                               ],
+                           "last_confirmed_at":  null,
+                           "pause_reason":  null,
+                           "return_condition":  null,
+                           "notes":  "Планы и сроки требуют сверки с Садовником."
+                       },
+                       {
+                           "id":  "learning",
+                           "name":  "Обучение",
+                           "sources":  [
+                                           "learning.json",
+                                           "career.json"
+                                       ],
+                           "state":  "unconfirmed",
+                           "priority":  null,
+                           "goal":  null,
+                           "next_step":  null,
+                           "last_sync_at":  null,
+                           "checked_sources":  [
+
+                                               ],
+                           "last_confirmed_at":  null,
+                           "pause_reason":  null,
+                           "return_condition":  null,
+                           "notes":  "Сроки курсов в разных разделах расходятся. Выполнение не подтверждено."
+                       },
+                       {
+                           "id":  "creative",
+                           "name":  "Творчество",
+                           "sources":  [
+                                           "creative.json",
+                                           "poetry/index.json",
+                                           "music/index.json"
+                                       ],
+                           "state":  "unconfirmed",
+                           "priority":  null,
+                           "goal":  null,
+                           "next_step":  null,
+                           "last_sync_at":  null,
+                           "checked_sources":  [
+
+                                               ],
+                           "last_confirmed_at":  null,
+                           "pause_reason":  null,
+                           "return_condition":  null,
+                           "notes":  "Общий creative.json содержит старые задачи. Литературный корпус и музыкальные проекты имеют отдельные индексы."
+                       },
+                       {
+                           "id":  "publishing",
+                           "name":  "Публичность",
+                           "sources":  [
+                                           "instagram.json",
+                                           "youtube.json"
+                                       ],
+                           "state":  "unconfirmed",
+                           "priority":  null,
+                           "goal":  null,
+                           "next_step":  null,
+                           "last_sync_at":  null,
+                           "checked_sources":  [
+
+                                               ],
+                           "last_confirmed_at":  null,
+                           "pause_reason":  null,
+                           "return_condition":  null,
+                           "notes":  "Прежние контент-планы требуют проверки актуальности."
+                       },
+                       {
+                           "id":  "income",
+                           "name":  "Дополнительный доход",
+                           "sources":  [
+                                           "ecommerce.json",
+                                           "gov_orders.json"
+                                       ],
+                           "state":  "unconfirmed",
+                           "priority":  null,
+                           "goal":  null,
+                           "next_step":  null,
+                           "last_sync_at":  null,
+                           "checked_sources":  [
+
+                                               ],
+                           "last_confirmed_at":  null,
+                           "pause_reason":  null,
+                           "return_condition":  null,
+                           "notes":  "Прежние идеи и статусы не означают текущий приоритет."
+                       },
+                       {
+                           "id":  "self_development",
+                           "name":  "Саморазвитие",
+                           "sources":  [
+                                           "self_development.json"
+                                       ],
+                           "state":  "unconfirmed",
+                           "priority":  null,
+                           "goal":  null,
+                           "next_step":  null,
+                           "last_sync_at":  null,
+                           "checked_sources":  [
+
+                                               ],
+                           "last_confirmed_at":  null,
+                           "pause_reason":  null,
+                           "return_condition":  null,
+                           "notes":  "Темы предстоит сопоставить с текущими потребностями и доступным временем."
+                       },
+                       {
+                           "id":  "pilgrimage",
+                           "name":  "Личный путь и паломничество",
+                           "sources":  [
+                                           "pilgrimage.json"
+                                       ],
+                           "state":  "unconfirmed",
+                           "priority":  null,
+                           "goal":  null,
+                           "next_step":  null,
+                           "last_sync_at":  null,
+                           "checked_sources":  [
+
+                                               ],
+                           "last_confirmed_at":  null,
+                           "pause_reason":  null,
+                           "return_condition":  null,
+                           "notes":  "Долгосрочный замысел и прежний горизонт требуют подтверждения."
+                       }
+                   ]
+}

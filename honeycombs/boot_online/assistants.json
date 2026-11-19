@@ -1,5 +1,5 @@
 {
-  "version": "v1.1.0",
+  "version": "v1.2.0",
   "updated": "2026-11-19",
   "local_default": "mandala",
   "assistants": [
@@ -10,6 +10,14 @@
       "description": "Развитие всей экосистемы: согласованные приоритеты, архитектура, связи между работами, знания, продукты и память решений.",
       "status": "available",
       "onboarding": "honeycombs/boot_online/mandala_assistant.md"
+    },
+    {
+      "id": "personal",
+      "name": "Личный",
+      "aliases": ["Личный ассистент", "Персональный ассистент"],
+      "description": "Личный курс Садовника: работа, обучение, творчество и другие направления, их актуальность, связи и посильный следующий шаг.",
+      "status": "available",
+      "onboarding": "honeycombs/personal/personal_assistant.md"
     },
     {
       "id": "kurtoch",

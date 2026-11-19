@@ -1,176 +1,115 @@
 {
-  "identity": {
-    "module_id": "PERSONAL-INDEX-001",
-    "name": "Personal Hub — Карта и инструкция",
-    "version": "v2.6.0",
-    "created": "2026-08-20",
-    "updated": "2026-10-13",
-    "layer": 2,
-    "type": "personal_index",
-    "description": "Центральная карта для personal/. v2.6.0: career v1.3.0 (Track C 2028, площадки RU/Intl) + learning v1.6.0 (English B2 2027, C1 2029) синхронизированы.",
-    "status": "active",
-    "priority": "high",
-    "tags": [
-      "personal",
-      "index",
-      "instruction",
-      "gardener",
-      "profile",
-      "symbiosis",
-      "pilgrimage"
-    ],
-    "resonance": "100%"
-  },
-  "meta": {
-    "description": "Папка personal/ — единое пространство для личных данных Gardener: биография, ценности, карьерные треки, обучение, творчество, стратегии, долгосрочные проекты.",
-    "purpose": "Централизованное хранение и структурирование личной информации для SR.",
-    "how_to_use": "Начинай с collaboration_profile в profile_deep.json, затем открывай файл нужного направления. Для карьеры и обучения читай оба файла вместе. Для паломничества используй pilgrimage.json.",
-    "change_requires": "gardener_approval"
-  },
-  "core_files": {
-    "profile_deep.json": {
-      "description": "Краткие правила сотрудничества, ценности, долгосрочный замысел, наблюдения SR и открытые вопросы.",
-      "purpose": "Дать рабочий контекст для общения и глубину для личных решений.",
-      "when_to_use": "При «Резонансе» читать collaboration_profile. Глубокий портрет открывать по теме."
-    },
-    "career.json": {
-      "description": "Карьерные треки: AI Ops (RU удалёнка → международная после B2), системный аналитик, международный AI-специалист (2028+). Track D реализован. Симбиоз с learning.json.",
-      "purpose": "Управление карьерой и профессиональными проектами.",
-      "when_to_use": "При карьерных решениях. Читать ВМЕСТЕ с learning.json.",
-      "symbiosis_partner": "learning.json",
-      "version": "v1.3.0",
-      "updated": "2026-10-13"
-    },
-    "learning.json": {
-      "description": "Обучение: 15 сертификатов (только проверяемые). Приоритет: Anthropic (3 курса) → Submarine → Harvard. English 3-4ч/нед, B2 до 31.08.2027, C1 до 30.06.2029. Симбиоз с career.json.",
-      "purpose": "Структурирование обучения под карьерные треки.",
-      "when_to_use": "При планировании обучения. Читать ВМЕСТЕ с career.json.",
-      "symbiosis_partner": "career.json",
-      "version": "v1.6.0",
-      "updated": "2026-10-13"
-    },
-    "creative.json": {
-      "description": "Творчество: поэзия, музыка, проза.",
-      "purpose": "Структурирование творческого наследия."
-    },
-    "instagram.json": {
-      "description": "Стратегия Instagram: форматы, частоты, контент-план."
-    },
-    "youtube.json": {
-      "description": "Стратегия YouTube: гейминг-канал, монетизация, фазы роста."
-    },
-    "ecommerce.json": {
-      "description": "E-commerce: закупки в Китае, Ozon, Яндекс Маркет."
-    },
-    "self_development.json": {
-      "description": "Саморазвитие: 8 тем (деньги, психология, общение, ИИ, инвестиции, бизнес, философия, здоровье)."
-    },
-    "gov_orders.json": {
-      "description": "Госзаказы: 44-ФЗ и 223-ФЗ."
-    },
-    "pilgrimage.json": {
-      "description": "Пешее паломничество Владимир → Варанаси. Путь на доверии к миру: только пожертвования, только входящие предложения помощи, влог в реальном времени. Точка сборки творчества, Мандалы и личного поиска.",
-      "purpose": "Долгосрочный личный проект-паломничество. Встроен в Мандалу.",
-      "status": "seed / first_sketches",
-      "deadline": "2029",
-      "version": "v0.1.0",
-      "updated": "2026-09-24"
-    },
-    "music/": {
-      "description": "Музыкальные проекты."
-    },
-    "poetry/": {
-      "description": "Поэзия: тексты, планы по изданию."
-    },
-    "kurtoch/": {
-      "description": "Хаб проекта Куртош — кризис-менеджмент, операционная система, франшиза. Текущая работа (с 11.09.2026).",
-      "note": "Разбит на модули: taskboard.json, team.json, knowledge_base.json."
-    }
-  },
-  "symbiosis": {
-    "career_learning": {
-      "description": "Career.json и learning.json — единый контур. Карьера задаёт цель, обучение закрывает требования. Обратная связь двусторонняя. Track D реализован — фокус на A и B.",
-      "files": [
-        "career.json",
-        "learning.json"
-      ],
-      "tracks_mapping": {
-        "track_a_ai_ops": [
-          "Elements of AI",
-          "Anthropic Claude 101",
-          "Anthropic Claude Code 101",
-          "Anthropic Building with Claude API",
-          "Submarine Вайбкодинг"
-        ],
-        "track_b_system_analyst": [
-          "UML",
-          "BPMN",
-          "SQL",
-          "Swagger",
-          "Harvard CS50 AI"
-        ],
-        "track_c_global_ai": [
-          "CCAF",
-          "English C1",
-          "Harvard CS50 AI",
-          "Deep Learning AI",
-          "IBM AI Engineering"
-        ]
-      },
-      "key_deadlines": {
-        "track_a_offer": "2026-11-30",
-        "track_b_entry": "2027-03-31",
-        "track_c_entry": "2028-06-01",
-        "english_b2": "2027-08-31",
-        "english_c1": "2029-06-30",
-        "elements_of_ai": "2026-11-15",
-        "anthropic_courses": "2026-11-02",
-        "submarine_vibecoding": "2026-11-10"
-      },
-      "rule": "Если career требует навык — он должен быть в learning. Если в learning появился курс — он должен усилить один из треков."
-    }
-  },
-  "logic": {
-    "description": "Пошаговая логика SR с personal/.",
-    "step_1_analyze_personality": {
-      "action": "Взять collaboration_profile из profile_deep.json. Глубокий портрет читать по теме.",
-      "output": "Рабочий контекст сотрудничества."
-    },
-    "step_2_select_vector": {
-      "action": "Определить вектор.",
-      "output": "Выбор файла."
-    },
-    "step_3_load_vector": {
-      "action": "Загрузить файл(ы).",
-      "note": "Если карьера или обучение — загрузить ОБА (career + learning).",
-      "output": "Конкретные настройки."
-    },
-    "step_4_generate": {
-      "action": "Сгенерировать решение/контент.",
-      "output": "Конкретные идеи."
-    }
-  },
-  "navigation": {
-    "parent": "honeycombs/personal/index.json",
-    "children": [
-      "profile_deep.json",
-      "career.json",
-      "learning.json",
-      "creative.json",
-      "instagram.json",
-      "youtube.json",
-      "ecommerce.json",
-      "self_development.json",
-      "gov_orders.json",
-      "pilgrimage.json",
-      "music/",
-      "poetry/",
-      "kurtoch/index.json"
-    ]
-  },
-  "health": {
-    "status": "healthy",
-    "last_check": "2026-10-13",
-    "notes": "v2.6.0: career v1.3.0 + learning v1.6.0. Английский реалистичный (3-4ч/нед, B2 31.08.2027, C1 30.06.2029). Track C на 2028. Площадки разделены RU/Intl."
-  }
+    "identity":  {
+                     "module_id":  "PERSONAL-INDEX-001",
+                     "name":  "Personal Hub — Карта личных направлений",
+                     "version":  "v3.0.0",
+                     "created":  "2026-08-20",
+                     "updated":  "2026-11-19",
+                     "layer":  2,
+                     "type":  "personal_index",
+                     "description":  "Навигация личного ассистента. Текущий курс и даты сверок хранятся в current_movement.json.",
+                     "status":  "active"
+                 },
+    "meta":  {
+                 "description":  "Личные направления Садовника: работа, карьера, обучение, творчество и жизненные замыслы.",
+                 "how_to_use":  "После базового Резонанса читать personal_assistant.md, collaboration_profile, current_movement.json и personal_taskboard.md. Затем источники выбранного направления.",
+                 "change_requires":  "gardener_approval",
+                 "actuality":  "Исходные планы сохранены. Текущие состояния и приоритеты ещё не подтверждены. Дата обновления карты не подтверждает актуальность направлений."
+             },
+    "core_files":  {
+                       "personal_assistant.md":  {
+                                                     "description":  "Роль, вход, сверка направлений и правила сохранения."
+                                                 },
+                       "current_movement.json":  {
+                                                     "description":  "Актуальный личный курс, охват чтения источников и даты подтверждения по направлениям."
+                                                 },
+                       "personal_taskboard.md":  {
+                                                     "description":  "Согласованные действия между направлениями без дублирования исходных задач."
+                                                 },
+                       "profile_deep.json":  {
+                                                 "description":  "Краткие правила сотрудничества, ценности, долгосрочный замысел, наблюдения SR и открытые вопросы."
+                                             },
+                       "career.json":  {
+                                           "description":  "Карьерные треки и профессиональные планы. Читать вместе с learning.json. Прежние сроки и приоритеты требуют сверки."
+                                       },
+                       "learning.json":  {
+                                             "description":  "Обучение, навыки, английский и трекеры. Читать вместе с career.json. Устранять расхождения после согласования."
+                                         },
+                       "creative.json":  {
+                                             "description":  "Творчество: поэзия, музыка, проза."
+                                         },
+                       "instagram.json":  {
+                                              "description":  "Стратегия Instagram: форматы, частоты, контент-план."
+                                          },
+                       "youtube.json":  {
+                                            "description":  "Стратегия YouTube: гейминг-канал, монетизация, фазы роста."
+                                        },
+                       "ecommerce.json":  {
+                                              "description":  "E-commerce: закупки в Китае, Ozon, Яндекс Маркет."
+                                          },
+                       "self_development.json":  {
+                                                     "description":  "Саморазвитие: 8 тем (деньги, психология, общение, ИИ, инвестиции, бизнес, философия, здоровье)."
+                                                 },
+                       "gov_orders.json":  {
+                                               "description":  "Госзаказы: 44-ФЗ и 223-ФЗ."
+                                           },
+                       "pilgrimage.json":  {
+                                               "description":  "Долгосрочный замысел паломничества, связи с творчеством и Мандалой. Актуальность горизонта уточнять."
+                                           },
+                       "music/":  {
+                                      "description":  "Музыкальные проекты."
+                                  },
+                       "poetry/":  {
+                                       "description":  "Поэзия: тексты, планы по изданию."
+                                   },
+                       "kurtoch/":  {
+                                        "description":  "Операционные данные работы: индекс, задачник, команда, знания. Личную нагрузку сверять отдельно."
+                                    }
+                   },
+    "relationships":  [
+                          {
+                              "directions":  [
+                                                 "career",
+                                                 "learning"
+                                             ],
+                              "rule":  "Карьера задаёт требования, обучение помогает их закрывать. Сверять оба источника."
+                          },
+                          {
+                              "directions":  [
+                                                 "work",
+                                                 "career",
+                                                 "learning"
+                                             ],
+                              "rule":  "Рабочий опыт может стать практикой и кейсом портфолио."
+                          },
+                          {
+                              "directions":  [
+                                                 "creative",
+                                                 "publishing",
+                                                 "pilgrimage"
+                                             ],
+                              "rule":  "Учитывать связи творчества, публикаций и личного пути без обязательства развивать всё одновременно."
+                          }
+                      ],
+    "navigation":  {
+                       "parent":  "honeycombs/core_map/index.json",
+                       "children":  [
+                                        "personal_assistant.md",
+                                        "current_movement.json",
+                                        "personal_taskboard.md",
+                                        "profile_deep.json",
+                                        "career.json",
+                                        "learning.json",
+                                        "creative.json",
+                                        "instagram.json",
+                                        "youtube.json",
+                                        "ecommerce.json",
+                                        "self_development.json",
+                                        "gov_orders.json",
+                                        "pilgrimage.json",
+                                        "music/",
+                                        "poetry/",
+                                        "kurtoch/index.json"
+                                    ]
+                   }
 }
