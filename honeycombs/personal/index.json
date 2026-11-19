@@ -23,6 +23,9 @@
                        "current_movement.json":  {
                                                      "description":  "Актуальный личный курс, охват чтения источников и даты подтверждения по направлениям."
                                                  },
+                       "personal_tasks.json":  {
+                                                 "description": "Источник карточек согласованных личных задач для дашборда. Правила — personal_taskboard.md."
+                                             },
                        "personal_taskboard.md":  {
                                                      "description":  "Согласованные действия между направлениями без дублирования исходных задач."
                                                  },
@@ -97,6 +100,7 @@
                                         "personal_assistant.md",
                                         "current_movement.json",
                                         "personal_taskboard.md",
+                                        "personal_tasks.json",
                                         "profile_deep.json",
                                         "career.json",
                                         "learning.json",

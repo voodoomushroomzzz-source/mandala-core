@@ -2,7 +2,10 @@
 <html lang="ru">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Работы — Мандала</title>
+<link rel="icon" href="../../../../assets/mandala.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/mandala-192.png">
+<link rel="manifest" href="../../../../manifest.webmanifest">
+<title>Works — Мандала</title>
 <style>
   * { box-sizing: border-box; }
   body { background: #0d1117; color: #e6edf3; font: 16px/1.55 "Segoe UI", sans-serif; margin: 0; }
@@ -30,6 +33,10 @@
   .lane article { padding: 0; margin-bottom: 8px; }
   .lane article:last-child { margin-bottom: 0; }
   .lane summary { cursor: pointer; padding: 12px; min-height: 44px; font-weight: 600; overflow-wrap: anywhere; }
+  .lane article > details > summary { list-style: none; position: relative; padding-right: 38px; }
+  .lane article > details > summary::-webkit-details-marker { display: none; }
+  .lane article > details > summary::after { content: '⌄'; position: absolute; right: 12px; top: 12px; transition: transform .15s; }
+  .lane article > details[open] > summary::after { transform: rotate(180deg); }
   .lane summary:hover { background: #212c3b; border-radius: 9px; }
   .lane summary time, .lane summary small { display: block; color: #b5c0cf; font-weight: 400; font-size: 13px; }
   .card-body { padding: 12px; border-top: 1px solid #30363d; }
@@ -41,11 +48,12 @@
   <nav aria-label="Разделы Мандалы">
     <a href="../../../../index.html">Главная</a>
     <a href="mandala_graph.html">Карта</a>
-    <a href="works.html">Работы</a>
-    <a href="knowledge.html">Знания</a>
-    <a href="fruits.html">Продукты</a>
+    <a href="personal.html">Личные задачи</a>
+    <a href="fruits.html">Fruits</a>
+    <a href="works.html">Works</a>
+    <a href="knowledge.html">Knowledge</a>
   </nav>
-  <h1>Работы</h1>
+  <h1>Works</h1>
 <h2>Сейчас</h2><ul class="queue"><li><a href="works.html#W-T-20260803-SR-EVALUATION">SR Evaluation</a> · Высокий · 31.10.2026 истёк · новый срок не согласован · Подготовить общий набор проверок: «Резонанс», чтение следующего шага и срока из задачника, объяснение связи в MGE.</li></ul><h2>Доска по приоритетам</h2>
   <div class="controls">
     <label>Поиск<input type="search" id="search"></label>
@@ -58,7 +66,7 @@
 <details class="queue-more"><summary>На паузе</summary><ul class="queue"><li>Разбор семян · 30.11.2026 · закончить разбор входящих · По согласованию возобновить разбор всех семян из seeds/inbox/. Затем разобрать корень seeds/ и перенести актуальное в works/. Срок второго этапа согласуем отдельно.</li><li><a href="works.html#W-T-20260408-1030__gentle_companion_bot">Gentle Companion</a> и <a href="works.html#W-T-20260511-ARCHBOT__architect_bot">Architect Bot</a> · Без рабочего срока · Сервер бота усыплён. К Telegram-интерфейсу вернуться, если появится сценарий, которому он нужен после появления мобильного Engineer Chat.</li></ul></details><details class="queue-more"><summary>Перспектива и отложенные решения</summary><ul class="queue"><li><a href="works.html#W-R-20261116-MANDALA-LOCAL-APP">Мандала Симбиоза — локальное приложение</a> · Средний · перспектива · Без дедлайна · Первая веха — один Сад, два устройства, одна задача. В составе проекта — <a href="works.html#W-T-20260511-ENGCHAT__engineer_chat">Engineer Chat</a> и <a href="works.html#W-T-20260511-MANUS__manus_hands">Manus</a>. OpenRouter и небольшую модель на ПК можно тестировать параллельно на одних задачах <a href="works.html#W-T-20260803-SR-EVALUATION">SR Evaluation</a>. Свой сервер с API — для внешнего пилота.</li><li>Объединение Core Map и Mandala Graph · Отложено · Без дедлайна · Вернуться, если описание сот и связей начнёт регулярно расходиться или потребует ручного обновления в нескольких местах.</li></ul></details>
 </main>
 <script>
-  const cards = [...document.querySelectorAll("article")];
+  const cards = [...document.querySelector('[aria-label="Каталог"]').querySelectorAll("article")];
   const search = document.getElementById("search");
   const filters = [...document.querySelectorAll("select[data-field]")];
   function update() {

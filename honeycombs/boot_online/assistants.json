@@ -1,7 +1,7 @@
 {
-  "version": "v1.2.0",
+  "version": "v1.3.0",
   "updated": "2026-11-19",
-  "local_default": "mandala",
+  "local_entry": "choose_assistant",
   "assistants": [
     {
       "id": "mandala",
@@ -25,7 +25,8 @@
       "aliases": ["Куртош ассистент", "Куртош Менеджер", "Куртош Кофе"],
       "description": "Операционный помощник: задачи, команда, регламенты, закупки, смены и зарплата.",
       "status": "available",
-      "onboarding": "honeycombs/personal/kurtoch/mobile_manager_onboarding.md"
+      "onboarding": "honeycombs/personal/kurtoch/mobile_manager_onboarding.md",
+      "local_onboarding": "honeycombs/personal/kurtoch/local_assistant_onboarding.md"
     }
   ]
 }

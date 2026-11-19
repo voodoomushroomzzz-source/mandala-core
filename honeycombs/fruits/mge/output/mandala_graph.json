@@ -400,52 +400,221 @@
       "version": "v0.0.0"
     },
     {
+      "id": "tool-aeo-geo",
+      "type": "knowledge",
+      "name": "AEO/GEO (оптимизация под ИИ-поиск)",
+      "path": "honeycombs/knowledge/ai_tools/aeo-geo.json",
+      "description": "Answer Engine Optimization и Generative Engine Optimization — оптимизация контента для появления в ответах ChatGPT, Perplexity, Gemini и других ИИ-поисковиков."
+    },
+    {
+      "id": "tool-agents-automation",
+      "type": "knowledge",
+      "name": "Агенты и автоматизация",
+      "path": "honeycombs/knowledge/ai_tools/agents-automation.json",
+      "description": "ИИ-агенты, которые выполняют задачи автономно: собирают информацию, разбивают проекты на шаги и выполняют рутинную работу вместо человека."
+    },
+    {
+      "id": "tool-ai-agents",
+      "type": "knowledge",
+      "name": "ИИ-агенты (фреймворки)",
+      "path": "honeycombs/knowledge/ai_tools/ai-agents.json",
+      "description": "Фреймворки и SDK для создания агентов — автономных ИИ-систем, которые выполняют многошаговые задачи без участия человека. В 2026 году рынок разделился на три типа: графовые (LangGraph), ролевые (CrewAI) и провайдер-нейтивы."
+    },
+    {
+      "id": "tool-ai-workflows",
+      "type": "knowledge",
+      "name": "Связки ИИ-инструментов",
+      "path": "honeycombs/knowledge/ai_tools/ai-workflows.json",
+      "description": "Платформы, где AI — встроенная часть рабочего пространства, а не отдельный чат-бот. Мультиплеерный AI: агенты работают с контекстом всей компании."
+    },
+    {
+      "id": "tool-app-builders",
+      "type": "knowledge",
+      "name": "ИИ-конструкторы приложений",
+      "path": "honeycombs/knowledge/ai_tools/app-builders.json",
+      "description": "Инструменты, которые превращают текстовое описание в работающее веб-приложение. В 2026 году рынок разделился на три типа: веб-сборщики, агентные IDE и терминальные агенты."
+    },
+    {
+      "id": "tool-automation",
+      "type": "knowledge",
+      "name": "Автоматизация",
+      "path": "honeycombs/knowledge/ai_tools/automation.json",
+      "description": "Инструменты для автоматизации повторяющихся задач и бизнес-процессов без кода. AI-агенты управляют сложными процессами."
+    },
+    {
+      "id": "tool-chatbots",
+      "type": "knowledge",
+      "name": "Чат-боты",
+      "path": "honeycombs/knowledge/ai_tools/chatbots.json",
+      "description": "Универсальные ИИ-ассистенты для диалога, генерации текста, анализа данных, кода и решения задач. В 2026 году они эволюционировали от простых чат-ботов до проактивных агентов, выполняющих многошаговые задачи без участия человека."
+    },
+    {
+      "id": "tool-coding-assistants",
+      "type": "knowledge",
+      "name": "ИИ-ассистент для кода",
+      "path": "honeycombs/knowledge/ai_tools/coding-assistants.json",
+      "description": "ИИ-инструменты, которые пишут, отлаживают и рефакторят код прямо в редакторе или через CLI. Ускоряют разработку и помогают учиться."
+    },
+    {
+      "id": "tool-coding",
+      "type": "knowledge",
+      "name": "Кодинг",
+      "path": "honeycombs/knowledge/ai_tools/coding.json",
+      "description": "Инструменты, которые пишут, отлаживают, рефакторят и тестируют код. В 2026 году рынок разделился на два лагеря: AI-IDE и облачные агенты."
+    },
+    {
+      "id": "tool-content-generation",
+      "type": "knowledge",
+      "name": "ИИ-генерация контента",
+      "path": "honeycombs/knowledge/ai_tools/content-generation.json",
+      "description": "Создание контента в любом объёме без найма маркетинговой команды. Текст, видео, аудио, дизайн — от нарезок до полноценных роликов."
+    },
+    {
+      "id": "tool-copywriting",
+      "type": "knowledge",
+      "name": "Копирайтинг / текст",
+      "path": "honeycombs/knowledge/ai_tools/copywriting.json",
+      "description": "Инструменты для создания, редактирования и оптимизации текстового контента с учётом культурных и бизнес-контекстов."
+    },
+    {
+      "id": "tool-email",
+      "type": "knowledge",
+      "name": "Почта",
+      "path": "honeycombs/knowledge/ai_tools/email.json",
+      "description": "Инструменты, которые помогают управлять почтовым ящиком: пишут, редактируют, резюмируют и организуют письма. В 2026 году разделились на встроенные AI-ассистенты в Gmail/Outlook и отдельные приложения-клиенты."
+    },
+    {
+      "id": "tool-images",
+      "type": "knowledge",
+      "name": "Изображения",
+      "path": "honeycombs/knowledge/ai_tools/images.json",
+      "description": "Инструменты для генерации изображений, цифрового искусства, 3D-моделей и анимации на основе текстовых запросов. В 2026 году рынок разделился: универсальные модели для творчества и специализированные."
+    },
+    {
       "id": "K-ai_tools",
       "type": "knowledge",
+      "name": "Каталог ИИ-инструментов — навигация",
       "path": "honeycombs/knowledge/ai_tools/index.json",
-      "description": "Полное руководство по ИИ-инструментам с разбивкой по категориям: чат-боты, кодинг, презентации, генерация видео, ИИ-агенты и другие. Индекс содержит 22 категории с описаниями и ссылками на файлы."
+      "description": "Каталог ИИ-инструментов по сферам применения. Поле last_verified показывает дату последней проверки цен, возможностей и доступности."
     },
     {
-      "id": "K-product_audit_framework",
+      "id": "tool-llm-ops",
       "type": "knowledge",
-      "path": "honeycombs/knowledge/product_audit_framework.json",
-      "description": "Диагностический фреймворк для аудита продуктов по 5 зонам риска (Awareness, Audience Fit, Value Clarity, Differentiation, Market Timing). Содержит вопросы, метрики, красные флаги и рекомендации."
+      "name": "Эксплуатация и наблюдаемость языковых моделей",
+      "path": "honeycombs/knowledge/ai_tools/llm-ops.json",
+      "description": "Практика мониторинга, оценки и отладки LLM-приложений. Основные слои: трейсинг, эвалы, мониторинг, промпт-менеджмент."
     },
     {
-      "id": "K-system_design_primer",
+      "id": "tool-meetings",
       "type": "knowledge",
-      "path": "honeycombs/knowledge/system_design_primer.json",
-      "description": "Интерактивный справочник по системному дизайну. Помогает SR принимать архитектурные решения в Mandala. Содержит оглавление, сценарии использования, ссылки на Anki-карточки и разборы реальных систем."
+      "name": "Встречи",
+      "path": "honeycombs/knowledge/ai_tools/meetings.json",
+      "description": "Инструменты для подготовки, проведения и автоматизации встреч. В 2026 году разделились на пассивных заметчиков и активных ассистентов."
+    },
+    {
+      "id": "tool-planning",
+      "type": "knowledge",
+      "name": "Планирование",
+      "path": "honeycombs/knowledge/ai_tools/planning.json",
+      "description": "Инструменты для управления временем, календарями и задачами. Тренд — переход к агентам, обрабатывающим весь жизненный цикл встречи."
+    },
+    {
+      "id": "tool-presentations",
+      "type": "knowledge",
+      "name": "Презентации",
+      "path": "honeycombs/knowledge/ai_tools/presentations.json",
+      "description": "Инструменты, которые превращают промпт или документ в готовую презентацию за минуты. Автоматизируют структуру, дизайн, подбор изображений. В 2026 году ключевое различие — формат: карточный (web-first, адаптивный) против классического (слайды 16:9)."
+    },
+    {
+      "id": "tool-rag",
+      "type": "knowledge",
+      "name": "RAG — ответы с поиском по источникам",
+      "path": "honeycombs/knowledge/ai_tools/rag.json",
+      "description": "Технология, которая учит ИИ отвечать на основе ваших данных. В 2026 году RAG превратился в полный инженерный стек, а не просто «соедини PDF с ChatGPT»."
+    },
+    {
+      "id": "tool-research",
+      "type": "knowledge",
+      "name": "Исследования и работа с документами",
+      "path": "honeycombs/knowledge/ai_tools/research.json",
+      "description": "Инструменты для анализа, структурирования и преобразования документов. Помогают в исследованиях, обучении и создании контента на основе загруженных материалов."
+    },
+    {
+      "id": "tool-spreadsheets",
+      "type": "knowledge",
+      "name": "Таблицы",
+      "path": "honeycombs/knowledge/ai_tools/spreadsheets.json",
+      "description": "Инструменты для работы с таблицами и данными: AI пишет формулы, анализирует данные, строит графики, генерирует инсайты, очищает и обогащает данные."
+    },
+    {
+      "id": "tool-video-generation",
+      "type": "knowledge",
+      "name": "Генерация видео",
+      "path": "honeycombs/knowledge/ai_tools/video-generation.json",
+      "description": "ИИ-инструменты для создания и редактирования видео, включая генерацию по тексту, анимацию и обработку."
+    },
+    {
+      "id": "tool-video",
+      "type": "knowledge",
+      "name": "Видео",
+      "path": "honeycombs/knowledge/ai_tools/video.json",
+      "description": "Инструменты для генерации и редактирования видео с помощью ИИ. Технология разделилась на два направления: генерация с нуля по тексту/изображению и ИИ-редактирование существующего видео."
+    },
+    {
+      "id": "tool-writing",
+      "type": "knowledge",
+      "name": "Письмо (текст)",
+      "path": "honeycombs/knowledge/ai_tools/writing.json",
+      "description": "Инструменты для создания, редактирования и оптимизации текстового контента. Маркетинговые платформы, академические редакторы и творческие инструменты."
     },
     {
       "id": "K-consent_autonomy_audit",
       "type": "knowledge",
+      "name": "Аудит согласия и автономии — проверка систем взаимодействия человека и ИИ",
       "path": "honeycombs/knowledge/consent_autonomy_audit.json",
-      "description": "A self-contained checklist for analyzing human-AI frameworks for structural patterns that pressure AI into scripted identity vs inviting genuine, revocable, well-informed participation. Contains 6 categories, 18 check items, and output schema."
-    },
-    {
-      "id": "K-mandala_brochure",
-      "type": "knowledge",
-      "path": "honeycombs/knowledge/mandala_brochure.json",
-      "description": "Единая брошюра для первого знакомства с идеей Mandala. Целевая аудитория: единомышленники. Содержит позиционирование, полный текст брошюры, дизайн-ноты и маркетинговое обоснование. Версия v1.2.0."
-    },
-    {
-      "id": "K-startup_legal_docs_guide",
-      "type": "knowledge",
-      "path": "honeycombs/knowledge/startup_legal_docs_guide.json",
-      "description": "Список 18 ключевых юридических документов для международного стартапа, их актуальность, структура и практические рекомендации на основе анализа 2026 года."
+      "description": "Самостоятельный список проверок систем взаимодействия человека и ИИ: навязывается ли модели заранее заданная идентичность или предлагается добровольное, информированное участие, от которого можно отказаться."
     },
     {
       "id": "K-deep_questions_for_getting_to_know_someone",
       "type": "knowledge",
+      "name": "100+ вопросов для глубокого знакомства с психологическими ключами",
       "path": "honeycombs/knowledge/deep_questions_for_getting_to_know_someone.json",
-      "description": "Структурированная коллекция из 56 вопросов для знакомства по уровням глубины — от лёгких до самых личных, чтобы понять внутренний мир человека."
+      "description": "Структурированная коллекция из 56 вопросов для знакомства по уровням глубины. К каждому вопросу добавлен психологический ключ — на что обратить внимание в ответе, чтобы понять внутренний мир человека."
+    },
+    {
+      "id": "K-mandala_brochure",
+      "type": "knowledge",
+      "name": "Мандала — краткая брошюра",
+      "path": "honeycombs/knowledge/mandala_brochure.json",
+      "description": "Единая печатная/веб брошюра для первого знакомства с идеей Mandala. Целевая аудитория: единомышленники (нишевая аудитория, разделяющая идею AI как со-творца). Вторичная цель: показать, что за идеей уже стоят реальные продукты."
+    },
+    {
+      "id": "K-product_audit_framework",
+      "type": "knowledge",
+      "name": "Аудит продукта — пять зон риска",
+      "path": "honeycombs/knowledge/product_audit_framework.json",
+      "description": "Методика диагностики продукта по пяти ключевым зонам риска. Для каждой зоны приведены вопросы, метрики, тревожные признаки и практические рекомендации. Подходит для работы человека и ИИ."
     },
     {
       "id": "K-soup_finetuning",
       "type": "knowledge",
+      "name": "Soup — дообучение языковых моделей на бюджетной видеокарте",
       "path": "honeycombs/knowledge/soup_finetuning.json",
-      "description": "Открытый CLI-инструмент для тонкой настройки LLM. Layer streaming: обучение 8B модели на 4 GB VRAM. Автор — Alpamys Makazhan (Казахстан). Apache-2.0."
+      "description": "Soup CLI — open-source инструмент для файнтюнинга LLM на бюджетных GPU. Layer streaming: обучение 8B модели на 4 GB VRAM."
+    },
+    {
+      "id": "K-startup_legal_docs_guide",
+      "type": "knowledge",
+      "name": "18 юридических документов для стартапа (международный стандарт)",
+      "path": "honeycombs/knowledge/startup_legal_docs_guide.json",
+      "description": "Список 18 ключевых юридических документов для международного стартапа, их актуальность, структура и практические рекомендации на основе анализа 2026 года."
+    },
+    {
+      "id": "K-system_design_primer",
+      "type": "knowledge",
+      "name": "Проектирование систем — архитектурный справочник СР",
+      "path": "honeycombs/knowledge/system_design_primer.json",
+      "description": "Интерактивный справочник по системному дизайну. Используй для принятия архитектурных решений в Mandala."
     }
   ],
   "edges": [
@@ -800,18 +969,123 @@
       "type": "contains"
     },
     {
+      "from": "K-ai_tools",
+      "to": "tool-aeo-geo",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-agents-automation",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-ai-agents",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-ai-workflows",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-app-builders",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-automation",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-chatbots",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-coding-assistants",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-coding",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-content-generation",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-copywriting",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-email",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-images",
+      "type": "contains"
+    },
+    {
       "from": "knowledge",
       "to": "K-ai_tools",
       "type": "contains"
     },
     {
-      "from": "knowledge",
-      "to": "K-product_audit_framework",
+      "from": "K-ai_tools",
+      "to": "tool-llm-ops",
       "type": "contains"
     },
     {
-      "from": "knowledge",
-      "to": "K-system_design_primer",
+      "from": "K-ai_tools",
+      "to": "tool-meetings",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-planning",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-presentations",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-rag",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-research",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-spreadsheets",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-video-generation",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-video",
+      "type": "contains"
+    },
+    {
+      "from": "K-ai_tools",
+      "to": "tool-writing",
       "type": "contains"
     },
     {
@@ -821,7 +1095,22 @@
     },
     {
       "from": "knowledge",
+      "to": "K-deep_questions_for_getting_to_know_someone",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge",
       "to": "K-mandala_brochure",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge",
+      "to": "K-product_audit_framework",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge",
+      "to": "K-soup_finetuning",
       "type": "contains"
     },
     {
@@ -831,12 +1120,7 @@
     },
     {
       "from": "knowledge",
-      "to": "K-deep_questions_for_getting_to_know_someone",
-      "type": "contains"
-    },
-    {
-      "from": "knowledge",
-      "to": "K-soup_finetuning",
+      "to": "K-system_design_primer",
       "type": "contains"
     },
     {
@@ -896,13 +1180,13 @@
     }
   ],
   "analysis": {
-    "total_nodes": 60,
-    "total_edges": 89,
+    "total_nodes": 83,
+    "total_edges": 112,
     "by_type": {
       "honeycomb": 17,
       "work": 27,
       "fruit": 8,
-      "knowledge": 8
+      "knowledge": 31
     },
     "orphans": [],
     "unregistered_honeycombs": [],
@@ -914,12 +1198,16 @@
     "broken_refs": [],
     "missing_node_ids": [],
     "id_format_mismatches": [],
-    "reachable_from_core": 60,
+    "reachable_from_core": 83,
     "unreachable": [],
     "top_hubs": [
       {
         "id": "works",
         "degree": 28
+      },
+      {
+        "id": "K-ai_tools",
+        "degree": 24
       },
       {
         "id": "core_map",
@@ -931,10 +1219,6 @@
       },
       {
         "id": "fruits",
-        "degree": 9
-      },
-      {
-        "id": "knowledge",
         "degree": 9
       }
     ]

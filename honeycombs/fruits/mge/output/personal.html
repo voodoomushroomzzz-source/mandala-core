@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../../../../assets/mandala.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/mandala-192.png">
+<link rel="manifest" href="../../../../manifest.webmanifest">
+<title>Личные задачи — Мандала</title>
+<style>
+  * { box-sizing: border-box; }
+  body { background: #0d1117; color: #e6edf3; font: 16px/1.55 "Segoe UI", sans-serif; margin: 0; }
+  main { max-width: 1080px; margin: auto; padding: 28px 20px 48px; }
+  a { color: #84b9ff; } a:hover { color: #b8d8ff; }
+  nav, .controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; }
+  nav { padding-bottom: 16px; border-bottom: 1px solid #30363d; }
+  h1 { font-size: clamp(28px, 5vw, 42px); margin: 26px 0 14px; }
+  h2 { margin-bottom: 10px; } h3 { margin: 0; font-size: 18px; overflow-wrap: anywhere; }
+  label { display: grid; gap: 4px; } input, select { font: inherit; padding: 8px; color: inherit;
+    background: #161b22; border: 1px solid #58616e; border-radius: 6px; min-width: 0; max-width: 100%; }
+  input { width: min(290px, 85vw); } .grid { display: grid; gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  article, .queue { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 16px; }
+  article:target { outline: 2px solid #84b9ff; } .meta { color: #b5c0cf; font-size: 14px; }
+  article p { white-space: pre-line; } article p:last-child { margin-bottom: 0; }
+  .queue { padding-left: 38px; } .queue li + li { margin-top: 10px; }
+  .lanes { display: grid; gap: 12px; align-items: start;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+  .lane { padding: 12px; background: #101720; border-radius: 10px; border-top: 3px solid #58616e; }
+  .lane[data-group="critical"], .lane[data-group="high"] { border-top-color: #e78476; }
+  .lane[data-group="medium"] { border-top-color: #d6ab59; }
+  .lane[data-group="low"] { border-top-color: #8aa9dc; }
+  .lane > h3 { margin: 0 0 10px; font-size: 16px; }
+  .lane article { padding: 0; margin-bottom: 8px; }
+  .lane article:last-child { margin-bottom: 0; }
+  .lane summary { cursor: pointer; padding: 12px; min-height: 44px; font-weight: 600; overflow-wrap: anywhere; }
+  .lane article > details > summary { list-style: none; position: relative; padding-right: 38px; }
+  .lane article > details > summary::-webkit-details-marker { display: none; }
+  .lane article > details > summary::after { content: '⌄'; position: absolute; right: 12px; top: 12px; transition: transform .15s; }
+  .lane article > details[open] > summary::after { transform: rotate(180deg); }
+  .lane summary:hover { background: #212c3b; border-radius: 9px; }
+  .lane summary time, .lane summary small { display: block; color: #b5c0cf; font-weight: 400; font-size: 13px; }
+  .card-body { padding: 12px; border-top: 1px solid #30363d; }
+  .lane details[open] > summary { background: #212c3b; border-radius: 9px 9px 0 0; }
+  .queue-more { margin-top: 20px; }
+  [hidden] { display: none !important; }
+</style>
+<main>
+  <nav aria-label="Разделы Мандалы">
+    <a href="../../../../index.html">Главная</a>
+    <a href="mandala_graph.html">Карта</a>
+    <a href="personal.html">Личные задачи</a>
+    <a href="fruits.html">Fruits</a>
+    <a href="works.html">Works</a>
+    <a href="knowledge.html">Knowledge</a>
+  </nav>
+  <h1>Личные задачи</h1>
+<h2>Сейчас</h2><ul class="queue"><li><a href="personal.html#A-TASK-003">Изучить и обновить имеющееся резюме под актуальные управленческие роли</a></li></ul><h2>Доска по приоритетам</h2>
+  <div class="controls">
+    <label>Поиск<input type="search" id="search"></label>
+    <label>Статус<select data-field="status"><option value="">Все</option><option value="pending">Ожидает</option><option value="perspective">Перспектива</option></select></label><label>Направление<select data-field="group"><option value="">Все</option><option value="Карьера">Карьера</option><option value="Обучение">Обучение</option></select></label>
+  </div>
+  <p id="results" class="meta" aria-live="polite"></p>
+  <section class="lanes" aria-label="Каталог"><section class="lane" data-group="critical"><h3>Критический</h3><article id="A-TASK-003" data-status="pending" data-group="Карьера"><details><summary>Изучить и обновить имеющееся резюме под актуальные управленческие роли<small>Срок не согласован</small></summary><div class="card-body"><div class="meta">Ожидает</div><p></p><p>Следующий шаг: Получить актуальную версию имеющегося резюме и провести первый разбор. После разбора выбрать одно целевое направление или несколько адаптированных версий.</p><p><a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/career.json">Исходник</a></p></div></details></article></section>
+<section class="lane" data-group="Без раздела"><h3>Без раздела</h3><article id="A-TASK-004" data-status="pending" data-group="Карьера"><details><summary>LinkedIn (ENG) + Habr Career + TenChat<small>Прежний срок 2026-10-13 не подтверждён</small></summary><div class="card-body"><div class="meta">Ожидает</div><p></p><p>После разбора резюме проверить площадки и существующие размещения. Старый список платформ, срок и приоритет требуют сверки; публикации не выполнены.</p><p><a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/career.json">Исходник</a></p></div></details></article><article id="A-TASK-005" data-status="pending" data-group="Карьера"><details><summary>Подписка на WWR, RemoteOK, Wellfound, Remotive, Himalayas<small>Прежний срок 2026-10-13 не подтверждён</small></summary><div class="card-body"><div class="meta">Ожидает</div><p></p><p>После разбора резюме проверить площадки и существующие размещения. Старый список платформ, срок и приоритет требуют сверки; публикации не выполнены.</p><p><a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/career.json">Исходник</a></p></div></details></article><article id="PER-001" data-status="perspective" data-group="Обучение"><details><summary>Пересмотреть маршрут обучения под актуальные цели<small>Срок не согласован</small></summary><div class="card-body"><div class="meta">Перспектива</div><p>Пересмотреть обучение после разбора резюме и проверки площадок. Конкретные курсы и язык обучения ещё не выбраны.</p><p>Следующий шаг: После разбора резюме определить пробелы и подобрать интересное прикладное обучение разработке, архитектуре и безопасности вместо автоматического продолжения базового сертификатного ИИ-плана.</p><p><a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/personal_tasks.json">Исходник</a></p></div></details></article></section></section>
+<h2>Личные направления</h2><section class="grid"><article><h3>Работа — Куртош</h3><p>Ещё не сверено</p><p class="meta">Источники прочитаны: ещё не отмечено<br>Планы подтверждены: ещё не сверяли</p></article><article><h3>Карьера</h3><p>Ещё не сверено</p><p class="meta">Источники прочитаны: ещё не отмечено<br>Планы подтверждены: ещё не сверяли</p></article><article><h3>Обучение</h3><p>Ещё не сверено</p><p class="meta">Источники прочитаны: ещё не отмечено<br>Планы подтверждены: ещё не сверяли</p></article><article><h3>Творчество</h3><p>Ещё не сверено</p><p class="meta">Источники прочитаны: ещё не отмечено<br>Планы подтверждены: ещё не сверяли</p></article><article><h3>Публичность</h3><p>Ещё не сверено</p><p class="meta">Источники прочитаны: ещё не отмечено<br>Планы подтверждены: ещё не сверяли</p></article><article><h3>Дополнительный доход</h3><p>Ещё не сверено</p><p class="meta">Источники прочитаны: ещё не отмечено<br>Планы подтверждены: ещё не сверяли</p></article><article><h3>Саморазвитие</h3><p>Ещё не сверено</p><p class="meta">Источники прочитаны: ещё не отмечено<br>Планы подтверждены: ещё не сверяли</p></article><article><h3>Личный путь и паломничество</h3><p>Ещё не сверено</p><p class="meta">Источники прочитаны: ещё не отмечено<br>Планы подтверждены: ещё не сверяли</p></article></section><p><a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/personal_taskboard.md">Исходник</a> · <a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/current_movement.json">Исходник</a></p>
+</main>
+<script>
+  const cards = [...document.querySelector('[aria-label="Каталог"]').querySelectorAll("article")];
+  const search = document.getElementById("search");
+  const filters = [...document.querySelectorAll("select[data-field]")];
+  function update() {
+    const query = search.value.trim().toLocaleLowerCase("ru");
+    let count = 0;
+    for (const card of cards) {
+      const matches = filters.every(filter => !filter.value || card.dataset[filter.dataset.field] === filter.value);
+      card.hidden = !matches || !card.textContent.toLocaleLowerCase("ru").includes(query);
+      if (!card.hidden) count++;
+    }
+    for (const lane of document.querySelectorAll(".lane")) {
+      lane.hidden = !lane.querySelector("article:not([hidden])");
+    }
+    document.getElementById("results").textContent = count ? "Показано: " + count + " из " + cards.length : "Ничего не найдено";
+  }
+  search.addEventListener("input", update);
+  for (const filter of filters) filter.addEventListener("change", update);
+  update();
+  function revealLinkedCard() {
+    try {
+      const card = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      const details = card?.querySelector("details");
+      if (details) {
+        if (card.hidden) {
+          search.value = "";
+          for (const filter of filters) filter.value = "";
+          update();
+        }
+        details.open = true;
+        card.scrollIntoView({ block: "nearest" });
+      }
+    } catch (error) {
+      if (!(error instanceof URIError)) throw error;
+    }
+  }
+  addEventListener("hashchange", revealLinkedCard);
+  revealLinkedCard();
+</script>
+</html>

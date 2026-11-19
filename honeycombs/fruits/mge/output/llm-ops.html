@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Эксплуатация и наблюдаемость языковых моделей — Knowledge</title>
+<link rel="icon" href="../../../../assets/mandala.svg" type="image/svg+xml">
+<style>
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #0d1117; color: #e6edf3; font: 17px/1.8 "Segoe UI", sans-serif; }
+main { max-width: 800px; margin: auto; padding: 28px 22px 64px; }
+a { color: #84b9ff; overflow-wrap: anywhere; }
+nav { display: flex; flex-wrap: wrap; gap: 20px; font-size: 15px; }
+header { text-align: center; padding: 44px 0 30px; }
+h1 { letter-spacing: .04em; font-size: clamp(26px, 5vw, 42px); line-height: 1.3; margin: 0; overflow-wrap: anywhere; }
+.subtitle { font-size: clamp(19px, 4vw, 25px); color: #b8a1e6; }
+.meta { color: #a7b4c5; font-size: 13px; }
+.notice { border-left: 3px solid #a371f7; padding: 10px 16px; background: #161b22; font-size: 14px; }
+.toc { margin: 28px 0; padding: 18px 22px; background: #161b22; border-radius: 12px; }
+.toc ol { margin-bottom: 0; padding-left: 22px; }
+article section { padding: 12px 0; scroll-margin-top: 20px; }
+h2 { font-size: clamp(22px, 4vw, 29px); line-height: 1.4; margin-top: 24px; }
+p { white-space: pre-line; overflow-wrap: anywhere; }
+.extras { margin-top: 48px; border-top: 1px solid #30363d; }
+details { border-bottom: 1px solid #30363d; }
+summary { cursor: pointer; padding: 16px 32px 16px 0; position: relative; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: '⌄'; position: absolute; right: 6px; top: 16px; }
+details[open] > summary::after { transform: rotate(180deg); }
+.extra-body { padding: 0 8px 20px; font-size: 15px; }
+dt { color: #b8a1e6; font-weight: 600; margin-top: 18px; }
+dd { margin-left: 16px; }
+pre { overflow: auto; padding: 14px; background: #161b22; font-size: 13px; }
+:focus-visible { outline: 2px solid #84b9ff; outline-offset: 4px; }
+@media print { body { background: white; color: black; } nav, .toc, .extras, .notice { display: none; } }
+</style></head><body><main>
+<nav><a href="knowledge.html#tool-llm-ops">← Knowledge</a><a href="../../../../index.html">Главная</a></nav>
+<header><h1>Эксплуатация и наблюдаемость языковых моделей</h1><p class="subtitle">Практика мониторинга, оценки и отладки LLM-приложений. Основные слои: трейсинг, эвалы, мониторинг, промпт-менеджмент.</p>
+<p class="meta">Версия не указана · Обновлено 2026-11-19
+· Создано не указано</p>
+<p class="meta">Проверено: 2026-07-24<br>Дата перенесена из прежнего индекса. При миграции новая проверка фактов не проводилась.</p></header>
+<p class="notice">Текст показан из сохранённой версии материала без редакторских изменений.
+Дата обновления не означает новую проверку актуальности упомянутых продуктов и планов.</p>
+<nav class="toc" aria-label="Оглавление"><div><strong>Содержание</strong><ol><li><a href="#section-1">Когда применять</a></li><li><a href="#section-2">Langfuse</a></li><li><a href="#section-3">Arize AI</a></li><li><a href="#section-4">Helicone</a></li><li><a href="#section-5">Weights &amp; Biases (W&amp;B Weave)</a></li></ol></div></nav>
+<article aria-label="Текст материала"><section id="section-1"><h2>Когда применять</h2><p>Для production-систем, где важны надёжность, стоимость и качество. Отладка агентов, мониторинг RAG-качества, детекция галлюцинаций.</p></section><section id="section-2"><h2>Langfuse</h2><dl><dt>Адрес</dt><dd><p><a href="https://langfuse.com" rel="noopener noreferrer">https://langfuse.com</a></p></dd><dt>Описание</dt><dd><p>Самая популярная OSS-платформа: трейсинг, эвалы, промпт-менеджмент. v4 — ускорение работы с большими проектами.</p></dd><dt>Плюсы</dt><dd><ul><li><p>MIT-лицензия</p></li><li><p>Отличная документация</p></li><li><p>Полный стек</p></li><li><p>V4 быстрее</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>Симуляция, voice-eval — в других инструментах</p></li><li><p>Enterprise-функции в облачной версии</p></li><li><p>Self-host требует настройки</p></li></ul></dd></dl></section><section id="section-3"><h2>Arize AI</h2><dl><dt>Адрес</dt><dd><p><a href="https://arize.com" rel="noopener noreferrer">https://arize.com</a></p></dd><dt>Описание</dt><dd><p>Enterprise-платформа для AI-observability. Arize AX — AI-фабрика для самоулучшающихся агентов.</p></dd><dt>Плюсы</dt><dd><ul><li><p>Signal — выявление паттернов ошибок</p></li><li><p>Поддержка voice-агентов</p></li><li><p>Управление взаимодействием компонентов</p></li><li><p>Корпоративный уровень</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>Enterprise-ориентирован</p></li><li><p>Не OSS</p></li><li><p>Сложность настройки</p></li></ul></dd></dl></section><section id="section-4"><h2>Helicone</h2><dl><dt>Адрес</dt><dd><p><a href="https://helicone.ai" rel="noopener noreferrer">https://helicone.ai</a></p></dd><dt>Описание</dt><dd><p>One-line прокси для LLM-observability. Maintenance-режин с марта 2026.</p></dd><dt>Плюсы</dt><dd><ul><li><p>Самый простой старт</p></li><li><p>Apache 2.0</p></li><li><p>Бесплатный Hobby-план</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>Maintenance-режим</p></li><li><p>Слаб в эвалах</p></li><li><p>Не для агентов</p></li></ul></dd></dl></section><section id="section-5"><h2>Weights &amp; Biases (W&amp;B Weave)</h2><dl><dt>Адрес</dt><dd><p><a href="https://wandb.ai" rel="noopener noreferrer">https://wandb.ai</a></p></dd><dt>Описание</dt><dd><p>ML-платформа. Weave — OSS-библиотека для LLM-трейсинга и эвалов.</p></dd><dt>Плюсы</dt><dd><ul><li><p>Интеграция с ML-экосистемой</p></li><li><p>Apache 2.0 для Weave</p></li><li><p>Зрелый продукт</p></li><li><p>Поддержка агентных eval-лупов</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>Оплата за каждого пользователя</p></li><li><p>Weave — новее и менее зрелый</p></li><li><p>Не в фокусе платформы</p></li></ul></dd></dl></section></article>
+<section class="extras"><h2>Дополнительные материалы</h2></section>
+<p class="meta"><a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/knowledge/ai_tools/llm-ops.json">Исходный материал</a></p>
+</main></body></html>

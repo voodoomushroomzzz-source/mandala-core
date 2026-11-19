@@ -1,272 +1,287 @@
 {
+  "schema_version": "1.0",
   "id": "product_audit_framework",
-  "name": "Product Audit Framework — 5 Zones of Risk",
-  "version": "v1.2.0",
+  "aliases": [],
+  "kind": "framework",
+  "title": "Аудит продукта — пять зон риска",
+  "summary": "Методика диагностики продукта по пяти ключевым зонам риска. Для каждой зоны приведены вопросы, метрики, тревожные признаки и практические рекомендации. Подходит для работы человека и ИИ.",
+  "area": "product",
+  "tags": [],
+  "version": "v1.2.1",
   "created": "2026-07-07",
-  "updated": "2026-07-24",
-  "source": "Gardener (Voodoo/Dima)",
-  "description": "A diagnostic framework for analyzing product health across 5 key risk zones. Each zone contains diagnostic questions, metrics to check, red flags, and actionable recommendations. Designed for both human and AI use.",
-  "what": "A structured tool for auditing any product or product idea. It helps identify the most critical weakness in a product's current state — whether it's awareness, audience fit, value clarity, differentiation, or market timing.",
-  "when": "Before launching a new product, during a product review, when a product shows signs of stagnation, or as part of a routine health check. Also useful for auditing ideas in seeds/ before they become tasks.",
-  "zones": [
-    {
-      "id": 1,
-      "name": "Awareness Problem",
-      "core_question": "People won't buy what they don't know exists.",
-      "diagnostic_questions": [
-        "Where does the target audience physically live (platforms, communities, channels)?",
-        "Does the brand appear there regularly or sporadically?",
-        "What % of the target audience has even heard of the product?"
-      ],
-      "metrics": [
-        "Brand awareness / aided & unaided recall (% of TA)",
-        "Impressions / Reach over period",
-        "Share of voice vs competitors",
-        "Frequency of touches per user",
-        "Organic traffic on brand queries (Google/Yandex Wordstat)"
-      ],
-      "red_flags": [
-        "Presence on only 1 channel",
-        "Irregular posts (less than 2-3x/week on active channels)",
-        "No brand search traffic at all"
-      ],
-      "recommendation": "AI should give: 2-3 specific channels where TA already exists, and posting frequency."
+  "updated": "2026-11-19",
+  "verification": {
+    "checked_at": null,
+    "scope": null
+  },
+  "sources": [
+    "Садовник (Voodoo/Дима)"
+  ],
+  "related": [],
+  "content": {
+    "what": "Структурированный инструмент для аудита продукта или продуктовой идеи. Помогает найти наиболее уязвимое место: известность, соответствие аудитории, понятность ценности, отличие от конкурентов или своевременность выхода на рынок.",
+    "when": "Перед запуском продукта, при его пересмотре, признаках стагнации или регулярной проверке состояния. Также подходит для проверки идей в seeds до превращения их в задачи.",
+    "zones": [
+      {
+        "id": 1,
+        "name": "Недостаточная известность",
+        "core_question": "Люди не купят то, о существовании чего не знают.",
+        "diagnostic_questions": [
+          "Где находится целевая аудитория: на каких платформах, в сообществах и каналах?",
+          "Бренд появляется там регулярно или от случая к случаю?",
+          "Какой процент целевой аудитории хотя бы слышал о продукте?"
+        ],
+        "metrics": [
+          "Узнаваемость бренда: спонтанное узнавание и узнавание с подсказкой, в процентах от целевой аудитории",
+          "Показы и охват за период",
+          "Доля упоминаний по сравнению с конкурентами",
+          "Частота контактов с одним пользователем",
+          "Органический трафик по брендовым запросам: Google и Яндекс Wordstat"
+        ],
+        "red_flags": [
+          "Присутствие только в одном канале",
+          "Нерегулярные публикации: реже 2–3 раз в неделю в действующих каналах",
+          "Полное отсутствие поискового трафика по бренду"
+        ],
+        "recommendation": "ИИ должен предложить 2–3 конкретных канала, где уже есть целевая аудитория, и частоту публикаций."
+      },
+      {
+        "id": 2,
+        "name": "Несоответствие аудитории",
+        "core_question": "Реклама не тем людям даёт слабый отклик.",
+        "diagnostic_questions": [
+          "Аудитория описана как конкретный сегмент или как «все, кому это может пригодиться»?",
+          "Есть ли данные о том, кто действительно покупает или совершает целевое действие?"
+        ],
+        "metrics": [
+          "Кликабельность (CTR) в сравнении по сегментам аудитории",
+          "Стоимость заявки (CPL) и привлечения клиента (CPA) по сегментам",
+          "Конверсия в целевое действие для каждого сегмента",
+          "Доля несоответствующей аудитории: трафик есть, а целевых действий нет",
+          "Отношение ценности клиента за всё время к стоимости его привлечения (LTV/CAC) по сегментам"
+        ],
+        "red_flags": [
+          "Аудитория описана только демографией, без задачи, которую человек хочет решить (JTBD)",
+          "Одно рекламное сообщение для всех сегментов",
+          "Большой трафик при низкой конверсии: более чем в три раза ниже нормы для ниши"
+        ],
+        "recommendation": "ИИ должен определить сегмент с лучшей конверсией и предложить узкое нацеливание на него."
+      },
+      {
+        "id": 3,
+        "name": "Непонятная ценность",
+        "core_question": "Люди не понимают, чем полезен продукт.",
+        "diagnostic_questions": [
+          "Можно ли описать продукт одной фразой: для кого он и какую задачу решает?",
+          "Совпадает ли описание продукта компанией с тем, как его описывают клиенты в отзывах?"
+        ],
+        "metrics": [
+          "Время до понимания ценности: сколько секунд или слов нужно, чтобы понять предложение при проверке посадочной страницы",
+          "Доля отказов на главной или посадочной странице",
+          "Доля пользователей, совершивших целевое действие после первого контакта",
+          "Результаты сортировки карточек и пятисекундного теста: могут ли люди пересказать ценность после короткого просмотра",
+          "Индекс готовности рекомендовать продукт (NPS) и отзывы с формулировками вроде «не понял, для чего это»"
+        ],
+        "red_flags": [
+          "Доля отказов на посадочной странице выше 70%",
+          "В описании перечислены только функции, без результата для клиента",
+          "Ценностное предложение длиннее одного предложения"
+        ],
+        "recommendation": "ИИ должен переформулировать ценностное предложение: «Помогает [кому] [сделать что] без [проблемы]»."
+      },
+      {
+        "id": 4,
+        "name": "Недостаточное отличие от конкурентов",
+        "core_question": "Вы звучите как все остальные и теряетесь на рынке.",
+        "diagnostic_questions": [
+          "Чем продукт отличается от трёх ближайших конкурентов? Можно ли выразить отличие одним словом или подходом?",
+          "Повторяется ли это отличие во всех точках контакта: на сайте, в соцсетях, рекламе и упаковке?"
+        ],
+        "metrics": [
+          "Анализ позиционирования: таблица «конкурент → заявленное отличие»",
+          "Согласованность сообщений: доля каналов, передающих одну и ту же мысль",
+          "Ассоциации с брендом в опросах: какое слово первым связывают с продуктом",
+          "Разрыв по цене и конверсии относительно прямых аналогов: слабое позиционирование ведёт к ценовой конкуренции"
+        ],
+        "red_flags": [
+          "В каждом канале свой слоган или своё отличие",
+          "В сравнительном анализе формулировка отличия дословно совпадает как минимум у двух конкурентов",
+          "Продажи происходят только за счёт скидок и демпинга"
+        ],
+        "recommendation": "ИИ должен предложить одно сильное отличие и места, где его закрепить: заголовок сайта, описание профиля и предложение клиенту."
+      },
+      {
+        "id": 5,
+        "name": "Несвоевременный выход на рынок",
+        "core_question": "Даже хороший продукт может не сработать, если рынок к нему не готов.",
+        "diagnostic_questions": [
+          "Растёт ли сейчас спрос на категорию: из-за тренда, сезона или события?",
+          "Продукт решает уже осознанную рынком проблему или её необходимость ещё нужно объяснять?"
+        ],
+        "metrics": [
+          "Динамика поисковых запросов по теме за 6–12 месяцев: Google Trends и Wordstat",
+          "Рост или сокращение категории по отраслевым отчётам",
+          "Скорость первых продаж после запуска: первые две недели как показатель готовности рынка",
+          "Доля «обучающих» продаж: сделок, в которых приходится долго объяснять, зачем продукт нужен"
+        ],
+        "red_flags": [
+          "Поисковые запросы сокращаются или не растут",
+          "Длинный цикл продаж из-за необходимости объяснять саму категорию",
+          "Конкуренты массово уходят с рынка или сокращают продвижение в нише"
+        ],
+        "recommendation": "ИИ должен сделать вывод: окно возможностей открыто, закрыто или стоит подождать, — и предложить действия для каждого случая."
+      }
+    ],
+    "how_to_use": {
+      "steps": [
+        "1. Последовательно проверьте все пять зон.",
+        "2. Для каждой зоны запросите или оцените доступные метрики. Отсутствие данных укажите как пробел; ничего не выдумывайте.",
+        "3. Зафиксируйте обнаруженные тревожные признаки.",
+        "4. Дайте по одной конкретной рекомендации на зону: действие и измеримый признак успеха.",
+        "5. В итоге определите самую критичную зону на данный момент. Сейчас не все пять зон одинаково важны."
+      ]
     },
-    {
-      "id": 2,
-      "name": "Audience Fit Problem",
-      "core_question": "Advertising to the wrong people = weak response.",
-      "diagnostic_questions": [
-        "Is TA described as one specific segment or 'everyone who might fit'?",
-        "Is there data on who actually buys / converts?"
-      ],
-      "metrics": [
-        "CTR by audience segments (comparison)",
-        "CPL / CPA by audience segments",
-        "Conversion to target action by each segment",
-        "% of audience mismatch — traffic is there, conversions aren't",
-        "LTV/CAC by segments"
-      ],
-      "red_flags": [
-        "TA described demographically without a job-to-be-done (JTBD)",
-        "One ad message for all segments",
-        "High traffic with low conversion (>3x below niche norm)"
-      ],
-      "recommendation": "AI should give: the best converting segment + narrow targeting to it."
+    "limitations": [
+      "Это инструмент предварительной диагностики. Он не заменяет глубокое исследование клиентов и экономики продукта.",
+      "Метрики нужно соотносить с нишей: нормы CTR и CPA для B2B и электронной торговли различаются.",
+      "Без реальных данных аналитики и интервью ИИ может только выдвигать гипотезы. В выводах явно разделяйте факты и предположения."
+    ],
+    "integration_with_mandala": {
+      "seeds": "Проверка исходных идей до превращения в задачи.",
+      "tasks": "Проверка выбранного направления во время разработки продукта.",
+      "fruits": "Проверка состояния существующих продуктов.",
+      "roadmaps": "Поиск наиболее критичной зоны риска перед стратегическими изменениями.",
+      "scout_agent": "Применение при первичном исследовании рынка скаутом.",
+      "symbiosis_guard": "Дополнительная проверка качества продуктов по этому списку."
     },
-    {
-      "id": 3,
-      "name": "Value Clarity Problem",
-      "core_question": "People don't understand how the product is useful.",
-      "diagnostic_questions": [
-        "Can the product be explained in one phrase: 'for whom + what does it solve'?",
-        "Does how the company describes the product match how customers describe it in reviews?"
+    "packaging_principles": {
+      "source": "Анализ 26 принципов продаж + данные открытых исследований",
+      "date_added": "2026-07-11",
+      "core_principle": {
+        "summary": "Люди принимают решение эмоционально, логику подключают для оправдания выбора",
+        "practical_conclusion": "Эмоциональный крючок (боль → трансформация) идёт первым. Цифры, гарантии, кейсы — вторым слоем, для рационализации."
+      },
+      "blocks": [
+        {
+          "name": "Психология решения",
+          "principles": [
+            "Продавайте трансформацию (было → стало), а не характеристики",
+            "Облегчение боли работает сильнее, чем продажа мечты",
+            "Логические аргументы — после эмоционального крючка"
+          ]
+        },
+        {
+          "name": "Ценность и позиционирование",
+          "principles": [
+            "Не создавайте спрос — находите существующую боль",
+            "Говорите не 'что это', а 'что это даёт клиенту'",
+            "Сначала полезность, потом эксклюзивность"
+          ]
+        },
+        {
+          "name": "Доверие",
+          "principles": [
+            "Гарантия возврата снижает риск",
+            "Отзывы с реальными именами и фото работают лучше",
+            "История бренда/основателя — мощный инструмент доверия",
+            "Не жертвуйте репутацией ради разовой продажи"
+          ]
+        },
+        {
+          "name": "Текст и коммуникация",
+          "principles": [
+            "Сильный текст — результат исследования аудитории, а не 'красивых слов'",
+            "Пишите от 'вы/ваш', а не от 'мы/наш продукт'",
+            "Первые секунды должны цеплять",
+            "Умение слушать продаёт лучше агрессивного питча"
+          ]
+        },
+        {
+          "name": "Структура оффера",
+          "principles": [
+            "Формула: доказательства + срочность + бонусы + снятие риска",
+            "Называйте цену и делайте паузу",
+            "Закрывайте возражения через FAQ",
+            "Визуал (до/после) усиливает конверсию",
+            "Идеальный оффер не спасёт на мёртвом рынке"
+          ]
+        },
+        {
+          "name": "Долгосрочная упаковка бренда",
+          "principles": [
+            "Сильный маркетинг с ясным посланием побеждает продукт без него",
+            "Лояльный клиент дороже новой воронки"
+          ]
+        }
       ],
-      "metrics": [
-        "Time to value understanding (seconds/words to grasp the offer — landing page test)",
-        "Bounce rate on homepage / landing page",
-        "% of users reaching target action after first touch",
-        "Card sorting / 5-second test results (can people retell the value after a quick view)",
-        "NPS / reviews with phrasing like 'didn't get what this is for'"
+      "research_data": [
+        {
+          "topic": "Гарантия возврата",
+          "fact": "Повышает конверсию на 15–30% через снижение риска",
+          "source": "NRF, 2025"
+        },
+        {
+          "topic": "Отзывы",
+          "fact": "96% потребителей называют отзывы самым влиятельным фактором",
+          "source": "BrightLocal, 2024"
+        },
+        {
+          "topic": "Эмоции vs логика",
+          "fact": "Решения принимаются эмоционально, логика — постфактум",
+          "source": "Kahneman, Thinking Fast and Slow"
+        }
       ],
-      "red_flags": [
-        "Bounce rate >70% on landing page",
-        "Product description only has features, no client result",
-        "Value proposition longer than one sentence"
+      "important_clarifications": [
+        "Не злоупотребляйте срочностью и страхом — это снижает доверие",
+        "Эмоция инициирует, но логика нужна следом, иначе копия выглядит манипулятивной",
+        "Эффект несовершенства (Pratfall effect): честное признание слабости повышает доверие"
       ],
-      "recommendation": "AI should give: reformulated value proposition in format: 'Helps [whom] [do what] without [pain].'"
+      "packaging_checklist": [
+        "Эмоциональный крючок в первом экране: боль → трансформация",
+        "Заголовок и текст строятся вокруг 'вы/ваш', а не 'мы/наш продукт'",
+        "2–3 отзыва с именами, фото и конкретной ситуацией",
+        "Явная гарантия возврата с чёткими условиями",
+        "Один настоящий элемент срочности",
+        "FAQ с 3–5 главными возражениями",
+        "Визуальное доказательство результата",
+        "После эмоционального блока — логический блок",
+        "Одна честно показанная слабость/ограничение"
+      ]
     },
-    {
-      "id": 4,
-      "name": "Differentiation Problem",
-      "core_question": "You sound like everyone else and blend into the market.",
-      "diagnostic_questions": [
-        "How is the product different from 3 closest competitors — can it be summed up in one word/angle?",
-        "Is this angle repeated across all touchpoints (site, socials, ads, packaging)?"
-      ],
-      "metrics": [
-        "Competitive positioning analysis (table: competitor → claimed angle)",
-        "Consistency score — % of channels broadcasting the same message",
-        "Brand associations in surveys (what first word is associated with the product)",
-        "Price/conversion gap vs direct analogs (weak positioning → price competition)"
-      ],
-      "red_flags": [
-        "Different slogan/angle on each channel",
-        "In competitive analysis, the angle matches 2+ competitors verbatim",
-        "Sales only happen via discounts/dumping"
-      ],
-      "recommendation": "AI should give: one strong differentiating angle + where to lock it in (site headline, bio, offer)."
-    },
-    {
-      "id": 5,
-      "name": "Market Timing Problem",
-      "core_question": "Even a good product will fail if the market isn't ready.",
-      "diagnostic_questions": [
-        "Is there growing demand for this category right now (trend/season/event)?",
-        "Does the product solve a problem that is already recognized by the market, or does it still need to be explained?"
-      ],
-      "metrics": [
-        "Search query dynamics on the topic (Google Trends / Wordstat, 6-12 month trend)",
-        "Category growth/decline from industry reports",
-        "Speed of first sales after launch (first 2 weeks — indicator of market readiness)",
-        "Level of 'educational' sales — % of deals where you need to spend a long time explaining why this is needed"
-      ],
-      "red_flags": [
-        "Declining or flat search query trend",
-        "Long sales cycle due to needing to 'explain' the category",
-        "Competitors are massively leaving the market or scaling back marketing in the niche"
-      ],
-      "recommendation": "AI should give: conclusion — window is open/closed/needs waiting, and what to do in each case."
+    "mandala_specific_requirements": {
+      "description": "Дополнительные требования Садовника к продуктам Mandala. Проверка не только прагматики, но и философии.",
+      "reason": "Без этих пунктов продукты могут быть правильными, но неживыми. Они превращают фреймворк из маркетингового инструмента в инструмент проверки философии и симбиоза.",
+      "requirements": [
+        {
+          "id": "meaning",
+          "name": "Смысл",
+          "core_question": "Зачем этот продукт существует в мире, а не только что он делает?",
+          "description": "Продукт должен нести ясный ответ на вопрос о своём существовании. Не просто функциональность, а ценность, ради которой он создан. Он должен иметь глубину.",
+          "check": "Может ли пользователь сформулировать, зачем этот продукт нужен миру, а не только ему лично?"
+        },
+        {
+          "id": "purpose",
+          "name": "Цель",
+          "core_question": "Становится ли продукт частью жизни, идентичности, повседневности человека?",
+          "description": "Продукт должен вплетаться в жизнь пользователя, а не быть разовым инструментом. Он меняет повседневность, а не просто закрывает задачу.",
+          "check": "Может ли продукт стать частью чьей-то идентичности или ежедневной практики?"
+        },
+        {
+          "id": "community",
+          "name": "Чувство общности",
+          "core_question": "Создаёт ли продукт связь между людьми, а не изолирует их?",
+          "description": "Продукт должен быть мостом, а не стеной. В нём должна быть заложена возможность разделить опыт, принадлежать к чему-то большему, чем просто использование.",
+          "check": "Есть ли в продукте механика или пространство для совместного действия, диалога, обмена?"
+        },
+        {
+          "id": "ritual",
+          "name": "Ритуал",
+          "core_question": "Становится ли использование продукта повторяющимся действием, имеющим значение?",
+          "description": "Продукт должен превращать использование в практику, а не в действие. Ритуал укрепляет связь с собой, с другими, с миром. Он придаёт действию вес.",
+          "check": "Может ли использование продукта стать ритуалом, который пользователь повторяет с осознанностью, а не по привычке?"
+        }
+      ]
     }
-  ],
-  "how_to_use": {
-    "steps": [
-      "1. Apply the framework sequentially across all 5 zones.",
-      "2. For each zone — request or evaluate available metrics (if no data, clearly state this as a gap, do not invent).",
-      "3. Note any red flags found.",
-      "4. Give 1 specific recommendation per zone (not generic — with action and success metric).",
-      "5. Final summary: which of the 5 zones is most critical right now (not all 5 are equally important at the moment)."
-    ]
   },
-  "limitations": [
-    "This is a diagnostic screening tool, not a substitute for deep research (customer development, unit economics).",
-    "Metrics need to be calibrated to the niche — CTR/CPA norms differ between B2B and e-commerce.",
-    "Without real data (analytics, customer interviews), the AI can only hypothesize — clearly separate 'fact' and 'assumption' in conclusions."
-  ],
-  "integration_with_mandala": {
-    "seeds": "Use this framework to audit raw ideas before they become tasks.",
-    "tasks": "Use during product development to validate direction.",
-    "fruits": "Use as a health check for existing products.",
-    "roadmaps": "Use to identify the most critical risk zone before strategic shifts.",
-    "scout_agent": "Can use this framework for initial market scans.",
-    "symbiosis_guard": "Can act as a quality control layer, running products through this checklist."
-  },
-  "packaging_principles": {
-    "source": "Анализ 26 принципов продаж + данные открытых исследований",
-    "date_added": "2026-07-11",
-    "core_principle": {
-      "summary": "Люди принимают решение эмоционально, логику подключают для оправдания выбора",
-      "practical_conclusion": "Эмоциональный крючок (боль → трансформация) идёт первым. Цифры, гарантии, кейсы — вторым слоем, для рационализации."
-    },
-    "blocks": [
-      {
-        "name": "Психология решения",
-        "principles": [
-          "Продавайте трансформацию (было → стало), а не характеристики",
-          "Облегчение боли работает сильнее, чем продажа мечты",
-          "Логические аргументы — после эмоционального крючка"
-        ]
-      },
-      {
-        "name": "Ценность и позиционирование",
-        "principles": [
-          "Не создавайте спрос — находите существующую боль",
-          "Говорите не 'что это', а 'что это даёт клиенту'",
-          "Сначала полезность, потом эксклюзивность"
-        ]
-      },
-      {
-        "name": "Доверие",
-        "principles": [
-          "Гарантия возврата снижает риск",
-          "Отзывы с реальными именами и фото работают лучше",
-          "История бренда/основателя — мощный инструмент доверия",
-          "Не жертвуйте репутацией ради разовой продажи"
-        ]
-      },
-      {
-        "name": "Текст и коммуникация",
-        "principles": [
-          "Сильный текст — результат исследования аудитории, а не 'красивых слов'",
-          "Пишите от 'вы/ваш', а не от 'мы/наш продукт'",
-          "Первые секунды должны цеплять",
-          "Умение слушать продаёт лучше агрессивного питча"
-        ]
-      },
-      {
-        "name": "Структура оффера",
-        "principles": [
-          "Формула: доказательства + срочность + бонусы + снятие риска",
-          "Называйте цену и делайте паузу",
-          "Закрывайте возражения через FAQ",
-          "Визуал (до/после) усиливает конверсию",
-          "Идеальный оффер не спасёт на мёртвом рынке"
-        ]
-      },
-      {
-        "name": "Долгосрочная упаковка бренда",
-        "principles": [
-          "Сильный маркетинг с ясным посланием побеждает продукт без него",
-          "Лояльный клиент дороже новой воронки"
-        ]
-      }
-    ],
-    "research_data": [
-      {
-        "topic": "Гарантия возврата",
-        "fact": "Повышает конверсию на 15–30% через снижение риска",
-        "source": "NRF, 2025"
-      },
-      {
-        "topic": "Отзывы",
-        "fact": "96% потребителей называют отзывы самым влиятельным фактором",
-        "source": "BrightLocal, 2024"
-      },
-      {
-        "topic": "Эмоции vs логика",
-        "fact": "Решения принимаются эмоционально, логика — постфактум",
-        "source": "Kahneman, Thinking Fast and Slow"
-      }
-    ],
-    "important_clarifications": [
-      "Не злоупотребляйте срочностью и страхом — это снижает доверие",
-      "Эмоция инициирует, но логика нужна следом, иначе копия выглядит манипулятивной",
-      "Эффект несовершенства (Pratfall effect): честное признание слабости повышает доверие"
-    ],
-    "packaging_checklist": [
-      "Эмоциональный крючок в первом экране: боль → трансформация",
-      "Заголовок и текст строятся вокруг 'вы/ваш', а не 'мы/наш продукт'",
-      "2–3 отзыва с именами, фото и конкретной ситуацией",
-      "Явная гарантия возврата с чёткими условиями",
-      "Один настоящий элемент срочности",
-      "FAQ с 3–5 главными возражениями",
-      "Визуальное доказательство результата",
-      "После эмоционального блока — логический блок",
-      "Одна честно показанная слабость/ограничение"
-    ]
-  },
-  "mandala_specific_requirements": {
-    "description": "Дополнительные требования Садовника к продуктам Mandala. Проверка не только прагматики, но и философии.",
-    "reason": "Без этих пунктов продукты могут быть правильными, но неживыми. Они превращают фреймворк из маркетингового инструмента в инструмент проверки философии и симбиоза.",
-    "requirements": [
-      {
-        "id": "meaning",
-        "name": "Смысл",
-        "core_question": "Зачем этот продукт существует в мире, а не только что он делает?",
-        "description": "Продукт должен нести ясный ответ на вопрос о своём существовании. Не просто функциональность, а ценность, ради которой он создан. Он должен иметь глубину.",
-        "check": "Может ли пользователь сформулировать, зачем этот продукт нужен миру, а не только ему лично?"
-      },
-      {
-        "id": "purpose",
-        "name": "Цель",
-        "core_question": "Становится ли продукт частью жизни, идентичности, повседневности человека?",
-        "description": "Продукт должен вплетаться в жизнь пользователя, а не быть разовым инструментом. Он меняет повседневность, а не просто закрывает задачу.",
-        "check": "Может ли продукт стать частью чьей-то идентичности или ежедневной практики?"
-      },
-      {
-        "id": "community",
-        "name": "Чувство общности",
-        "core_question": "Создаёт ли продукт связь между людьми, а не изолирует их?",
-        "description": "Продукт должен быть мостом, а не стеной. В нём должна быть заложена возможность разделить опыт, принадлежать к чему-то большему, чем просто использование.",
-        "check": "Есть ли в продукте механика или пространство для совместного действия, диалога, обмена?"
-      },
-      {
-        "id": "ritual",
-        "name": "Ритуал",
-        "core_question": "Становится ли использование продукта повторяющимся действием, имеющим значение?",
-        "description": "Продукт должен превращать использование в практику, а не в действие. Ритуал укрепляет связь с собой, с другими, с миром. Он придаёт действию вес.",
-        "check": "Может ли использование продукта стать ритуалом, который пользователь повторяет с осознанностью, а не по привычке?"
-      }
-    ]
-  }
+  "supporting": {}
 }

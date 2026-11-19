@@ -1,6 +1,7 @@
 {
   "content": {
     "critical_rules": {
+      "module_readme_rule": "Перед изменением файлов примени README.md в корне репозитория, раздел «Работа с модулем». Загрузи недостающие актуальные README затронутых модулей и родителей. Если правила уже есть в контексте и актуальны, повторное чтение не требуется. Проверяй ревизию через GitHub. Подробный порядок хранится только в корневом README.",
       "pre_check_mandatory": "Before any patch, read the file and note its version. This is your pre-check.",
       "pre_check_flow": {
         "description": "NEVER assume local state. ALWAYS fetch current version before modifying.",
@@ -393,22 +394,31 @@
       }
     },
     "knowledge_index_management": {
-      "description": "Управление индексом базы знаний (knowledge/index.json).",
+      "description": "Управление базой знаний. Сначала прочитай honeycombs/knowledge/README.md и material.schema.json. Все материалы используют единую схему. Индекс knowledge/index.json генерируется автоматически; вручную его не редактируй.",
       "steps_to_add": [
-        "Создать файл в honeycombs/knowledge/",
-        "Добавить запись в contents с полями: id, name, file, description, source, date_added, version",
-        "Увеличить metrics.total_resources",
-        "Обновить metrics.last_updated",
-        "Обновить identity.version (например, v1.1.0 → v1.1.1)"
+        "Создать файл по material.schema.json с устойчивым id и русскими title, summary и содержанием",
+        "Выбрать kind и area по README и taxonomy.json; сохранить источники и дату проверки фактов",
+        "При локальном доступе запустить python -m mge dashboard из honeycombs/fruits/mge: индекс, страницы и граф обновятся автоматически",
+        "При работе только через GitHub сохранить исходник: после публикации индекс пересобирает MGE, а страницы — GitHub Pages",
+        "Проверить готовые страницы, индекс и отсутствие ошибок сборки"
       ],
       "example_resource": {
-        "id": "startup_legal_docs_guide",
-        "name": "18 юридических документов для стартапа",
-        "file": "startup_legal_docs_guide.json",
-        "description": "...",
-        "source": "Dialogue between Gardener and External SR",
-        "date_added": "2026-07-14",
-        "version": "v1.0.0"
+        "schema_version": "1.0",
+        "id": "example_reference",
+        "aliases": [],
+        "kind": "reference",
+        "title": "Пример справочника",
+        "summary": "Краткое описание назначения справочника.",
+        "area": "mandala",
+        "tags": [],
+        "version": "v1.0.0",
+        "created": null,
+        "updated": null,
+        "verification": {"checked_at": null, "scope": null},
+        "sources": [],
+        "related": [],
+        "content": {"what": "Основное содержание на русском языке."},
+        "supporting": {}
       }
     },
     "youtube_marketing_pipelines": {

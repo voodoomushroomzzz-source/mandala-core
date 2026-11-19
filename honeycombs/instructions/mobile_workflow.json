@@ -385,11 +385,11 @@
     "update_index": "Обновить works/index.json: добавить в works_list, увеличить total_works, обновить by_status, by_horizon, by_priority, добавить related_works"
   },
   "knowledge_index_mobile": {
-    "description": "Обновление knowledge/index.json из Termux.",
+    "description": "Обновление Knowledge из Termux. Все материалы используют material.schema.json. Правила находятся в honeycombs/knowledge/README.md; навигационный индекс генерируется и не редактируется вручную.",
     "steps": [
-      "Создать файл в honeycombs/knowledge/",
-      "Добавить запись в contents",
-      "Обновить total_resources, last_updated, identity.version"
+      "Создать или обновить исходник материала по material.schema.json на русском языке",
+      "Запустить python -m mge dashboard из honeycombs/fruits/mge либо после публикации проверить сборки MGE и GitHub Pages",
+      "Проверить карточку, страницу чтения, автоматически собранный индекс и связи"
     ]
   },
   "seed_management_mobile": {

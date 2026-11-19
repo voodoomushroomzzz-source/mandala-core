@@ -1,0 +1,48 @@
+{
+  "version": "v1.0.0",
+  "updated": "2026-11-19",
+  "instructions": "personal_taskboard.md",
+  "tasks": [
+    {
+      "id": "A-TASK-003",
+      "source_file": "honeycombs/personal/career.json",
+      "source_collection": "/task_tracker/packaging_tasks",
+      "record_id": "A-TASK-003",
+      "direction": "career",
+      "now": true
+    },
+    {
+      "id": "A-TASK-004",
+      "source_file": "honeycombs/personal/career.json",
+      "source_collection": "/task_tracker/packaging_tasks",
+      "record_id": "A-TASK-004",
+      "direction": "career",
+      "now": false,
+      "deadline_confirmed": false,
+      "priority_confirmed": false,
+      "context": "После разбора резюме проверить площадки и существующие размещения. Старый список платформ, срок и приоритет требуют сверки; публикации не выполнены."
+    },
+    {
+      "id": "A-TASK-005",
+      "source_file": "honeycombs/personal/career.json",
+      "source_collection": "/task_tracker/packaging_tasks",
+      "record_id": "A-TASK-005",
+      "direction": "career",
+      "now": false,
+      "deadline_confirmed": false,
+      "priority_confirmed": false,
+      "context": "После разбора резюме проверить площадки и существующие размещения. Старый список платформ, срок и приоритет требуют сверки; публикации не выполнены."
+    },
+    {
+      "id": "PER-001",
+      "name": "Пересмотреть маршрут обучения под актуальные цели",
+      "description": "Пересмотреть обучение после разбора резюме и проверки площадок. Конкретные курсы и язык обучения ещё не выбраны.",
+      "direction": "learning",
+      "status": "perspective",
+      "priority": null,
+      "deadline": null,
+      "now": false,
+      "next_step": "После разбора резюме определить пробелы и подобрать интересное прикладное обучение разработке, архитектуре и безопасности вместо автоматического продолжения базового сертификатного ИИ-плана."
+    }
+  ]
+}

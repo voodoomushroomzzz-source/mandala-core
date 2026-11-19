@@ -195,22 +195,20 @@ def parse_knowledge(knowledge_path=None) -> dict:
     if knowledge_path is None:
         root = find_repo_root()
         knowledge_path = root / "honeycombs" / "knowledge" / "index.json"
-    data = read_json(knowledge_path)
-
+    from mge.knowledge import load_knowledge
+    collection = load_knowledge(Path(knowledge_path).parent)
     nodes = []
     edges = []
-
-    for item in data.get("contents", []):
-        kid = item.get("id", "")
-        if not kid:
-            continue
+    for item in collection["materials"]:
         nodes.append({
-            "id": "K-" + kid,
+            "id": item["graph_id"],
             "type": "knowledge",
-            "path": "honeycombs/knowledge/" + (item.get("file") or ""),
-            "description": item.get("description", "")
+            "name": item["title"],
+            "path": item["path"],
+            "description": item["summary"]
         })
-        edges.append({"from": "knowledge", "to": "K-" + kid, "type": "contains"})
+        parent = "K-ai_tools" if item["category"] else "knowledge"
+        edges.append({"from": parent, "to": item["graph_id"], "type": "contains"})
 
     return {"nodes": nodes, "edges": edges}
 

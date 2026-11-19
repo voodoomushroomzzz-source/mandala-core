@@ -5,6 +5,8 @@ on:
   push:
     paths:
       - 'index.html'
+      - 'assets/**'
+      - 'manifest.webmanifest'
       - '.github/workflows/pages-deploy.yml'
       - 'honeycombs/**'
       - '!honeycombs/fruits/mge/output/**'

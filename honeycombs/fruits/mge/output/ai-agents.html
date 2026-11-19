@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ИИ-агенты (фреймворки) — Knowledge</title>
+<link rel="icon" href="../../../../assets/mandala.svg" type="image/svg+xml">
+<style>
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #0d1117; color: #e6edf3; font: 17px/1.8 "Segoe UI", sans-serif; }
+main { max-width: 800px; margin: auto; padding: 28px 22px 64px; }
+a { color: #84b9ff; overflow-wrap: anywhere; }
+nav { display: flex; flex-wrap: wrap; gap: 20px; font-size: 15px; }
+header { text-align: center; padding: 44px 0 30px; }
+h1 { letter-spacing: .04em; font-size: clamp(26px, 5vw, 42px); line-height: 1.3; margin: 0; overflow-wrap: anywhere; }
+.subtitle { font-size: clamp(19px, 4vw, 25px); color: #b8a1e6; }
+.meta { color: #a7b4c5; font-size: 13px; }
+.notice { border-left: 3px solid #a371f7; padding: 10px 16px; background: #161b22; font-size: 14px; }
+.toc { margin: 28px 0; padding: 18px 22px; background: #161b22; border-radius: 12px; }
+.toc ol { margin-bottom: 0; padding-left: 22px; }
+article section { padding: 12px 0; scroll-margin-top: 20px; }
+h2 { font-size: clamp(22px, 4vw, 29px); line-height: 1.4; margin-top: 24px; }
+p { white-space: pre-line; overflow-wrap: anywhere; }
+.extras { margin-top: 48px; border-top: 1px solid #30363d; }
+details { border-bottom: 1px solid #30363d; }
+summary { cursor: pointer; padding: 16px 32px 16px 0; position: relative; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: '⌄'; position: absolute; right: 6px; top: 16px; }
+details[open] > summary::after { transform: rotate(180deg); }
+.extra-body { padding: 0 8px 20px; font-size: 15px; }
+dt { color: #b8a1e6; font-weight: 600; margin-top: 18px; }
+dd { margin-left: 16px; }
+pre { overflow: auto; padding: 14px; background: #161b22; font-size: 13px; }
+:focus-visible { outline: 2px solid #84b9ff; outline-offset: 4px; }
+@media print { body { background: white; color: black; } nav, .toc, .extras, .notice { display: none; } }
+</style></head><body><main>
+<nav><a href="knowledge.html#tool-ai-agents">← Knowledge</a><a href="../../../../index.html">Главная</a></nav>
+<header><h1>ИИ-агенты (фреймворки)</h1><p class="subtitle">Фреймворки и SDK для создания агентов — автономных ИИ-систем, которые выполняют многошаговые задачи без участия человека. В 2026 году рынок разделился на три типа: графовые (LangGraph), ролевые (CrewAI) и провайдер-нейтивы.</p>
+<p class="meta">Версия не указана · Обновлено 2026-11-19
+· Создано не указано</p>
+<p class="meta">Проверено: 2026-07-24<br>Дата перенесена из прежнего индекса. При миграции новая проверка фактов не проводилась.</p></header>
+<p class="notice">Текст показан из сохранённой версии материала без редакторских изменений.
+Дата обновления не означает новую проверку актуальности упомянутых продуктов и планов.</p>
+<nav class="toc" aria-label="Оглавление"><div><strong>Содержание</strong><ol><li><a href="#section-1">Когда применять</a></li><li><a href="#section-2">LangGraph</a></li><li><a href="#section-3">CrewAI</a></li><li><a href="#section-4">Microsoft Agent Framework (MAF)</a></li><li><a href="#section-5">Google Agent Development Kit (ADK)</a></li><li><a href="#section-6">OpenAI Agents SDK</a></li><li><a href="#section-7">LlamaIndex Workflows</a></li></ol></div></nav>
+<article aria-label="Текст материала"><section id="section-1"><h2>Когда применять</h2><p>Создание сложных систем с несколькими агентами, автоматизация длительных процессов (исследования, кодинг, поддержка), интеграция с API и данными.</p></section><section id="section-2"><h2>LangGraph</h2><dl><dt>Адрес</dt><dd><p><a href="https://www.langchain.com/langgraph" rel="noopener noreferrer">https://www.langchain.com/langgraph</a></p></dd><dt>Описание</dt><dd><p>Low-level фреймворк для построения stateful, графовых агентов с чекпоинтами и time-travel отладкой. Лучший выбор для production-систем.</p></dd><dt>Плюсы</dt><dd><ul><li><p>Графовая модель</p></li><li><p>Чекпоинты и time-travel отладка</p></li><li><p>Модель-агностик</p></li><li><p>Нативная интеграция с LangSmith</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>Самый сложный для старта</p></li><li><p>Операционно тяжелый</p></li><li><p>Абстракции LangChain</p></li></ul></dd></dl></section><section id="section-3"><h2>CrewAI</h2><dl><dt>Адрес</dt><dd><p><a href="https://crewai.com" rel="noopener noreferrer">https://crewai.com</a></p></dd><dt>Описание</dt><dd><p>Фреймворк для создания команд агентов с ролями. Самый быстрый старт для multi-agent систем.</p></dd><dt>Плюсы</dt><dd><ul><li><p>Ролевая модель</p></li><li><p>Низкий порог входа</p></li><li><p>Модель-агностик</p></li><li><p>Поддерживает MCP-серверы</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>Меньше контроля на каждом шаге</p></li><li><p>Нет чекпоинтов и time-travel</p></li><li><p>Токен-оверхед ~3x</p></li></ul></dd></dl></section><section id="section-4"><h2>Microsoft Agent Framework (MAF)</h2><dl><dt>Адрес</dt><dd><p><a href="https://github.com/microsoft/agent-framework" rel="noopener noreferrer">https://github.com/microsoft/agent-framework</a></p></dd><dt>Описание</dt><dd><p>Рекомендованный наследник AutoGen и Semantic Kernel. Объединяет креативную и детерминированную оркестрацию.</p></dd><dt>Плюсы</dt><dd><ul><li><p>C# и Python parity</p></li><li><p>Нативная поддержка A2A-протокола</p></li><li><p>Интеграция с Azure AI Foundry</p></li><li><p>Контроль человеком на промежуточных этапах</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>Самый молодой из мейнстрим-фреймворков</p></li><li><p>Привязка к Azure</p></li><li><p>Меньше готовых интеграций</p></li></ul></dd></dl></section><section id="section-5"><h2>Google Agent Development Kit (ADK)</h2><dl><dt>Адрес</dt><dd><p><a href="https://google.github.io/adk-docs/" rel="noopener noreferrer">https://google.github.io/adk-docs/</a></p></dd><dt>Описание</dt><dd><p>Фреймворк Google для построения иерархических агентов с нативной Vertex AI интеграцией.</p></dd><dt>Плюсы</dt><dd><ul><li><p>Интеграция с Vertex AI</p></li><li><p>Иерархическая модель</p></li><li><p>Встроенная отладка</p></li><li><p>Поддержка 5+ языков</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>Gemini-ориентирован</p></li><li><p>Меньше интеграций вне Google Cloud</p></li><li><p>Зависимость от экосистемы Google</p></li></ul></dd></dl></section><section id="section-6"><h2>OpenAI Agents SDK</h2><dl><dt>Адрес</dt><dd><p><a href="https://platform.openai.com/docs/agents-sdk" rel="noopener noreferrer">https://platform.openai.com/docs/agents-sdk</a></p></dd><dt>Описание</dt><dd><p>Provider-native SDK от OpenAI. Нативная MCP-поддержка и улучшенная работа с инструментами.</p></dd><dt>Плюсы</dt><dd><ul><li><p>Самый чистый developer experience</p></li><li><p>Нативная поддержка всех новейших функций OpenAI</p></li><li><p>Apache 2.0 лицензия</p></li><li><p>Хорош для production</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>OpenAI-first по дизайну</p></li><li><p>Меньше гибкости для сложных workflow</p></li><li><p>Не замена LangGraph</p></li></ul></dd></dl></section><section id="section-7"><h2>LlamaIndex Workflows</h2><dl><dt>Адрес</dt><dd><p><a href="https://www.llamaindex.ai" rel="noopener noreferrer">https://www.llamaindex.ai</a></p></dd><dt>Описание</dt><dd><p>Data-first фреймворк для построения агентов на основе документов и данных. Best-in-class для RAG-агентов.</p></dd><dt>Плюсы</dt><dd><ul><li><p>Лучший для knowledge-heavy агентов</p></li><li><p>Сильная работа с памятью</p></li><li><p>Документация и материалы</p></li><li><p>MIT лицензия</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>Слаб для action-heavy систем</p></li><li><p>Ограниченная multi-agent оркестрация</p></li><li><p>Меньше enterprise-деплоев</p></li></ul></dd></dl></section></article>
+<section class="extras"><h2>Дополнительные материалы</h2></section>
+<p class="meta"><a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/knowledge/ai_tools/ai-agents.json">Исходный материал</a></p>
+</main></body></html>

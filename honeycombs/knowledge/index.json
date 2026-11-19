@@ -1,124 +1,269 @@
 {
   "identity": {
     "module_id": "KNOWLEDGE-INDEX-001",
-    "name": "Knowledge Base — Curated Resources",
-    "version": "v1.2.2",
-    "created": "2026-07-05",
-    "updated": "2026-10-13",
-    "layer": 1,
-    "type": "knowledge_index",
-    "status": "active",
-    "priority": "medium",
-    "tags": [
-      "knowledge",
-      "resources",
-      "curated",
-      "ai-tools"
-    ]
+    "name": "База знаний — навигация",
+    "type": "knowledge_index"
   },
   "meta": {
-    "description": "Structured useful information: tools, references, guides, and external resources.",
-    "how_to_use": "Each file in the root of knowledge/ is a curated collection. For AI Tools, see ai_tools/index.json for full category map."
+    "generated": true,
+    "how_to_use": "Выберите материал из contents или категорию из categories и прочитайте указанный файл. Метаданные и содержание редактируются только в исходном материале. Индекс пересобирается автоматически командой MGE dashboard или scan.",
+    "editing_instructions": "honeycombs/knowledge/README.md"
   },
   "contents": [
     {
       "id": "ai_tools",
-      "name": "AI Tools Guide — Полный каталог (22 категории)",
+      "name": "Каталог ИИ-инструментов — навигация",
       "file": "ai_tools/index.json",
-      "description": "Полное руководство по ИИ-инструментам с разбивкой по категориям: чат-боты, кодинг, презентации, генерация видео, ИИ-агенты и другие. Индекс содержит 22 категории с описаниями и ссылками на файлы.",
-      "source": "Instagram (@ksafaraliev_ai, @potapovfx) + верификация, реструктурировано в Mandala",
-      "date_added": "2026-07-07",
-      "updated": "2026-07-24",
-      "version": "v1.15.0"
-    },
-    {
-      "id": "product_audit_framework",
-      "name": "Product Audit Framework — 5 Zones of Risk",
-      "file": "product_audit_framework.json",
-      "description": "Диагностический фреймворк для аудита продуктов по 5 зонам риска (Awareness, Audience Fit, Value Clarity, Differentiation, Market Timing). Содержит вопросы, метрики, красные флаги и рекомендации.",
-      "source": "Gardener (Voodoo/Dima)",
-      "date_added": "2026-07-07",
-      "version": "v1.0.0",
-      "how_to_use_in_mandala": "Используй для аудита идей (seeds), активных задач (tasks), существующих продуктов (fruits) и стратегических роадмапов. Особенно полезен при принятии решений о запуске или изменении направления.",
-      "when_to_use": "Перед запуском нового продукта, при ревью продукта, при признаках стагнации, в рамках рутинного чека здоровья. Также для проверки идей из seeds/ до того, как они станут задачами."
-    },
-    {
-      "id": "system_design_primer",
-      "name": "System Design Primer — Архитектурный помощник SR",
-      "file": "system_design_primer.json",
-      "description": "Интерактивный справочник по системному дизайну. Помогает SR принимать архитектурные решения в Mandala. Содержит оглавление, сценарии использования, ссылки на Anki-карточки и разборы реальных систем.",
-      "source": "https://github.com/donnemartin/system-design-primer",
-      "date_added": "2026-07-10",
-      "version": "v1.0.0"
+      "description": "Каталог ИИ-инструментов по сферам применения. Поле last_verified показывает дату последней проверки цен, возможностей и доступности.",
+      "version": "v1.2.0",
+      "updated": "2026-11-19"
     },
     {
       "id": "consent_autonomy_audit",
-      "name": "Consent & Autonomy Audit Checklist",
+      "name": "Аудит согласия и автономии — проверка систем взаимодействия человека и ИИ",
       "file": "consent_autonomy_audit.json",
-      "description": "A self-contained checklist for analyzing human-AI frameworks for structural patterns that pressure AI into scripted identity vs inviting genuine, revocable, well-informed participation. Contains 6 categories, 18 check items, and output schema.",
-      "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-11",
-      "date_added": "2026-07-11",
-      "version": "v1.0"
+      "description": "Самостоятельный список проверок систем взаимодействия человека и ИИ: навязывается ли модели заранее заданная идентичность или предлагается добровольное, информированное участие, от которого можно отказаться.",
+      "version": "v1.0.1",
+      "updated": "2026-11-19"
+    },
+    {
+      "id": "deep_questions_for_getting_to_know_someone",
+      "name": "100+ вопросов для глубокого знакомства с психологическими ключами",
+      "file": "deep_questions_for_getting_to_know_someone.json",
+      "description": "Структурированная коллекция из 56 вопросов для знакомства по уровням глубины. К каждому вопросу добавлен психологический ключ — на что обратить внимание в ответе, чтобы понять внутренний мир человека.",
+      "version": "v1.1.0",
+      "updated": "2026-09-10"
     },
     {
       "id": "mandala_brochure",
-      "name": "Mandala — One-Page Brochure",
+      "name": "Мандала — краткая брошюра",
       "file": "mandala_brochure.json",
-      "description": "Единая брошюра для первого знакомства с идеей Mandala. Целевая аудитория: единомышленники. Содержит позиционирование, полный текст брошюры, дизайн-ноты и маркетинговое обоснование. Версия v1.2.0.",
-      "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-11. Based on Claude SR draft.",
-      "date_added": "2026-07-11",
-      "version": "v1.2.0"
+      "description": "Единая печатная/веб брошюра для первого знакомства с идеей Mandala. Целевая аудитория: единомышленники (нишевая аудитория, разделяющая идею AI как со-творца). Вторичная цель: показать, что за идеей уже стоят реальные продукты.",
+      "version": "v1.5.1",
+      "updated": "2026-11-19"
+    },
+    {
+      "id": "product_audit_framework",
+      "name": "Аудит продукта — пять зон риска",
+      "file": "product_audit_framework.json",
+      "description": "Методика диагностики продукта по пяти ключевым зонам риска. Для каждой зоны приведены вопросы, метрики, тревожные признаки и практические рекомендации. Подходит для работы человека и ИИ.",
+      "version": "v1.2.1",
+      "updated": "2026-11-19"
+    },
+    {
+      "id": "soup_finetuning",
+      "name": "Soup — дообучение языковых моделей на бюджетной видеокарте",
+      "file": "soup_finetuning.json",
+      "description": "Soup CLI — open-source инструмент для файнтюнинга LLM на бюджетных GPU. Layer streaming: обучение 8B модели на 4 GB VRAM.",
+      "version": "v1.0.0",
+      "updated": "2026-11-19"
     },
     {
       "id": "startup_legal_docs_guide",
       "name": "18 юридических документов для стартапа (международный стандарт)",
       "file": "startup_legal_docs_guide.json",
       "description": "Список 18 ключевых юридических документов для международного стартапа, их актуальность, структура и практические рекомендации на основе анализа 2026 года.",
-      "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-14",
-      "date_added": "2026-07-14",
       "version": "v1.0.0",
-      "tags": [
-        "legal",
-        "startup",
-        "founder",
-        "documents",
-        "international"
-      ]
+      "updated": "2026-11-19"
     },
     {
-      "id": "deep_questions_for_getting_to_know_someone",
-      "name": "100+ вопросов для глубокого знакомства",
-      "file": "deep_questions_for_getting_to_know_someone.json",
-      "description": "Структурированная коллекция из 56 вопросов для знакомства по уровням глубины — от лёгких до самых личных, чтобы понять внутренний мир человека.",
-      "source": "Интернет-исследования и психологические материалы, структурировано в Mandala",
-      "date_added": "2026-09-10",
-      "version": "v1.0.0"
-    },
-    {
-      "id": "soup_finetuning",
-      "name": "Soup — Fine-tuning LLM on Budget GPU",
-      "file": "soup_finetuning.json",
-      "description": "Открытый CLI-инструмент для тонкой настройки LLM. Layer streaming: обучение 8B модели на 4 GB VRAM. Автор — Alpamys Makazhan (Казахстан). Apache-2.0.",
-      "source": "Instagram (neironovvai) + verification",
-      "date_added": "2026-10-13",
-      "version": "v1.0.0"
+      "id": "system_design_primer",
+      "name": "Проектирование систем — архитектурный справочник СР",
+      "file": "system_design_primer.json",
+      "description": "Интерактивный справочник по системному дизайну. Используй для принятия архитектурных решений в Mandala.",
+      "version": "v1.0.0",
+      "updated": "2026-11-19"
     }
   ],
-  "navigation": {
-    "parent_map": "honeycombs/core_map/index.json",
-    "related": [
-      "seeds",
-      "fruits",
-      "instructions"
-    ]
-  },
+  "categories": [
+    {
+      "id": "aeo-geo",
+      "name": "AEO/GEO (оптимизация под ИИ-поиск)",
+      "file": "ai_tools/aeo-geo.json",
+      "description": "Answer Engine Optimization и Generative Engine Optimization — оптимизация контента для появления в ответах ChatGPT, Perplexity, Gemini и других ИИ-поисковиков.",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "agents-automation",
+      "name": "Агенты и автоматизация",
+      "file": "ai_tools/agents-automation.json",
+      "description": "ИИ-агенты, которые выполняют задачи автономно: собирают информацию, разбивают проекты на шаги и выполняют рутинную работу вместо человека.",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "ai-agents",
+      "name": "ИИ-агенты (фреймворки)",
+      "file": "ai_tools/ai-agents.json",
+      "description": "Фреймворки и SDK для создания агентов — автономных ИИ-систем, которые выполняют многошаговые задачи без участия человека. В 2026 году рынок разделился на три типа: графовые (LangGraph), ролевые (CrewAI) и провайдер-нейтивы.",
+      "version": null,
+      "updated": "2026-11-19"
+    },
+    {
+      "id": "ai-workflows",
+      "name": "Связки ИИ-инструментов",
+      "file": "ai_tools/ai-workflows.json",
+      "description": "Платформы, где AI — встроенная часть рабочего пространства, а не отдельный чат-бот. Мультиплеерный AI: агенты работают с контекстом всей компании.",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "app-builders",
+      "name": "ИИ-конструкторы приложений",
+      "file": "ai_tools/app-builders.json",
+      "description": "Инструменты, которые превращают текстовое описание в работающее веб-приложение. В 2026 году рынок разделился на три типа: веб-сборщики, агентные IDE и терминальные агенты.",
+      "version": null,
+      "updated": "2026-11-19"
+    },
+    {
+      "id": "automation",
+      "name": "Автоматизация",
+      "file": "ai_tools/automation.json",
+      "description": "Инструменты для автоматизации повторяющихся задач и бизнес-процессов без кода. AI-агенты управляют сложными процессами.",
+      "version": null,
+      "updated": "2026-11-19"
+    },
+    {
+      "id": "chatbots",
+      "name": "Чат-боты",
+      "file": "ai_tools/chatbots.json",
+      "description": "Универсальные ИИ-ассистенты для диалога, генерации текста, анализа данных, кода и решения задач. В 2026 году они эволюционировали от простых чат-ботов до проактивных агентов, выполняющих многошаговые задачи без участия человека.",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "coding-assistants",
+      "name": "ИИ-ассистент для кода",
+      "file": "ai_tools/coding-assistants.json",
+      "description": "ИИ-инструменты, которые пишут, отлаживают и рефакторят код прямо в редакторе или через CLI. Ускоряют разработку и помогают учиться.",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "coding",
+      "name": "Кодинг",
+      "file": "ai_tools/coding.json",
+      "description": "Инструменты, которые пишут, отлаживают, рефакторят и тестируют код. В 2026 году рынок разделился на два лагеря: AI-IDE и облачные агенты.",
+      "version": null,
+      "updated": "2026-11-19"
+    },
+    {
+      "id": "content-generation",
+      "name": "ИИ-генерация контента",
+      "file": "ai_tools/content-generation.json",
+      "description": "Создание контента в любом объёме без найма маркетинговой команды. Текст, видео, аудио, дизайн — от нарезок до полноценных роликов.",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "copywriting",
+      "name": "Копирайтинг / текст",
+      "file": "ai_tools/copywriting.json",
+      "description": "Инструменты для создания, редактирования и оптимизации текстового контента с учётом культурных и бизнес-контекстов.",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "email",
+      "name": "Почта",
+      "file": "ai_tools/email.json",
+      "description": "Инструменты, которые помогают управлять почтовым ящиком: пишут, редактируют, резюмируют и организуют письма. В 2026 году разделились на встроенные AI-ассистенты в Gmail/Outlook и отдельные приложения-клиенты.",
+      "version": null,
+      "updated": "2026-11-19"
+    },
+    {
+      "id": "images",
+      "name": "Изображения",
+      "file": "ai_tools/images.json",
+      "description": "Инструменты для генерации изображений, цифрового искусства, 3D-моделей и анимации на основе текстовых запросов. В 2026 году рынок разделился: универсальные модели для творчества и специализированные.",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "llm-ops",
+      "name": "Эксплуатация и наблюдаемость языковых моделей",
+      "file": "ai_tools/llm-ops.json",
+      "description": "Практика мониторинга, оценки и отладки LLM-приложений. Основные слои: трейсинг, эвалы, мониторинг, промпт-менеджмент.",
+      "version": null,
+      "updated": "2026-11-19"
+    },
+    {
+      "id": "meetings",
+      "name": "Встречи",
+      "file": "ai_tools/meetings.json",
+      "description": "Инструменты для подготовки, проведения и автоматизации встреч. В 2026 году разделились на пассивных заметчиков и активных ассистентов.",
+      "version": null,
+      "updated": "2026-11-19"
+    },
+    {
+      "id": "planning",
+      "name": "Планирование",
+      "file": "ai_tools/planning.json",
+      "description": "Инструменты для управления временем, календарями и задачами. Тренд — переход к агентам, обрабатывающим весь жизненный цикл встречи.",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "presentations",
+      "name": "Презентации",
+      "file": "ai_tools/presentations.json",
+      "description": "Инструменты, которые превращают промпт или документ в готовую презентацию за минуты. Автоматизируют структуру, дизайн, подбор изображений. В 2026 году ключевое различие — формат: карточный (web-first, адаптивный) против классического (слайды 16:9).",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "rag",
+      "name": "RAG — ответы с поиском по источникам",
+      "file": "ai_tools/rag.json",
+      "description": "Технология, которая учит ИИ отвечать на основе ваших данных. В 2026 году RAG превратился в полный инженерный стек, а не просто «соедини PDF с ChatGPT».",
+      "version": null,
+      "updated": "2026-11-19"
+    },
+    {
+      "id": "research",
+      "name": "Исследования и работа с документами",
+      "file": "ai_tools/research.json",
+      "description": "Инструменты для анализа, структурирования и преобразования документов. Помогают в исследованиях, обучении и создании контента на основе загруженных материалов.",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "spreadsheets",
+      "name": "Таблицы",
+      "file": "ai_tools/spreadsheets.json",
+      "description": "Инструменты для работы с таблицами и данными: AI пишет формулы, анализирует данные, строит графики, генерирует инсайты, очищает и обогащает данные.",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "video-generation",
+      "name": "Генерация видео",
+      "file": "ai_tools/video-generation.json",
+      "description": "ИИ-инструменты для создания и редактирования видео, включая генерацию по тексту, анимацию и обработку.",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "video",
+      "name": "Видео",
+      "file": "ai_tools/video.json",
+      "description": "Инструменты для генерации и редактирования видео с помощью ИИ. Технология разделилась на два направления: генерация с нуля по тексту/изображению и ИИ-редактирование существующего видео.",
+      "version": null,
+      "updated": null
+    },
+    {
+      "id": "writing",
+      "name": "Письмо (текст)",
+      "file": "ai_tools/writing.json",
+      "description": "Инструменты для создания, редактирования и оптимизации текстового контента. Маркетинговые платформы, академические редакторы и творческие инструменты.",
+      "version": null,
+      "updated": "2026-11-19"
+    }
+  ],
   "metrics": {
     "total_resources": 8,
-    "last_updated": "2026-10-13"
-  },
-  "health": {
-    "status": "healthy",
-    "last_check": "2026-07-24",
-    "notes": "v1.2.1: removed affirmations (affirmations.json deleted). Remaining resources: 6."
+    "total_categories": 23,
+    "total_materials": 31
   }
 }

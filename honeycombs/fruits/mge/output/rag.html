@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAG — ответы с поиском по источникам — Knowledge</title>
+<link rel="icon" href="../../../../assets/mandala.svg" type="image/svg+xml">
+<style>
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #0d1117; color: #e6edf3; font: 17px/1.8 "Segoe UI", sans-serif; }
+main { max-width: 800px; margin: auto; padding: 28px 22px 64px; }
+a { color: #84b9ff; overflow-wrap: anywhere; }
+nav { display: flex; flex-wrap: wrap; gap: 20px; font-size: 15px; }
+header { text-align: center; padding: 44px 0 30px; }
+h1 { letter-spacing: .04em; font-size: clamp(26px, 5vw, 42px); line-height: 1.3; margin: 0; overflow-wrap: anywhere; }
+.subtitle { font-size: clamp(19px, 4vw, 25px); color: #b8a1e6; }
+.meta { color: #a7b4c5; font-size: 13px; }
+.notice { border-left: 3px solid #a371f7; padding: 10px 16px; background: #161b22; font-size: 14px; }
+.toc { margin: 28px 0; padding: 18px 22px; background: #161b22; border-radius: 12px; }
+.toc ol { margin-bottom: 0; padding-left: 22px; }
+article section { padding: 12px 0; scroll-margin-top: 20px; }
+h2 { font-size: clamp(22px, 4vw, 29px); line-height: 1.4; margin-top: 24px; }
+p { white-space: pre-line; overflow-wrap: anywhere; }
+.extras { margin-top: 48px; border-top: 1px solid #30363d; }
+details { border-bottom: 1px solid #30363d; }
+summary { cursor: pointer; padding: 16px 32px 16px 0; position: relative; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: '⌄'; position: absolute; right: 6px; top: 16px; }
+details[open] > summary::after { transform: rotate(180deg); }
+.extra-body { padding: 0 8px 20px; font-size: 15px; }
+dt { color: #b8a1e6; font-weight: 600; margin-top: 18px; }
+dd { margin-left: 16px; }
+pre { overflow: auto; padding: 14px; background: #161b22; font-size: 13px; }
+:focus-visible { outline: 2px solid #84b9ff; outline-offset: 4px; }
+@media print { body { background: white; color: black; } nav, .toc, .extras, .notice { display: none; } }
+</style></head><body><main>
+<nav><a href="knowledge.html#tool-rag">← Knowledge</a><a href="../../../../index.html">Главная</a></nav>
+<header><h1>RAG — ответы с поиском по источникам</h1><p class="subtitle">Технология, которая учит ИИ отвечать на основе ваших данных. В 2026 году RAG превратился в полный инженерный стек, а не просто «соедини PDF с ChatGPT».</p>
+<p class="meta">Версия не указана · Обновлено 2026-11-19
+· Создано не указано</p>
+<p class="meta">Проверено: 2026-07-24<br>Дата перенесена из прежнего индекса. При миграции новая проверка фактов не проводилась.</p></header>
+<p class="notice">Текст показан из сохранённой версии материала без редакторских изменений.
+Дата обновления не означает новую проверку актуальности упомянутых продуктов и планов.</p>
+<nav class="toc" aria-label="Оглавление"><div><strong>Содержание</strong><ol><li><a href="#section-1">Когда применять</a></li><li><a href="#section-2">Pinecone</a></li><li><a href="#section-3">Milvus</a></li><li><a href="#section-4">LlamaIndex</a></li><li><a href="#section-5">Haystack</a></li></ol></div></nav>
+<article aria-label="Текст материала"><section id="section-1"><h2>Когда применять</h2><p>Создание корпоративных чат-ботов, внутренних баз знаний, автоматизация поддержки, агентные системы с памятью и контекстом.</p></section><section id="section-2"><h2>Pinecone</h2><dl><dt>Адрес</dt><dd><p><a href="https://www.pinecone.io" rel="noopener noreferrer">https://www.pinecone.io</a></p></dd><dt>Описание</dt><dd><p>Лидер managed векторных баз данных. Простой старт, не нужно думать об инфраструктуре.</p></dd><dt>Плюсы</dt><dd><ul><li><p>Управляемый сервис</p></li><li><p>Быстрый старт</p></li><li><p>Работа без управления серверами</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>Дорого при росте объёма</p></li><li><p>Зависимость от облака</p></li><li><p>Меньше гибкости</p></li></ul></dd></dl></section><section id="section-3"><h2>Milvus</h2><dl><dt>Адрес</dt><dd><p><a href="https://milvus.io" rel="noopener noreferrer">https://milvus.io</a></p></dd><dt>Описание</dt><dd><p>Open-source векторная база данных для production-масштабов. Справляется с миллиардами векторов.</p></dd><dt>Плюсы</dt><dd><ul><li><p>Масштабируемость</p></li><li><p>Открытый исходный код</p></li><li><p>GPU-акселерация</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>Сложнее в развёртывании</p></li><li><p>Требует настройки</p></li><li><p>Self-host = ответственность</p></li></ul></dd></dl></section><section id="section-4"><h2>LlamaIndex</h2><dl><dt>Адрес</dt><dd><p><a href="https://www.llamaindex.ai" rel="noopener noreferrer">https://www.llamaindex.ai</a></p></dd><dt>Описание</dt><dd><p>Data-first фреймворк для построения RAG-пайплайнов. Фокус на извлечении, индексации и поиске данных.</p></dd><dt>Плюсы</dt><dd><ul><li><p>Документация и материалы</p></li><li><p>Готовые коннекторы</p></li><li><p>Специализация на retrieval</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>Сложен для новичков</p></li><li><p>Меньше enterprise-функций</p></li><li><p>Ориентирован на Python</p></li></ul></dd></dl></section><section id="section-5"><h2>Haystack</h2><dl><dt>Адрес</dt><dd><p><a href="https://haystack.deepset.ai" rel="noopener noreferrer">https://haystack.deepset.ai</a></p></dd><dt>Описание</dt><dd><p>Open-source фреймворк для построения RAG-систем. Отличается модульностью и гибкостью.</p></dd><dt>Плюсы</dt><dd><ul><li><p>Модульная архитектура</p></li><li><p>Открытый код</p></li><li><p>Интеграция с векторными БД</p></li></ul></dd><dt>Минусы</dt><dd><ul><li><p>Требует Python-разработки</p></li><li><p>Меньше готовых интеграций</p></li><li><p>Документация не самая свежая</p></li></ul></dd></dl></section></article>
+<section class="extras"><h2>Дополнительные материалы</h2></section>
+<p class="meta"><a href="https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/knowledge/ai_tools/rag.json">Исходный материал</a></p>
+</main></body></html>

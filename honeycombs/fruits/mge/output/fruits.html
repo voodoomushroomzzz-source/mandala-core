@@ -2,7 +2,10 @@
 <html lang="ru">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Продукты — Мандала</title>
+<link rel="icon" href="../../../../assets/mandala.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/mandala-192.png">
+<link rel="manifest" href="../../../../manifest.webmanifest">
+<title>Fruits — Мандала</title>
 <style>
   * { box-sizing: border-box; }
   body { background: #0d1117; color: #e6edf3; font: 16px/1.55 "Segoe UI", sans-serif; margin: 0; }
@@ -30,6 +33,10 @@
   .lane article { padding: 0; margin-bottom: 8px; }
   .lane article:last-child { margin-bottom: 0; }
   .lane summary { cursor: pointer; padding: 12px; min-height: 44px; font-weight: 600; overflow-wrap: anywhere; }
+  .lane article > details > summary { list-style: none; position: relative; padding-right: 38px; }
+  .lane article > details > summary::-webkit-details-marker { display: none; }
+  .lane article > details > summary::after { content: '⌄'; position: absolute; right: 12px; top: 12px; transition: transform .15s; }
+  .lane article > details[open] > summary::after { transform: rotate(180deg); }
   .lane summary:hover { background: #212c3b; border-radius: 9px; }
   .lane summary time, .lane summary small { display: block; color: #b5c0cf; font-weight: 400; font-size: 13px; }
   .card-body { padding: 12px; border-top: 1px solid #30363d; }
@@ -41,11 +48,12 @@
   <nav aria-label="Разделы Мандалы">
     <a href="../../../../index.html">Главная</a>
     <a href="mandala_graph.html">Карта</a>
-    <a href="works.html">Работы</a>
-    <a href="knowledge.html">Знания</a>
-    <a href="fruits.html">Продукты</a>
+    <a href="personal.html">Личные задачи</a>
+    <a href="fruits.html">Fruits</a>
+    <a href="works.html">Works</a>
+    <a href="knowledge.html">Knowledge</a>
   </nav>
-  <h1>Продукты</h1>
+  <h1>Fruits</h1>
 
   <div class="controls">
     <label>Поиск<input type="search" id="search"></label>
@@ -63,7 +71,7 @@
 
 </main>
 <script>
-  const cards = [...document.querySelectorAll("article")];
+  const cards = [...document.querySelector('[aria-label="Каталог"]').querySelectorAll("article")];
   const search = document.getElementById("search");
   const filters = [...document.querySelectorAll("select[data-field]")];
   function update() {

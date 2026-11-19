@@ -1,0 +1,359 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mandala Knowledge Material v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "aliases",
+    "kind",
+    "title",
+    "summary",
+    "area",
+    "tags",
+    "version",
+    "created",
+    "updated",
+    "verification",
+    "sources",
+    "related",
+    "content",
+    "supporting"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+    },
+    "aliases": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "kind": {
+      "enum": [
+        "article",
+        "framework",
+        "tools",
+        "reference",
+        "checklist",
+        "questions",
+        "collection"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "area": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tags": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checked_at",
+        "scope"
+      ],
+      "properties": {
+        "checked_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scope": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "related": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "content": {
+      "type": "object"
+    },
+    "supporting": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "article"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "content": {
+            "type": "object",
+            "required": [
+              "title",
+              "subtitle",
+              "sections"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "subtitle": {
+                "type": "string"
+              },
+              "sections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "text"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "heading": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "framework"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "content": {
+            "type": "object",
+            "required": [
+              "zones"
+            ],
+            "properties": {
+              "zones": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "core_question",
+                    "diagnostic_questions",
+                    "metrics",
+                    "red_flags",
+                    "recommendation"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "core_question": {
+                      "type": "string"
+                    },
+                    "diagnostic_questions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "metrics": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "red_flags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "recommendation": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "tools"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "content": {
+            "type": "object",
+            "required": [
+              "when_to_use",
+              "tools"
+            ],
+            "properties": {
+              "when_to_use": {
+                "type": "string"
+              },
+              "tools": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "url",
+                    "description",
+                    "pros",
+                    "cons"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "pros": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "cons": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "checklist"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "content": {
+            "required": [
+              "audit_categories"
+            ],
+            "properties": {
+              "audit_categories": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "questions"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "content": {
+            "required": [
+              "levels"
+            ],
+            "properties": {
+              "levels": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

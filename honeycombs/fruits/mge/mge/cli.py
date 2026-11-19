@@ -10,6 +10,9 @@ from mge.reporters.html_reporter import write_html
 def cmd_scan(output=Path("output")):
     print("Scanning Mandala...")
     parsed = parse_all()
+    from mge.knowledge import load_knowledge, write_knowledge_index
+    knowledge_root = find_repo_root() / "honeycombs/knowledge"
+    write_knowledge_index(knowledge_root, load_knowledge(knowledge_root))
 
     g = Graph()
     for node in parsed["nodes"]:

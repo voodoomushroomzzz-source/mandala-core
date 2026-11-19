@@ -1,24 +1,46 @@
-﻿# MGE - Mandala Graph Explorer
+# MGE — граф и дашборды Мандалы
 
-Read-only tool for visualizing and analyzing Mandala structure.
+Модуль строит граф связей, главную страницу и каталоги Works, Knowledge, Fruits
+и личных задач. Исходные данные принадлежат соответствующим модулям.
+Работа: W-T-20261015-MGE; продукт: fruit-mge-001.
 
-## Work Reference
+## Источники и результаты
 
-- Work: W-T-20261015-MGE
-- Fruit: fruit-mge-001
+| Что меняем | Источник |
+|---|---|
+| Сканирование и связи | mge/core/parser.py, scanner.py, graph.py |
+| Каталоги и карточки | mge/dashboard.py |
+| Загрузка Knowledge | mge/knowledge.py |
+| Страницы чтения | mge/reader.py |
+| Главная и значки | index.html, assets/ и manifest.webmanifest в корне репозитория |
+| Автоматическая сборка | .github/workflows/build-mge-graph.yml и pages-deploy.yml в корне |
 
-## Usage
+output/ и honeycombs/knowledge/index.json — результаты сборки. Остальные исходники
+смотри по [Knowledge](../../knowledge/README.md), [Works](../../works/README.md),
+[Personal](../../personal/README.md) и родительскому [Fruits](../README.md).
+Правила личных карточек находятся в personal_taskboard.md модуля Personal.
+
+Меняй данные в их модуле, представление — в коде MGE. Новому структурному полю
+Knowledge нужна русская подпись в reader.py. Сохраняй устойчивые ID, якоря карточек
+и опубликованные адреса страниц. При изменении автоматизации сверяй триггеры,
+состав производных файлов и отсутствие цикла сборки; актуальная логика — в workflow.
+
+## Сборка и проверка
+
+Из honeycombs/fruits/mge, с Python 3.12 или новее:
 
     python -m mge scan
-
-From this directory, build the full dashboard with Python 3.12 or newer:
-
     python -m mge dashboard
+    python -m mge dashboard --output <каталог-сайта>
+    python -m unittest discover -s tests
 
-Open the repository root's `index.html` in a browser. To build the same pages
-into a separate static site root, as GitHub Pages does:
+scan собирает граф и навигационный индекс Knowledge. dashboard дополнительно
+строит каталоги и страницы чтения. Для изменения кода выполни относящиеся к нему
+тесты и сборку. При изменении представления проверь получившуюся страницу;
+при изменении общей сборки сравни локальный результат с отдельным каталогом сайта.
+Проверь ссылки, уникальность ID и диагностику графа, не скрывая обнаруженные ошибки.
 
-    python -m mge dashboard --output ../../../_site
-
-The catalog pages embed their data and work from local files. The interactive
-MGE graph loads vis-network from a CDN.
+Для открытия на ПК используй index.html в корне. Каталоги и страницы чтения
+встраивают данные и не требуют доступа браузера к JSON. Интерактивная карта
+загружает vis-network из CDN. Поведение значка ярлыка зависит от браузера.
+Сборка для GitHub Pages использует те же исходники и команду dashboard.

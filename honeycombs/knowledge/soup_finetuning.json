@@ -1,43 +1,50 @@
 {
-  "identity": {
-    "module_id": "KNOWLEDGE-SOUP-FINETUNING-001",
-    "name": "Soup — Fine-tuning LLM on Budget GPU",
-    "version": "v1.0.0",
-    "created": "2026-10-13",
-    "updated": "2026-10-13",
-    "layer": 3,
-    "type": "knowledge_index",
-    "description": "Soup CLI — open-source инструмент для файнтюнинга LLM на бюджетных GPU. Layer streaming: обучение 8B модели на 4 GB VRAM.",
-    "status": "active",
-    "priority": "medium",
-    "tags": [
-      "ai",
-      "llm",
-      "fine-tuning",
-      "lora",
-      "qlora",
-      "open-source",
-      "soup"
-    ]
+  "schema_version": "1.0",
+  "id": "soup_finetuning",
+  "aliases": [
+    "KNOWLEDGE-SOUP-FINETUNING-001"
+  ],
+  "kind": "reference",
+  "title": "Soup — дообучение языковых моделей на бюджетной видеокарте",
+  "summary": "Soup CLI — open-source инструмент для файнтюнинга LLM на бюджетных GPU. Layer streaming: обучение 8B модели на 4 GB VRAM.",
+  "area": "architecture",
+  "tags": [
+    "ai",
+    "llm",
+    "fine-tuning",
+    "lora",
+    "qlora",
+    "open-source",
+    "soup"
+  ],
+  "version": "v1.0.0",
+  "created": "2026-10-13",
+  "updated": "2026-11-19",
+  "verification": {
+    "checked_at": null,
+    "scope": null
   },
-  "meta": {
-    "description": "Ресурс базы знаний Mandala: инструмент Soup для тонкой настройки языковых моделей.",
-    "source": "Instagram + verification (GitHub, PyPI, Hacker News, Product Hunt)",
-    "date_added": "2026-10-13",
-    "how_to_use": "Для справки. Может пригодиться, когда Mandala дорастёт до дообучения собственных SR-моделей."
-  },
+  "sources": [
+    "Instagram и проверка по GitHub, PyPI, Hacker News и Product Hunt"
+  ],
+  "related": [],
   "content": {
+    "usage_notes": {
+      "description": "Ресурс базы знаний Mandala: инструмент Soup для тонкой настройки языковых моделей.",
+      "date_added": "2026-10-13",
+      "how_to_use": "Для справки. Может пригодиться, когда Mandala дорастёт до дообучения собственных SR-моделей."
+    },
     "what_it_is": "Soup (soup-cli) — открытый CLI-инструмент для post-training LLM. Полный цикл: advise, data doctor, train (SFT/DPO/ORPO/GRPO/PPO и др.), ship, diagnose, adapter arithmetic.",
     "author": "Alpamys Makazhan (Казахстан)",
     "license": "Apache-2.0",
     "key_innovation": {
-      "name": "Layer Streaming",
+      "name": "Потоковая загрузка слоёв (Layer Streaming)",
       "description": "Базовые (замороженные) слои модели не загружаются в VRAM целиком, а подаются на GPU по одному decoder-слою через double-buffered VRAM slots.",
       "effect": "Пик VRAM = размер одного слоя + адаптер. Требования к памяти падают с 16 GB до ~3.3 GB.",
       "tradeoff": "Каждый слой читается дважды (forward + backward recompute). Время обменивается на память."
     },
     "verified_facts": {
-      "github": "github.com/MakazhanAlpamys/Soup (~1.1k stars, 84k+ PyPI downloads)",
+      "github": "github.com/MakazhanAlpamys/Soup — около 1,1 тыс. звёзд и более 84 тыс. загрузок в PyPI",
       "pypi": "soup-cli",
       "docker": "ghcr.io/makazhanalpamys/soup",
       "zenodo": "Научная статья с протоколом корректности и измерениями",
@@ -85,20 +92,20 @@
         "IPO",
         "BCO",
         "PRM",
-        "distillation",
-        "vision",
-        "audio"
+        "Дистилляция",
+        "Работа с изображениями",
+        "Работа с аудио"
       ],
       "ship": [
         "soup ship — eval-гейт, exit 0/2, SHA-pinned"
       ],
       "operate": [
         "soup diagnose",
-        "adapter arithmetic (diff/merge/bisect)"
+        "Операции с адаптерами: сравнение, объединение и поиск проблемной версии (diff/merge/bisect)"
       ],
       "secure": [
         "HIPAA/SOC2/EU-AI-Act шаблоны",
-        "signed ML-BOMs"
+        "Подписанные перечни компонентов машинного обучения (ML-BOM)"
       ],
       "integrations": [
         "HuggingFace",
@@ -128,12 +135,20 @@
     },
     "mandala_verdict": "8/10. Реальная разработка, верифицирована, open-source, релевантна. Добавлена в knowledge как справочный ресурс."
   },
-  "navigation": {
-    "parent": "honeycombs/knowledge/index.json"
-  },
-  "health": {
-    "status": "healthy",
-    "last_check": "2026-10-13",
-    "notes": "Создан на основе Instagram-поста neironovvai + верификация через GitHub/PyPI/HN/Product Hunt."
+  "supporting": {
+    "service_metadata": {
+      "layer": 3,
+      "type": "knowledge_index",
+      "status": "active",
+      "priority": "medium"
+    },
+    "navigation": {
+      "parent": "honeycombs/knowledge/index.json"
+    },
+    "health": {
+      "status": "healthy",
+      "last_check": "2026-10-13",
+      "notes": "Создан на основе Instagram-поста neironovvai + верификация через GitHub/PyPI/HN/Product Hunt."
+    }
   }
 }

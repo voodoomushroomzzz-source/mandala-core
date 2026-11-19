@@ -1,6 +1,7 @@
 """Build file-compatible HTML catalogs from Mandala's working files."""
 import json
 import re
+import shutil
 from collections import defaultdict
 from html import escape
 from urllib.parse import quote
@@ -10,24 +11,19 @@ LABELS = {
     "active": "Активно", "in_progress": "В работе", "in_development": "В разработке",
     "planning": "Планируется", "planned": "Запланировано", "paused": "На паузе",
     "high": "Высокий", "medium": "Средний", "low": "Низкий", "critical": "Критический",
+    "unconfirmed": "Ещё не сверено", "perspective": "Перспектива", "done": "Завершено",
+    "cancelled": "Отменено", "todo": "Не начато", "blocked": "Заблокировано",
+    "pending": "Ожидает",
 }
 PRIORITIES = ("critical", "high", "medium", "low")
-KNOWLEDGE_AREAS = {
-    "system_design_primer": "Архитектура и модели",
-    "soup_finetuning": "Архитектура и модели",
-    "product_audit_framework": "Продукт и запуск",
-    "startup_legal_docs_guide": "Продукт и запуск",
-    "mandala_brochure": "Мандала и взаимодействие",
-    "consent_autonomy_audit": "Мандала и взаимодействие",
-    "deep_questions_for_getting_to_know_someone": "Мандала и взаимодействие",
-    "ai_tools": "ИИ-инструменты",
-}
-KNOWLEDGE_AREA_ORDER = ("Архитектура и модели", "Продукт и запуск", "Мандала и взаимодействие", "ИИ-инструменты")
 
 TEMPLATE = """<!doctype html>
 <html lang="ru">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../../../../assets/mandala.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/mandala-192.png">
+<link rel="manifest" href="../../../../manifest.webmanifest">
 <title>__TITLE__ — Мандала</title>
 <style>
   * { box-sizing: border-box; }
@@ -56,6 +52,10 @@ TEMPLATE = """<!doctype html>
   .lane article { padding: 0; margin-bottom: 8px; }
   .lane article:last-child { margin-bottom: 0; }
   .lane summary { cursor: pointer; padding: 12px; min-height: 44px; font-weight: 600; overflow-wrap: anywhere; }
+  .lane article > details > summary { list-style: none; position: relative; padding-right: 38px; }
+  .lane article > details > summary::-webkit-details-marker { display: none; }
+  .lane article > details > summary::after { content: '⌄'; position: absolute; right: 12px; top: 12px; transition: transform .15s; }
+  .lane article > details[open] > summary::after { transform: rotate(180deg); }
   .lane summary:hover { background: #212c3b; border-radius: 9px; }
   .lane summary time, .lane summary small { display: block; color: #b5c0cf; font-weight: 400; font-size: 13px; }
   .card-body { padding: 12px; border-top: 1px solid #30363d; }
@@ -67,9 +67,10 @@ TEMPLATE = """<!doctype html>
   <nav aria-label="Разделы Мандалы">
     <a href="../../../../index.html">Главная</a>
     <a href="mandala_graph.html">Карта</a>
-    <a href="works.html">Работы</a>
-    <a href="knowledge.html">Знания</a>
-    <a href="fruits.html">Продукты</a>
+    <a href="personal.html">Личные задачи</a>
+    <a href="fruits.html">Fruits</a>
+    <a href="works.html">Works</a>
+    <a href="knowledge.html">Knowledge</a>
   </nav>
   <h1>__TITLE__</h1>
 __INTRO__
@@ -82,7 +83,7 @@ __INTRO__
 __OUTRO__
 </main>
 <script>
-  const cards = [...document.querySelectorAll("article")];
+  const cards = [...document.querySelector('[aria-label="Каталог"]').querySelectorAll("article")];
   const search = document.getElementById("search");
   const filters = [...document.querySelectorAll("select[data-field]")];
   function update() {
@@ -155,6 +156,8 @@ def render_page(path, title, entries, fields=(), intro="", grouping=None, outro=
         body = (f'<div class="meta">{escape(entry["meta"])}</div><p>{escape(entry["description"])}</p>'
                 f'{entry["details"]}<p>{" · ".join(entry["links"])}</p>')
         name = escape(entry["name"])
+        if entry.get("reading_url"):
+            name = f'<a href="{escape(entry["reading_url"])}">{name}</a>'
         if grouping:
             field, _ = grouping
             group = entry.get(field) or "Без раздела"
@@ -212,9 +215,94 @@ def render_queue(root, works_by_file):
     return intro, outro
 
 
+def personal_entries(root, movement):
+    """Read only explicitly agreed personal tasks, resolving references at build time."""
+    directions = {d["id"]: d["name"] for d in movement["directions"]}
+    entries = []
+    ids = set()
+    for task in load(root / "honeycombs/personal/personal_tasks.json")["tasks"]:
+        key = task["id"]
+        if key in ids:
+            raise ValueError(f"Duplicate personal task: {key}")
+        ids.add(key)
+        path = "honeycombs/personal/personal_tasks.json"
+        if "source_file" in task:
+            path = task["source_file"]
+            resolved = (root / path).resolve()
+            if not resolved.is_relative_to(root.resolve()):
+                raise ValueError("Personal task source must stay inside repository")
+            data = load(resolved)
+            if task.get("source_collection"):
+                candidates = data
+                for part in task["source_collection"].strip("/").split("/"):
+                    candidates = candidates[part.replace("~1", "/").replace("~0", "~")]
+                if not isinstance(candidates, list):
+                    raise ValueError(f"Task collection is not a list: {key}")
+            else:
+                candidates = data.get("taskboard", {}).get("tasks", []) if "taskboard" in data else [data]
+            matches = [t for t in candidates if t.get("id") == task["record_id"]]
+            if len(matches) != 1:
+                raise ValueError(f"Missing or ambiguous task reference: {key}")
+            record = matches[0]
+            direction = task.get("direction") or ("work" if "taskboard" in data else "")
+        else:
+            record = task
+            direction = task["direction"]
+            if direction not in directions:
+                raise ValueError(f"Unknown personal direction: {direction}")
+        priority = (record.get("priority") or "").lower() or None
+        if task.get("priority_confirmed") is False:
+            priority = None
+        due = record.get("deadline")
+        details = []
+        if task.get("context"):
+            details.append(f'<p>{escape(task["context"])}</p>')
+        for field, caption in (("next_step", "Следующий шаг"), ("pause_reason", "Причина паузы"), ("return_condition", "Условие возврата")):
+            if record.get(field):
+                details.append(f'<p>{caption}: {escape(record[field])}</p>')
+        summary_detail = f'<time datetime="{escape(due)}">{escape(due)}</time>' if due else '<small>Срок не согласован</small>'
+        if due and task.get("deadline_confirmed") is False:
+            summary_detail = f'<small>Прежний срок {escape(due)} не подтверждён</small>'
+        entries.append({
+            "id": key, "name": record.get("name") or record["title"],
+            "description": record.get("description", ""), "status": record["status"],
+            "priority": priority, "group": directions.get(direction, "Мандала"),
+            "now": task.get("now", record["status"] in {"active", "in_progress", "todo", "pending", "blocked"}),
+            "meta": label(record["status"]), "details": "".join(details),
+            "summary_detail": summary_detail,
+            "links": [source_link(path)],
+        })
+    return entries
+
+
+def build_personal(root, output):
+    movement = load(root / "honeycombs/personal/current_movement.json")
+    entries = personal_entries(root, movement)
+    rows = []
+    for d in movement["directions"]:
+        rows.append(f'<article><h3>{escape(d["name"])}</h3><p>{escape(label(d["state"]))}</p>'
+                    f'<p class="meta">Источники прочитаны: {escape(d.get("last_sync_at") or "ещё не отмечено")}<br>'
+                    f'Планы подтверждены: {escape(d.get("last_confirmed_at") or "ещё не сверяли")}</p></article>')
+    intro = '<h2>Сейчас</h2>'
+    active = [e for e in entries if e["now"]]
+    intro += ('<ul class="queue">' + ''.join(f'<li>{link("personal.html", e["id"], e["name"])}</li>' for e in active) + '</ul>') if active else '<p>Согласованных текущих действий пока нет.</p>'
+    intro += '<h2>Доска по приоритетам</h2>'
+    if not entries:
+        intro += '<p>Личный фронт ещё предстоит сверить. Старые планы направлений не стали текущими задачами автоматически.</p>'
+    outro = '<h2>Личные направления</h2><section class="grid">' + ''.join(rows) + '</section>'
+    outro += '<p>' + source_link('honeycombs/personal/personal_taskboard.md') + ' · ' + source_link('honeycombs/personal/current_movement.json') + '</p>'
+    render_page(output / "personal.html", "Личные задачи", entries,
+                (("status", "Статус"), ("group", "Направление")), intro,
+                grouping=("priority", PRIORITIES), outro=outro)
+
+
 def build_catalogs(root, site, output, graph):
     if site != root:
         (site / "index.html").write_text((root / "index.html").read_text(encoding="utf-8"), encoding="utf-8", newline="\n")
+        shutil.copytree(root / "assets", site / "assets", dirs_exist_ok=True)
+        shutil.copyfile(root / "manifest.webmanifest", site / "manifest.webmanifest")
+
+    build_personal(root, output)
 
     nodes = {node["id"]: node for node in graph["nodes"]}
     work_cards = {}
@@ -242,30 +330,37 @@ def build_catalogs(root, site, output, graph):
         })
     works_by_file = {node_path.rsplit("/", 1)[-1]: work_id for work_id in work_cards if (node_path := nodes[work_id]["path"])}
     intro, outro = render_queue(root, works_by_file)
-    render_page(output / "works.html", "Работы", works,
+    render_page(output / "works.html", "Works", works,
                 (("status", "Статус"), ("group", "Блок"), ("deadline", "Дедлайн")),
                 intro, grouping=("priority", PRIORITIES), outro=outro)
 
     knowledge_root = root / "honeycombs/knowledge"
-    resources = load(knowledge_root / "index.json")["contents"]
-    categories = load(knowledge_root / "ai_tools/index.json")["categories"]
+    from mge.knowledge import load_knowledge
+    from mge.reader import build_material
+    collection = load_knowledge(knowledge_root)
     knowledge = []
-    for items, folder in ((resources, ""), (categories, "ai_tools/")):
-        for item in items:
-            group = "ИИ-инструменты" if folder else KNOWLEDGE_AREAS.get(item["id"], "Другие материалы")
-            key = "K-" + item["id"] if not folder else "tool-" + item["id"]
-            verified = item.get("last_verified")
-            links = [source_link("honeycombs/knowledge/" + folder + item["file"])]
-            if key in nodes:
-                links.insert(0, link("mandala_graph.html", key, "На карте", separator="?node="))
-            if item["id"] == "ai_tools":
-                links.insert(0, link("knowledge.html", "tool-" + categories[0]["id"], "Перейти к категориям"))
-            knowledge.append({
-                "id": key, "name": item["name"], "description": item["description"], "group": group,
-                "meta": f"Проверено {verified}" if verified else "", "details": "", "links": links,
-            })
-    render_page(output / "knowledge.html", "База знаний", knowledge, (("group", "Сфера"),),
-                grouping=("group", KNOWLEDGE_AREA_ORDER))
+    for material in collection["materials"]:
+        key = material["graph_id"]
+        reading_url = material["reading_url"]
+        links = [source_link(material["path"])]
+        if reading_url:
+            build_material(output, material)
+            links.insert(0, f'<a href="{reading_url}">Читать полностью →</a>')
+        if key in nodes:
+            links.insert(0, link("mandala_graph.html", key, "На карте", separator="?node="))
+        if material["id"] == "ai_tools":
+            category = next(m for m in collection["materials"] if m["category"])
+            links.insert(0, link("knowledge.html", category["graph_id"], "Перейти к категориям"))
+        meta = " · ".join(text for text in (
+            f'Версия {material["version"]}' if material.get("version") else "",
+            f'Обновлено {material["updated"]}' if material.get("updated") else "",
+            f'Проверено {material["verification"]["checked_at"]}' if material["verification"].get("checked_at") else "",
+        ) if text)
+        knowledge.append({"id": key, "name": material["title"], "description": material["summary"],
+                          "group": material["area_title"], "meta": meta, "details": "",
+                          "links": links, "reading_url": reading_url})
+    render_page(output / "knowledge.html", "Knowledge", knowledge, (("group", "Сфера"),),
+                grouping=("group", collection["areas"]))
 
     products = []
     for fruit in load(root / "honeycombs/fruits/index.json")["fruits"]:
@@ -294,4 +389,4 @@ def build_catalogs(root, site, output, graph):
             "links": [link("mandala_graph.html", fruit_id, "На карте", separator="?node=")]
             + ([source_link(fruit["path"])] if fruit.get("path") else []),
         })
-    render_page(output / "fruits.html", "Продукты", products, (("status", "Статус продукта"),))
+    render_page(output / "fruits.html", "Fruits", products, (("status", "Статус продукта"),))
