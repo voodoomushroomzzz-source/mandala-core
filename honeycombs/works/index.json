@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "WORKS-MANIFEST-001",
     "name": "Works — Unified System of Work Items",
-    "version": "v1.0.17",
+    "version": "v1.0.18",
     "created": "2026-07-08",
     "updated": "2026-11-19",
     "layer": 1,
@@ -52,19 +52,19 @@
     ]
   },
   "manifest": {
-    "total_works": 28,
+    "total_works": 29,
     "by_status": {
       "active": 14,
       "in_progress": 1,
-      "planned": 10,
+      "planned": 11,
       "paused": 3
     },
     "by_horizon": {
       "strategic": 9,
-      "tactical": 19
+      "tactical": 20
     },
     "by_priority": {
-      "high": 2,
+      "high": 3,
       "medium": 11,
       "low": 15
     },
@@ -96,7 +96,8 @@
       "W-R-20261116-MANDALA-LOCAL-APP",
       "W-T-20261015-MGE",
       "W-T-20261017-MGE-BUNDLE",
-      "W-T-20261119-MANDALA-AUDIT"
+      "W-T-20261119-MANDALA-AUDIT",
+      "W-T-20261119-CHAT-CONTINUITY"
     ],
     "deadlines": {
       "W-R-RC-001__visibility_strategy": null,
@@ -123,7 +124,8 @@
       "W-R-20261116-MANDALA-LOCAL-APP": null,
       "W-T-20261015-MGE": "2026-11-15",
       "W-T-20261017-MGE-BUNDLE": null,
-      "W-T-20261119-MANDALA-AUDIT": null
+      "W-T-20261119-MANDALA-AUDIT": null,
+      "W-T-20261119-CHAT-CONTINUITY": null
     },
     "progress": {
       "W-R-RC-001__visibility_strategy": 0,
@@ -150,7 +152,8 @@
       "W-R-20261116-MANDALA-LOCAL-APP": 0,
       "W-T-20261015-MGE": 0,
       "W-T-20261017-MGE-BUNDLE": 0,
-      "W-T-20261119-MANDALA-AUDIT": 0
+      "W-T-20261119-MANDALA-AUDIT": 0,
+      "W-T-20261119-CHAT-CONTINUITY": 0
     },
     "progress_updated": "2026-10-14",
     "related_works": {
@@ -197,6 +200,11 @@
         "W-R-ROSE-001",
         "W-R-20261116-MANDALA-LOCAL-APP",
         "W-T-20260807-MEMORY__mandala_memory_layer"
+      ],
+      "W-T-20261119-CHAT-CONTINUITY": [
+        "W-T-20260803-SR-EVALUATION",
+        "W-T-20261015-MGE",
+        "W-R-20261116-MANDALA-LOCAL-APP"
       ]
     }
   },
