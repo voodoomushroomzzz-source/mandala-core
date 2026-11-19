@@ -336,6 +336,14 @@
       "progress": 0
     },
     {
+      "id": "W-T-20261119-MANDALA-AUDIT",
+      "type": "work",
+      "path": "honeycombs/works/W-T-20261119-MANDALA-AUDIT.json",
+      "description": "",
+      "deadline": null,
+      "progress": 0
+    },
+    {
       "id": "fruit-gentle-companion-001",
       "type": "fruit",
       "path": "honeycombs/fruits/gentle_companion/index.json",
@@ -834,6 +842,11 @@
       "type": "contains"
     },
     {
+      "from": "works",
+      "to": "W-T-20261119-MANDALA-AUDIT",
+      "type": "contains"
+    },
+    {
       "from": "W-R-20261116-MANDALA-LOCAL-APP",
       "to": "W-T-20260511-ENGCHAT__engineer_chat",
       "type": "related_works"
@@ -926,6 +939,31 @@
     {
       "from": "W-T-20261017-MGE-BUNDLE",
       "to": "W-T-20261015-MGE",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20261119-MANDALA-AUDIT",
+      "to": "W-T-20260803-SR-EVALUATION",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20261119-MANDALA-AUDIT",
+      "to": "W-T-20261015-MGE",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20261119-MANDALA-AUDIT",
+      "to": "W-R-ROSE-001__rose_world_ethical_filter",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20261119-MANDALA-AUDIT",
+      "to": "W-R-20261116-MANDALA-LOCAL-APP",
+      "type": "related_works"
+    },
+    {
+      "from": "W-T-20261119-MANDALA-AUDIT",
+      "to": "W-T-20260807-MEMORY__mandala_memory_layer",
       "type": "related_works"
     },
     {
@@ -1180,11 +1218,11 @@
     }
   ],
   "analysis": {
-    "total_nodes": 83,
-    "total_edges": 112,
+    "total_nodes": 84,
+    "total_edges": 118,
     "by_type": {
       "honeycomb": 17,
-      "work": 27,
+      "work": 28,
       "fruit": 8,
       "knowledge": 31
     },
@@ -1198,12 +1236,12 @@
     "broken_refs": [],
     "missing_node_ids": [],
     "id_format_mismatches": [],
-    "reachable_from_core": 83,
+    "reachable_from_core": 84,
     "unreachable": [],
     "top_hubs": [
       {
         "id": "works",
-        "degree": 28
+        "degree": 29
       },
       {
         "id": "K-ai_tools",
