@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.64",
+    "version": "v2.6.65",
     "created": "2026-09-14",
     "updated": "2026-11-19",
     "layer": 2,
@@ -15,7 +15,7 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.6.64",
+    "version": "v2.6.65",
     "created": "2026-09-14",
     "updated": "2026-11-19",
     "legend": {
@@ -1849,30 +1849,57 @@
           "responsible_name": "Катрин"
         },
         "focus": false
+      },
+      {
+        "id": "K-205",
+        "title": "Проконтролировать замену витринных калачей в колбах (Центр)",
+        "description": "Проследить, чтобы 20 ноября витринные калачи в колбах в Центре заменили на новые.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-20",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "EMP-001"
+        ],
+        "created": "2026-11-19",
+        "updated": "2026-11-19",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр",
+          "responsible_id": "EMP-001",
+          "responsible_name": "Катрин"
+        },
+        "focus": false
       }
     ],
     "counters": {
-      "total": 66,
+      "total": 67,
       "by_status": {
-        "todo": 60,
+        "todo": 61,
         "in_progress": 5,
         "planning": 1
       },
       "by_priority": {
         "high": 32,
-        "medium": 30,
+        "medium": 31,
         "critical": 2,
         "low": 2
       },
       "by_column": {
         "Операционка — Общая": 24,
-        "Операционка — Центр": 18,
+        "Операционка — Центр": 19,
         "Операционка — Нижка": 15,
         "Крупные вехи": 3,
         "Стратегические": 6
       },
       "by_phase": {
-        "phase_0": 65,
+        "phase_0": 66,
         "phase_1": 1
       }
     },
