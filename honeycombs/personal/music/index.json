@@ -3,7 +3,7 @@
     "name": "Music — входной индекс проектов",
     "version": "v1.0.0",
     "created": "2026-08-20",
-    "updated": "2026-08-20",
+    "updated": "2026-11-19",
     "description": "Общая структура музыкальных проектов Дмитрия Лёвина. Для деталей — см. индексы в папках проектов."
   },
   "profile": {
@@ -30,41 +30,49 @@
       "name": "Маякома",
       "path": "music/mayakoma/index.json",
       "status": "active",
-      "priority": "critical",
-      "deadline": "2026-09-30",
-      "goal": "Широкая русскоязычная аудитория, 3 готовых трека, выход на стриминги",
+      "priority": null,
+      "deadline": null,
+      "goal": "Дополнить незаконченный трек вокалом.",
       "sound": "инди-поп-рок, светлый гитарный, мелодичный вокал, русский язык",
-      "total_tracks": 3
+      "total_tracks": 3,
+      "focus_order": 3,
+      "current_details_source": "honeycombs/personal/music/mayakoma/index.json"
     },
     "dmitrii_levin": {
       "name": "Dmitrii Levin",
       "path": "music/dmitrii_levin/index.json",
       "status": "active",
-      "priority": "high",
-      "deadline": "2026-10-31",
-      "goal": "Систематизировать ~15 синглов, обновить дистрибуцию",
+      "priority": null,
+      "deadline": null,
+      "goal": "Подготовить к релизу электронный техно-трек из черновика.",
       "sound": "электроника, глитч-хоп, трип-хоп, атмосфера, космос, экспериментал",
-      "total_tracks": 15
+      "total_tracks": 15,
+      "focus_order": 1,
+      "current_details_source": "honeycombs/personal/music/dmitrii_levin/index.json"
     },
     "x_deaddy_x": {
       "name": "X Deaddy X",
       "path": "music/x_deaddy_x/index.json",
       "status": "active",
-      "priority": "high",
-      "deadline": "2026-10-31",
-      "goal": "Завершить «Мечты», провести открытую репетицию и концерт",
+      "priority": null,
+      "deadline": null,
+      "goal": "Поддерживать репетиции и подготовить один трек к релизу зимой — к весне.",
       "sound": "гаражный гранж-панк, живой звук, 50/50 рус/англ",
-      "total_tracks": 10
+      "total_tracks": 10,
+      "focus_order": 2,
+      "current_details_source": "honeycombs/personal/music/x_deaddy_x/index.json"
     },
     "mc_voodookid": {
       "name": "MC Voodookid",
       "path": "music/mc_voodookid/index.json",
       "status": "active",
-      "priority": "medium",
-      "deadline": "2026-09-30",
-      "goal": "Доделать фит, записать черновик, выпустить релиз",
+      "priority": null,
+      "deadline": null,
+      "goal": "Сохранить черновик для последующего возвращения.",
       "sound": "русскоязычный рэп, агрессивный / философский",
-      "total_tracks": 4
+      "total_tracks": 4,
+      "focus_order": null,
+      "current_details_source": "honeycombs/personal/music/mc_voodookid/index.json"
     }
   },
   "task_tracker": {
@@ -125,5 +133,16 @@
     "metric_4": "Релиз фита MC Voodookid",
     "metric_5": "Чёткая карта всех треков с датами и статусами"
   },
-  "last_updated": "2026-08-20"
+  "last_updated": "2026-11-19",
+  "current_focus": {
+    "confirmed_on": "2026-11-19",
+    "order": [
+      "dmitrii_levin",
+      "x_deaddy_x",
+      "mayakoma"
+    ],
+    "note": "Основной текущий фокус — сольный электронный проект и рок-группа. Маякома третья. MC Voodookid имеет черновик, но не получил места в первой тройке; пауза не согласована.",
+    "deadline_policy": "Зима — к весне для одного трека XDDX — ориентир, не точная дата."
+  },
+  "previous_plan_note": "overall_plan за август–октябрь, старые задачи, success_metrics и total_tracks сохранены как исторический материал и не подтверждены в текущей сверке. Актуальный порядок задаёт current_focus, сведения — карточки проектов. Подтверждение музыки не означает сверку всей поэзии и прозы."
 }
