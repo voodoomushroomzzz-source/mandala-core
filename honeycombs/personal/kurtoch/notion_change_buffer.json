@@ -91,6 +91,78 @@
       "updated_at": "2026-11-19T11:44:57Z",
       "notion_page_id": null,
       "last_error": null
+    },
+    {
+      "id": "notion-task-K-198",
+      "source_file": "honeycombs/personal/kurtoch/taskboard.json",
+      "record_id": "K-198",
+      "target": "taskboard",
+      "action": "upsert",
+      "desired_fields": {
+        "id": "K-198",
+        "title": "Распределить фонды",
+        "description": "Распределить фонды 20 ноября 2026 года.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-20",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-078"
+        ],
+        "created": "2026-11-19",
+        "updated": "2026-11-19",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": true
+      },
+      "revision": 1,
+      "created_at": "2026-11-19T13:41:17Z",
+      "updated_at": "2026-11-19T13:41:17Z",
+      "notion_page_id": null,
+      "last_error": null
+    },
+    {
+      "id": "notion-task-K-199",
+      "source_file": "honeycombs/personal/kurtoch/taskboard.json",
+      "record_id": "K-199",
+      "target": "taskboard",
+      "action": "upsert",
+      "desired_fields": {
+        "id": "K-199",
+        "title": "Разобраться с ЭДО Метро: соки не проходят по коду маркировки",
+        "description": "Разобраться, почему соки из Метро не проходят в ЭДО по коду маркировки. Проверить сообщение об ошибке и затронутые документы и позиции, выяснить причину и добиться корректного прохождения документов.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-20",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-11-19",
+        "updated": "2026-11-19",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": true
+      },
+      "revision": 1,
+      "created_at": "2026-11-19T13:41:17Z",
+      "updated_at": "2026-11-19T13:41:17Z",
+      "notion_page_id": null,
+      "last_error": null
     }
   ]
 }
