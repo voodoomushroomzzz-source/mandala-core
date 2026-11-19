@@ -17,5 +17,78 @@
     "notion_page_id": "Проверенный ID карточки Notion либо null до сопоставления.",
     "last_error": "Краткое описание незавершённого переноса либо null."
   },
-  "pending": []
+  "pending": [
+    {
+      "id": "notion-task-K-200",
+      "source_file": "honeycombs/personal/kurtoch/taskboard.json",
+      "record_id": "K-200",
+      "target": "taskboard",
+      "action": "upsert",
+      "desired_fields": {
+        "id": "K-200",
+        "title": "Организовать уборку места сразу после ухода гостя",
+        "description": "После ухода гостя сотрудники должны подойти и убрать освободившееся место. Ответственная за организацию и контроль — Катрин.",
+        "related_to": [
+          "EMP-001"
+        ],
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "created": "2026-11-19",
+        "updated": "2026-11-19",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
+      },
+      "revision": 1,
+      "created_at": "2026-11-19T15:43:37Z",
+      "updated_at": "2026-11-19T15:43:37Z",
+      "notion_page_id": null,
+      "last_error": null
+    },
+    {
+      "id": "notion-task-K-201",
+      "source_file": "honeycombs/personal/kurtoch/taskboard.json",
+      "record_id": "K-201",
+      "target": "taskboard",
+      "action": "upsert",
+      "desired_fields": {
+        "id": "K-201",
+        "title": "Выставлять калачи новой сезонки на подставках для гостей",
+        "description": "Выставлять калачи из новой сезонки на подставках на внешней выкладке, чтобы гости их видели. Точное место выкладки уточнить.",
+        "related_to": [],
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "created": "2026-11-19",
+        "updated": "2026-11-19",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
+      },
+      "revision": 1,
+      "created_at": "2026-11-19T15:43:37Z",
+      "updated_at": "2026-11-19T15:43:37Z",
+      "notion_page_id": null,
+      "last_error": null
+    }
+  ]
 }

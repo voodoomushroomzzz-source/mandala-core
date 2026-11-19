@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.61",
+    "version": "v2.6.62",
     "created": "2026-09-14",
     "updated": "2026-11-19",
     "layer": 2,
@@ -15,7 +15,7 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.6.61",
+    "version": "v2.6.62",
     "created": "2026-09-14",
     "updated": "2026-11-19",
     "legend": {
@@ -1714,30 +1714,78 @@
           "column": "Операционка — Общая"
         },
         "focus": true
+      },
+      {
+        "id": "K-200",
+        "title": "Организовать уборку места сразу после ухода гостя",
+        "description": "После ухода гостя сотрудники должны подойти и убрать освободившееся место. Ответственная за организацию и контроль — Катрин.",
+        "related_to": [
+          "EMP-001"
+        ],
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "created": "2026-11-19",
+        "updated": "2026-11-19",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
+      },
+      {
+        "id": "K-201",
+        "title": "Выставлять калачи новой сезонки на подставках для гостей",
+        "description": "Выставлять калачи из новой сезонки на подставках на внешней выкладке, чтобы гости их видели. Точное место выкладки уточнить.",
+        "related_to": [],
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "created": "2026-11-19",
+        "updated": "2026-11-19",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
       }
     ],
     "counters": {
-      "total": 61,
+      "total": 63,
       "by_status": {
-        "todo": 55,
+        "todo": 57,
         "in_progress": 5,
         "planning": 1
       },
       "by_priority": {
         "high": 30,
-        "medium": 27,
+        "medium": 29,
         "critical": 2,
         "low": 2
       },
       "by_column": {
-        "Операционка — Общая": 20,
+        "Операционка — Общая": 22,
         "Операционка — Центр": 17,
         "Операционка — Нижка": 15,
         "Крупные вехи": 3,
         "Стратегические": 6
       },
       "by_phase": {
-        "phase_0": 60,
+        "phase_0": 62,
         "phase_1": 1
       }
     },
