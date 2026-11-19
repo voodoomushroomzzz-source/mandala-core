@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.66",
+    "version": "v2.6.67",
     "created": "2026-09-14",
     "updated": "2026-11-19",
     "layer": 2,
@@ -15,7 +15,7 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.6.66",
+    "version": "v2.6.67",
     "created": "2026-09-14",
     "updated": "2026-11-19",
     "legend": {
@@ -1904,30 +1904,85 @@
           "responsible_name": "Дмитрий"
         },
         "focus": false
+      },
+      {
+        "id": "K-207",
+        "title": "Сравнить цены новых десертов и согласовать пробный заказ",
+        "description": "Новые десерты протестировали 18 ноября 2026 года, Катрин участвовала в дегустации. Прайс Дмитрий отправил Катрин в Telegram.\n\n1. По отправленному прайсу сравнить стоимость новых десертов с десертами, которые заказываем сейчас.\n2. Предоставить Дмитрию результаты сравнения.\n3. После согласования Дмитрием подходящей стоимости сделать пробный заказ новых десертов.",
+        "related_to": [
+          "EMP-001"
+        ],
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "created": "2026-11-19",
+        "updated": "2026-11-19",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая",
+          "responsible_id": "EMP-001",
+          "responsible_name": "Катрин"
+        },
+        "focus": false
+      },
+      {
+        "id": "K-208",
+        "title": "Отсканировать приходные документы и чеки и загрузить по неделям в Drive",
+        "description": "Отсканировать все приходные документы, а также чеки покупок из магазинов и загрузить сканы в соответствующую папку недели.\n\nGoogle Drive: _Для Админа → [Архив доки] → 2026. Внутри созданы папки 11.1, 11.2, 11.3 и 11.4 для недель ноября. Разложить документы по соответствующим неделям.\nПапка: https://drive.google.com/drive/folders/1WrvS1pABC07DB3tzT-H24gIzjGc1jspU",
+        "related_to": [
+          "EMP-001",
+          "K-145"
+        ],
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "created": "2026-11-19",
+        "updated": "2026-11-19",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая",
+          "responsible_id": "EMP-001",
+          "responsible_name": "Катрин"
+        },
+        "focus": false
       }
     ],
     "counters": {
-      "total": 68,
+      "total": 70,
       "by_status": {
-        "todo": 62,
+        "todo": 64,
         "in_progress": 5,
         "planning": 1
       },
       "by_priority": {
         "high": 33,
-        "medium": 31,
+        "medium": 33,
         "critical": 2,
         "low": 2
       },
       "by_column": {
-        "Операционка — Общая": 24,
+        "Операционка — Общая": 26,
         "Операционка — Центр": 20,
         "Операционка — Нижка": 15,
         "Крупные вехи": 3,
         "Стратегические": 6
       },
       "by_phase": {
-        "phase_0": 67,
+        "phase_0": 69,
         "phase_1": 1
       }
     },
