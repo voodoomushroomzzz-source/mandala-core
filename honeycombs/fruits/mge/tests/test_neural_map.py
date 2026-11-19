@@ -46,5 +46,18 @@ const filtered=map.visibleModel(model,new Set(['honeycomb','work']));
 assert.equal(filtered.bundles.length,0,'hidden links do not inflate weight');
 assert.equal(filtered.edges.length,2);
 assert.ok(model.nodes.every(n=>Number.isFinite(n.x)&&Number.isFinite(n.y)));
+const start=new Map(model.nodes.map(n=>[n.id,{x:n.x,y:n.y}]));
+map.moveNode(model,'works',40,-20);
+for(const id of ['works','task','other']){
+ assert.equal(model.byId.get(id).x,start.get(id).x+40,'hub drags its whole group');
+ assert.equal(model.byId.get(id).y,start.get(id).y-20);
+}
+assert.equal(model.byId.get('product').x,start.get('product').x,'other groups stay put');
+map.moveNode(model,'task',10,15);
+assert.equal(model.byId.get('task').x,start.get('task').x+50,'satellite moves independently');
+assert.equal(model.byId.get('works').x,start.get('works').x+40,'satellite leaves hub in place');
+assert.equal(JSON.stringify(graph),before,'drag does not alter source graph');
+assert.equal(map.visibleModel(model,new Set(['honeycomb','work','fruit'])).bundles[0].count,3,'drag does not change links');
+
 '''
         subprocess.run(['node','-e',program,str(script)],check=True,capture_output=True,text=True)

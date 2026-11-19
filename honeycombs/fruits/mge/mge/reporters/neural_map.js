@@ -17,6 +17,19 @@ const NeuralMap = (() => {
     const t = Math.min(1, Math.log1p(Math.max(0,count-1))/Math.log(33));
     return {width:1.15 + t*7.3, opacity:.3 + t*.57, strands:Math.min(7,Math.max(1,Math.ceil(Math.sqrt(count))))};
   }
+  const TONES = {
+    works:{hex:'#56d364',rgb:'86,211,100'}, knowledge:{hex:'#7989ef',rgb:'121,137,239'},
+    fruits:{hex:'#b08af5',rgb:'176,138,245'}, core_map:{hex:'#56d364',rgb:'86,211,100'},
+    philosophy:{hex:'#b08af5',rgb:'176,138,245'}, akasha:{hex:'#7989ef',rgb:'121,137,239'},
+    personal:{hex:'#56d364',rgb:'86,211,100'}, protocols:{hex:'#7989ef',rgb:'121,137,239'}
+  };
+  const tone = n => TONES[n.group] || {hex:'#a371f7',rgb:'163,113,247'};
+  function moveNode(model,id,dx,dy) {
+    const node=model.byId.get(id);
+    if(!node||!Number.isFinite(dx)||!Number.isFinite(dy))return;
+    const members=node.hub ? model.groups.get(node.group) : [node];
+    members.forEach(n=>{n.x+=dx;n.y+=dy;});
+  }
   function buildModel(graph) {
     const nodes = graph.nodes.map(n => ({...n, hub:isHub(n), group:n.id, neighbors:new Set(), degree:0}));
     const byId = new Map(nodes.map(n=>[n.id,n]));
@@ -102,7 +115,7 @@ const NeuralMap = (() => {
     function stroke(points,color,lineWidth,glow=0){ctx.strokeStyle=color;ctx.lineWidth=lineWidth;ctx.shadowColor=color;ctx.shadowBlur=glow;path(points);ctx.stroke();ctx.shadowBlur=0;}
     function draw() {
       ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);
-      const bg=ctx.createRadialGradient(width*.42,height*.4,0,width*.42,height*.4,width*.7);bg.addColorStop(0,'#172519');bg.addColorStop(1,'#080f0b');ctx.fillStyle=bg;ctx.fillRect(0,0,width,height);
+      const bg=ctx.createRadialGradient(width*.42,height*.4,0,width*.42,height*.4,width*.7);bg.addColorStop(0,'#19213a');bg.addColorStop(1,'#0d1117');ctx.fillStyle=bg;ctx.fillRect(0,0,width,height);
       ctx.translate(panX,panY);ctx.scale(scale,scale);bundlePaths=[];nodeHits=[];
       // Only real graph edges generate branches. Curved routing is visual, not new data.
       view.bundles.forEach(b=>{
@@ -110,12 +123,12 @@ const NeuralMap = (() => {
         const active=b.id===bundleSelected||hover?.bundle?.id===b.id||b.edges.some(e=>e.from===selected||e.to===selected);
         const alpha=selected&&!active ? b.opacity*.25:b.opacity;
         const c=curve(a,z);
-        stroke(c,`rgba(193,202,126,${alpha*.11})`,b.width*3.2,12);
+        stroke(c,`rgba(${tone(a).rgb},${alpha*.11})`,b.width*3.2,12);
         for(let i=0;i<b.strands;i++){
           const offset=(i-(b.strands-1)/2)*2.2;
-          stroke(curve(a,z,offset),active?'rgba(244,218,147,.94)':`rgba(193,209,140,${alpha})`,Math.max(.65,b.width/b.strands),active?8:3);
+          stroke(curve(a,z,offset),active?'rgba(199,187,255,.94)':`rgba(${i%2?tone(z).rgb:tone(a).rgb},${alpha})`,Math.max(.65,b.width/b.strands),active?8:3);
         }
-        if(b.count>1||active){const p=pointOn(c,.53);const r=active?4:2.4;const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*6);g.addColorStop(0,'#f4d793');g.addColorStop(.2,'#c6ad6870');g.addColorStop(1,'#c6ad6800');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,r*6,0,Math.PI*2);ctx.fill();}
+        if(b.count>1||active){const p=pointOn(c,.53);const r=active?4:2.4;const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*6);g.addColorStop(0,'#d4d6ff');g.addColorStop(.2,'#a371f770');g.addColorStop(1,'#a371f700');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,r*6,0,Math.PI*2);ctx.fill();}
         bundlePaths.push({bundle:b,points:c});
       });
       view.edges.forEach((e,i)=>{
@@ -123,7 +136,7 @@ const NeuralMap = (() => {
         const active=e.from===selected||e.to===selected;
         const bad=['broken_link','unregistered'].includes(e.type);
         const opacity=selected&&!active ? .07 : same ? .42 : .19;
-        const color=bad?'rgba(230,148,110,.8)':active?'rgba(242,218,156,.93)':`rgba(171,202,139,${opacity})`;
+        const color=bad?'rgba(230,148,110,.8)':active?'rgba(184,172,255,.93)':`rgba(${tone(a).rgb},${opacity})`;
         ctx.setLineDash(bad?[5,5]:[]);
         if(same)stroke(curve(a,b,(i%5-2)*3),color,active?1.9:.85,active?5:0);
         else{
@@ -138,14 +151,14 @@ const NeuralMap = (() => {
       view.nodes.forEach(n=>{
         const active=n.id===selected||n.id===hover?.node?.id, bad=['missing','honeycomb_unregistered'].includes(n.type);
         const alpha=relevant(n)?1:.35;
-        const color=bad?'#e6a578':n.hub?'#f3dfa0':n.type==='fruit'?'#e4c985':'#c1daa0';
+        const color=bad?'#ffa657':tone(n).hex;
         const r=(n.hub?Math.max(n.radius,10/scale):Math.max(n.radius,2.5/scale))*(active?1.15:1);ctx.globalAlpha=alpha;
-        const glow=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,r*4.5);glow.addColorStop(0,n.hub?'#d8c17c55':'#b8d89333');glow.addColorStop(1,'#a5c37d00');ctx.fillStyle=glow;ctx.beginPath();ctx.arc(n.x,n.y,r*4.5,0,Math.PI*2);ctx.fill();
+        const glow=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,r*4.5);glow.addColorStop(0,`rgba(${tone(n).rgb},${n.hub ? .38 : .22})`);glow.addColorStop(1,`rgba(${tone(n).rgb},0)`);ctx.fillStyle=glow;ctx.beginPath();ctx.arc(n.x,n.y,r*4.5,0,Math.PI*2);ctx.fill();
         ctx.shadowColor=color;ctx.shadowBlur=n.hub?18:active?14:5;
-        const core=ctx.createRadialGradient(n.x-r*.3,n.y-r*.3,0,n.x,n.y,r);core.addColorStop(0,'#ffffe1');core.addColorStop(1,color);ctx.fillStyle=core;ctx.beginPath();ctx.arc(n.x,n.y,r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-        if(active){ctx.strokeStyle='#f7e8bb';ctx.lineWidth=1.3/scale;ctx.beginPath();ctx.arc(n.x,n.y,r+5/scale,0,Math.PI*2);ctx.stroke();}
+        const core=ctx.createRadialGradient(n.x-r*.3,n.y-r*.3,0,n.x,n.y,r);core.addColorStop(0,'#eef2ff');core.addColorStop(1,color);ctx.fillStyle=core;ctx.beginPath();ctx.arc(n.x,n.y,r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+        if(active){ctx.strokeStyle='#c4b5fd';ctx.lineWidth=1.3/scale;ctx.beginPath();ctx.arc(n.x,n.y,r+5/scale,0,Math.PI*2);ctx.stroke();}
         const showLabel=n.hub||active||scale>1.1;
-        if(showLabel){const text=label(n);const size=n.hub?14/scale:12/scale;ctx.font=`${n.hub?'500':'400'} ${size}px system-ui`;ctx.textBaseline='middle';ctx.fillStyle=n.hub?'#edf0ce':'#cfdbb8';ctx.shadowColor='#080f0b';ctx.shadowBlur=7;const clipped=text.length>38&&!n.hub?text.slice(0,35)+'…':text;const tx=n.x+r+9/scale;ctx.fillText(clipped,tx,n.y);ctx.shadowBlur=0;if(n.hub)nodeHits.push({node:n,x:tx,y:n.y,w:ctx.measureText(clipped).width,h:size});}
+        if(showLabel){const text=label(n);const size=n.hub?14/scale:12/scale;ctx.font=`${n.hub?'500':'400'} ${size}px system-ui`;ctx.textBaseline='middle';ctx.fillStyle=n.hub?'#dce3f1':'#bac9dc';ctx.shadowColor='#0d1117';ctx.shadowBlur=7;const clipped=text.length>38&&!n.hub?text.slice(0,35)+'…':text;const tx=n.x+r+9/scale;ctx.fillText(clipped,tx,n.y);ctx.shadowBlur=0;if(n.hub)nodeHits.push({node:n,x:tx,y:n.y,w:ctx.measureText(clipped).width,h:size});}
         nodeHits.push({node:n,x:n.x-r-7/scale,y:n.y,w:(r+7/scale)*2,h:(r+7/scale)*2,circle:true});ctx.globalAlpha=1;
       });
     }
@@ -166,10 +179,12 @@ const NeuralMap = (() => {
       selected=null;bundleSelected=b.id;panel.className='';panel.replaceChildren(el('div','Пучок связей','type'),el('h3',`${label(model.byId.get(b.from))} ↔ ${label(model.byId.get(b.to))}`),el('div',String(b.count),'metric'),el('p','Реальных связей между группами. Толщина и яркость растут плавно и ограничены.'));
       const list=el('div',undefined,'details');b.edges.forEach(e=>list.append(el('p',`${label(model.byId.get(e.from))} → ${label(model.byId.get(e.to))} · ${e.type}`)));panel.append(list);requestDraw();
     }
-    canvas.addEventListener('pointerdown',e=>{const p=local(e);pointers.set(e.pointerId,p);canvas.setPointerCapture(e.pointerId);moved=false;if(pointers.size===1)drag={...p,panX,panY};if(pointers.size===2){const [a,b]=[...pointers.values()];pinch={distance:Math.hypot(a.x-b.x,a.y-b.y)};drag=null;moved=true;}canvas.classList.add('dragging');});
+    canvas.addEventListener('pointerdown',e=>{const p=local(e);pointers.set(e.pointerId,p);canvas.setPointerCapture(e.pointerId);moved=false;if(pointers.size===1)drag={...p,panX,panY,node:nodeAt(p)?.id,lastX:p.x,lastY:p.y};if(pointers.size===2){const [a,b]=[...pointers.values()];pinch={distance:Math.hypot(a.x-b.x,a.y-b.y)};drag=null;moved=true;}canvas.classList.add('dragging');});
     canvas.addEventListener('pointermove',e=>{
       const p=local(e);
-      if(pointers.has(e.pointerId)){pointers.set(e.pointerId,p);if(pointers.size===2){const [a,b]=[...pointers.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(pinch?.distance)zoom(d/pinch.distance,{x:(a.x+b.x)/2,y:(a.y+b.y)/2});pinch={distance:d};moved=true;return;}if(drag){const dx=p.x-drag.x,dy=p.y-drag.y;if(Math.hypot(dx,dy)>4)moved=true;panX=drag.panX+dx;panY=drag.panY+dy;requestDraw();}return;}
+      if(pointers.has(e.pointerId)){pointers.set(e.pointerId,p);if(pointers.size===2){const [a,b]=[...pointers.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(pinch?.distance)zoom(d/pinch.distance,{x:(a.x+b.x)/2,y:(a.y+b.y)/2});pinch={distance:d};moved=true;return;}if(drag){const dx=p.x-drag.x,dy=p.y-drag.y;if(Math.hypot(dx,dy)>4)moved=true;
+        if(moved){if(drag.node){moveNode(model,drag.node,(p.x-drag.lastX)/scale,(p.y-drag.lastY)/scale);drag.lastX=p.x;drag.lastY=p.y;}
+        else{panX=drag.panX+dx;panY=drag.panY+dy;}tooltip.hidden=true;requestDraw();}}return;}
       const node=nodeAt(p),bundle=node?null:bundleAt(p);hover={node,bundle};canvas.style.cursor=node||bundle?'pointer':'grab';tooltip.hidden=!node&&!bundle;
       if(!tooltip.hidden){tooltip.textContent=node?`${label(node)} · ${node.degree} соседей`:`${label(model.byId.get(bundle.from))} ↔ ${label(model.byId.get(bundle.to))} · ${bundle.count} связей`;tooltip.style.left=Math.max(8,Math.min(width-315,p.x+15))+'px';tooltip.style.top=Math.max(8,Math.min(height-50,p.y+16))+'px';}requestDraw();
     });
@@ -188,7 +203,7 @@ const NeuralMap = (() => {
     // Public, read-only inspection surface for integration tests and diagnostics.
     return {model,getVisible:()=>view,selectNode:id=>{const n=model.byId.get(id);if(n&&view.ids.has(id))selectNode(n,true);},fit};
   }
-  return {buildModel,visibleModel,strength,init};
+  return {buildModel,visibleModel,strength,moveNode,init};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=NeuralMap;
 if(typeof document!=='undefined')window.mandalaMap=NeuralMap.init(GRAPH);
