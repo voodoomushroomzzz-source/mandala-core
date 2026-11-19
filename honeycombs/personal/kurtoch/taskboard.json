@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.58",
+    "version": "v2.6.59",
     "created": "2026-09-14",
     "updated": "2026-11-19",
     "layer": 2,
@@ -15,7 +15,7 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.6.58",
+    "version": "v2.6.59",
     "created": "2026-09-14",
     "updated": "2026-11-19",
     "legend": {
@@ -1616,30 +1616,80 @@
           "column": "Операционка — Центр"
         },
         "focus": true
+      },
+      {
+        "id": "K-196",
+        "title": "Выставить оплаты",
+        "description": "Выставить необходимые оплаты сегодня, 19 ноября 2026 года.",
+        "related_to": [
+          "K-078"
+        ],
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-19",
+        "reminder": null,
+        "depends_on": [],
+        "created": "2026-11-19",
+        "updated": "2026-11-19",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": true
+      },
+      {
+        "id": "K-197",
+        "title": "Начать расчёт ЗП",
+        "description": "Начать расчёт заработной платы сегодня, 19 ноября 2026 года. Собрать данные по отработанным сменам и часам, проверить ставки и доплаты и начать предварительный расчёт.",
+        "related_to": [
+          "K-147"
+        ],
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-19",
+        "reminder": null,
+        "depends_on": [],
+        "created": "2026-11-19",
+        "updated": "2026-11-19",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": true
       }
     ],
     "counters": {
-      "total": 57,
+      "total": 59,
       "by_status": {
-        "todo": 51,
+        "todo": 53,
         "in_progress": 5,
         "planning": 1
       },
       "by_priority": {
-        "high": 26,
+        "high": 28,
         "medium": 27,
         "critical": 2,
         "low": 2
       },
       "by_column": {
-        "Операционка — Общая": 16,
+        "Операционка — Общая": 18,
         "Операционка — Центр": 17,
         "Операционка — Нижка": 15,
         "Крупные вехи": 3,
         "Стратегические": 6
       },
       "by_phase": {
-        "phase_0": 56,
+        "phase_0": 58,
         "phase_1": 1
       }
     },
