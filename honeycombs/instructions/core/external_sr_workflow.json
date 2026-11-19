@@ -53,7 +53,12 @@
         "why": "GitHub web interface (blob) displays content from the current HEAD commit. No CDN, no cache, no delay. Instant and accurate.",
         "fallback": "If direct link is unavailable, use API (api.github.com) as fallback to verify SHA and version."
       },
-      "python_package_cli_rule": "For any Python package with CLI (invoked as 'python -m pkg ...'), ALWAYS create pkg/__main__.py with: from pkg.cli import main; if __name__ == '__main__': main(). Without __main__.py, 'python -m pkg' fails with 'No module named pkg.__main__'. This is a standard Python requirement, not optional."
+      "python_package_cli_rule": "For any Python package with CLI (invoked as 'python -m pkg ...'), ALWAYS create pkg/__main__.py with: from pkg.cli import main; if __name__ == '__main__': main(). Without __main__.py, 'python -m pkg' fails with 'No module named pkg.__main__'. This is a standard Python requirement, not optional.",
+      "batched_context_saving": {
+        "source": "honeycombs/instructions/core/external_context_saving.md",
+        "scope": "Только внешние диалоговые ассистенты; не локальные рабочие циклы.",
+        "instruction": "Прочитай общий источник и применяй его перед диалоговым ведением данных. Повторной редакции правила здесь не хранить. Прямые задачи и дедлайны, а также отдельное согласие на Notion обрабатываются по исходному порядку."
+      }
     },
     "powershell_examples": {
       "description": "Concrete, copy-paste ready examples for common tasks.",
@@ -414,10 +419,15 @@
         "version": "v1.0.0",
         "created": null,
         "updated": null,
-        "verification": {"checked_at": null, "scope": null},
+        "verification": {
+          "checked_at": null,
+          "scope": null
+        },
         "sources": [],
         "related": [],
-        "content": {"what": "Основное содержание на русском языке."},
+        "content": {
+          "what": "Основное содержание на русском языке."
+        },
         "supporting": {}
       }
     },
@@ -473,7 +483,7 @@
     ]
   },
   "identity": {
-    "updated": "2026-10-16",
+    "updated": "2026-11-19",
     "layer": 2,
     "type": "workflow_guide",
     "version": "v1.8.2",
