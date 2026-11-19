@@ -10,6 +10,12 @@
     "path": "honeycombs/boot_online/local_onboarding.md",
     "command": "Резонанс"
   },
+  "assistants_project": {
+    "path": "honeycombs/boot_online/assistants_onboarding.md",
+    "registry": "honeycombs/boot_online/assistants.json",
+    "command": "Резонанс",
+    "flow": "Базовый вход Мандалы, выбор ассистента, рабочий вход выбранного направления."
+  },
   "kurtoch_mobile": {
     "path": "honeycombs/personal/kurtoch/mobile_manager_onboarding.md",
     "command": "Резонанс"

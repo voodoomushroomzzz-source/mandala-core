@@ -38,6 +38,8 @@
       "report": "Кратко назови ближайший согласованный шаг, пример применения философии и одну связь из графа. Укажи недоступные или расходящиеся источники."
     },
     "routes": {
+      "assistants": "honeycombs/boot_online/assistants_onboarding.md",
+      "assistant_registry": "honeycombs/boot_online/assistants.json",
       "local": "honeycombs/boot_online/local_onboarding.md",
       "kurtoch_mobile": "honeycombs/personal/kurtoch/mobile_manager_onboarding.md",
       "poetry": "honeycombs/personal/poetry/index.json",

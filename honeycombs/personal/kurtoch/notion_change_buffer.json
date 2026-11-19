@@ -1,0 +1,21 @@
+{
+  "version": "v1.0.0",
+  "updated": "2026-11-19",
+  "purpose": "Изменения из исходников Куртоша на GitHub, ожидающие подтверждённой выгрузки в Notion.",
+  "instructions": "honeycombs/personal/kurtoch/mobile_manager_onboarding.md",
+  "target_map": "honeycombs/personal/kurtoch/index.json#notion_hub",
+  "entry_schema": {
+    "id": "Устойчивый уникальный ID записи буфера.",
+    "source_file": "Путь к исходному JSON от корня репозитория.",
+    "record_id": "ID задачи, сотрудника или материала в исходнике.",
+    "target": "Ключ целевой базы в notion_hub.branches: taskboard, team или kb.",
+    "action": "upsert или archive. Archive требует явного согласия.",
+    "desired_fields": "Объект согласованных изменяемых полей и их итоговых значений из исходника.",
+    "revision": "Целое число начиная с 1. Увеличивать при изменении содержимого записи.",
+    "created_at": "Время первой постановки в очередь в ISO 8601 с часовым поясом.",
+    "updated_at": "Время последней правки записи в ISO 8601 с часовым поясом.",
+    "notion_page_id": "Проверенный ID карточки Notion либо null до сопоставления.",
+    "last_error": "Краткое описание незавершённого переноса либо null."
+  },
+  "pending": []
+}

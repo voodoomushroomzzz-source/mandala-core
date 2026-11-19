@@ -1,0 +1,23 @@
+{
+  "version": "v1.1.0",
+  "updated": "2026-11-19",
+  "local_default": "mandala",
+  "assistants": [
+    {
+      "id": "mandala",
+      "name": "Мандала",
+      "aliases": ["Ассистент Мандалы", "Мандала ассистент"],
+      "description": "Развитие всей экосистемы: согласованные приоритеты, архитектура, связи между работами, знания, продукты и память решений.",
+      "status": "available",
+      "onboarding": "honeycombs/boot_online/mandala_assistant.md"
+    },
+    {
+      "id": "kurtoch",
+      "name": "Куртош",
+      "aliases": ["Куртош ассистент", "Куртош Менеджер", "Куртош Кофе"],
+      "description": "Операционный помощник: задачи, команда, регламенты, закупки, смены и зарплата.",
+      "status": "available",
+      "onboarding": "honeycombs/personal/kurtoch/mobile_manager_onboarding.md"
+    }
+  ]
+}
