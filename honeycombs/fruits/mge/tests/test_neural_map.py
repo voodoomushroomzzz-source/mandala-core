@@ -49,6 +49,13 @@ assert.ok(model.nodes.every(n=>Number.isFinite(n.x)&&Number.isFinite(n.y)));
 assert.equal(map.tone(model.byId.get('works')).hex,'#a371f7');
 assert.equal(map.tone(model.byId.get('product')).hex,'#7989ef');
 assert.equal(map.tone({id:'core_map',hub:true}).hex,'#56d364');
+const texture=map.fiberGeometry('works');
+assert.deepEqual(texture,map.fiberGeometry('works'),'texture does not flicker between frames');
+assert.notDeepEqual(texture,map.fiberGeometry('fruits'),'nodes have individual fiber patterns');
+assert.ok(texture.fibers.length>map.fiberGeometry('small',55).fibers.length);
+assert.ok(texture.fibers.every(f=>f.points.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)&&Math.hypot(p.x,p.y)<=1)));
+assert.ok(texture.tips.every(f=>f.points.every(p=>Math.hypot(p.x,p.y)<1.2)),'edge fibers fit the cached sprite');
+
 
 '''
         subprocess.run(['node','-e',program,str(script)],check=True,capture_output=True,text=True)
