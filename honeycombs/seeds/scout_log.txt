@@ -13872,3 +13872,62 @@
 [2026-11-20 07:01:17] [INFO]   Total duplicates: 5
 [2026-11-20 07:01:17] [INFO]   Total removed (old): 0
 [2026-11-20 07:01:17] [INFO] ============================================================
+[2026-11-20 17:33:19] [INFO] ============================================================
+[2026-11-20 17:33:19] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-11-20 17:33:19] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-11-20 17:33:19] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-11-20 17:33:19] [INFO]   → Found 15 raw items, 15 recent
+[2026-11-20 17:33:19] [INFO]   → Filtered to 5 relevant items
+[2026-11-20 17:33:19] [INFO]   ⏭️ Duplicate: Human-AI Mutualism Is Unstable under Capability As...
+[2026-11-20 17:33:19] [INFO]   ⏭️ Duplicate: Training Language Models for Introspective Oversig...
+[2026-11-20 17:33:19] [INFO]   ⏭️ Duplicate: Where the Tokens Go: Heat, Entropy and Error in Ag...
+[2026-11-20 17:33:19] [INFO]   ⏭️ Duplicate: HardwareDx: A Foundational Graph Model System for ...
+[2026-11-20 17:33:19] [INFO]   ⏭️ Duplicate: RFBench: A Simulator-Grounded Multimodal Benchmark...
+[2026-11-20 17:33:19] [INFO]   📊 arXiv AI: saved 0, duplicates 5
+[2026-11-20 17:33:19] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-11-20 17:33:19] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-11-20 17:33:19] [INFO]   → Found 15 raw items, 15 recent
+[2026-11-20 17:33:19] [INFO]   → Filtered to 5 relevant items
+[2026-11-20 17:33:20] [INFO]   ⏭️ Duplicate: Inhabitant: An Agent Framework for Long-Horizon Hu...
+[2026-11-20 17:33:20] [INFO]   ⏭️ Duplicate: Mapping the Wind to Find the Source: Online Physic...
+[2026-11-20 17:33:20] [INFO]   ⏭️ Duplicate: MAWAM: A Multi-Agent World-Action Model for Coordi...
+[2026-11-20 17:33:20] [INFO]   ⏭️ Duplicate: GEMS: Generation and Experience Memory for Subgoal...
+[2026-11-20 17:33:20] [INFO]   ⏭️ Duplicate: Old-School Planners Drive (Sometimes) Better Than ...
+[2026-11-20 17:33:20] [INFO]   📊 arXiv Robotics: saved 0, duplicates 5
+[2026-11-20 17:33:20] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-11-20 17:33:20] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-11-20 17:33:20] [ERROR]   ❌ RSS error: 419 Client Error:  for url: https://news.ycombinator.com/rss
+[2026-11-20 17:33:20] [INFO]   📊 Hacker News: saved 0, duplicates 0
+[2026-11-20 17:33:20] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-11-20 17:33:20] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-11-20 17:33:21] [INFO]   → Found 15 raw items, 15 recent
+[2026-11-20 17:33:21] [INFO]   → Filtered to 5 relevant items
+[2026-11-20 17:33:21] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-11-20 17:33:21] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-11-20 17:33:21] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-11-20 17:33:21] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-11-20 17:33:21] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-11-20 17:33:21] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-11-20 17:33:21] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-11-20 17:33:21] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-11-20 17:33:22] [INFO]   → Found 15 raw items, 4 recent
+[2026-11-20 17:33:22] [INFO]   → Filtered to 3 relevant items
+[2026-11-20 17:33:22] [INFO]   ✅ Saved: SEED-20261120-173322-725.json
+[2026-11-20 17:33:22] [INFO]   ✅ Saved: SEED-20261120-173322-726.json
+[2026-11-20 17:33:22] [INFO]   ⏭️ Duplicate: Apple may be developing its own AI agent that runs...
+[2026-11-20 17:33:22] [INFO]   📊 TechCrunch AI: saved 2, duplicates 1
+[2026-11-20 17:33:22] [INFO]   🗑️ Cleaning old seeds (date <= 2026-11-20)...
+[2026-11-20 17:33:22] [INFO]   ✅ No old seeds to remove
+[2026-11-20 17:33:22] [INFO]   📝 Updated inbox/index.json with last_processed=2026-11-20
+[2026-11-20 17:33:22] [INFO] 
+============================================================
+[2026-11-20 17:33:22] [INFO] ✅ Scout Agent v2.2 finished
+[2026-11-20 17:33:22] [INFO]   Total saved: 2
+[2026-11-20 17:33:22] [INFO]   Total duplicates: 16
+[2026-11-20 17:33:22] [INFO]   Total removed (old): 0
+[2026-11-20 17:33:22] [INFO] ============================================================
