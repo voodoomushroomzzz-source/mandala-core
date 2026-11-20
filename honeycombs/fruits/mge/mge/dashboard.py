@@ -275,6 +275,41 @@ def personal_entries(root, movement):
     return entries
 
 
+def render_everyday(root):
+    """Keep short household lists separate from the personal priority board."""
+    path = root / "honeycombs/personal/everyday_tasks.json"
+    if not path.exists():
+        return ""
+    groups = {"shopping": ("Покупки", []), "errands": ("Дела", [])}
+    closed = []
+    ids = set()
+    for task in load(path)["tasks"]:
+        key = task["id"]
+        if key in ids:
+            raise ValueError(f"Duplicate everyday task: {key}")
+        ids.add(key)
+        if task["category"] not in groups:
+            raise ValueError(f"Unknown everyday category: {task['category']}")
+        if task["status"] not in {"active", "done", "cancelled"}:
+            raise ValueError(f"Unknown everyday status: {task['status']}")
+        item = f'<li id="{escape(key, quote=True)}">{escape(task["name"])}</li>'
+        if task["status"] == "active":
+            groups[task["category"]][1].append(item)
+        else:
+            closed.append(f'<li id="{escape(key, quote=True)}">{escape(task["name"])}'
+                          f' <span class="meta">— {escape(label(task["status"]))}</span></li>')
+    html = '<section id="everyday" aria-labelledby="everyday-title"><h2 id="everyday-title">Повседневное</h2>'
+    html += '<p class="meta">Покупки и небольшие бытовые дела.</p><div class="grid">'
+    for title, items in groups.values():
+        html += f'<article><h3>{title}</h3>'
+        html += ('<ul>' + ''.join(items) + '</ul>') if items else '<p class="meta">Список пуст.</p>'
+        html += '</article>'
+    html += '</div>'
+    if closed:
+        html += '<details class="queue-more"><summary>Завершённые и отменённые</summary><ul>' + ''.join(closed) + '</ul></details>'
+    return html + '</section>'
+
+
 def build_personal(root, output):
     movement = load(root / "honeycombs/personal/current_movement.json")
     entries = personal_entries(root, movement)
@@ -296,6 +331,7 @@ def build_personal(root, output):
             if focus.get(field):
                 intro += f'<p>{escape(focus[field])}</p>'
         intro += '</section>'
+    intro += render_everyday(root)
     intro += '<h2>Сейчас</h2>'
     active = [e for e in entries if e["now"]]
     intro += ('<ul class="queue">' + ''.join(f'<li>{link("personal.html", e["id"], e["name"])}</li>' for e in active) + '</ul>') if active else '<p>Согласованных текущих действий пока нет.</p>'

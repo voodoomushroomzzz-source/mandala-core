@@ -38,6 +38,27 @@ class PersonalDashboardTest(unittest.TestCase):
         self.assertIn('datetime="2026-12-01"', html)
         self.assertIn("Следующий шаг: Практика", html)
 
+    def test_everyday_items_stay_separate_and_follow_source_status(self):
+        self.write("personal_tasks.json", {"tasks": []})
+        data = {"tasks": [
+            {"id": "DAY-001", "name": "Яйца <6>", "category": "shopping", "status": "active"},
+            {"id": "DAY-002", "name": "Забрать заказ", "category": "errands", "status": "done"},
+        ]}
+        self.write("everyday_tasks.json", data)
+        build_personal(self.root, self.root)
+        html = (self.root / "personal.html").read_text(encoding="utf-8")
+        self.assertIn('id="everyday-title">Повседневное', html)
+        self.assertIn('id="DAY-001">Яйца &lt;6&gt;', html)
+        self.assertIn('Завершённые и отменённые', html)
+        self.assertIn('— Завершено', html)
+        self.assertEqual(personal_entries(self.root, self.movement), [])
+        data["tasks"][0]["status"] = "done"
+        self.write("everyday_tasks.json", data)
+        build_personal(self.root, self.root)
+        html = (self.root / "personal.html").read_text(encoding="utf-8")
+        self.assertIn('<h3>Покупки</h3><p class="meta">Список пуст.', html)
+        self.assertIn('id="DAY-001">Яйца &lt;6&gt; <span', html)
+
     def test_direction_changes_and_focus_are_rendered_from_live_data(self):
         self.write("personal_tasks.json", {"tasks": []})
         self.movement["personal_focus"] = {"focus": "Доход <рост>", "balance": "Без гонки & спешки"}

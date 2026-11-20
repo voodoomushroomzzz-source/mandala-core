@@ -10,26 +10,46 @@
   "loans": [
     {
       "id": "loan_1",
-      "monthly_payment_rub": 43000,
+      "monthly_payment_rub": 43524,
       "reported_end_month": "2028-02",
-      "end_note": "Точный день и включение последнего месяца в график не уточнены.",
+      "end_note": "Дата подтверждена предоставленным графиком платежей.",
       "remaining_balance_rub": null,
-      "interest_rate_percent": null
+      "interest_rate_percent": null,
+      "payment_day": 27,
+      "final_payment_date": "2028-02-27",
+      "original_amount_rub": 700000,
+      "term_months": 24,
+      "full_term_payments_rub": 1044575.08,
+      "full_term_interest_rub": 344575.08,
+      "displayed_remaining_rub": 654186.02,
+      "final_payment_rub": 43523.08,
+      "displayed_remaining_note": "Сумма «осталось выплатить» на скриншоте; не подтверждена как сумма полного досрочного погашения на текущую дату.",
+      "source": "Скриншоты приложения и графиков платежей, предоставленные 20.11.2026."
     },
     {
       "id": "loan_2",
-      "monthly_payment_rub": 10000,
+      "monthly_payment_rub": 10598,
       "reported_end_month": "2027-11",
-      "end_note": "Точный день и включение последнего месяца в график не уточнены.",
+      "end_note": "Дата подтверждена предоставленным графиком платежей.",
       "remaining_balance_rub": null,
-      "interest_rate_percent": null
+      "interest_rate_percent": null,
+      "payment_day": 15,
+      "final_payment_date": "2027-11-15",
+      "original_amount_rub": 104000,
+      "term_months": 12,
+      "full_term_payments_rub": 127171.19,
+      "full_term_interest_rub": 23171.19,
+      "displayed_remaining_rub": 104000,
+      "final_payment_rub": 10593.19,
+      "displayed_remaining_note": "Сумма «осталось выплатить» на скриншоте; не подтверждена как сумма полного досрочного погашения на текущую дату.",
+      "source": "Скриншоты приложения и графиков платежей, предоставленные 20.11.2026."
     }
   ],
   "fixed_expenses": {
     "utilities_rub_monthly": 5000,
     "utilities_approximate": true,
-    "loan_payments_rub_monthly": 53000,
-    "total_rub_monthly": 58000,
+    "loan_payments_rub_monthly": 54122,
+    "total_rub_monthly": 59122,
     "note": "Кредиты и коммунальная плата — жёсткие постоянные платежи; коммунальная сумма приблизительная."
   },
   "children": {
@@ -46,25 +66,100 @@
       "одежда",
       "мобильная связь",
       "VPN",
-      "домашний интернет"
+      "домашний интернет",
+      "транспорт"
     ],
-    "note": "Связь, VPN и домашний интернет уже входят в 30 000 ₽; дополнительно не прибавлять. Для них прозвучал примерный ориентир 1–2 тыс. ₽, отдельная точная сумма не подтверждена."
+    "note": "Связь, VPN и домашний интернет уже входят в 30 000 ₽; дополнительно не прибавлять. Для них прозвучал примерный ориентир 1–2 тыс. ₽, отдельная точная сумма не подтверждена.",
+    "transport_estimate_rub_monthly": {
+      "min": 2500,
+      "max": 3000,
+      "included_in_household_total": true
+    }
   },
   "monthly_baseline": {
-    "fixed_rub": 58000,
+    "fixed_rub": 59122,
     "children_target_rub": 30000,
     "household_estimate_rub": 30000,
-    "total_estimated_rub": 118000,
-    "note": "Расчёт 43 000 + 10 000 + 5 000 + 30 000 + 30 000. Включает желательные выплаты детям; не означает, что все статьи фиксированные или что учтены все возможные расходы."
+    "total_estimated_rub": 119122,
+    "note": "43 524 + 10 598 + около 5 000 + 30 000 детям + около 30 000 бытовых расходов, включая транспорт и связь. Не все статьи фиксированные; это не полная финансовая отчётность.",
+    "from_december_2026_estimated_rub": 122622
   },
   "priorities": [
-    "По возможности быстрее погасить кредиты, затем направлять высвободившиеся средства на дальнейшее развитие и инвестиции."
+    "Закрыть оба кредита и в дальнейшем обходиться без новых.",
+    "Маленький кредит рассматривается для досрочного погашения при свободных средствах; утверждённого плана нет."
   ],
   "links": {
     "personal_course": "current_movement.json",
     "profile": "profile_deep.json"
   },
   "open_questions": [
-    "Остатки долга, ставки и условия досрочного погашения пока неизвестны; план погашения не составлен."
+    "Годовые ставки, ПСК и точные условия досрочного погашения не подтверждены.",
+    "Гипотеза Садовника: по большому кредиту значительная часть процентов уже выплачена; вывод об отсутствии выгоды досрочного погашения не подтверждён.",
+    "Суммы за весь срок из графиков не являются суммами оставшихся платежей."
+  ],
+  "sports": {
+    "monthly_rub": 3500,
+    "starts_month": "2026-12",
+    "additional_to_household": true
+  },
+  "subscriptions": {
+    "chatgpt": {
+      "personal_expense_rub_monthly": 0,
+      "payer": "Компания компенсирует подписку",
+      "continuation_confirmed": false
+    }
+  },
+  "income": {
+    "kurtoch_payments": [
+      {
+        "month": "2026-09",
+        "received_rub": 50000
+      },
+      {
+        "month": "2026-10",
+        "received_rub": 70000
+      },
+      {
+        "month": "2026-11",
+        "received_rub": null,
+        "note": "Сумма пока неизвестна."
+      }
+    ],
+    "rent": {
+      "agreed_rub_monthly": 35000,
+      "last_received_rub": 35000,
+      "tenant": "Родственники",
+      "possible_reduced_rub_monthly": 30000,
+      "reduction_confirmed": false,
+      "note": "Просьба о снижении из-за финансовых сложностей. Обещал попробовать при возможности; действующая договорённость — 35 000 ₽."
+    }
+  },
+  "reserves": {
+    "savings_rub": 0,
+    "split": {
+      "outstanding_rub": 0,
+      "available_limit_rub": 100000,
+      "terms_months": [
+        2,
+        4
+      ],
+      "note": "Заёмный лимит, не накопления и не доход."
+    }
+  },
+  "payment_discipline": {
+    "loan_and_utilities_arrears": false,
+    "source": "Прямое подтверждение 20.11.2026",
+    "shortfall_handling": "Сокращает расходы, включая продукты и выплаты детям, либо пользуется Сплитом."
+  },
+  "goals": [
+    {
+      "id": "dental_care",
+      "name": "Накопить на стоматолога",
+      "target_rub_min": 20000,
+      "target_rub_max": 30000,
+      "target_period": "К весне 2027 года",
+      "deadline": null,
+      "note": "Личный приоритет; предварительная оценка, точная стоимость неизвестна."
+    }
   ]
 }
