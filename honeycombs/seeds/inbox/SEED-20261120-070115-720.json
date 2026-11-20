@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261120-070115-720",
+  "title": "Mapping the Wind to Find the Source: Online Physics-Informed Gas Source Localization with Mobile Robots",
+  "url": "https://arxiv.org/abs/2611.25067",
+  "description": "arXiv:2611.25067v1 Announce Type: new \nAbstract: Gas Source Localization (GSL) with mobile robots is challenging because wind and gas measurements are spatially sparse, noisy, and potentially affected by robot motion. Indoor airflow can vary substantially across space, while detailed environmental layouts, boundary conditions, or precomputed airflow fields are often unavailable. Moreover, hazardous sources must be localized as quickly as possible, making exhaustive exploration impractical. This ",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-11-20T07:01:15.087427",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

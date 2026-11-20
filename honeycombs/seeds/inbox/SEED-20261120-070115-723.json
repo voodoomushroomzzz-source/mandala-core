@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261120-070115-723",
+  "title": "Old-School Planners Drive (Sometimes) Better Than Learned Ones",
+  "url": "https://arxiv.org/abs/2611.25138",
+  "description": "arXiv:2611.25138v1 Announce Type: new \nAbstract: End-to-end driving models learn to plan from data, and hand-written planners are widely treated as a thing of the past. We test whether this is justified: we implement sixteen textbook planners, each combining a path source (reference line, A*, hybrid A*, RRT*) with a trajectory method (Frenet lattice, nonlinear optimization, $s$--$t$ search, dynamic window), and evaluate them on three benchmarks: open loop on nuScenes, closed loop on nuPlan with ",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-11-20T07:01:15.907304",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
