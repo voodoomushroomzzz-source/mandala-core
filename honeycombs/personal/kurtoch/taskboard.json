@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.70",
+    "version": "v2.6.71",
     "created": "2026-09-14",
     "updated": "2026-11-20",
     "layer": 2,
@@ -15,7 +15,7 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.6.70",
+    "version": "v2.6.71",
     "created": "2026-09-14",
     "updated": "2026-11-20",
     "legend": {
@@ -2035,30 +2035,76 @@
           "column": "Операционка — Общая"
         },
         "focus": false
+      },
+      {
+        "id": "K-212",
+        "title": "Организовать ежемесячные разговоры с командой один на один",
+        "description": "Организовать ежемесячные индивидуальные разговоры с сотрудниками о планах работы. Обсуждать дальнейшие планы сотрудника, его возможности и пожелания по работе, фиксировать договорённости и возвращаться к ним на следующей встрече.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-11-20",
+        "updated": "2026-11-20",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
+      },
+      {
+        "id": "K-213",
+        "title": "Продумать формат общих планёрок",
+        "description": "Продумать, как проводить общие планёрки команды: цель, состав участников, периодичность, продолжительность и повестка. Определить, как фиксировать решения и отслеживать выполнение договорённостей.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-11-20",
+        "updated": "2026-11-20",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
       }
     ],
     "counters": {
-      "total": 73,
+      "total": 75,
       "by_status": {
-        "todo": 66,
+        "todo": 68,
         "in_progress": 6,
         "planning": 1
       },
       "by_priority": {
         "high": 34,
-        "medium": 35,
+        "medium": 37,
         "critical": 2,
         "low": 2
       },
       "by_column": {
-        "Операционка — Общая": 28,
+        "Операционка — Общая": 30,
         "Операционка — Центр": 20,
         "Операционка — Нижка": 16,
         "Крупные вехи": 3,
         "Стратегические": 6
       },
       "by_phase": {
-        "phase_0": 72,
+        "phase_0": 74,
         "phase_1": 1
       }
     },

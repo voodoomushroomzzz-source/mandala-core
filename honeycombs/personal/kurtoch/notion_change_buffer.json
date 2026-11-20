@@ -196,6 +196,76 @@
       "updated_at": "2026-11-20T10:59:26.422Z",
       "notion_page_id": null,
       "last_error": null
+    },
+    {
+      "id": "notion-task-K-212",
+      "source_file": "honeycombs/personal/kurtoch/taskboard.json",
+      "record_id": "K-212",
+      "target": "taskboard",
+      "action": "upsert",
+      "desired_fields": {
+        "id": "K-212",
+        "title": "Организовать ежемесячные разговоры с командой один на один",
+        "description": "Организовать ежемесячные индивидуальные разговоры с сотрудниками о планах работы. Обсуждать дальнейшие планы сотрудника, его возможности и пожелания по работе, фиксировать договорённости и возвращаться к ним на следующей встрече.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-11-20",
+        "updated": "2026-11-20",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
+      },
+      "revision": 1,
+      "created_at": "2026-11-20T11:03:47.390Z",
+      "updated_at": "2026-11-20T11:03:47.390Z",
+      "notion_page_id": null,
+      "last_error": null
+    },
+    {
+      "id": "notion-task-K-213",
+      "source_file": "honeycombs/personal/kurtoch/taskboard.json",
+      "record_id": "K-213",
+      "target": "taskboard",
+      "action": "upsert",
+      "desired_fields": {
+        "id": "K-213",
+        "title": "Продумать формат общих планёрок",
+        "description": "Продумать, как проводить общие планёрки команды: цель, состав участников, периодичность, продолжительность и повестка. Определить, как фиксировать решения и отслеживать выполнение договорённостей.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-11-20",
+        "updated": "2026-11-20",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
+      },
+      "revision": 1,
+      "created_at": "2026-11-20T11:03:47.390Z",
+      "updated_at": "2026-11-20T11:03:47.390Z",
+      "notion_page_id": null,
+      "last_error": null
     }
   ]
 }
