@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.73",
+    "version": "v2.6.74",
     "created": "2026-09-14",
     "updated": "2026-11-20",
     "layer": 2,
@@ -15,7 +15,7 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.6.73",
+    "version": "v2.6.74",
     "created": "2026-09-14",
     "updated": "2026-11-20",
     "legend": {
@@ -1586,13 +1586,15 @@
           "M-002"
         ],
         "created": "2026-11-13",
-        "updated": "2026-11-13",
+        "updated": "2026-11-20",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
           "notion_page_id": null,
-          "column": "Операционка — Общая"
+          "column": "Операционка — Общая",
+          "responsible_id": "EMP-021",
+          "responsible_name": "Витя"
         },
         "focus": false
       },
