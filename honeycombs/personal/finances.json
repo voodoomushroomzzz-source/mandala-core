@@ -1,0 +1,70 @@
+{
+  "version": "v1.0.0",
+  "updated": "2026-11-20",
+  "currency": "RUB",
+  "source": {
+    "type": "gardener_statement",
+    "date": "2026-11-20"
+  },
+  "scope": "Текущие личные месячные расходы и обязательства; оценки со слов Садовника, не полная финансовая отчётность.",
+  "loans": [
+    {
+      "id": "loan_1",
+      "monthly_payment_rub": 43000,
+      "reported_end_month": "2028-02",
+      "end_note": "Точный день и включение последнего месяца в график не уточнены.",
+      "remaining_balance_rub": null,
+      "interest_rate_percent": null
+    },
+    {
+      "id": "loan_2",
+      "monthly_payment_rub": 10000,
+      "reported_end_month": "2027-11",
+      "end_note": "Точный день и включение последнего месяца в график не уточнены.",
+      "remaining_balance_rub": null,
+      "interest_rate_percent": null
+    }
+  ],
+  "fixed_expenses": {
+    "utilities_rub_monthly": 5000,
+    "utilities_approximate": true,
+    "loan_payments_rub_monthly": 53000,
+    "total_rub_monthly": 58000,
+    "note": "Кредиты и коммунальная плата — жёсткие постоянные платежи; коммунальная сумма приблизительная."
+  },
+  "children": {
+    "count": 2,
+    "desired_minimum_per_child_rub_monthly": 15000,
+    "desired_total_rub_monthly": 30000,
+    "flexibility": "По словам Садовника, в сложные месяцы выплаты могут быть меньше, затем больше; это желательный ориентир, не утверждение о юридически установленной сумме."
+  },
+  "household": {
+    "estimated_rub_monthly": 30000,
+    "variable": true,
+    "includes": [
+      "продукты и прочие бытовые расходы",
+      "одежда",
+      "мобильная связь",
+      "VPN",
+      "домашний интернет"
+    ],
+    "note": "Связь, VPN и домашний интернет уже входят в 30 000 ₽; дополнительно не прибавлять. Для них прозвучал примерный ориентир 1–2 тыс. ₽, отдельная точная сумма не подтверждена."
+  },
+  "monthly_baseline": {
+    "fixed_rub": 58000,
+    "children_target_rub": 30000,
+    "household_estimate_rub": 30000,
+    "total_estimated_rub": 118000,
+    "note": "Расчёт 43 000 + 10 000 + 5 000 + 30 000 + 30 000. Включает желательные выплаты детям; не означает, что все статьи фиксированные или что учтены все возможные расходы."
+  },
+  "priorities": [
+    "По возможности быстрее погасить кредиты, затем направлять высвободившиеся средства на дальнейшее развитие и инвестиции."
+  ],
+  "links": {
+    "personal_course": "current_movement.json",
+    "profile": "profile_deep.json"
+  },
+  "open_questions": [
+    "Остатки долга, ставки и условия досрочного погашения пока неизвестны; план погашения не составлен."
+  ]
+}
