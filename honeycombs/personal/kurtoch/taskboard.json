@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.68",
+    "version": "v2.6.69",
     "created": "2026-09-14",
-    "updated": "2026-11-19",
+    "updated": "2026-11-20",
     "layer": 2,
     "type": "taskboard_module",
     "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -15,9 +15,9 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.6.68",
+    "version": "v2.6.69",
     "created": "2026-09-14",
-    "updated": "2026-11-19",
+    "updated": "2026-11-20",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -1984,30 +1984,81 @@
           "column": "Операционка — Нижка"
         },
         "focus": false
+      },
+      {
+        "id": "K-210",
+        "title": "Составить расписание на 2 недели и собрать пожелания на новогодние праздники",
+        "description": "Составить расписание смен на две недели вперёд.\n\nОтдельно собрать у сотрудников пожелания на новогодние праздники: кто в какие дни и часы может работать, кто планирует уехать или посещать мероприятия и когда будет недоступен. Зафиксировать доступность для подготовки праздничного графика.",
+        "deadline": "2026-11-27",
+        "priority": "high",
+        "related_to": [
+          "K-147"
+        ],
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "reminder": null,
+        "depends_on": [],
+        "created": "2026-11-20",
+        "updated": "2026-11-20",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
+      },
+      {
+        "id": "K-211",
+        "title": "Продумать бонус от выручки за работу в праздничные дни",
+        "description": "Продумать бонус сотрудникам за работу в праздничные дни, привязанный к выручке. Подготовить предложение по условиям начисления и расчёту бонуса.",
+        "deadline": null,
+        "priority": "medium",
+        "related_to": [
+          "K-078",
+          "K-178"
+        ],
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "reminder": null,
+        "depends_on": [],
+        "created": "2026-11-20",
+        "updated": "2026-11-20",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
       }
     ],
     "counters": {
-      "total": 71,
+      "total": 73,
       "by_status": {
-        "todo": 65,
+        "todo": 67,
         "in_progress": 5,
         "planning": 1
       },
       "by_priority": {
-        "high": 33,
-        "medium": 34,
+        "high": 34,
+        "medium": 35,
         "critical": 2,
         "low": 2
       },
       "by_column": {
-        "Операционка — Общая": 26,
+        "Операционка — Общая": 28,
         "Операционка — Центр": 20,
         "Операционка — Нижка": 16,
         "Крупные вехи": 3,
         "Стратегические": 6
       },
       "by_phase": {
-        "phase_0": 70,
+        "phase_0": 72,
         "phase_1": 1
       }
     },

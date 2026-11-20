@@ -1,6 +1,6 @@
 {
   "version": "v1.0.0",
-  "updated": "2026-11-19",
+  "updated": "2026-11-20",
   "purpose": "Изменения из исходников Куртоша на GitHub, ожидающие подтверждённой выгрузки в Notion.",
   "instructions": "honeycombs/personal/kurtoch/mobile_manager_onboarding.md",
   "target_map": "honeycombs/personal/kurtoch/index.json#notion_hub",
@@ -68,6 +68,81 @@
       "revision": 1,
       "created_at": "2026-11-19T19:22:39Z",
       "updated_at": "2026-11-19T19:22:39Z",
+      "notion_page_id": null,
+      "last_error": null
+    },
+    {
+      "id": "notion-task-K-210",
+      "source_file": "honeycombs/personal/kurtoch/taskboard.json",
+      "record_id": "K-210",
+      "target": "taskboard",
+      "action": "upsert",
+      "desired_fields": {
+        "id": "K-210",
+        "title": "Составить расписание на 2 недели и собрать пожелания на новогодние праздники",
+        "description": "Составить расписание смен на две недели вперёд.\n\nОтдельно собрать у сотрудников пожелания на новогодние праздники: кто в какие дни и часы может работать, кто планирует уехать или посещать мероприятия и когда будет недоступен. Зафиксировать доступность для подготовки праздничного графика.",
+        "deadline": "2026-11-27",
+        "priority": "high",
+        "related_to": [
+          "K-147"
+        ],
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "reminder": null,
+        "depends_on": [],
+        "created": "2026-11-20",
+        "updated": "2026-11-20",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
+      },
+      "revision": 1,
+      "created_at": "2026-11-20T10:49:24.292Z",
+      "updated_at": "2026-11-20T10:49:24.292Z",
+      "notion_page_id": null,
+      "last_error": null
+    },
+    {
+      "id": "notion-task-K-211",
+      "source_file": "honeycombs/personal/kurtoch/taskboard.json",
+      "record_id": "K-211",
+      "target": "taskboard",
+      "action": "upsert",
+      "desired_fields": {
+        "id": "K-211",
+        "title": "Продумать бонус от выручки за работу в праздничные дни",
+        "description": "Продумать бонус сотрудникам за работу в праздничные дни, привязанный к выручке. Подготовить предложение по условиям начисления и расчёту бонуса.",
+        "deadline": null,
+        "priority": "medium",
+        "related_to": [
+          "K-078",
+          "K-178"
+        ],
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "reminder": null,
+        "depends_on": [],
+        "created": "2026-11-20",
+        "updated": "2026-11-20",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "focus": false
+      },
+      "revision": 1,
+      "created_at": "2026-11-20T10:49:24.292Z",
+      "updated_at": "2026-11-20T10:49:24.292Z",
       "notion_page_id": null,
       "last_error": null
     }
