@@ -46,18 +46,48 @@ const filtered=map.visibleModel(model,new Set(['honeycomb','work']));
 assert.equal(filtered.bundles.length,0,'hidden links do not inflate weight');
 assert.equal(filtered.edges.length,2);
 assert.ok(model.nodes.every(n=>Number.isFinite(n.x)&&Number.isFinite(n.y)));
-const start=new Map(model.nodes.map(n=>[n.id,{x:n.x,y:n.y}]));
-map.moveNode(model,'works',40,-20);
-for(const id of ['works','task','other']){
- assert.equal(model.byId.get(id).x,start.get(id).x+40,'hub drags its whole group');
- assert.equal(model.byId.get(id).y,start.get(id).y-20);
-}
-assert.equal(model.byId.get('product').x,start.get('product').x,'other groups stay put');
-map.moveNode(model,'task',10,15);
-assert.equal(model.byId.get('task').x,start.get('task').x+50,'satellite moves independently');
-assert.equal(model.byId.get('works').x,start.get('works').x+40,'satellite leaves hub in place');
-assert.equal(JSON.stringify(graph),before,'drag does not alter source graph');
-assert.equal(map.visibleModel(model,new Set(['honeycomb','work','fruit'])).bundles[0].count,3,'drag does not change links');
+assert.equal(map.tone(model.byId.get('works')).hex,'#a371f7');
+assert.equal(map.tone(model.byId.get('product')).hex,'#7989ef');
+assert.equal(map.tone({id:'core_map',hub:true}).hex,'#56d364');
 
+'''
+        subprocess.run(['node','-e',program,str(script)],check=True,capture_output=True,text=True)
+
+    @unittest.skipUnless(shutil.which('node'), 'Node needed for physics regression')
+    def test_drag_propagates_over_links_and_settles(self):
+        script = Path(__file__).resolve().parents[1] / 'mge/reporters/neural_map.js'
+        program = r'''
+const assert=require('node:assert/strict'),map=require(process.argv[1]);
+const graph={nodes:[{id:'works',type:'honeycomb'},{id:'a',type:'work'},
+ {id:'b',type:'work'},{id:'isolated',type:'knowledge'}],edges:[
+ {from:'works',to:'a',type:'contains'},{from:'a',to:'b',type:'related'}]};
+const source=JSON.stringify(graph),m=map.buildModel(graph),physics=map.createPhysics(m);
+const start=new Map(m.nodes.map(n=>[n.id,{x:n.x,y:n.y}]));
+const distance=id=>Math.hypot(m.byId.get(id).x-start.get(id).x,m.byId.get(id).y-start.get(id).y);
+assert.equal(physics.step(),false,'idle map does not animate');
+physics.pin('works',start.get('works').x+180,start.get('works').y+40);
+physics.step();
+assert.ok(distance('a')>0,'direct neighbor follows');
+assert.equal(distance('b'),0,'distant neighbor responds after a delay');
+assert.equal(distance('isolated'),0,'unconnected node does not follow');
+for(let i=0;i<60;i++)physics.step();
+assert.ok(distance('b')>1,'motion reaches the next linked node');
+assert.equal(m.byId.get('works').x,start.get('works').x+180,'grabbed node stays under pointer');
+assert.ok(distance('a')<180,'group is elastic, not rigidly translated');
+physics.release();
+for(let i=0;i<650;i++)physics.step();
+assert.equal(physics.active,false,'animation eventually sleeps');
+assert.ok(distance('works')<180,'damping and anchors settle the pull');
+assert.ok(m.nodes.every(n=>Number.isFinite(n.x)&&Number.isFinite(n.y)));
+assert.equal(JSON.stringify(graph),source,'source graph unchanged');
+const hidden=map.buildModel(graph),p=map.createPhysics(hidden);
+const hx=hidden.byId.get('a').x;
+p.pin('works',200,0);for(let i=0;i<30;i++)p.step(1,new Set(['works']));
+assert.equal(hidden.byId.get('a').x,hx,'hidden nodes do not move');
+p.stop();assert.equal(p.active,false);
+const reduced=map.createPhysics(map.buildModel(graph),{reducedMotion:true});
+reduced.pin('works',200,0);reduced.step();reduced.release();
+for(let i=0;i<120;i++)reduced.step();
+assert.equal(reduced.active,false,'reduced-motion tail is bounded');
 '''
         subprocess.run(['node','-e',program,str(script)],check=True,capture_output=True,text=True)

@@ -18,18 +18,11 @@ const NeuralMap = (() => {
     return {width:1.15 + t*7.3, opacity:.3 + t*.57, strands:Math.min(7,Math.max(1,Math.ceil(Math.sqrt(count))))};
   }
   const TONES = {
-    works:{hex:'#56d364',rgb:'86,211,100'}, knowledge:{hex:'#7989ef',rgb:'121,137,239'},
-    fruits:{hex:'#b08af5',rgb:'176,138,245'}, core_map:{hex:'#56d364',rgb:'86,211,100'},
-    philosophy:{hex:'#b08af5',rgb:'176,138,245'}, akasha:{hex:'#7989ef',rgb:'121,137,239'},
-    personal:{hex:'#56d364',rgb:'86,211,100'}, protocols:{hex:'#7989ef',rgb:'121,137,239'}
+    core:{hex:'#56d364',rgb:'86,211,100'},
+    hub:{hex:'#a371f7',rgb:'163,113,247'},
+    small:{hex:'#7989ef',rgb:'121,137,239'}
   };
-  const tone = n => TONES[n.group] || {hex:'#a371f7',rgb:'163,113,247'};
-  function moveNode(model,id,dx,dy) {
-    const node=model.byId.get(id);
-    if(!node||!Number.isFinite(dx)||!Number.isFinite(dy))return;
-    const members=node.hub ? model.groups.get(node.group) : [node];
-    members.forEach(n=>{n.x+=dx;n.y+=dy;});
-  }
+  const tone = n => n.id==='core_map' ? TONES.core : n.hub ? TONES.hub : TONES.small;
   function buildModel(graph) {
     const nodes = graph.nodes.map(n => ({...n, hub:isHub(n), group:n.id, neighbors:new Set(), degree:0}));
     const byId = new Map(nodes.map(n=>[n.id,n]));
@@ -80,13 +73,74 @@ const NeuralMap = (() => {
     bundles.forEach(b=>Object.assign(b,strength(b.count)));
     return {nodes,edges,bundles:[...bundles.values()],ids};
   }
+  function createPhysics(model,{reducedMotion=false}={}) {
+    // Springs preserve the original relative layout and transmit displacement
+    // over real links only. Nodes near the grab respond before distant nodes.
+    const bodies=new Map(model.nodes.map(n=>[n.id,{
+      x:n.x,y:n.y,vx:0,vy:0,mass:1+Math.sqrt(n.degree||0)+(n.hub?1:0)
+    }]));
+    const pairs=new Map();
+    model.edges.forEach(e=>{
+      if(e.from===e.to)return;
+      const k=key(e.from,e.to);
+      if(!pairs.has(k)){
+        const a=model.byId.get(e.from),b=model.byId.get(e.to);
+        pairs.set(k,{a,b,dx:b.x-a.x,dy:b.y-a.y});
+      }
+    });
+    let active=false,pinned=null,age=0;
+    function stop(){active=false;pinned=null;model.nodes.forEach(n=>{const b=bodies.get(n.id);b.vx=0;b.vy=0;});}
+    return {
+      get active(){return active;},
+      pin(id,x,y){
+        const n=model.byId.get(id);
+        if(!n||!Number.isFinite(x)||!Number.isFinite(y))return;
+        n.x=x;n.y=y;pinned=id;active=true;age=0;
+        const b=bodies.get(id);b.vx=0;b.vy=0;
+      },
+      release(){pinned=null;age=0;},
+      stop,
+      step(dt=1,visible=null){
+        if(!active)return false;
+        dt=Math.max(.1,Math.min(1.5,Number.isFinite(dt)?dt:1));
+        const forces=new Map();
+        model.nodes.forEach(n=>{
+          const b=bodies.get(n.id);
+          forces.set(n.id,{x:(b.x-n.x)*.009,y:(b.y-n.y)*.009});
+        });
+        pairs.forEach(({a,b,dx,dy})=>{
+          if(visible&&(!visible.has(a.id)||!visible.has(b.id)))return;
+          const fx=((b.x-a.x)-dx)*.065,fy=((b.y-a.y)-dy)*.065;
+          forces.get(a.id).x+=fx;forces.get(a.id).y+=fy;
+          forces.get(b.id).x-=fx;forces.get(b.id).y-=fy;
+        });
+        let motion=0;
+        model.nodes.forEach(n=>{
+          const b=bodies.get(n.id),f=forces.get(n.id);
+          if(n.id===pinned||(visible&&!visible.has(n.id))){b.vx=0;b.vy=0;return;}
+          const damping=Math.pow(reducedMotion ? .62 : .86,dt);
+          b.vx=(b.vx+f.x/b.mass*dt)*damping;
+          b.vy=(b.vy+f.y/b.mass*dt)*damping;
+          const speed=Math.hypot(b.vx,b.vy);
+          if(speed>16){b.vx*=16/speed;b.vy*=16/speed;}
+          n.x+=b.vx*dt;n.y+=b.vy*dt;
+          motion=Math.max(motion,Math.hypot(b.vx,b.vy),Math.hypot(f.x,f.y)/b.mass);
+        });
+        age+=dt;
+        if(!pinned&&(motion<.035||age>(reducedMotion?100:600)))stop();
+        return active;
+      }
+    };
+  }
   function init(graph) {
     const model=buildModel(graph), canvas=document.getElementById('network'), ctx=canvas.getContext('2d');
+    const simulation=createPhysics(model,{reducedMotion:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches||false});
     const panel=document.getElementById('panel'), tooltip=document.getElementById('tooltip');
     const intro=panel.innerHTML, search=document.getElementById('search'), results=document.getElementById('search-results');
     let view, width=1,height=1,dpr=1, scale=1,panX=0,panY=0, selected=null, hover=null, bundleSelected=null;
-    let bundlePaths=[],nodeHits=[],drag=null,moved=false,frame=0;
+    let bundlePaths=[],nodeHits=[],drag=null,moved=false,frame=0,lastFrame=0;
     const pointers=new Map();let pinch=null;
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)simulation.stop();});
     function refresh() {
       const types=new Set([...document.querySelectorAll('#filters input:checked')].map(i=>i.value));
       view=visibleModel(model,types);
@@ -95,7 +149,12 @@ const NeuralMap = (() => {
       document.getElementById('stat').textContent=`${view.nodes.length} узлов · ${view.edges.length} связей · ${(graph.analysis||{}).seeds_total||0} семян`;
       requestDraw();
     }
-    function requestDraw(){if(!frame)frame=requestAnimationFrame(()=>{frame=0;draw();});}
+    function requestDraw(){if(!frame)frame=requestAnimationFrame(time=>{
+      frame=0;
+      const dt=lastFrame?Math.min(1.5,(time-lastFrame)/16.667):1;
+      simulation.step(dt,view?.ids);draw();lastFrame=time;
+      if(simulation.active)requestDraw();else lastFrame=0;
+    });}
     function fit() {
       const ns=view.nodes;if(!ns.length)return;
       const minX=Math.min(...ns.map(n=>n.x))-100,maxX=Math.max(...ns.map(n=>n.x))+180;
@@ -179,17 +238,17 @@ const NeuralMap = (() => {
       selected=null;bundleSelected=b.id;panel.className='';panel.replaceChildren(el('div','Пучок связей','type'),el('h3',`${label(model.byId.get(b.from))} ↔ ${label(model.byId.get(b.to))}`),el('div',String(b.count),'metric'),el('p','Реальных связей между группами. Толщина и яркость растут плавно и ограничены.'));
       const list=el('div',undefined,'details');b.edges.forEach(e=>list.append(el('p',`${label(model.byId.get(e.from))} → ${label(model.byId.get(e.to))} · ${e.type}`)));panel.append(list);requestDraw();
     }
-    canvas.addEventListener('pointerdown',e=>{const p=local(e);pointers.set(e.pointerId,p);canvas.setPointerCapture(e.pointerId);moved=false;if(pointers.size===1)drag={...p,panX,panY,node:nodeAt(p)?.id,lastX:p.x,lastY:p.y};if(pointers.size===2){const [a,b]=[...pointers.values()];pinch={distance:Math.hypot(a.x-b.x,a.y-b.y)};drag=null;moved=true;}canvas.classList.add('dragging');});
+    canvas.addEventListener('pointerdown',e=>{const p=local(e);pointers.set(e.pointerId,p);canvas.setPointerCapture(e.pointerId);moved=false;if(pointers.size===1)drag={...p,panX,panY,node:nodeAt(p)?.id,lastX:p.x,lastY:p.y};if(pointers.size===2){const [a,b]=[...pointers.values()];pinch={distance:Math.hypot(a.x-b.x,a.y-b.y)};drag=null;simulation.release();moved=true;}canvas.classList.add('dragging');});
     canvas.addEventListener('pointermove',e=>{
       const p=local(e);
       if(pointers.has(e.pointerId)){pointers.set(e.pointerId,p);if(pointers.size===2){const [a,b]=[...pointers.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(pinch?.distance)zoom(d/pinch.distance,{x:(a.x+b.x)/2,y:(a.y+b.y)/2});pinch={distance:d};moved=true;return;}if(drag){const dx=p.x-drag.x,dy=p.y-drag.y;if(Math.hypot(dx,dy)>4)moved=true;
-        if(moved){if(drag.node){moveNode(model,drag.node,(p.x-drag.lastX)/scale,(p.y-drag.lastY)/scale);drag.lastX=p.x;drag.lastY=p.y;}
+        if(moved){if(drag.node){const grabbed=model.byId.get(drag.node);simulation.pin(drag.node,grabbed.x+(p.x-drag.lastX)/scale,grabbed.y+(p.y-drag.lastY)/scale);drag.lastX=p.x;drag.lastY=p.y;}
         else{panX=drag.panX+dx;panY=drag.panY+dy;}tooltip.hidden=true;requestDraw();}}return;}
       const node=nodeAt(p),bundle=node?null:bundleAt(p);hover={node,bundle};canvas.style.cursor=node||bundle?'pointer':'grab';tooltip.hidden=!node&&!bundle;
       if(!tooltip.hidden){tooltip.textContent=node?`${label(node)} · ${node.degree} соседей`:`${label(model.byId.get(bundle.from))} ↔ ${label(model.byId.get(bundle.to))} · ${bundle.count} связей`;tooltip.style.left=Math.max(8,Math.min(width-315,p.x+15))+'px';tooltip.style.top=Math.max(8,Math.min(height-50,p.y+16))+'px';}requestDraw();
     });
-    function release(e){const p=local(e),wasPinching=!!pinch;pointers.delete(e.pointerId);if(!moved&&!wasPinching){const node=nodeAt(p);if(node)selectNode(node);else{const bundle=bundleAt(p);if(bundle)selectBundle(bundle);else resetPanel();}}if(pointers.size===0){drag=null;pinch=null;canvas.classList.remove('dragging');}else{const p=[...pointers.values()][0];drag={...p,panX,panY};pinch=null;moved=true;}}
-    canvas.addEventListener('pointerup',release);canvas.addEventListener('pointercancel',()=>{pointers.clear();drag=null;pinch=null;canvas.classList.remove('dragging');});
+    function release(e){simulation.release();requestDraw();const p=local(e),wasPinching=!!pinch;pointers.delete(e.pointerId);if(!moved&&!wasPinching){const node=nodeAt(p);if(node)selectNode(node);else{const bundle=bundleAt(p);if(bundle)selectBundle(bundle);else resetPanel();}}if(pointers.size===0){drag=null;pinch=null;canvas.classList.remove('dragging');}else{const p=[...pointers.values()][0];drag={...p,panX,panY};pinch=null;moved=true;}}
+    canvas.addEventListener('pointerup',release);canvas.addEventListener('pointercancel',()=>{pointers.clear();drag=null;pinch=null;simulation.release();requestDraw();canvas.classList.remove('dragging');});
     canvas.addEventListener('pointerleave',()=>{tooltip.hidden=true;hover=null;requestDraw();});
     canvas.addEventListener('wheel',e=>{e.preventDefault();zoom(Math.exp(-e.deltaY*.001),local(e));},{passive:false});
     canvas.addEventListener('keydown',e=>{if(e.key==='Escape')resetPanel();else if(e.key==='+'||e.key==='=')zoom(1.2);else if(e.key==='-')zoom(1/1.2);else if(e.key==='0')fit();else if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();panX+=e.key==='ArrowLeft'?40:e.key==='ArrowRight'?-40:0;panY+=e.key==='ArrowUp'?40:e.key==='ArrowDown'?-40:0;requestDraw();}});
@@ -203,7 +262,7 @@ const NeuralMap = (() => {
     // Public, read-only inspection surface for integration tests and diagnostics.
     return {model,getVisible:()=>view,selectNode:id=>{const n=model.byId.get(id);if(n&&view.ids.has(id))selectNode(n,true);},fit};
   }
-  return {buildModel,visibleModel,strength,moveNode,init};
+  return {buildModel,visibleModel,strength,tone,createPhysics,init};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=NeuralMap;
 if(typeof document!=='undefined')window.mandalaMap=NeuralMap.init(GRAPH);
