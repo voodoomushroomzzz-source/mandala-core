@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.6.75",
+    "version": "v2.6.76",
     "created": "2026-09-14",
-    "updated": "2026-11-21",
+    "updated": "2026-11-22",
     "layer": 2,
     "type": "taskboard_module",
     "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -15,9 +15,9 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.6.75",
+    "version": "v2.6.76",
     "created": "2026-09-14",
-    "updated": "2026-11-21",
+    "updated": "2026-11-22",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -1786,114 +1786,6 @@
         "focus": false
       },
       {
-        "id": "K-202",
-        "title": "Почистить новый холодильник на складе Центра",
-        "description": "Почистить новый холодильник на складе Центра Куртоша.",
-        "priority": "high",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": "2026-11-20",
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [
-          "EMP-001"
-        ],
-        "created": "2026-11-19",
-        "updated": "2026-11-19",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Центр",
-          "responsible_id": "EMP-001",
-          "responsible_name": "Катрин"
-        },
-        "focus": false
-      },
-      {
-        "id": "K-203",
-        "title": "Разобраться с поставкой зерна",
-        "description": "Разобраться с поставкой зерна.",
-        "priority": "high",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": "2026-11-20",
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [
-          "EMP-001"
-        ],
-        "created": "2026-11-19",
-        "updated": "2026-11-19",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Общая",
-          "responsible_id": "EMP-001",
-          "responsible_name": "Катрин"
-        },
-        "focus": false
-      },
-      {
-        "id": "K-204",
-        "title": "Создать ярлык профиля задач на рабочем столе",
-        "description": "Вынести ссылку на профиль задач Катрин на рабочий стол в виде ярлыка.",
-        "priority": "medium",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": "2026-11-20",
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [
-          "EMP-001"
-        ],
-        "created": "2026-11-19",
-        "updated": "2026-11-19",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Общая",
-          "responsible_id": "EMP-001",
-          "responsible_name": "Катрин"
-        },
-        "focus": false
-      },
-      {
-        "id": "K-205",
-        "title": "Проконтролировать замену витринных калачей в колбах (Центр)",
-        "description": "Проследить, чтобы 20 ноября витринные калачи в колбах в Центре заменили на новые.",
-        "priority": "medium",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": "2026-11-20",
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [
-          "EMP-001"
-        ],
-        "created": "2026-11-19",
-        "updated": "2026-11-19",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Центр",
-          "responsible_id": "EMP-001",
-          "responsible_name": "Катрин"
-        },
-        "focus": false
-      },
-      {
         "id": "K-206",
         "title": "Подобрать мастера и согласовать выезд для ремонта морозилки (Центр)",
         "description": "Решить вопрос с ремонтом морозилки в Центре.\n\n1. Учесть предложение действующих мастеров: 2 600 руб/час работы (со слов Дмитрия).\n2. Посмотреть на Profi.ru мастеров по ремонту морозильников во Владимире и сравнить стоимость с текущим предложением, чтобы найти более доступный вариант.\n3. Уточнить стоимость выезда и диагностики, условия ремонта.\n4. Выбрать мастера и согласовать выезд для ремонта.",
@@ -1918,33 +1810,6 @@
           "column": "Операционка — Центр",
           "responsible_id": "EMP-022",
           "responsible_name": "Дмитрий"
-        },
-        "focus": false
-      },
-      {
-        "id": "K-207",
-        "title": "Сравнить цены новых десертов и согласовать пробный заказ",
-        "description": "Новые десерты протестировали 18 ноября 2026 года, Катрин участвовала в дегустации. Прайс Дмитрий отправил Катрин в Telegram.\n\n1. По отправленному прайсу сравнить стоимость новых десертов с десертами, которые заказываем сейчас.\n2. Предоставить Дмитрию результаты сравнения.\n3. После согласования Дмитрием подходящей стоимости сделать пробный заказ новых десертов.",
-        "related_to": [
-          "EMP-001"
-        ],
-        "priority": "medium",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": null,
-        "reminder": null,
-        "depends_on": [],
-        "created": "2026-11-19",
-        "updated": "2026-11-19",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Общая",
-          "responsible_id": "EMP-001",
-          "responsible_name": "Катрин"
         },
         "focus": false
       },
@@ -2097,30 +1962,60 @@
           "column": "Операционка — Общая"
         },
         "focus": true
+      },
+      {
+        "id": "K-214",
+        "title": "Заказать новые десерты на пробу",
+        "description": "Заказать новые десерты на пробу по итогам завершённой задачи K-207 — сравнения цен и согласования пробного заказа.\n\nОформить пробный заказ новых десертов по прайсу, который Дмитрий отправил Катрин в Telegram.\n\nСрок: понедельник, 23 ноября 2026 года.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-23",
+        "reminder": null,
+        "depends_on": [
+          "K-207"
+        ],
+        "related_to": [
+          "K-207",
+          "EMP-001"
+        ],
+        "created": "2026-11-22",
+        "updated": "2026-11-22",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая",
+          "responsible_id": "EMP-001",
+          "responsible_name": "Катрин"
+        },
+        "focus": false
       }
     ],
     "counters": {
-      "total": 75,
+      "total": 71,
       "by_status": {
-        "todo": 68,
+        "todo": 64,
         "in_progress": 6,
         "planning": 1
       },
       "by_priority": {
-        "high": 34,
-        "medium": 37,
+        "high": 32,
+        "medium": 35,
         "critical": 2,
         "low": 2
       },
       "by_column": {
-        "Операционка — Общая": 30,
-        "Операционка — Центр": 20,
+        "Операционка — Общая": 28,
+        "Операционка — Центр": 18,
         "Операционка — Нижка": 16,
         "Крупные вехи": 3,
         "Стратегические": 6
       },
       "by_phase": {
-        "phase_0": 74,
+        "phase_0": 70,
         "phase_1": 1
       }
     },
