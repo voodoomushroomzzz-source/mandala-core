@@ -61,13 +61,13 @@
       "id": "DAY-010",
       "name": "Линзы — 6 штук",
       "category": "major_purchases",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "DAY-011",
       "name": "Жидкость для линз — 2 штуки",
       "category": "major_purchases",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "DAY-012",
@@ -93,6 +93,13 @@
       "name": "Майонез",
       "category": "groceries",
       "status": "done"
+    },
+    {
+      "id": "DAY-016",
+      "name": "Сходить к стоматологу",
+      "category": "errands",
+      "status": "active",
+      "deadline": "2027-03-15"
     }
   ],
   "categories": {
