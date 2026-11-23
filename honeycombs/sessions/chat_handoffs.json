@@ -41,6 +41,27 @@
       "affects": [
         "mandala"
       ]
+    },
+    "personal-external-assistant": {
+      "title": "Личный [1.1]",
+      "role": "personal",
+      "mode": "external",
+      "focus": "Личный курс Садовника, карьера и ведение повседневных задач",
+      "updated": "2026-11-23",
+      "status": "active",
+      "result": "Действующий чат зарегистрирован после ознакомления с общими командами и правилами Sessions. Роль, внешний режим и точное название подтверждены. Личный контекст сохранён в профильных сотах; задачи и покупки ведутся через JSON-источники дашборда.",
+      "next_step": "Продолжать личные задачи по запросу Садовника; к резюме вернуться по его команде. Актуальные статусы и сроки читать в личных исходниках. При синхронизации учитывать общие передачи, не раскрывая личные подробности в общем файле.",
+      "sources": [
+        "honeycombs/personal/personal_assistant.md",
+        "honeycombs/personal/current_movement.json",
+        "honeycombs/personal/personal_tasks.json",
+        "honeycombs/personal/everyday_tasks.json",
+        "honeycombs/instructions/core/mandala_commands.md",
+        "honeycombs/sessions/README.md"
+      ],
+      "affects": [
+        "personal"
+      ]
     }
   }
 }
