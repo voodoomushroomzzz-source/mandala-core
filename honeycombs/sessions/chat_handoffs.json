@@ -21,6 +21,26 @@
         "kurtoch"
       ],
       "title": "Мандала А [1.1]"
+    },
+    "mandala-external-management": {
+      "title": "Мандала [1.1]",
+      "role": "mandala",
+      "mode": "external",
+      "focus": "Управление задачами Мандалы, обсуждение направлений и подготовка ТЗ локальному менеджеру",
+      "updated": "2026-11-23",
+      "status": "active",
+      "result": "Сохранён контекст действующего чата. Прочитаны новые общие команды и правила Sessions, выполнена сверка передач с задачником и живым синтезом. Название подтверждено Садовником. Здесь ведём задачи и ТЗ; реализация кода передаётся локальному менеджеру.",
+      "next_step": "Продолжить управление задачами и подготовку ТЗ по запросу Садовника. По преемственности подтвердить локальному чату результат реальной внешней регистрации; статус работы сверять по задачнику.",
+      "sources": [
+        "honeycombs/instructions/core/mandala_commands.md",
+        "honeycombs/sessions/README.md",
+        "honeycombs/works/management_taskboard.md",
+        "honeycombs/akasha/session_synthesis.md",
+        "honeycombs/works/W-T-20261119-CHAT-CONTINUITY.json"
+      ],
+      "affects": [
+        "mandala"
+      ]
     }
   }
 }
