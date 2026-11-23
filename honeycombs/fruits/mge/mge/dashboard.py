@@ -280,10 +280,12 @@ def render_everyday(root):
     path = root / "honeycombs/personal/everyday_tasks.json"
     if not path.exists():
         return ""
-    groups = {"shopping": ("Покупки", []), "errands": ("Дела", [])}
+    data = load(path)
+    categories = data.get("categories", {"shopping": "Покупки", "errands": "Дела"})
+    groups = {key: (title, []) for key, title in categories.items()}
     closed = []
     ids = set()
-    for task in load(path)["tasks"]:
+    for task in data["tasks"]:
         key = task["id"]
         if key in ids:
             raise ValueError(f"Duplicate everyday task: {key}")
@@ -292,7 +294,13 @@ def render_everyday(root):
             raise ValueError(f"Unknown everyday category: {task['category']}")
         if task["status"] not in {"active", "done", "cancelled"}:
             raise ValueError(f"Unknown everyday status: {task['status']}")
-        item = f'<li id="{escape(key, quote=True)}">{escape(task["name"])}</li>'
+        due = task.get("deadline")
+        due_html = ""
+        if due:
+            from datetime import date
+            display = date.fromisoformat(due).strftime("%d.%m.%Y")
+            due_html = f' <time class="meta" datetime="{escape(due)}">— {display}</time>'
+        item = f'<li id="{escape(key, quote=True)}">{escape(task["name"])}{due_html}</li>'
         if task["status"] == "active":
             groups[task["category"]][1].append(item)
         else:
@@ -301,7 +309,7 @@ def render_everyday(root):
     html = '<section id="everyday" aria-labelledby="everyday-title"><h2 id="everyday-title">Повседневное</h2>'
     html += '<p class="meta">Покупки и небольшие бытовые дела.</p><div class="grid">'
     for title, items in groups.values():
-        html += f'<article><h3>{title}</h3>'
+        html += f'<article><h3>{escape(title)}</h3>'
         html += ('<ul>' + ''.join(items) + '</ul>') if items else '<p class="meta">Список пуст.</p>'
         html += '</article>'
     html += '</div>'

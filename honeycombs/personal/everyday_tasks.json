@@ -1,37 +1,98 @@
 {
   "version": "v1.0.0",
-  "updated": "2026-11-20",
+  "updated": "2026-11-23",
   "instructions": "personal_taskboard.md#повседневное",
   "tasks": [
     {
       "id": "DAY-001",
       "name": "Губки",
-      "category": "shopping",
+      "category": "household",
       "status": "active"
     },
     {
       "id": "DAY-002",
       "name": "Целлюлозные тряпки",
-      "category": "shopping",
+      "category": "household",
       "status": "active"
     },
     {
       "id": "DAY-003",
       "name": "Туалетная бумага",
-      "category": "shopping",
+      "category": "household",
       "status": "active"
     },
     {
       "id": "DAY-004",
       "name": "Яйца",
-      "category": "shopping",
+      "category": "groceries",
       "status": "active"
     },
     {
       "id": "DAY-005",
       "name": "Что-нибудь к чаю",
-      "category": "shopping",
+      "category": "groceries",
       "status": "active"
+    },
+    {
+      "id": "DAY-006",
+      "name": "Овощи",
+      "category": "groceries",
+      "status": "active"
+    },
+    {
+      "id": "DAY-007",
+      "name": "Горошек консервированный",
+      "category": "groceries",
+      "status": "active"
+    },
+    {
+      "id": "DAY-008",
+      "name": "Кукуруза консервированная",
+      "category": "groceries",
+      "status": "active"
+    },
+    {
+      "id": "DAY-009",
+      "name": "Творог обезжиренный — 3–4 упаковки",
+      "category": "groceries",
+      "status": "active"
+    },
+    {
+      "id": "DAY-010",
+      "name": "Линзы — 6 штук",
+      "category": "major_purchases",
+      "status": "active"
+    },
+    {
+      "id": "DAY-011",
+      "name": "Жидкость для линз — 2 штуки",
+      "category": "major_purchases",
+      "status": "active"
+    },
+    {
+      "id": "DAY-012",
+      "name": "Новая кофта-худи",
+      "category": "major_purchases",
+      "status": "active"
+    },
+    {
+      "id": "DAY-013",
+      "name": "Новый рюкзак",
+      "category": "major_purchases",
+      "status": "active"
+    },
+    {
+      "id": "DAY-014",
+      "name": "Сводить сына к стоматологу",
+      "category": "errands",
+      "status": "active",
+      "deadline": "2026-12-04"
     }
-  ]
+  ],
+  "categories": {
+    "groceries": "Продукты",
+    "household": "Хозка",
+    "major_purchases": "Большие покупки",
+    "errands": "Дела"
+  }
 }
