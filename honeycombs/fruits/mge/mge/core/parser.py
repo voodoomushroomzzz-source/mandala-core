@@ -2,6 +2,7 @@
 import json
 import os
 from pathlib import Path
+from textwrap import shorten
 
 from mge.core.graph import find_orphans
 
@@ -23,7 +24,7 @@ def find_repo_root(start: Path = None) -> Path:
 
 def read_json(path) -> dict:
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, "r", encoding="utf-8-sig") as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError) as e:
         return {"_error": str(e)}
@@ -116,7 +117,7 @@ def find_unregistered_honeycombs() -> dict:
 
 
 def parse_works(works_path=None) -> dict:
-    """Parse works/index.json: works nodes + related edges."""
+    """Read indexed work cards and their catalog relations."""
     if works_path is None:
         root = find_repo_root()
         works_path = root / "honeycombs" / "works" / "index.json"
@@ -124,6 +125,7 @@ def parse_works(works_path=None) -> dict:
 
     nodes = []
     edges = []
+    cards = {}
     manifest = data.get("manifest", {})
 
     work_ids = manifest.get("works_list", [])
@@ -135,11 +137,16 @@ def parse_works(works_path=None) -> dict:
             matching_files = sorted(works_path.parent.glob(f"{work_id}__*.json"))
             if len(matching_files) == 1:
                 work_file = matching_files[0]
+        card = read_json(work_file)
+        cards[work_id] = card
+        description = card.get("short_description") or card.get("description") or ""
         nodes.append({
             "id": work_id,
             "type": "work",
             "path": "honeycombs/works/" + work_file.name,
-            "description": "",
+            "name": card.get("name") or work_id,
+            "description": shorten(description, width=420, placeholder="…"),
+            "status": card.get("status"),
             "deadline": manifest.get("deadlines", {}).get(work_id),
             "progress": manifest.get("progress", {}).get(work_id, 0)
         })
@@ -160,7 +167,7 @@ def parse_works(works_path=None) -> dict:
             for tgt in targets:
                 edges.append({"from": source, "to": resolve_work_id(tgt), "type": "related_works"})
 
-    return {"nodes": nodes, "edges": edges}
+    return {"nodes": nodes, "edges": edges, "cards": cards}
 
 
 def parse_fruits(fruits_path=None) -> dict:
@@ -370,10 +377,7 @@ def parse_all() -> dict:
 
     root = find_repo_root()
     works_by_path = {node["path"]: node["id"] for node in parts[1]["nodes"]}
-    work_cards = {
-        graph_id: read_json(root / path)
-        for path, graph_id in works_by_path.items()
-    }
+    work_cards = parts[1]["cards"]
     works_by_id = {card["work_id"]: graph_id for graph_id, card in work_cards.items() if card.get("work_id")}
     for graph_id, card in work_cards.items():
         if parent := works_by_id.get(card.get("parent_work")):
