@@ -84,6 +84,24 @@
       "affects": [
         "kurtoch"
       ]
+    },
+    "kurtoch-local-notion": {
+      "title": "Базы данных / ноушн [1.1]",
+      "role": "kurtoch",
+      "mode": "local",
+      "focus": "Базы Куртоша в Notion: Taskboard, вид «Фокус» и страница «Задачи Катрин»",
+      "updated": "2026-11-23",
+      "status": "active",
+      "result": "Настроена страница «Задачи Катрин» с активными задачами и вкладкой архива. Активная доска и «Фокус» сгруппированы по срочности; на карточках Катрин показаны дедлайн и столбец. Общие правила передач прочитаны.",
+      "next_step": "Перед переносом сверить локальную запись K-214 с опубликованным задачником и текущей тестовой карточкой Notion. Карточка закрыта с ID TEST-KATRIN-001, а K-198 в main относится к другой задаче. Изменения в Notion переносить после отдельного согласия.",
+      "sources": [
+        "honeycombs/personal/kurtoch/taskboard.json",
+        "honeycombs/personal/kurtoch/notion_change_buffer.json",
+        "honeycombs/personal/kurtoch/index.json"
+      ],
+      "affects": [
+        "kurtoch"
+      ]
     }
   }
 }
