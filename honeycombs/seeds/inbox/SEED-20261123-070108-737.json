@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261123-070108-737",
+  "title": "Latent Space Planning with Sequential Monte Carlo",
+  "url": "https://arxiv.org/abs/2611.26706",
+  "description": "arXiv:2611.26706v1 Announce Type: new \nAbstract: Planning with learned world models amounts to finding action sequences whose predicted rollouts reach a goal. Sampling-based planners often struggle at longer horizons, while gradient-based methods can become trapped in local minima. Meanwhile, model predictive path integral control (MPPI), a complementary approach, alternates between estimating an expectation under a cost-weighted distribution from samples and updating the plan from this estimate",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-11-23T07:01:08.457100",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
