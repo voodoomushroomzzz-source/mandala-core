@@ -102,6 +102,23 @@
       "affects": [
         "kurtoch"
       ]
+    },
+    "kurtoch-local-saby": {
+      "title": "Куртош Сбис [1.1]",
+      "role": "kurtoch",
+      "mode": "local",
+      "focus": "Выгрузка статистики продаж Куртоша из Saby",
+      "updated": "2026-11-23",
+      "status": "active",
+      "result": "Изучена документация Saby и составлен план выгрузки продаж. Доступ аккаунта и данные точек ещё не проверены.",
+      "next_step": "Проверить сервисную авторизацию и доступ к точкам Центр и Нижка. Выгрузить продажи одной точки за закрытый день и сверить итоги с отчётом Saby.",
+      "sources": [
+        "honeycombs/personal/kurtoch/index.json",
+        "honeycombs/personal/kurtoch/local_assistant_onboarding.md"
+      ],
+      "affects": [
+        "kurtoch"
+      ]
     }
   }
 }
