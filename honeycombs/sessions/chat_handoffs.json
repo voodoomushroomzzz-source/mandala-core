@@ -119,6 +119,23 @@
       "affects": [
         "kurtoch"
       ]
+    },
+    "kurtoch-local-procurement": {
+      "title": "Закупки автоматизация [1.1]",
+      "role": "kurtoch",
+      "mode": "local",
+      "focus": "Автоматизация закупок и инвентаризации Куртоша",
+      "updated": "2026-11-23",
+      "status": "active",
+      "result": "Сверены Код.gs и PIL.gs с планом PIL. Наличие PIL.gs подтверждает s0_2. В локальном плане описаны учёт приходов по документам поставщиков, номенклатура и статистика закупок.",
+      "next_step": "Сверить завершение инвентаризации Центра и архивацию, затем продолжить с каркаса PIL (s0_3). Перед s0_5 подтвердить наличие тестовой копии.",
+      "sources": [
+        "honeycombs/personal/kurtoch/index.json",
+        "honeycombs/personal/kurtoch/procurement_automation.json"
+      ],
+      "affects": [
+        "kurtoch"
+      ]
     }
   }
 }
