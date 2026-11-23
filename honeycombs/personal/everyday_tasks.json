@@ -7,43 +7,43 @@
       "id": "DAY-001",
       "name": "Губки",
       "category": "household",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "DAY-002",
       "name": "Целлюлозные тряпки",
       "category": "household",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "DAY-003",
       "name": "Туалетная бумага",
       "category": "household",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "DAY-004",
       "name": "Яйца",
       "category": "groceries",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "DAY-005",
       "name": "Что-нибудь к чаю",
       "category": "groceries",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "DAY-006",
       "name": "Овощи",
       "category": "groceries",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "DAY-007",
       "name": "Горошек консервированный",
       "category": "groceries",
-      "status": "active"
+      "status": "done"
     },
     {
       "id": "DAY-008",
@@ -92,7 +92,7 @@
       "id": "DAY-015",
       "name": "Майонез",
       "category": "groceries",
-      "status": "active"
+      "status": "done"
     }
   ],
   "categories": {
