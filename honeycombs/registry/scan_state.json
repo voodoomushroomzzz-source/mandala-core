@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-11-23T07:10:41.332037",
+  "last_scan": "2026-11-23T20:39:36.289419",
   "honeycomb_hashes": {
     "honeycombs/protocols": "cc4a79a67d5b41605f4df93294d16a35",
     "honeycombs/seeds": "be2f3e08de805cee8036714094e797e6",
@@ -10,7 +10,7 @@
     "honeycombs/knowledge": "246c386edca83b018558add8a796ab32",
     "honeycombs/knowledge/ai_tools": "9532cc74c6c6a8d622a23b8fb32ce031",
     "honeycombs/akasha": "682590839d458e1aa647a6fb0d4b1b43",
-    "honeycombs/boot_online": "3d54defcc7b38bc7046b47543a5ec19a",
+    "honeycombs/boot_online": "622e6e4f739551ca31cd604255f94977",
     "honeycombs/fruits": "4fec631274da7349566b319304287fc6",
     "honeycombs/fruits/mge": "2f22a0d50e0225a489615766644dae71",
     "honeycombs/fruits/scout_agent": "1d2daeb2d7ad988c6cad5a0fba403bfc",
@@ -18,7 +18,7 @@
     "honeycombs/philosophy": "fd05008634be1ed9e63189c6d7c5d0bd",
     "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
     "honeycombs/core_map": "aa246a608899e4308a307638847082cc",
-    "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
+    "honeycombs/sessions": "c241c77e3cffd6fa1ee71b79c1a725dd",
     "honeycombs/works": "5a13bb4c02bab3b0cab263d83496c7db",
     "honeycombs/instructions": "af6cf0c9f1d0ec8a4a111c4bc424e37d",
     "honeycombs/personal": "fb88f9d5698b447b026c182d3afd9446",
@@ -37,8 +37,8 @@
     "invalid_v2": 8,
     "errors": 0,
     "warnings": 8,
-    "total_files": 1439,
-    "total_size_kb": 4092.03
+    "total_files": 1440,
+    "total_size_kb": 4136.52
   },
   "seeds_health": {
     "root_count": 24,
@@ -55,7 +55,7 @@
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-11-23T07:10:41.332047",
+    "last_check": "2026-11-23T20:39:36.289433",
     "errors_count": 21,
     "warnings_count": 10,
     "expired_tasks": 12,
