@@ -50,10 +50,16 @@ def main():
     commands.add_parser("scan", help="Build graph only into ./output")
     dashboard = commands.add_parser("dashboard", help="Build the entire static dashboard")
     dashboard.add_argument("--output", type=Path, help="Output site root (defaults to the repository)")
+    public_commands = commands.add_parser("commands", help="Export only the public command reference")
+    public_commands.add_argument("--output", type=Path, required=True, help="Standalone site directory")
     args = cli.parse_args()
 
     if args.command == "scan":
         cmd_scan()
+    elif args.command == "commands":
+        from mge.commands import build_commands
+
+        build_commands(find_repo_root(), args.output / "index.html")
     else:
         from mge.dashboard import build_catalogs
 

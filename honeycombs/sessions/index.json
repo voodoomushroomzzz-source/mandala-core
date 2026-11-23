@@ -1,4 +1,9 @@
 {
+  "current_protocol": {
+    "index": "README.md",
+    "handoffs": "chat_handoffs.json",
+    "note": "Настоящий порядок описан в README. Остальные разделы этого файла сохраняют историческую схему по именам моделей."
+  },
   "identity": {
     "module_id": "HONEYCOMB-SESSIONS-001",
     "name": "Sessions — SR Handoff Continuity",

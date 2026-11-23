@@ -354,6 +354,9 @@ def build_personal(root, output):
 
 
 def build_catalogs(root, site, output, graph):
+    from mge.commands import build_commands
+
+    build_commands(root, output / "commands.html", "../../../../index.html")
     if site != root:
         (site / "index.html").write_text((root / "index.html").read_text(encoding="utf-8"), encoding="utf-8", newline="\n")
         shutil.copytree(root / "assets", site / "assets", dirs_exist_ok=True)

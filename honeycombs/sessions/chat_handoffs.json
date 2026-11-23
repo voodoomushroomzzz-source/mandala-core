@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "chats": {
+    "mandala-local-continuity": {
+      "role": "mandala",
+      "mode": "local",
+      "focus": "Преемственность чатов",
+      "work_id": "W-T-20261119-CHAT-CONTINUITY",
+      "updated": "2026-11-23",
+      "status": "active",
+      "result": "Локально добавлены общие команды, общий файл передач, проверка версии при записи и справочник. Проверены два сценария записи в тестовой копии.",
+      "next_step": "Проверить чтение и запись из реального внешнего чата после публикации согласованных правок.",
+      "sources": [
+        "honeycombs/instructions/core/mandala_commands.md",
+        "honeycombs/sessions/README.md",
+        "honeycombs/works/W-T-20261119-CHAT-CONTINUITY.json"
+      ],
+      "affects": [
+        "mandala",
+        "personal",
+        "kurtoch"
+      ]
+    }
+  }
+}
