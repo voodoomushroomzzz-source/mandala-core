@@ -87,6 +87,12 @@
       "category": "errands",
       "status": "active",
       "deadline": "2026-12-04"
+    },
+    {
+      "id": "DAY-015",
+      "name": "Майонез",
+      "category": "groceries",
+      "status": "active"
     }
   ],
   "categories": {
