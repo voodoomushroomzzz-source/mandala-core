@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261125-185854-758",
+  "title": "Learning from Human Corrections through Temporal Preferences",
+  "url": "https://arxiv.org/abs/2611.31446",
+  "description": "arXiv:2611.31446v1 Announce Type: new \nAbstract: When people intervene to correct a robot, they provide information not only through how they correct its behavior, but also through when they choose to intervene. Existing approaches to Learning from Corrections focus on comparing the new trajectory to the robot's originally intended behavior, thus underutilizing the context of the robot's behavior before the intervention. In this work, we investigate how both pre- and post-intervention behavior c",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-11-25T18:58:54.913943",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

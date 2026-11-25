@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261125-185854-757",
+  "title": "EvoMisty: Building, Optimizing, and Evolving Capabilities on a Social Robot",
+  "url": "https://arxiv.org/abs/2611.31341",
+  "description": "arXiv:2611.31341v1 Announce Type: new \nAbstract: Social robots face diverse and changing tasks in companionship and education. LLM-based methods can generate task programs, but they still rely on manually developed control interfaces and predefined capabilities. They also lack a general mechanism to optimize completed tasks based on user-specified metrics and reuse performance improvements across tasks.We present EvoMisty, a plugin-based framework that enables coding agents to build and continua",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-11-25T18:58:54.547385",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

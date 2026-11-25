@@ -14393,3 +14393,64 @@
 [2026-11-25 07:01:08] [INFO]   Total duplicates: 5
 [2026-11-25 07:01:08] [INFO]   Total removed (old): 0
 [2026-11-25 07:01:08] [INFO] ============================================================
+[2026-11-25 18:58:51] [INFO] ============================================================
+[2026-11-25 18:58:51] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-11-25 18:58:51] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-11-25 18:58:51] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-11-25 18:58:52] [INFO]   → Found 15 raw items, 15 recent
+[2026-11-25 18:58:52] [INFO]   → Filtered to 5 relevant items
+[2026-11-25 18:58:52] [INFO]   ✅ Saved: SEED-20261125-185852-752.json
+[2026-11-25 18:58:52] [INFO]   ✅ Saved: SEED-20261125-185852-753.json
+[2026-11-25 18:58:53] [INFO]   ✅ Saved: SEED-20261125-185853-754.json
+[2026-11-25 18:58:53] [INFO]   ✅ Saved: SEED-20261125-185853-755.json
+[2026-11-25 18:58:54] [INFO]   ✅ Saved: SEED-20261125-185854-756.json
+[2026-11-25 18:58:54] [INFO]   📊 arXiv AI: saved 5, duplicates 0
+[2026-11-25 18:58:54] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-11-25 18:58:54] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-11-25 18:58:54] [INFO]   → Found 15 raw items, 15 recent
+[2026-11-25 18:58:54] [INFO]   → Filtered to 5 relevant items
+[2026-11-25 18:58:54] [INFO]   ✅ Saved: SEED-20261125-185854-757.json
+[2026-11-25 18:58:54] [INFO]   ✅ Saved: SEED-20261125-185854-758.json
+[2026-11-25 18:58:55] [INFO]   ✅ Saved: SEED-20261125-185855-759.json
+[2026-11-25 18:58:55] [INFO]   ✅ Saved: SEED-20261125-185855-760.json
+[2026-11-25 18:58:56] [INFO]   ✅ Saved: SEED-20261125-185856-761.json
+[2026-11-25 18:58:56] [INFO]   📊 arXiv Robotics: saved 5, duplicates 0
+[2026-11-25 18:58:56] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-11-25 18:58:56] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-11-25 18:58:56] [ERROR]   ❌ RSS error: 419 Client Error:  for url: https://news.ycombinator.com/rss
+[2026-11-25 18:58:56] [INFO]   📊 Hacker News: saved 0, duplicates 0
+[2026-11-25 18:58:56] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-11-25 18:58:56] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-11-25 18:58:57] [INFO]   → Found 15 raw items, 15 recent
+[2026-11-25 18:58:57] [INFO]   → Filtered to 5 relevant items
+[2026-11-25 18:58:57] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-11-25 18:58:57] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-11-25 18:58:57] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-11-25 18:58:57] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-11-25 18:58:57] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-11-25 18:58:57] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-11-25 18:58:57] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-11-25 18:58:57] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-11-25 18:58:57] [INFO]   → Found 15 raw items, 6 recent
+[2026-11-25 18:58:57] [INFO]   → Filtered to 5 relevant items
+[2026-11-25 18:58:57] [INFO]   ✅ Saved: SEED-20261125-185857-762.json
+[2026-11-25 18:58:58] [INFO]   ✅ Saved: SEED-20261125-185858-763.json
+[2026-11-25 18:58:58] [INFO]   ✅ Saved: SEED-20261125-185858-764.json
+[2026-11-25 18:58:58] [INFO]   ✅ Saved: SEED-20261125-185858-765.json
+[2026-11-25 18:58:59] [INFO]   ✅ Saved: SEED-20261125-185859-766.json
+[2026-11-25 18:58:59] [INFO]   📊 TechCrunch AI: saved 5, duplicates 0
+[2026-11-25 18:58:59] [INFO]   🗑️ Cleaning old seeds (date <= 2026-11-25)...
+[2026-11-25 18:58:59] [INFO]   ✅ No old seeds to remove
+[2026-11-25 18:58:59] [INFO]   📝 Updated inbox/index.json with last_processed=2026-11-25
+[2026-11-25 18:58:59] [INFO] 
+============================================================
+[2026-11-25 18:58:59] [INFO] ✅ Scout Agent v2.2 finished
+[2026-11-25 18:58:59] [INFO]   Total saved: 15
+[2026-11-25 18:58:59] [INFO]   Total duplicates: 5
+[2026-11-25 18:58:59] [INFO]   Total removed (old): 0
+[2026-11-25 18:58:59] [INFO] ============================================================
