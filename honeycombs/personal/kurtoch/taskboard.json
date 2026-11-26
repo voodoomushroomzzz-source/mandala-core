@@ -4,7 +4,7 @@
     "name": "Kurtoch — Taskboard",
     "version": "v2.6.77",
     "created": "2026-09-14",
-    "updated": "2026-11-25",
+    "updated": "2026-11-26",
     "layer": 2,
     "type": "taskboard_module",
     "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -17,7 +17,7 @@
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
     "version": "v2.6.77",
     "created": "2026-09-14",
-    "updated": "2026-11-25",
+    "updated": "2026-11-26",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -1941,30 +1941,54 @@
           "responsible_name": "Катрин"
         },
         "focus": false
+      },
+      {
+        "id": "K-215",
+        "title": "Обсудить новогоднее предложение: ёлочные игрушки-куртоши на 3D-принтере",
+        "description": "Обсудить идею новогоднего предложения от Куртоша: печатать на 3D-принтере ёлочные игрушки в форме куртошей. Рассмотреть этот вариант и определить дальнейшие шаги.\n\nОбсуждение: 27 ноября 2026 года в 17:00 по Москве.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-27",
+        "reminder": "17:00",
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-11-26",
+        "updated": "2026-11-26",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая",
+          "timezone": "Europe/Moscow"
+        },
+        "focus": false
       }
     ],
     "counters": {
-      "total": 69,
+      "total": 70,
       "by_status": {
-        "todo": 62,
+        "todo": 63,
         "in_progress": 6,
         "planning": 1
       },
       "by_priority": {
         "high": 30,
-        "medium": 35,
+        "medium": 36,
         "critical": 2,
         "low": 2
       },
       "by_column": {
-        "Операционка — Общая": 27,
+        "Операционка — Общая": 28,
         "Операционка — Центр": 17,
         "Операционка — Нижка": 16,
         "Крупные вехи": 3,
         "Стратегические": 6
       },
       "by_phase": {
-        "phase_0": 68,
+        "phase_0": 69,
         "phase_1": 1
       }
     },

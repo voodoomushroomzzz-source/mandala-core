@@ -1,6 +1,6 @@
 {
   "version": "v1.0.0",
-  "updated": "2026-11-25",
+  "updated": "2026-11-26",
   "purpose": "Изменения из исходников Куртоша на GitHub, ожидающие подтверждённой выгрузки в Notion.",
   "instructions": "honeycombs/personal/kurtoch/mobile_manager_onboarding.md",
   "target_map": "honeycombs/personal/kurtoch/index.json#notion_hub",
@@ -33,6 +33,42 @@
       "revision": 1,
       "created_at": "2026-11-25T12:14:44.916Z",
       "updated_at": "2026-11-25T12:14:44.916Z",
+      "notion_page_id": null,
+      "last_error": null
+    },
+    {
+      "id": "kurtoch-task-K-215",
+      "source_file": "honeycombs/personal/kurtoch/taskboard.json",
+      "record_id": "K-215",
+      "target": "taskboard",
+      "action": "upsert",
+      "desired_fields": {
+        "id": "K-215",
+        "title": "Обсудить новогоднее предложение: ёлочные игрушки-куртоши на 3D-принтере",
+        "description": "Обсудить идею новогоднего предложения от Куртоша: печатать на 3D-принтере ёлочные игрушки в форме куртошей. Рассмотреть этот вариант и определить дальнейшие шаги.\n\nОбсуждение: 27 ноября 2026 года в 17:00 по Москве.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-11-27",
+        "reminder": "17:00",
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-11-26",
+        "updated": "2026-11-26",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая",
+          "timezone": "Europe/Moscow"
+        },
+        "focus": false
+      },
+      "revision": 1,
+      "created_at": "2026-11-26T17:05:52.060Z",
+      "updated_at": "2026-11-26T17:05:52.060Z",
       "notion_page_id": null,
       "last_error": null
     }
