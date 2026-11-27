@@ -596,7 +596,7 @@
         "title": "Контроль больших финансов / все бюджеты",
         "description": "Взять под контроль все бюджеты сети (Нижка + Центр).\nЦелевой ориентир: 2 200 000 ₽/мес на 2 точки (1,1 млн на точку).\n\nКлючевые шаги:\n1. Принять решения по бюджетам и финансам (лимиты, направления, оптимизация) — до 15.10\n2. Продумать систему учёта (переделка таблиц)\n3. Свести все бюджеты в единый контур\n4. Связать с метрикой выручки (см. index.json success_metrics.revenue_target)\n\nDeadline: 15.10.2026 — точка решения.\nСвязано с K-077 (анализ Крис).\n\nЗапросить у Крис (управляющая) инструкцию (гайд): как ведётся учёт больших финансов и больших закупок, как это всё работает между формами (Google Sheets / Forms / Notion).\n\nСвязь: K-105, K-019.\n\n--- ВИДЕОГАЙДЫ ОТ КРИС (28.10) ---\nЗапросить 4 видеоинструкции:\n1. Таблицы закупок: Связь инвентаризации, больших закупок и распределения фондов (что куда идет, где учитывается).\n2. Расчёт ЗП: Как считается ЗП, отпускные, больничные.\n3. Таблица фондов: Какие метрики/показатели важны, какие данные нельзя упускать. Как логика работает сейчас (требования для автоматизации).\n4. Маркировки: Меркурий и др. (какие кнопки нажимаются).",
         "priority": "critical",
-        "status": "todo",
+        "status": "done",
         "horizon": "strategic",
         "phase": "phase_0",
         "deadline": "2026-11-30",
@@ -606,15 +606,15 @@
           "K-077"
         ],
         "created": "2026-09-25",
-        "updated": "2026-11-17",
-        "completed": null,
+        "updated": "2026-11-27",
+        "completed": "2026-11-27",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Стратегические"
         },
-        "focus": true
+        "focus": false
       },
       {
         "id": "K-080",
@@ -1641,22 +1641,22 @@
           "K-078"
         ],
         "priority": "high",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-11-24",
         "reminder": null,
         "depends_on": [],
         "created": "2026-11-19",
-        "updated": "2026-11-23",
-        "completed": null,
+        "updated": "2026-11-27",
+        "completed": "2026-11-27",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
         },
-        "focus": true
+        "focus": false
       },
       {
         "id": "K-197",
@@ -1666,29 +1666,29 @@
           "K-147"
         ],
         "priority": "high",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-11-24",
         "reminder": null,
         "depends_on": [],
         "created": "2026-11-19",
-        "updated": "2026-11-23",
-        "completed": null,
+        "updated": "2026-11-27",
+        "completed": "2026-11-27",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
         },
-        "focus": true
+        "focus": false
       },
       {
         "id": "K-198",
         "title": "Распределить фонды",
         "description": "Распределить фонды 24 ноября 2026 года.",
         "priority": "high",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-11-24",
@@ -1698,15 +1698,15 @@
           "K-078"
         ],
         "created": "2026-11-19",
-        "updated": "2026-11-23",
-        "completed": null,
+        "updated": "2026-11-27",
+        "completed": "2026-11-27",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
         },
-        "focus": true
+        "focus": false
       },
       {
         "id": "K-200",
@@ -2089,8 +2089,8 @@
     "counters": {
       "total": 75,
       "by_status": {
-        "todo": 66,
-        "done": 1,
+        "todo": 62,
+        "done": 5,
         "in_progress": 6,
         "planning": 2
       },
