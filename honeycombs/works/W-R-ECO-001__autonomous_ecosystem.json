@@ -5,7 +5,7 @@
   "status": "active",
   "priority": "medium",
   "horizon": "strategic",
-  "description": "Development and implementation of a three-phase autonomous ecosystem under AI control. Phase 1: indoor ecosystem with plant zoning (split into 1a: sensors + data collection, 1b: AI control). Phase 2: fully autonomous year-round greenhouse. Phase 3: integration of renewable energy sources (solar, wind, water) for complete energy independence. Includes computer vision for plant health monitoring, real-time dashboard, and Scout Agent integration.",
+  "description": "Направление будущего продолжения личного Сада в доме, комнате с растениями, теплице и оранжерее. ИИ может помогать с уходом, наблюдением и условиями среды, опираясь на доступный контекст Садовника. Прежний трёхфазный план — комнатная среда, теплица и энергетическая независимость — сохраняется как технический замысел; работоспособность и степень автономности не подтверждаются описанием карточки.",
   "parent_work": null,
   "sub_works": [],
   "depends_on": [],
@@ -21,7 +21,7 @@
   ],
   "deadline": "2026-12-31",
   "created": "2026-07-13",
-  "updated": "2026-07-13",
+  "updated": "2026-11-19",
   "phases": {
     "phase_1": {
       "name": "Indoor Ecosystem",
@@ -149,5 +149,19 @@
     "phase_1": "Working prototype with sensors and controllable sockets",
     "phase_2": "AI reduces water usage by 20% without loss of yield",
     "phase_3": "Ecosystem operates 48+ hours without external power"
+  },
+  "product_vision": {
+    "purpose": "Воплотить заботу в живой среде: благополучие человека, растений и экосистемы; продолжать один личный Сад вместе с приложением.",
+    "automation_boundary": "На ближайшем смысловом уровне автономность означает автоматизацию под управлением ИИ. Самостоятельность управления, работа без внешнего питания и независимость от участия человека — разные свойства, каждое проверяется отдельно.",
+    "planning_basis": "Компоненты, фазы и целевые показатели ниже — прежние проектные варианты и критерии испытаний. Они не представлены как результаты внедрения; выбор конкретного оборудования и алгоритмов требует сверки.",
+    "ecological_direction": "Бережное использование ресурсов, снижение вреда и исследование более экологичных источников энергии. Конкретное снижение расхода воды, выбросов и энергетический эффект требуют измерения.",
+    "later_context": "Опыт личных экосистем может в будущем участвовать в заботе о городской и природной среде. Городские системы и космические станции остаются самостоятельными дальними направлениями карты видения."
+  },
+  "vision_context": {
+    "source": "honeycombs/akasha/core/vision.json",
+    "philosophy": "honeycombs/philosophy/index.json",
+    "contour_refs": [
+      "FUT-HOME-001"
+    ]
   }
 }

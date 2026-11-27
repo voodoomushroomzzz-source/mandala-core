@@ -150,6 +150,7 @@
     color: var(--text-3);
     text-align: center;
   }
+@media(min-width:660px){.hub{grid-template-columns:1fr 1fr}.ecosystem{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -159,26 +160,14 @@
   </header>
 
   <nav class="hub" aria-label="Разделы Мандалы">
-    <a class="card" href="honeycombs/fruits/mge/output/personal.html">
-      <h2>Личные задачи</h2>
-      <p>Ближайшие действия, личные направления и даты сверки планов.</p>
-    </a>
-    <a class="card" href="honeycombs/fruits/mge/output/commands.html">
-      <h2>Команды Мандалы</h2>
-      <p>Доступные команды СР и что делает каждая из них.</p>
-    </a>
-    <a class="card" href="honeycombs/fruits/mge/output/mandala_graph.html">
-      <h2>Карта Мандалы</h2>
-      <p>Интерактивный граф MGE. Соты, работы, знания и продукты.</p>
-    </a>
-    <details class="card ecosystem">
-      <summary>Экосистема<span>Fruits · Works · Knowledge</span></summary>
-      <div class="grid">
-        <a class="card" href="honeycombs/fruits/mge/output/fruits.html"><h2>Fruits</h2><p>Продукты, стадии развития и связанные работы.</p></a>
-        <a class="card" href="honeycombs/fruits/mge/output/works.html"><h2>Works</h2><p>Что делать сейчас, приоритеты и сроки.</p></a>
-        <a class="card" href="honeycombs/fruits/mge/output/knowledge.html"><h2>Knowledge</h2><p>Знания, методы и каталог ИИ-инструментов.</p></a>
-      </div>
-    </details>
+    <a class="card" href="honeycombs/fruits/mge/output/personal.html"><h2>Личные задачи</h2><p>Мой фокус и ближайшие дела</p></a>
+    <a class="card" href="honeycombs/fruits/mge/output/works.html#now"><h2>Задачи Мандалы</h2><p id="mandala-focus">Внешнее позиционирование · Запуск Gentle Companion · Mandala Symbiosis на ПК</p></a>
+    <details class="card ecosystem"><summary>Система</summary><div class="grid">
+      <a class="card" href="honeycombs/fruits/mge/output/mandala_graph.html">Карта Мандалы</a>
+      <a class="card" href="honeycombs/fruits/mge/output/commands.html">Команды Мандалы</a>
+      <a class="card" href="honeycombs/fruits/mge/output/fruits.html">Fruits · Продукты</a>
+      <a class="card" href="honeycombs/fruits/mge/output/knowledge.html">Knowledge · База знаний</a>
+    </div></details>
   </nav>
 
 

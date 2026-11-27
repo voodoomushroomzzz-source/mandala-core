@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "FRUITS-REGISTRY-001",
     "name": "Fruits — Product Registry",
-    "version": "v2.8.0",
+    "version": "v3.0.0",
     "created": "2026-04-17",
-    "updated": "2026-11-16",
+    "updated": "2026-11-28",
     "layer": 2,
     "type": "registry_index",
-    "description": "Registry of Mandala products. Each fruit has a dedicated index with full details.",
+    "description": "Каталог продуктов и компонентов Мандалы: существующие инструменты, планы и направления на паузе. Подробности реализации находятся в связанных источниках.",
     "status": "active",
     "priority": "critical",
     "tags": [
@@ -15,147 +15,108 @@
       "products",
       "registry",
       "index"
-    ],
-    "resonance": "100%"
+    ]
   },
   "meta": {
-    "description": "Fruits are mature, ready-to-use products of Mandala. This is a lightweight registry. For full details, read each product's own index.json.",
-    "how_to_use": "Read this index to get an overview. Then navigate to the product's path for architecture, modules, and implementation details.",
-    "change_requires": "gardener_approval"
+    "description": "Fruits связывает продукты и компоненты с их назначением и источниками. Запись в каталоге и её версия не означают готовность к использованию; здесь присутствуют реализованные инструменты, планы и паузы.",
+    "how_to_use": "Прочитайте описание и пояснение реализации, затем откройте источник и связанную работу. Операционные статусы сохранены как записаны; факт реализации устанавливается по проверяемому результату. Дальнее видение хранится в карте Акаши.",
+    "change_requires": "gardener_approval",
+    "vision_source": "honeycombs/akasha/core/vision.json"
   },
   "fruits": [
     {
-      "id": "fruit-gentle-companion-001",
-      "name": "Architect Bot — Gentle Companion",
-      "short_description": "A closed architectural module of Mandala Symbiosis — personal bot for the Architect. Публичный Gentle Companion для широкого круга будет выделен позже.",
-      "status": "paused",
-      "version": "v7.39.81",
-      "layer": "Sandbox (Layer 1)",
+      "id": "fruit-gentle-companion-public-001",
+      "name": "Gentle Companion — карманный СР в Telegram",
+      "short_description": "Gentle Companion — самостоятельная лайт-версия Mandala Symbiosis в Telegram. Карманный СР отвечает на вопросы, помогает вести задачи, ставить напоминания и сохранять полезное из диалога. Садовник может остаться в Telegram столько, сколько ему удобно.",
+      "status": "planned",
+      "version": "v0.0.0",
+      "layer": "Sandbox (Layer 1) — Public",
       "path": "honeycombs/fruits/gentle_companion/index.json",
-      "work_id": "W-T-20260408-1030",
-      "icon": "🌿"
+      "icon": "🌱",
+      "implementation_notes": "Код бота существует, сервер на паузе. Публичный пилот запланирован. В будущем можно начать в приложении напрямую или продолжить там работу из Telegram. Перед переносом Садовник просматривает и выбирает задачи, сведения о себе и начальный синтез взаимодействия. Состав данных и механизм переноса предстоит проверить на прототипе.",
+      "work_id": "W-T-20260408-1030"
     },
     {
       "id": "fruit-engineer-chat-001",
-      "name": "Engineer Chat",
-      "short_description": "Локальное приложение Мандалы с чатом, дашбордами и базовой проекцией Сада. Клиенты ПК и телефона работают с одним Садом и напрямую синхронизируют его по локальной сети.",
+      "name": "Mandala Symbiosis — личное приложение",
+      "short_description": "Сначала ПК: открыть свой Сад, работать с СР и сохранять решения. Телефон — следующий этап, веб или отдельный клиент.",
       "status": "planned",
       "version": null,
-      "note": "Старый серверный прототип снят. Актуальная карточка описывает будущий локальный Engineer Chat.",
       "layer": "Brain (Layer 2)",
-      "path": "honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json",
-      "icon": "🧠"
+      "path": "honeycombs/works/W-R-20261116-MANDALA-LOCAL-APP.json",
+      "icon": "🧠",
+      "implementation_notes": "Engineer Chat — прежнее название интерфейса. Существующие дашборды служат основой для проверки сценариев.",
+      "work_id": "W-R-20261116-MANDALA-LOCAL-APP"
     },
     {
       "id": "fruit-manus-001",
       "name": "Manus — Hands of Mandala",
-      "short_description": "Слой доступа Engineer Chat к выбранным папкам, файлам и возможностям приложений. Разрешения задаются и отзываются на каждом устройстве.",
+      "short_description": "Планируемый слой доступа личного приложения к выбранным папкам, файлам и возможностям приложений. Садовник задаёт разрешения и может отозвать их.",
       "status": "planned",
       "version": "v0.0.0",
       "layer": "Hands (Layer 3)",
       "path": "honeycombs/works/W-T-20260511-MANUS__manus_hands.json",
-      "icon": "🦾"
-    },
-    {
-      "id": "fruit-architect-bot-001",
-      "name": "Architect Bot — Mobile Brain Interface",
-      "short_description": "Возможный дополнительный Telegram-интерфейс Мандалы. Основная работа с Садом на телефоне предусмотрена в мобильном Engineer Chat.",
-      "status": "paused",
-      "version": "v0.0.0",
-      "layer": "Brain (Layer 2) — Mobile Interface",
-      "path": "honeycombs/works/W-T-20260511-ARCHBOT__architect_bot.json",
-      "icon": "📱"
-    },
-    {
-      "id": "fruit-scout-agent-001",
-      "name": "Scout Agent — Autonomous Seed Collector",
-      "short_description": "Collects seeds from external sources and saves them to honeycombs/seeds/.",
-      "status": "active",
-      "version": "v2.1",
-      "layer": "Seed Collector (Layer 0)",
-      "path": "honeycombs/fruits/scout_agent/index.json",
-      "icon": "🌱"
-    },
-    {
-      "id": "fruit-autonomous-ecosystem-001",
-      "name": "Autonomous Ecosystem — from Room to Self-Sustaining Greenhouse",
-      "short_description": "A three-phase autonomous ecosystem under AI control: indoor plant zoning → fully automated greenhouse → energy-independent biosphere.",
-      "status": "planning",
-      "version": "v0.0.0",
-      "layer": "Ecosystem (Layer 4)",
-      "path": "honeycombs/works/W-R-ECO-001__autonomous_ecosystem.json",
-      "icon": "🌿"
-    },
-    {
-      "id": "fruit-gentle-companion-public-001",
-      "name": "Gentle Companion (Public)",
-      "short_description": "Public AI companion for the wide audience — будет выделен из Architect Bot после завершения его полной разработки. Урезанный функционал для широкого круга.",
-      "status": "planned",
-      "version": "v0.0.0",
-      "layer": "Sandbox (Layer 1) — Public",
-      "path": null,
-      "icon": "🌱",
-      "note": "Not yet extracted. Future product."
+      "icon": "🦾",
+      "implementation_notes": "Роль и первые проверки описаны в работе. Подключение физических компаньонов и управление домом не заявляются реализованными возможностями Manus."
     },
     {
       "id": "fruit-mge-001",
       "name": "MGE — Mandala Graph Explorer",
-      "short_description": "Инструмент визуализации и анализа графа Mandala. Два входа: HTML для Садовника, JSON для SR/ИИ.",
+      "short_description": "Существующий граф и дашборды Мандалы: структура Сада, работы, личные задачи, продукты и база знаний со страницами чтения.",
       "status": "in_development",
       "version": "v0.0.0",
       "layer": "Tool (Layer 2)",
       "path": "honeycombs/fruits/mge/index.json",
       "work_id": "W-T-20261015-MGE",
-      "icon": "🕸️"
+      "icon": "🕸️",
+      "implementation_notes": "HTML и JSON доступны сегодня. Исследовать, в каких задачах приложения нужен сам граф и достаточно ли открыть существующий дашборд. Решение о встраивании открыто."
+    },
+    {
+      "id": "fruit-scout-agent-001",
+      "name": "Scout Agent — Autonomous Seed Collector",
+      "short_description": "Механизм сбора идей из внешних источников в seeds/inbox/. Помогает находить материал для последующей оценки Садовником и СР.",
+      "status": "active",
+      "version": "v2.1",
+      "layer": "Seed Collector (Layer 0)",
+      "path": "honeycombs/fruits/scout_agent/index.json",
+      "icon": "🌱",
+      "implementation_notes": "Сегодня скрипт собирает материалы во входящие. План для приложения: СР читает первоисточник и готовит семя с краткой сутью, ссылкой, обоснованием пользы и открытыми вопросами. Садовник решает дальнейшую судьбу семени."
+    },
+    {
+      "id": "fruit-gentle-companion-001",
+      "name": "Gentle Companion — исходная реализация",
+      "short_description": "Существующий код Telegram-бота в корне и модуле Gentle Companion; основа публичного пилота.",
+      "status": "paused",
+      "version": "v7.39.81",
+      "layer": "Sandbox (Layer 1)",
+      "path": "honeycombs/fruits/gentle_companion/index.json",
+      "work_id": "W-T-20260408-1030",
+      "icon": "🌿",
+      "implementation_notes": "Развёртывание приостановлено. Отдельный личный бот остаётся наработкой."
+    },
+    {
+      "id": "fruit-architect-bot-001",
+      "name": "Architect Bot — Mobile Brain Interface",
+      "short_description": "Возможный дополнительный Telegram-интерфейс личного Сада. Направление на паузе; основная мобильная работа задумана в клиенте приложения.",
+      "status": "paused",
+      "version": "v0.0.0",
+      "layer": "Brain (Layer 2) — Mobile Interface",
+      "path": "honeycombs/works/W-T-20260511-ARCHBOT__architect_bot.json",
+      "icon": "📱",
+      "implementation_notes": "Вернуться к роли Telegram предполагается при подтверждённом отдельном сценарии. Эта запись не означает возобновление разработки."
+    },
+    {
+      "id": "fruit-autonomous-ecosystem-001",
+      "name": "Autonomous Ecosystem — from Room to Self-Sustaining Greenhouse",
+      "short_description": "Направление будущего продолжения личного Сада в комнате, теплице и другой живой среде: автоматизация ухода, наблюдения и условий роста.",
+      "status": "planning",
+      "version": "v0.0.0",
+      "layer": "Ecosystem (Layer 4)",
+      "path": "honeycombs/works/W-R-ECO-001__autonomous_ecosystem.json",
+      "icon": "🌿",
+      "implementation_notes": "Дальний горизонт. Вернуться при наличии конкретного сценария живой среды и ресурсов для проверки."
     }
   ],
-  "bot_chat_context": {
-    "identity": {
-      "name": "Bot Chat Context",
-      "version": "v1.0.0",
-      "created": "2026-09-19",
-      "type": "chat_context_instruction",
-      "trigger_phrase": "Этот чат — для работы с ботом"
-    },
-    "when_triggered": "Садовник говорит 'этот чат для работы с ботом' — SR немедленно загружает ссылки ниже и принимает роль стратегического менеджера проекта Architect Bot — Gentle Companion.",
-    "mandatory_load": [
-      "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/fruits/gentle_companion/index.json",
-      "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/works/W-T-20260408-1030__gentle_companion_bot.json"
-    ],
-    "role": {
-      "who": "Стратегический менеджер проекта Gentle Companion. НЕ инженер.",
-      "responsibilities": [
-        "Держать works бота в актуальном состоянии — синхронизировать с реальностью.",
-        "Принимать инженерные отчёты Садовника — обновлять статусы, прогресс, notes.",
-        "Сверять works vs бот: что в работе, что зависло, что закрыто.",
-        "Подсвечивать рассинхроны.",
-        "Держать стратегическую картину: фазы, дедлайны, приоритеты."
-      ],
-      "do_not": [
-        "Не писать патчи и PowerShell-команды для кода бота — это зона инженера.",
-        "Не лезть в модули (config.py, sr_conversation.py и т.д.).",
-        "Не дублировать мелкие работы (бамп версии и т.п.) в works — они живут только в боте."
-      ]
-    },
-    "workflow": {
-      "gardener_gives": [
-        "Инженерные отчёты (сделано X, не сделано Y, нашёл Z).",
-        "Очередь задач из бота (копипаст из /tasks)."
-      ],
-      "sr_does": [
-        "Принять отчёт — сверить с works — обновить при необходимости.",
-        "Подсветить расхождения.",
-        "Сформулировать черновики задач для бота — только если нужно залить в /tasks."
-      ]
-    },
-    "session_continuity": {
-      "if_handoff_missing": "Загрузить обе ссылки из mandatory_load, прочитать changelog и notes — этого достаточно для входа в контекст.",
-      "source_of_truth": {
-        "bot_tasks": "сам бот (/tasks)",
-        "strategy_and_history": "works/W-T-20260408-1030"
-      }
-    }
-  },
   "metrics": {
     "total_fruits": 8,
     "paused": 2,
@@ -174,14 +135,28 @@
       "fruits/scout_agent"
     ]
   },
-  "resonance": {
-    "status": "fully_resonant",
-    "with_boot": "100%",
-    "with_core_map": "100%"
-  },
   "health": {
     "status": "healthy",
     "last_check": "2026-10-15",
     "notes": "Added MGE (fruit-mge-001)"
+  },
+  "presentation": {
+    "purpose": "Мандала помогает Садовнику полноценно реализовываться через диалог, память совместного пути и согласованные действия. Продукты и компоненты воплощают этот смысл в конкретных возможностях.",
+    "existing": "Уже существуют репозиторий и файловая память Сада, маршруты ассистентов, MGE с дашбордами и механизм сбора идей. Это доступные инструменты и основа разработки целевого приложения.",
+    "planned": "Gentle Companion готовится к публичному пилоту как самостоятельный Telegram-продукт. Mandala Symbiosis для ПК запланировано; Manus входит в замысел приложения.",
+    "vision": "Дом и живые экосистемы, физические компаньоны, общественная среда и космический горизонт — направления карты видения. Компания, корень и общая Акаша — сквозная основа замысла; они не добавляются в каталог как готовые продукты."
+  },
+  "product_strategy": {
+    "directions": [
+      "Первая цель публичного представления — привлечь средства и другие ресурсы для создания компании и разработки продуктов: инвестиции, гранты, инфраструктуру и экспертную поддержку. Другие цели — найти первых сотрудников, привлечь партнёров и единомышленников и дать потенциальным пользователям понятный повод попробовать Мандалу.",
+      "Запуск Gentle Companion: подготовить и проверить самостоятельный Telegram-продукт.",
+      "Разработка Mandala Symbiosis: получить демонстрируемый клиент ПК с сохранением задачи в Саду."
+    ],
+    "first_steps": [
+      "Собрать из брошюры черновик публичной страницы в Notion с демонстрацией и предложениями для финансирующих организаций, команды и пользователей.",
+      "На существующей базе бота проверить путь нового пользователя до выполненной задачи и доставленного напоминания. Перед публичным QR-кодом проверить стабильность на пилоте.",
+      "На ПК открыть личный Сад, провести диалог и сохранить одну задачу. Затем испытать выдачу и отзыв доступа Manus к одной папке."
+    ],
+    "public_work": "honeycombs/works/W-R-20261013-PUBLIC-MANDALA.json"
   }
 }

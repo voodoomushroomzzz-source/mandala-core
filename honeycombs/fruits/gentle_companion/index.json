@@ -7,7 +7,7 @@
     "updated": "2026-11-16",
     "layer": 2,
     "type": "fruits_index",
-    "description": "Modular architecture index for Gentle Companion bot. 15 modules, 7 migration phases complete. Production on Hetzner VPS. v2.3.0: Budget module (handlers/budget.py) added — 5 patches deployed; BUG-20260907 fixed in build.py BUILD_ORDER. Also known as Architect Bot — closed architectural module. Public Gentle Companion will be extracted in future.",
+    "description": "Gentle Companion — самостоятельная лайт-версия Mandala Symbiosis в Telegram. Карманный СР отвечает на вопросы, помогает вести задачи, ставить напоминания и сохранять полезное из диалога. Садовник может остаться в Telegram столько, сколько ему удобно. Здесь описаны существующие модули бота. Сервер на паузе, публичный пилот и перенос в приложение предстоит подготовить.",
     "status": "paused",
     "priority": "critical",
     "tags": [

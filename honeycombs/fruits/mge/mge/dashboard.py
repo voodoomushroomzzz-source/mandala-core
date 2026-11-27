@@ -181,6 +181,11 @@ def render_page(path, title, entries, fields=(), intro="", grouping=None, outro=
     sections = {"TITLE": escape(title), "FILTERS": "".join(filters), "CARDS": content,
                 "INTRO": intro, "LAYOUT": layout, "OUTRO": outro}
     page = re.sub(r"__(TITLE|FILTERS|CARDS|INTRO|LAYOUT|OUTRO)__", lambda match: sections[match[1]], TEMPLATE)
+    if path.name in {"works.html", "personal.html"}:
+        page = page.replace('<div class="controls">', '<details class="task-catalog"><summary>По направлениям</summary><div class="controls">', 1)
+        page = page.replace('aria-label="Каталог">' + content + '</section>', 'aria-label="Каталог">' + content + '</section></details>', 1)
+        page = page.replace('</style>', 'summary {cursor:pointer} main > details > summary,.queue summary {padding:9px 0;font-weight:600} main > details {margin:12px 0} .queue li::marker {color:#84b9ff} .task-catalog > summary {color:#84b9ff}</style>')
+        page = page.replace('details.open = true;', 'for (let parent = card.parentElement; parent; parent = parent.parentElement) { if (parent.tagName === "DETAILS") parent.open = true; } details.open = true;')
     path.write_text(page, encoding="utf-8", newline="\n")
 
 
@@ -188,6 +193,7 @@ def render_queue(root, works_by_file):
     board = (root / "honeycombs/works/management_taskboard.md").read_text(encoding="utf-8")
     sections = re.split(r"(?m)^## ", board)
     rendered = {}
+    focus_titles = []
     for title in ("Чем заняться сейчас", "На паузе", "Перспектива и отложенные решения"):
         section = next((text for text in sections if text.startswith(f"{title}\n")), "")
         items = []
@@ -196,6 +202,14 @@ def render_queue(root, works_by_file):
                 continue
             cells = [cell.strip() for cell in line.strip("|").split("|")]
             if cells[0] in {"Очередь", "Работа"}:
+                continue
+            if title == "Чем заняться сейчас" and cells[0].isdigit():
+                name = re.fullmatch(r"\[([^\]]+)\]\(([^)]+)\)", cells[1])
+                title_text = name[1] if name else cells[1]
+                focus_titles.append(title_text)
+                source = works_by_file.get(name[2]) if name else None
+                more = link("works.html", source, "Открыть работу") if source else ""
+                items.append(f'<li><details><summary>{escape(title_text)}</summary><p>{escape(cells[-1])}</p><small>{escape(cells[-2])}</small> {more}</details></li>')
                 continue
             if cells[0].isdigit():
                 cells = cells[1:]
@@ -209,10 +223,10 @@ def render_queue(root, works_by_file):
         if items:
             rendered[title] = f'<ul class="queue">{"".join(items)}</ul>'
     now = rendered.pop("Чем заняться сейчас", "")
-    intro = (f"<h2>Сейчас</h2>{now}" if now else "") + "<h2>Доска по приоритетам</h2>"
+    intro = f'<h2 id="now">Сейчас</h2>{now}'
     outro = "".join(f'<details class="queue-more"><summary>{title}</summary>{items}</details>'
                     for title, items in rendered.items())
-    return intro, outro
+    return intro, outro, focus_titles
 
 
 def personal_entries(root, movement):
@@ -268,6 +282,8 @@ def personal_entries(root, movement):
             "description": record.get("description", ""), "status": record["status"],
             "priority": priority, "group": directions.get(direction, "Мандала"),
             "now": task.get("now", record["status"] in {"active", "in_progress", "todo", "pending", "blocked"}),
+            "next_step": record.get("next_step") or task.get("context") or "",
+            "confirmed_due": due if task.get("deadline_confirmed") is not False else None,
             "meta": label(record["status"]), "details": "".join(details),
             "summary_detail": summary_detail,
             "links": [source_link(path)],
@@ -306,7 +322,7 @@ def render_everyday(root):
         else:
             closed.append(f'<li id="{escape(key, quote=True)}">{escape(task["name"])}'
                           f' <span class="meta">— {escape(label(task["status"]))}</span></li>')
-    html = '<section id="everyday" aria-labelledby="everyday-title"><h2 id="everyday-title">Повседневное</h2>'
+    html = '<section id="everyday" aria-labelledby="everyday-title"><details><summary id="everyday-title">Повседневное</summary>'
     html += '<p class="meta">Покупки и небольшие бытовые дела.</p><div class="grid">'
     for title, items in groups.values():
         html += f'<article><h3>{escape(title)}</h3>'
@@ -315,7 +331,7 @@ def render_everyday(root):
     html += '</div>'
     if closed:
         html += '<details class="queue-more"><summary>Завершённые и отменённые</summary><ul>' + ''.join(closed) + '</ul></details>'
-    return html + '</section>'
+    return html + '</details></section>'
 
 
 def build_personal(root, output):
@@ -326,10 +342,10 @@ def build_personal(root, output):
         context = ''.join(f'<p><strong>{caption}:</strong> {escape(d[field])}</p>'
                           for field, caption in (("goal", "Цель"), ("next_step", "Следующий шаг"),
                                                  ("notes", "Контекст")) if d.get(field))
-        rows.append(f'<article><h3>{escape(d["name"])}</h3><p>{escape(label(d["state"]))}</p>'
+        rows.append(f'<article><details><summary>{escape(d["name"])}</summary><p>{escape(label(d["state"]))}</p>'
                     f'{context}'
                     f'<p class="meta">Источники прочитаны: {escape(d.get("last_sync_at") or "ещё не отмечено")}<br>'
-                    f'Планы подтверждены: {escape(d.get("last_confirmed_at") or "ещё не сверяли")}</p></article>')
+                    f'Планы подтверждены: {escape(d.get("last_confirmed_at") or "ещё не сверяли")}</p></details></article>')
     focus = movement.get("personal_focus", {})
     intro = ''
     if focus.get("focus"):
@@ -339,18 +355,27 @@ def build_personal(root, output):
             if focus.get(field):
                 intro += f'<p>{escape(focus[field])}</p>'
         intro += '</section>'
-    intro += render_everyday(root)
+    focus_section = intro
+    intro = ""
     intro += '<h2>Сейчас</h2>'
     active = [e for e in entries if e["now"]]
-    intro += ('<ul class="queue">' + ''.join(f'<li>{link("personal.html", e["id"], e["name"])}</li>' for e in active) + '</ul>') if active else '<p>Согласованных текущих действий пока нет.</p>'
-    intro += '<h2>Доска по приоритетам</h2>'
+    items = []
+    for entry in active:
+        due = f' · {escape(entry["confirmed_due"])}' if entry["confirmed_due"] else ""
+        step = f'<p>{escape(entry["next_step"])}</p>' if entry["next_step"] else ""
+        more = link("personal.html", entry["id"], "Открыть задачу")
+        items.append(f'<li><details><summary>{escape(entry["name"])}{due}</summary>{step}{more}</details></li>')
+    intro += '<ul class="queue">' + ''.join(items) + '</ul>' if items else '<p>Согласованных текущих действий пока нет.</p>'
+    intro += render_everyday(root)
+    if focus_section:
+        intro += f'<details><summary>Личный фокус</summary>{focus_section}</details>'
     if not entries:
         intro += '<p>Личный фронт ещё предстоит сверить. Старые планы направлений не стали текущими задачами автоматически.</p>'
     outro = '<h2>Личные направления</h2><section class="grid">' + ''.join(rows) + '</section>'
     outro += '<p>' + source_link('honeycombs/personal/personal_taskboard.md') + ' · ' + source_link('honeycombs/personal/current_movement.json') + '</p>'
     render_page(output / "personal.html", "Личные задачи", entries,
-                (("status", "Статус"), ("group", "Направление")), intro,
-                grouping=("priority", PRIORITIES), outro=outro)
+                (("status", "Статус"), ("priority", "Приоритет")), intro,
+                grouping=("group", ()), outro=outro)
 
 
 def build_catalogs(root, site, output, graph):
@@ -358,7 +383,7 @@ def build_catalogs(root, site, output, graph):
 
     build_commands(root, output / "commands.html", "../../../../index.html")
     if site != root:
-        (site / "index.html").write_text((root / "index.html").read_text(encoding="utf-8"), encoding="utf-8", newline="\n")
+        shutil.copyfile(root / "index.html", site / "index.html")
         shutil.copytree(root / "assets", site / "assets", dirs_exist_ok=True)
         shutil.copyfile(root / "manifest.webmanifest", site / "manifest.webmanifest")
 
@@ -389,10 +414,15 @@ def build_catalogs(root, site, output, graph):
             "links": [graph_link, source_link(nodes[work_id]["path"])],
         })
     works_by_file = {node_path.rsplit("/", 1)[-1]: work_id for work_id in work_cards if (node_path := nodes[work_id]["path"])}
-    intro, outro = render_queue(root, works_by_file)
-    render_page(output / "works.html", "Works", works,
-                (("status", "Статус"), ("group", "Блок"), ("deadline", "Дедлайн")),
-                intro, grouping=("priority", PRIORITIES), outro=outro)
+    intro, outro, focus_titles = render_queue(root, works_by_file)
+    home = site / "index.html"
+    markup = home.read_text(encoding="utf-8")
+    markup = re.sub(r'(<p id="mandala-focus">).*?(</p>)',
+                    lambda m: m[1] + escape(" · ".join(focus_titles) or "Текущая очередь работ") + m[2], markup)
+    home.write_text(markup, encoding="utf-8", newline="\n")
+    render_page(output / "works.html", "Задачи Мандалы", works,
+                (("status", "Статус"), ("priority", "Приоритет"), ("deadline", "Дедлайн")),
+                intro, grouping=("group", ()), outro=outro)
 
     knowledge_root = root / "honeycombs/knowledge"
     from mge.knowledge import load_knowledge
@@ -423,9 +453,12 @@ def build_catalogs(root, site, output, graph):
                 grouping=("group", collection["areas"]))
 
     products = []
-    for fruit in load(root / "honeycombs/fruits/index.json")["fruits"]:
+    fruits_catalog = load(root / "honeycombs/fruits/index.json")
+    for fruit in fruits_catalog["fruits"]:
         fruit_id = fruit["id"]
         details = []
+        if fruit.get("implementation_notes"):
+            details.append(f'<p>{escape(fruit["implementation_notes"])}</p>')
         for work_id in relations[fruit_id]:
             card = work_cards[work_id]
             parent = next((n for n, children in relations.items() if work_id in children and n in work_cards), "")
@@ -449,4 +482,11 @@ def build_catalogs(root, site, output, graph):
             "links": [link("mandala_graph.html", fruit_id, "На карте", separator="?node=")]
             + ([source_link(fruit["path"])] if fruit.get("path") else []),
         })
-    render_page(output / "fruits.html", "Fruits", products, (("status", "Статус продукта"),))
+    presentation = fruits_catalog.get("presentation", {})
+    intro = f'<p>{escape(presentation["purpose"])}</p>' if presentation.get("purpose") else ""
+    overview = "".join(f'<article><h2>{caption}</h2><p>{escape(presentation[key])}</p></article>'
+                       for key, caption in (("existing", "Уже существует"), ("planned", "Планы"), ("vision", "Дальнее видение"))
+                       if presentation.get(key))
+    if overview:
+        intro += f'<section class="grid" aria-label="Обзор развития">{overview}</section><h2>Каталог продуктов и компонентов</h2>'
+    render_page(output / "fruits.html", "Fruits", products, (("status", "Статус продукта"),), intro=intro)

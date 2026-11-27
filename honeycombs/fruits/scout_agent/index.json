@@ -10,7 +10,13 @@
     "description": "Autonomous agent that collects seeds from external sources and saves them to honeycombs/seeds/.",
     "status": "active",
     "priority": "high",
-    "tags": ["scout", "seeds", "collector", "autonomous", "agent"],
+    "tags": [
+      "scout",
+      "seeds",
+      "collector",
+      "autonomous",
+      "agent"
+    ],
     "resonance": "100%"
   },
   "meta": {
@@ -60,5 +66,10 @@
     "status": "healthy",
     "last_check": "2026-08-10",
     "notes": "v2.1: added meta.description."
+  },
+  "application_direction": {
+    "current": "Сборщик складывает найденные материалы во входящие семена.",
+    "planned": "В Mandala Symbiosis СР готовит по источнику карточку с кратким содержанием, ссылкой, возможной пользой и вопросами.",
+    "first_check": "Сравнить исходный материал и подготовленное семя вручную. Проверить точность ссылки и отделение содержания источника от оценки СР."
   }
 }

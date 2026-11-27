@@ -80,11 +80,18 @@ LABELS = {
     "quick_reference": "Краткая памятка", "section": "Раздел", "topics": "Темы",
     "use_in_mandala": "Применение в Мандале", "key_links": "Основные ссылки",
     "catalog_description": "О каталоге", "previous_format_note": "Историческая заметка о формате",
+    "publication_history": "История предложений о публикации",
 }
 
 
 def paragraphs(value):
-    return "".join(f'<p>{escape(p)}</p>' for p in value.split("\n\n"))
+    result = []
+    for p in value.split("\n\n"):
+        text = escape(p)
+        if p.startswith(('https://', 'http://')) and not any(c.isspace() for c in p):
+            text = f'<a href="{text}" rel="noopener noreferrer">{text}</a>'
+        result.append(f'<p>{text}</p>')
+    return ''.join(result)
 
 
 def supplementary(value):
