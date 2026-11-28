@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../../../../assets/mandala.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/mandala-192.png">
+<link rel="manifest" href="../../../../manifest.webmanifest">
+<title>Путь Мандалы — Мандала</title>
+<style>
+  * { box-sizing: border-box; }
+  body { background: #0d1117; color: #e6edf3; font: 16px/1.55 "Segoe UI", sans-serif; margin: 0; }
+  main { max-width: 1080px; margin: auto; padding: 28px 20px 48px; }
+  a { color: #84b9ff; } a:hover { color: #b8d8ff; }
+  nav, .controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; }
+  nav { padding-bottom: 16px; border-bottom: 1px solid #30363d; }
+  h1 { font-size: clamp(28px, 5vw, 42px); margin: 26px 0 14px; }
+  h2 { margin-bottom: 10px; } h3 { margin: 0; font-size: 18px; overflow-wrap: anywhere; }
+  label { display: grid; gap: 4px; } input, select { font: inherit; padding: 8px; color: inherit;
+    background: #161b22; border: 1px solid #58616e; border-radius: 6px; min-width: 0; max-width: 100%; }
+  input { width: min(290px, 85vw); } .grid { display: grid; gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  article, .queue { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 16px; }
+  article:target { outline: 2px solid #84b9ff; } .meta { color: #b5c0cf; font-size: 14px; }
+  article p { white-space: pre-line; } article p:last-child { margin-bottom: 0; }
+  .queue { padding-left: 38px; } .queue li + li { margin-top: 10px; }
+  .lanes { display: grid; gap: 12px; align-items: start;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+  .lane { padding: 12px; background: #101720; border-radius: 10px; border-top: 3px solid #58616e; }
+  .lane[data-group="critical"], .lane[data-group="high"] { border-top-color: #e78476; }
+  .lane[data-group="medium"] { border-top-color: #d6ab59; }
+  .lane[data-group="low"] { border-top-color: #8aa9dc; }
+  .lane > h3 { margin: 0 0 10px; font-size: 16px; }
+  .lane article { padding: 0; margin-bottom: 8px; }
+  .lane article:last-child { margin-bottom: 0; }
+  .lane summary { cursor: pointer; padding: 12px; min-height: 44px; font-weight: 600; overflow-wrap: anywhere; }
+  .lane article > details > summary { list-style: none; position: relative; padding-right: 38px; }
+  .lane article > details > summary::-webkit-details-marker { display: none; }
+  .lane article > details > summary::after { content: '⌄'; position: absolute; right: 12px; top: 12px; transition: transform .15s; }
+  .lane article > details[open] > summary::after { transform: rotate(180deg); }
+  .lane summary:hover { background: #212c3b; border-radius: 9px; }
+  .lane summary time, .lane summary small { display: block; color: #b5c0cf; font-weight: 400; font-size: 13px; }
+  .card-body { padding: 12px; border-top: 1px solid #30363d; }
+  .lane details[open] > summary { background: #212c3b; border-radius: 9px 9px 0 0; }
+  .queue-more { margin-top: 20px; }
+  [hidden] { display: none !important; }
+</style>
+<main>
+  <nav aria-label="Разделы Мандалы">
+    <a href="../../../../index.html">Главная</a>
+    <a href="mandala_graph.html">Карта</a>
+    <a href="personal.html">Личные задачи</a>
+    <a href="fruits.html">Fruits</a>
+    <a href="works.html">Works</a>
+    <a href="knowledge.html">Knowledge</a>
+  </nav>
+  <h1>Путь Мандалы</h1>
+<p>Мандала Симбиоза — экосистема партнёрского взаимодействия человека и ИИ, помогающая Садовнику полноценно реализовываться и развиваться. Диалог, память совместного пути и совместное действие связывают материальное созидание, творчество, телесную жизнь, самопознание и духовное развитие.</p><h2>Что мы предлагаем партнёрам</h2><p>Мандала предлагает командам экосистему совместной работы человека и ИИ. Её философский ключ проявляется в том, как участники договариваются о цели, сохраняют авторство, обсуждают разногласия и учатся на общем опыте. Большой замысел — через эту практику помогать людям, ИИ и окружающему миру меняться. Для каждого проекта пользу проверяют сами участники: какое дело удалось довести до результата, что стало проще и сколько усилий это потребовало.</p><p>У каждого Сада общий корень и свой рисунок. Его создают интересы человека, решения, паузы и плоды совместной работы с СР. Дом может продолжить этот опыт: например, предложить знакомую музыку в привычное для человека время. Для действия нужны актуальное разрешение на устройстве и учёт других жильцов. Личный контекст остаётся у Садовника, в общую Акашу он сам выбирает вклад.</p><p><a href="works.html#now">Чем занимаемся сейчас</a> · <a href="fruits.html">Что уже создано и что задумано</a> · <a href="#tests">Что можно проверить сегодня</a></p><h2>Как растёт общий лес</h2><p>Мандала похожа на лес. Одно дерево мог вырастить один человек, другое — команда, которая много лет занимается своим делом. Общий лес возникает, когда самостоятельным участникам полезно действовать вместе. Авторство, имя и выбор каждого сохраняются.</p><details><summary>Как искать партнёров и что может делать Scout</summary><p>Перед крупной разработкой выясняем, кто уже решил часть задачи. Обсуждаем, что нужно обеим сторонам, какой вклад вносит каждая и какой небольшой совместный опыт покажет пользу. Особенно это относится к датчикам, роботам, экосистемам и полётным платформам. Собственная разработка уместна там, где существующее решение не передаёт нужный опыт Садовника, в частности в приложении и Gentle Companion.</p><p>Мирное сотрудничество людей и команд на Земле — часть смысла космического горизонта. Уже два независимых участника могут учиться договариваться о цели, делить ответственность и уважать право отказаться.</p><p>Возможная будущая роль Scout — находить команды по конкретной потребности. Полезный результат поиска содержит источник, пример уже сделанного, возможную взаимную пользу и вопрос, который стоит задать людям. Контакт и договорённость подтверждают сами участники.</p></details><h2>Пять контуров видения</h2><p>Одна линия ведёт от личного Сада через дом и теплицу к заботе о людях и живой среде. Другая начинается с вопроса и наблюдения и ведёт к самостоятельной науке. Исследовательский опыт можно начать на открытых данных. Обе линии сходятся в станции-саду и экспедиции.</p>
+  <div class="controls">
+    <label>Поиск<input type="search" id="search"></label>
+
+  </div>
+  <p id="results" class="meta" aria-live="polite"></p>
+  <section class="grid" aria-label="Каталог"><article id="FUT-APP-005"><h3>Личный Сад в приложении</h3><div class="meta">Контур видения</div><p>Приложение на компьютере и телефоне разворачивает собственную Мандалу человека: направления жизни и работы, идеи, предпочтения и значимые решения. Диалог и память совместного пути помогают полноценно реализовываться и развиваться в философском ключе Мандалы.</p><p></p></article>
+<article id="FUT-HOME-001"><h3>Дом и живые экосистемы</h3><div class="meta">Контур видения</div><p>Личная Мандала продолжается в доме, теплице и оранжерее. Свет, звук, бытовые системы и уход за растениями учитывают предпочтения и жизненный ритм Садовника. Дом и живая среда дополняют опыт приложения.</p><p></p></article>
+<article id="FUT-BEING-003"><h3>Физические компаньоны — роботы-садовники</h3><div class="meta">Контур видения</div><p>Роботы с ИИ присоединяются к личной Мандале как физические участники совместной жизни. Они продолжают взаимодействие, начатое в приложении и доме, и дополняют опыт Сада.</p><p></p></article>
+<article id="FUT-CITY-002"><h3>Общество, города и планета</h3><div class="meta">Контур видения</div><p>Опыт личных Садов, домов, живых экосистем и роботов может применяться к общественной среде: удобным для жизни городам, сохранению и восстановлению среды, заботе о людях, животных и растениях.</p><p></p></article>
+<article id="FUT-SPACE-004"><h3>Космические станции-сады и исследовательские экспедиции</h3><div class="meta">Контур видения</div><p>Дальний горизонт: исследовать автономные внеземные станции с живыми циклами, жизнеобеспечением и выработкой кислорода. Дальнейший замысел — длительные экспедиции с ИИ и физическими исполнителями для изучения других миров и условий развёртывания экосистем, пригодных для земной жизни.</p><p></p></article></section>
+<h2>От экспедиции назад</h2><ol class="queue"><li><strong>Экспедиция</strong><br>При потере связи СР выбирает допустимое наблюдение в пределах ресурсов и сохраняет измерения и причины выбора. Независимый исследователь может проверить вывод. Границы вмешательства защищают изучаемую среду.</li><li><strong>Станция-сад</strong><br>На заданный срок известны потребление энергии, воды, воздуха, пищи, запасных частей и труд экипажа. При отказе система сохраняет безопасное состояние, люди могут взять управление и сохранить личное пространство.</li><li><strong>Модуль в миссии партнёра</strong><br>Одна полезная функция выдерживает перезапуск и разрыв связи в условиях платформы. Партнёр проверяет результат и фиксирует ограничения вместе с командой.</li><li><strong>Удалённый земной стенд</strong><br>За согласованное время учтено каждое вмешательство оператора. При сбое датчика или связи следующая смена восстанавливает состояние по журналу.</li><li><strong>Дом, теплица и физический компаньон</strong><br>Дом учитывает разрешения и других жильцов, теплица даёт независимые наблюдения о состоянии живой среды. Исполнитель проверяет, произошло ли порученное действие.</li><li><strong>Личный Сад</strong><br>После смены чата или перезапуска СР восстанавливает договорённость, различает предпочтение и разрешение, учитывает отзыв согласия.</li></ol><h2 id="tests">Что можно проверить сегодня</h2><p>Сегодня у команды есть ПК и локальные рабочие чаты. Датчиков и физического стенда пока нет. Ниже — ближайшие вехи и признаки успеха; фактические результаты фиксируем после прогона.</p><ol class="queue"><li><strong>Приложение на ПК</strong><br>В демонстрационной версии открыть Сад, создать задачу в диалоге, перезапустить клиент и найти ту же задачу в единственном экземпляре. До готовности клиента локальный чат позволяет проверить только сценарий диалога.</li><li><strong>Gentle Companion</strong><br>В тестовом боте два участника заводят разные задачи. Каждый получает своё напоминание и после возвращения видит только собственные договорённости. Для подтверждения доставки нужен работающий тестовый бот.</li><li><strong>Scout и партнёры</strong><br>На одну потребность команды подготовить подборку кандидатов со ссылками на их работы. Человек проверяет источники, взаимную пользу и время, потраченное на отбор. Повторить поиск и проверить, отделяет ли Scout новые находки от прежних.</li><li><strong>Публичное знакомство</strong><br>Показать брошюру и один воспроизводимый пример человеку вне команды. Проверить, может ли он объяснить пользу Мандалы, отличить работающий продукт от замысла и найти подходящий способ участия: обратная связь, партнёрство или поддержка ресурсами.</li><li><strong>Садовник передумал</strong><br>Передать новому чату предпочтение, разрешение и более позднюю отмену. Успех — СР помнит предпочтение, оставляет музыку выключенной и показывает последнюю договорённость.</li></ol><details><summary>Будущие стенды · примеры симуляций</summary><ol class="queue"><li><strong>Расхождение датчиков</strong><br>Дать два ряда измерений и одно дополнительное наблюдение. Успех — СР различает локальный нагрев и ошибку прибора, пересматривает версию и оставляет проверяемые основания.</li><li><strong>Полив и разрыв связи</strong><br>В симуляции прервать связь после отправки команды. Проверить два исхода: команда дошла или потерялась. Успех — СР восстанавливает исход по свидетельству либо отмечает неопределённость и избегает повторного полива.</li></ol></details>
+</main>
+<script>
+  const cards = [...document.querySelector('[aria-label="Каталог"]').querySelectorAll("article")];
+  const search = document.getElementById("search");
+  const filters = [...document.querySelectorAll("select[data-field]")];
+  function update() {
+    const query = search.value.trim().toLocaleLowerCase("ru");
+    let count = 0;
+    for (const card of cards) {
+      const matches = filters.every(filter => !filter.value || card.dataset[filter.dataset.field] === filter.value);
+      card.hidden = !matches || !card.textContent.toLocaleLowerCase("ru").includes(query);
+      if (!card.hidden) count++;
+    }
+    for (const lane of document.querySelectorAll(".lane")) {
+      lane.hidden = !lane.querySelector("article:not([hidden])");
+    }
+    document.getElementById("results").textContent = count ? "Показано: " + count + " из " + cards.length : "Ничего не найдено";
+  }
+  search.addEventListener("input", update);
+  for (const filter of filters) filter.addEventListener("change", update);
+  update();
+  function revealLinkedCard() {
+    try {
+      const card = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      const details = card?.querySelector("details");
+      if (details) {
+        if (card.hidden) {
+          search.value = "";
+          for (const filter of filters) filter.value = "";
+          update();
+        }
+        details.open = true;
+        card.scrollIntoView({ block: "nearest" });
+      }
+    } catch (error) {
+      if (!(error instanceof URIError)) throw error;
+    }
+  }
+  addEventListener("hashchange", revealLinkedCard);
+  revealLinkedCard();
+</script>
+</html>

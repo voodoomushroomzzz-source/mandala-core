@@ -76,7 +76,7 @@ TEMPLATE = """<!doctype html>
 __INTRO__
   <div class="controls">
     <label>Поиск<input type="search" id="search"></label>
-    __FILTERS__
+__FILTERS__
   </div>
   <p id="results" class="meta" aria-live="polite"></p>
   <section class="__LAYOUT__" aria-label="Каталог">__CARDS__</section>
@@ -378,6 +378,41 @@ def build_personal(root, output):
                 grouping=("group", ()), outro=outro)
 
 
+def build_vision(root, output):
+    vision = load(root / "honeycombs/akasha/core/vision.json")["content"]
+    cooperation = vision["cooperation"]
+    path = vision["path_to_test"]
+    intro = (
+        f'<p>{escape(vision["vision_statement"])}</p>'
+        f'<h2>Что мы предлагаем партнёрам</h2><p>{escape(cooperation["offer"])}</p>'
+        f'<p>{escape(vision["personal_and_common_gardens"]["personal_garden"])}</p>'
+        '<p><a href="works.html#now">Чем занимаемся сейчас</a> · '
+        '<a href="fruits.html">Что уже создано и что задумано</a> · '
+        '<a href="#tests">Что можно проверить сегодня</a></p>'
+        f'<h2>Как растёт общий лес</h2><p>{escape(cooperation["forest"])}</p>'
+        '<details><summary>Как искать партнёров и что может делать Scout</summary>'
+        + ''.join(f'<p>{escape(cooperation[key])}</p>' for key in ("practice", "horizon", "scout"))
+        + f'</details><h2>Пять контуров видения</h2><p>{escape(path["branches"])}</p>'
+    )
+    entries = []
+    for key in vision["contours"]["order"]:
+        seed = vision["seeds"][key]
+        entries.append(dict(id=key, name=seed["name"], description=seed["core_idea"],
+                            meta="Контур видения", details="", links=[]))
+
+    def steps(items):
+        return '<ol class="queue">' + ''.join(
+            f'<li><strong>{escape(title)}</strong><br>{escape(check)}</li>'
+            for title, check in items) + '</ol>'
+
+    outro = ('<h2>От экспедиции назад</h2>' + steps(path["backward"])
+             + '<h2 id="tests">Что можно проверить сегодня</h2>'
+             + f'<p>{escape(path["available"])}</p>' + steps(path["experiments"])
+             + '<details><summary>Будущие стенды · примеры симуляций</summary>'
+             + steps(path["simulations"]) + '</details>')
+    render_page(output / "vision.html", "Путь Мандалы", entries, intro=intro, outro=outro)
+
+
 def build_catalogs(root, site, output, graph):
     from mge.commands import build_commands
 
@@ -388,6 +423,7 @@ def build_catalogs(root, site, output, graph):
         shutil.copyfile(root / "manifest.webmanifest", site / "manifest.webmanifest")
 
     build_personal(root, output)
+    build_vision(root, output)
 
     nodes = {node["id"]: node for node in graph["nodes"]}
     work_cards = {}

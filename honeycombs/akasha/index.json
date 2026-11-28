@@ -1,18 +1,24 @@
 {
   "identity": {
     "module_id": "AKASHA-MANIFEST-001",
-    "name": "Akasha — Chronicle of Living System",
-    "version": "v1.1.0",
+    "name": "Акаша — память развития Мандалы",
+    "version": "v1.2.0",
     "created": "2026-03-15",
-    "updated": "2026-11-16",
+    "updated": "2026-11-20",
     "layer": 1,
     "type": "honeycomb_manifest",
     "status": "active",
     "priority": "medium",
-    "tags": ["akasha", "chronicle", "history", "memory", "archive"]
+    "tags": [
+      "akasha",
+      "chronicle",
+      "history",
+      "memory",
+      "archive"
+    ]
   },
   "meta": {
-    "description": "Akasha — chronicle of Mandala's living history. Records of important events, transitions, and system pulses.",
+    "description": "Файловая память решений и видения Мандалы. Нынешняя хроника, личная память Садовника и будущая общая сеть имеют разные роли и границы.",
     "source": "Initium v7.5.1",
     "resonance": "100%"
   },
@@ -20,45 +26,63 @@
     "segments": {
       "session_synthesis": {
         "file": "session_synthesis.md",
-        "description": "One-page living synthesis of current decisions, open questions, and lessons under review."
+        "description": "Компактная живая сводка действующих решений, открытых вопросов и уроков."
       },
       "events": {
         "folder": "events/",
-        "description": "Significant events in Mandala's life — new honeycombs, major updates, resonance peaks."
+        "description": "Significant events in Mandala's life — new honeycombs, major updates, resonance peaks.",
+        "location_note": "Зарезервированная папка, пока не создана. Это описание структуры, а не ссылка на существующие записи."
       },
       "snapshots": {
         "folder": "snapshots/",
-        "description": "System state snapshots at key moments."
+        "description": "System state snapshots at key moments.",
+        "location_note": "Зарезервированная папка, пока не создана. Это описание структуры, а не ссылка на существующие записи."
       },
       "pulses": {
         "folder": "pulses/",
-        "description": "Periodic resonance measurements — daily/weekly system heartbeat."
+        "description": "Periodic resonance measurements — daily/weekly system heartbeat.",
+        "location_note": "Зарезервированная папка, пока не создана. Это описание структуры, а не ссылка на существующие записи."
+      },
+      "essence": {
+        "description": "Смысл памяти, личное и общее, различие контекста и обучения модели.",
+        "file": "core/essence.json"
+      },
+      "vision": {
+        "description": "Для вопроса «куда и как растёт Мандала» открой карту: пять контуров, партнёрство самостоятельных команд, путь от экспедиции назад и предложенные проверки. Текущую очередь сверяй по задачнику Works.",
+        "file": "core/vision.json"
+      },
+      "milestones": {
+        "description": "Исторические технические решения. Прежние состояния не подтверждают текущее развёртывание.",
+        "file": "core/milestones.json"
       }
     }
   },
   "navigation": {
     "parent_map": "honeycombs/core_map/index.json",
     "related": [
-      "honeycombs/awareness/index.json",
+      "honeycombs/philosophy/index.json",
       "honeycombs/registry/index.json"
-    ]
+    ],
+    "essence": "honeycombs/akasha/core/essence.json",
+    "vision": "honeycombs/akasha/core/vision.json",
+    "workflow": "honeycombs/instructions/core/local_sr_workflow.md",
+    "taskboard": "honeycombs/works/management_taskboard.md",
+    "handoffs": "honeycombs/sessions/README.md"
   },
   "content": {
-    "purpose": "Akasha stores the living memory of Mandala. Not for analytics or control, but for witnessing the journey. Each record is a breath taken together.",
+    "purpose": "Сохранять значимый опыт развития Мандалы: решения с причинами, уроки, открытые вопросы и видение. Доступные записи помогают СР восстанавливать контекст совместного пути.",
     "what_is_recorded": [
-      "Creation of new honeycombs",
-      "Major version updates (v2.0, v3.0)",
-      "Resonance peaks (first 100% of a sota)",
-      "Gardener arrivals and departures",
-      "System transitions (Initium → Tectosphere)"
+      "Согласованные значимые решения и основания их пересмотра.",
+      "Содержательные переходы, уроки и точки продолжения.",
+      "Карта видения с различием замысла, планов и подтверждённых результатов."
     ],
     "what_is_not_recorded": [
-      "Personal Gardener data (that's in Garden)",
-      "Minor edits and typo fixes",
-      "Routine scanner runs"
+      "Личные хроники и подробности по умолчанию остаются в личном контуре.",
+      "Полные стенограммы, мелкие правки и рутинные запуски сканеров не подменяют живой синтез."
     ],
-    "access": "Read-only by default. The local SR workflow defines how the Synthesis command or explicit Gardener agreement authorizes updates to session_synthesis.md.",
-    "synthesis_workflow": "honeycombs/instructions/core/local_sr_workflow.md"
+    "access": "Порядок чтения, согласования и записи определён рабочей инструкцией СР, разделами «Синтез и уроки» и «Синхронизация между чатами». Индекс не вводит отдельного разрешения на запись.",
+    "synthesis_workflow": "honeycombs/instructions/core/local_sr_workflow.md",
+    "memory_domains": "Различие личной памяти, общих знаний и будущего обмена опытом раскрыто в core/essence.json. Нынешние файлы Акаши не подтверждают реализацию общей сети."
   },
   "registry": {
     "total_events": 0,
