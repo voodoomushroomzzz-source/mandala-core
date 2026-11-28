@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-11-28T07:10:45.641483",
+  "last_scan": "2026-11-28T17:14:00.230468",
   "honeycomb_hashes": {
     "honeycombs/protocols": "cc4a79a67d5b41605f4df93294d16a35",
     "honeycombs/seeds": "be2f3e08de805cee8036714094e797e6",
@@ -9,11 +9,11 @@
     "honeycombs/directives": "dbc3c48c5b13d37df132cf510c2a3e8e",
     "honeycombs/knowledge": "ccd05977ee0aabe9b3fa94b2bff21155",
     "honeycombs/knowledge/ai_tools": "9532cc74c6c6a8d622a23b8fb32ce031",
-    "honeycombs/akasha": "682590839d458e1aa647a6fb0d4b1b43",
+    "honeycombs/akasha": "66f3aa1988d5448f99ff89d8a98ab211",
     "honeycombs/boot_online": "622e6e4f739551ca31cd604255f94977",
     "honeycombs/fruits": "d20fff6879848f7bf3e3771a274157a9",
     "honeycombs/fruits/mge": "2f22a0d50e0225a489615766644dae71",
-    "honeycombs/fruits/scout_agent": "2fa3c6277cb94d8e5e2a0a3ee93b590d",
+    "honeycombs/fruits/scout_agent": "53ba8ff9ef904802e8755d48806680f8",
     "honeycombs/fruits/gentle_companion": "60d6e316a717c753e6e0c112471d19b6",
     "honeycombs/philosophy": "1e14806ae11f0eaac6f5d98512a13a6b",
     "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
@@ -38,7 +38,7 @@
     "errors": 0,
     "warnings": 8,
     "total_files": 1503,
-    "total_size_kb": 4282.21
+    "total_size_kb": 4313.74
   },
   "seeds_health": {
     "root_count": 24,
@@ -55,7 +55,7 @@
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-11-28T07:10:45.641493",
+    "last_check": "2026-11-28T17:14:00.230482",
     "errors_count": 21,
     "warnings_count": 10,
     "expired_tasks": 12,
